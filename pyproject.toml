@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "estimating-quantum-circuit"
+version = "0.1.0"
+description = "Thesis experiments and dataset for estimating quantum circuit behavior"
+requires-python = ">=3.11"
+dependencies = ["qiskit-qward==0.30.0"]
+
+[project.optional-dependencies]
+aws = ["qiskit-braket-provider==0.23.2", "amazon-braket-sdk==1.126.1"]
+torch = ["torch==2.8.0"]
+dev = ["pytest>=8", "black==26.1.0"]
+
+[tool.setuptools.packages.find]
+include = ["experiments", "experiments.*"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.black]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

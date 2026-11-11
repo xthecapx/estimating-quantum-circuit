@@ -1,0 +1,72 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "status": "completed",
+  "prepared_at": "2026-10-29T21:00:25.503000+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/qiskit-qward/qward/examples/papers/vtp/plans/vtp-w0.json",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-dataset-v2",
+  "window": 0,
+  "order_seed": 8,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": "bb1c1393-387c-4a08-abb7-7def74e85513",
+  "jobs_planned": 4,
+  "items": [
+    {
+      "config": "VTP-V2-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/qiskit-qward/qward/examples/papers/vtp/data/qpu/v2/VTP-V2-SINGLE_IBM_ibm_fez_20261029_210022_7cf2ccc6.json",
+      "calibrated_at": "2026-10-29 15:52:55-05:00",
+      "physical_layout": [
+        146,
+        144,
+        143,
+        136,
+        145
+      ],
+      "isa_depth": 47,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbhriic2d77s739dap70",
+        "dbhriis2d77s739dap8g"
+      ]
+    },
+    {
+      "config": "VTP-S2-TRIPLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/qiskit-qward/qward/examples/papers/vtp/data/qpu/v2/VTP-S2-TRIPLE_IBM_ibm_fez_20261029_210025_9e851697.json",
+      "calibrated_at": "2026-10-29 15:52:55-05:00",
+      "physical_layout": [
+        123,
+        143,
+        142,
+        144,
+        136
+      ],
+      "isa_depth": 44,
+      "isa_two_qubit_gates": 15,
+      "job_ids": [
+        "dbhrii81h92s7382bl5g",
+        "dbhriik2d77s739dap7g"
+      ]
+    }
+  ],
+  "submitted_at": "2026-10-29T21:23:23.695398+00:00"
+}

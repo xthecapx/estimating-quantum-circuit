@@ -1,0 +1,82 @@
+name: Website checks and Pages publication
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - 'site/**'
+      - 'experiments/dataset_out/**'
+      - '.github/workflows/dashboard.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - 'site/**'
+      - 'experiments/dataset_out/**'
+      - '.github/workflows/dashboard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Do not interrupt an active Pages deployment. Pull requests have separate groups.
+concurrency:
+  group: dashboard-pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+      - name: Install dashboard dependencies
+        run: npm ci --prefix dashboard
+      - name: Validate committed tables and generate dashboard data
+        run: python dashboard/build.py
+      - name: Type-check the dashboard
+        run: npm run check --prefix dashboard
+      - name: Run dashboard unit tests
+        run: npm test --prefix dashboard
+      - name: Build static site
+        run: npm run build --prefix dashboard
+      - name: Assemble website
+        run: |
+          mkdir -p _site/dashboard
+          cp -R site/. _site/
+          cp -R dashboard/dist/. _site/dashboard/
+          touch _site/.nojekyll
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy dashboard
+        id: deployment
+        uses: actions/deploy-pages@v4

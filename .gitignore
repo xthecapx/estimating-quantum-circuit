@@ -1,0 +1,18 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.env
+.env.*
+.aws/
+.DS_Store
+build/
+dist/
+dashboard/node_modules/
+dashboard/dist/
+dashboard/public/data/
+
+# Assembled GitHub Pages website
+_site/

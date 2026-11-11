@@ -1,0 +1,29 @@
+{
+  "exported_job_rows": 2018,
+  "exported_calibration_records": 991,
+  "journal_files_by_algorithm": {
+    "ghz": 79,
+    "bv": 208,
+    "vtp": 154,
+    "qft": 139,
+    "phase_estimation": 109,
+    "grover": 177,
+    "random_volumetric": 79,
+    "shor": 56
+  },
+  "journal_status_counts": {
+    "completed": 986,
+    "incomplete": 14,
+    "prepared": 1
+  },
+  "copied_files": 4781,
+  "copied_bytes": 550888854,
+  "qward_public_version": "0.30.0",
+  "source_originals_retained": true,
+  "notes": [
+    "Statuses describe journals, not individual jobs.",
+    "No new QPU runs were submitted during migration.",
+    "This is the initial migrated collection, not a final thesis cohort.",
+    "Coin-toss supporting source and exclusion tests removed after initial migration; raw thesis data unchanged."
+  ]
+}
