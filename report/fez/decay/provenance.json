@@ -1,0 +1,207 @@
+{
+  "backend": "ibm_fez",
+  "input_jobs": 2409,
+  "selected_jobs": 1236,
+  "configuration_count": 189,
+  "excluded_jobs": 1173,
+  "campaign_jobs": {
+    "fez-dataset-v2": 374,
+    "fez-dataset-v2-2026-11-05": 344,
+    "fez-dataset-v2-pilot-r2": 30,
+    "fez-full-shor-growth-v1-2026-11-06": 381,
+    "fez-oracle-growth-v1-2026-11-07": 51,
+    "fez-oracle-growth-v1-2026-11-07-makeup": 10,
+    "fez-oracle-growth-v1-2026-11-07-standalone": 7,
+    "fez-shor-growth-v1-2026-11-05": 39
+  },
+  "period_jobs": {
+    "fez-dataset-v2 / window 0": 30,
+    "fez-dataset-v2 / window 1": 344,
+    "fez-dataset-v2-2026-11-05 / window 20261105": 344,
+    "fez-dataset-v2-pilot-r2 / window 0": 30,
+    "fez-full-shor-growth-v1-2026-11-06 / window 20261106": 381,
+    "fez-oracle-growth-v1-2026-11-07 / window 20261107": 51,
+    "fez-oracle-growth-v1-2026-11-07-makeup / window 20261107": 10,
+    "fez-oracle-growth-v1-2026-11-07-standalone / window 20261108": 7,
+    "fez-shor-growth-v1-2026-11-05 / window 20261105": 39
+  },
+  "algorithm_jobs": {
+    "BERNSTEIN-VAZIRANI": 260,
+    "GHZ": 98,
+    "GROVER": 202,
+    "PHASE-ESTIMATION": 134,
+    "QFT": 170,
+    "RANDOM-VOLUMETRIC": 98,
+    "SHOR": 86,
+    "VTP": 188
+  },
+  "exported_target_jobs": {
+    "hellinger_fidelity": 1236,
+    "tvd_similarity": 1236,
+    "dsr": 1236
+  },
+  "algorithm_configs": {
+    "BERNSTEIN-VAZIRANI": 39,
+    "GHZ": 15,
+    "GROVER": 29,
+    "PHASE-ESTIMATION": 21,
+    "QFT": 27,
+    "RANDOM-VOLUMETRIC": 15,
+    "SHOR": 13,
+    "VTP": 30
+  },
+  "metrics": [
+    "a.num_qubits",
+    "a.depth",
+    "a.size",
+    "a.ComplexityMetrics.gate_based_metrics.two_qubit_count",
+    "a.StructuralMetrics.volume",
+    "a.BehavioralMetrics.program_communication",
+    "a.quantum_specific.entanglement_ratio",
+    "b.depth",
+    "b.two_qubit_depth",
+    "b.two_qubit_gates"
+  ],
+  "metric_coverage": {
+    "a.num_qubits": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.depth": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.size": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.ComplexityMetrics.gate_based_metrics.two_qubit_count": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.StructuralMetrics.volume": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.BehavioralMetrics.program_communication": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "a.quantum_specific.entanglement_ratio": {
+      "available_jobs": 890,
+      "missing_jobs": 346
+    },
+    "b.depth": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "b.two_qubit_depth": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    },
+    "b.two_qubit_gates": {
+      "available_jobs": 1236,
+      "missing_jobs": 0
+    }
+  },
+  "inputs": [
+    {
+      "file": "dataset-001.csv",
+      "rows": 738,
+      "bytes": 19983971,
+      "sha256": "ac87eeeac3bf70feb39363c02d9a53d7d79382ae3a6510df86e6c19825816987"
+    },
+    {
+      "file": "dataset-002.csv",
+      "rows": 104,
+      "bytes": 19765775,
+      "sha256": "d23dc9861f78eb6b0221b4e988fd36395c73a7f2d191e5aa37bbbca9db6cf78f"
+    },
+    {
+      "file": "dataset-003.csv",
+      "rows": 271,
+      "bytes": 19966818,
+      "sha256": "c72b6ca94125ff28508f7e942d375871995a00b403c3f993bf604a054d6504c8"
+    },
+    {
+      "file": "dataset-004.csv",
+      "rows": 341,
+      "bytes": 19998788,
+      "sha256": "4a7a8b5b4b5b015ec38c0b56b5f6a4a6c10dc2bb6d6c9fa9b0bb149b2cf8f4d3"
+    },
+    {
+      "file": "dataset-005.csv",
+      "rows": 274,
+      "bytes": 19907144,
+      "sha256": "3226968b50d5f60415651adca991bd8bb292838f5d6e0094b962967c178756ae"
+    },
+    {
+      "file": "dataset-006.csv",
+      "rows": 80,
+      "bytes": 19784086,
+      "sha256": "c03773d9b60c0b2fcede8276a014a94d80354a0a944d603fe8d1f78a7584cb44"
+    },
+    {
+      "file": "dataset-007.csv",
+      "rows": 76,
+      "bytes": 19787408,
+      "sha256": "a13f101b233464ec0db010cfad91db14673c9e38e19172b14a7e13ac8fc823ad"
+    },
+    {
+      "file": "dataset-008.csv",
+      "rows": 94,
+      "bytes": 19305540,
+      "sha256": "e1a584d8a5537db61059b4646265af7f2c118c0f07ec022dd8b58a99c421df00"
+    },
+    {
+      "file": "dataset-009.csv",
+      "rows": 13,
+      "bytes": 19436529,
+      "sha256": "c659b7b475034650f0dd08fac0d18019a80c62b5842983c6022c82006cd37276"
+    },
+    {
+      "file": "dataset-010.csv",
+      "rows": 13,
+      "bytes": 19367319,
+      "sha256": "84c746002cdec3475a16729891fe4b1cb04b2df748f414d986cfdc6c94f16b0e"
+    },
+    {
+      "file": "dataset-011.csv",
+      "rows": 13,
+      "bytes": 19601104,
+      "sha256": "07dd7b5d088beea48d34e36b10314df8dd689c6676b5af4a24c8a8c94db45230"
+    },
+    {
+      "file": "dataset-012.csv",
+      "rows": 13,
+      "bytes": 19896944,
+      "sha256": "a96182ffc31e7ebddcbdf30f53692d4ae9cfafb77c1d2837ecfc54f08ce1da85"
+    },
+    {
+      "file": "dataset-013.csv",
+      "rows": 125,
+      "bytes": 19981355,
+      "sha256": "2ebb7db53349f150708b0292d9d45a854f2fd5e9c742332ebfb21faca14380a3"
+    },
+    {
+      "file": "dataset-014.csv",
+      "rows": 254,
+      "bytes": 9686716,
+      "sha256": "64d749b94c3a0b4bbd0958c31d6279c4f4063afcda1398be36a5175f8864428a"
+    }
+  ],
+  "manifest_sha256": "fe125a5487917b62a152b78de00eb90d10def481b9042fa8a6a76322bfd6a3f4",
+  "references_sha256": "931bacf80f33e10e733e841c35596770209509cf4ac3a065af25600ebe03b92e",
+  "analysis_source_sha256": "d1c8d755dc121a6ead37c986dd1399e7bc970bbc646464931bcdea9e1e03ad65",
+  "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
+  "versions": {
+    "python": "3.11.14",
+    "statsmodels": "0.15.0",
+    "pandas": "3.1.1",
+    "numpy": "2.4.6"
+  },
+  "minimum_shared_levels": 3,
+  "group_tolerance_points": 5.0,
+  "group_source_sha256": "feb35b627a54eb18e1caf7191f73b08d1d6bf40d88c1c20aa461b1a1555531a4",
+  "decay_source_sha256": "d2ce9e60d45b523490f62704fabc1cddeb324d0429f106b7505ed1ec33bfd09b"
+}

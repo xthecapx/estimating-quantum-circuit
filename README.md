@@ -128,6 +128,10 @@ the IBM dashboard inputs. Unsupported VTP/Shor AWS studies remain deferred.
 
 ```sh
 python scripts/run.py export-ibm --out experiments/dataset_out
+python scripts/run.py decay --decay-only --backend ibm_fez --out report/fez
+python scripts/run.py decay --decay-only --backend ibm_kingston --out report/kingston
+python dashboard/export_decay.py report/fez/decay
+python dashboard/export_decay.py report/kingston/decay
 python scripts/run.py dashboard
 npm ci --prefix dashboard
 npm run dev --prefix dashboard
@@ -141,6 +145,8 @@ Keep **all files from one export together**: `dataset-*.csv`,
 `export_report.json`. Do not combine parts from different exports. Building from
 the existing tables uses only Python's standard library. See
 [dashboard setup](dashboard/README.md) for Node requirements and production build.
+See [the decay runbook](docs/DECAY_ANALYSIS.md) for report provenance, matching
+periods, replacement jobs, and refreshing both chip snapshots after an export.
 
 This repository is the authoritative home for the migrated experiments, dataset,
 and dashboard. QWARD's current branches no longer contain the migrated files;

@@ -208,10 +208,15 @@ parts match the analysis input hashes. A chip without a matching report shows an
 To refresh the snapshot after exporting new jobs, run from the repository root:
 
 ```sh
-python -m experiments.scalability_regression --decay-only --backend ibm_fez --out report/fez
+python scripts/run.py decay --decay-only --backend ibm_fez --out report/fez
+python scripts/run.py decay --decay-only --backend ibm_kingston --out report/kingston
 python dashboard/export_decay.py report/fez/decay
-python dashboard/build.py
+python dashboard/export_decay.py report/kingston/decay
+python scripts/run.py dashboard
 ```
 
 The heatmap and table use the same complete-linkage assignments and period fits as the offline
 analysis. URLs preserve the selected pair, resource and outcome, for example `#section=decay`.
+
+The [decay runbook](../docs/DECAY_ANALYSIS.md) describes the migrated runner,
+source hashes, input provenance, and treatment of replacement campaigns.

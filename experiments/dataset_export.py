@@ -42,7 +42,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
 import pandas as pd
 
-from experiments.ibm_campaign import RECORD_SCHEMA_VERSION
+from experiments.ibm_campaign import RECORD_SCHEMA_VERSION, record_hash
 from experiments.calibration_tables import calibration_record, write_calibrations
 
 PAPERS = Path(__file__).resolve().parent
@@ -102,6 +102,46 @@ def discover(root: Path = PAPERS) -> List[Path]:
     return paths
 
 
+def collection_identity(journal_path, journal, prepared, entry):
+    """Resolve a linked replacement into its original collection/repetition slot.
+
+    Only exported collection identity changes. Raw acquisition identity and
+    actual timestamps remain intact and are exported separately for provenance.
+    """
+    link = prepared["payload"].get("replacement_of")
+    if not link:
+        return journal["campaign_id"], journal["window"], entry["run_index"], None
+    source_path = journal_path.parent / Path(link["record_path"]).name
+    source = json.loads(source_path.read_text())
+    original = json.loads(
+        (source_path.parent / source["artifact_directory"] / "prepared.json").read_text()
+    )
+    if (
+        record_hash(original) != source["prepared_hash"]
+        or source["prepared_hash"] != link["prepared_hash"]
+    ):
+        raise ValueError("Replacement source integrity mismatch")
+    if source["campaign_id"] != link["campaign_id"] or any(
+        source[field] != journal[field] for field in ("algorithm", "config_id", "backend_name")
+    ):
+        raise ValueError("Replacement source identity mismatch")
+    attempts = [
+        e
+        for e in source["submission_journal"]
+        if e.get("job_id") == link["job_id"] and e["run_index"] == link["run_index"]
+    ]
+    if len(attempts) != 1 or any(
+        r["job_id"] == link["job_id"] for r in source["individual_results"]
+    ):
+        raise ValueError("Replacement must reference one unsuccessful original attempt")
+    if entry["run_index"] != 0 or any(
+        original[field] != prepared[field]
+        for field in ("logical_circuit_hash", "shots", "runtime_options", "reference")
+    ):
+        raise ValueError("Replacement does not match original protocol")
+    return source["campaign_id"], source["window"], link["run_index"], link["job_id"]
+
+
 def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]]:
     """Rows for the completed jobs of one record; (rows, skip_reason)."""
     journal = json.loads(journal_path.read_text(encoding="utf-8"))
@@ -116,6 +156,9 @@ def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]
         result = results.get(entry.get("job_id"))
         if result is None:
             continue
+        campaign, window, repetition, replaces_job = collection_identity(
+            journal_path, journal, prepared, entry
+        )
         row: Dict[str, Any] = {}
         row.update(
             {
@@ -124,10 +167,10 @@ def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]
                 "meta.algorithm": journal["algorithm"],
                 "meta.config_id": journal["config_id"],
                 "meta.job_id": entry["job_id"],
-                "meta.run_index": entry["run_index"],
+                "meta.run_index": repetition,
                 "meta.run_id": journal["run_id"],
-                "meta.campaign_id": journal["campaign_id"],
-                "meta.window": journal["window"],
+                "meta.campaign_id": campaign,
+                "meta.window": window,
                 "meta.batch_id": journal.get("batch_id"),
                 "meta.backend_name": journal["backend_name"],
                 "meta.shots": result["shots"],
@@ -162,6 +205,10 @@ def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]
         usage = metrics_t.get("usage") or {}
         row.update(
             {
+                "g.source_campaign_id": journal["campaign_id"],
+                "g.source_window": journal["window"],
+                "g.source_run_index": entry["run_index"],
+                "g.replaces_job_id": replaces_job,
                 "g.seed_transpiler": prepared["seed_transpiler"],
                 "g.scheduling_method": prepared["scheduling_method"],
                 "g.dynamic_circuit": prepared["dynamic_circuit"],
@@ -236,6 +283,10 @@ def validate(frame: pd.DataFrame, *, allow_fake: bool = False) -> Dict[str, List
             "duplicate job IDs: "
             + ", ".join(frame.loc[frame["meta.job_id"].duplicated(), "meta.job_id"])
         )
+    if "g.replaces_job_id" in frame:
+        replacements = frame["g.replaces_job_id"].dropna()
+        if replacements.duplicated().any():
+            errors.append("multiple successful replacements for the same failed job")
     if frame["meta.record_schema_version"].nunique() > 1:
         errors.append(
             f"mixed record schema versions: {sorted(frame['meta.record_schema_version'].unique())}"

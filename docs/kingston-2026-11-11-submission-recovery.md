@@ -161,3 +161,15 @@ job IDs, present the collection as a single calibration window, or count failed
 attempts as successful measurements. The combined recovered cohort can have 391
 results once all four replacements complete; the full repository export also
 contains earlier campaigns.
+
+## Merged dashboard and analysis collection
+
+After the four replacements completed, the user chose to include them in the
+original window 3 rather than expose an additional dashboard period. The export
+resolves each verified frozen replacement link into the original campaign,
+window, and second-repetition slot. The dashboard and decay analysis both use
+this derived collection identity. Window 3 therefore has 391 successful results.
+Raw acquisition records, failed attempts, real job/run IDs, calibration and
+execution timestamps remain unchanged. Acquisition identity remains available
+in exported `g.source_*` fields, with `g.replaces_job_id` identifying each
+failed original. The raw original manifest still records its four failures.

@@ -1,66 +1,76 @@
 {
   "schema_version": "1.0",
-  "rows": 2018,
+  "rows": 2409,
   "parts": [
     {
       "file": "dataset-001.csv",
-      "rows": 666,
-      "bytes": 19947935
+      "rows": 738,
+      "bytes": 19983971
     },
     {
       "file": "dataset-002.csv",
-      "rows": 170,
-      "bytes": 19980932
+      "rows": 104,
+      "bytes": 19765775
     },
     {
       "file": "dataset-003.csv",
-      "rows": 272,
-      "bytes": 19996888
+      "rows": 271,
+      "bytes": 19966818
     },
     {
       "file": "dataset-004.csv",
-      "rows": 326,
-      "bytes": 19986899
+      "rows": 341,
+      "bytes": 19998788
     },
     {
       "file": "dataset-005.csv",
-      "rows": 90,
-      "bytes": 19877719
+      "rows": 274,
+      "bytes": 19907144
     },
     {
       "file": "dataset-006.csv",
-      "rows": 95,
-      "bytes": 19961133
+      "rows": 80,
+      "bytes": 19784086
     },
     {
       "file": "dataset-007.csv",
-      "rows": 44,
-      "bytes": 18744841
+      "rows": 76,
+      "bytes": 19787408
     },
     {
       "file": "dataset-008.csv",
-      "rows": 13,
-      "bytes": 19249226
+      "rows": 94,
+      "bytes": 19305540
     },
     {
       "file": "dataset-009.csv",
       "rows": 13,
-      "bytes": 19529454
+      "bytes": 19436529
     },
     {
       "file": "dataset-010.csv",
       "rows": 13,
-      "bytes": 19888622
+      "bytes": 19367319
     },
     {
       "file": "dataset-011.csv",
-      "rows": 252,
-      "bytes": 19963801
+      "rows": 13,
+      "bytes": 19601104
     },
     {
       "file": "dataset-012.csv",
-      "rows": 64,
-      "bytes": 2949155
+      "rows": 13,
+      "bytes": 19896944
+    },
+    {
+      "file": "dataset-013.csv",
+      "rows": 125,
+      "bytes": 19981355
+    },
+    {
+      "file": "dataset-014.csv",
+      "rows": 254,
+      "bytes": 9686716
     }
   ]
 }

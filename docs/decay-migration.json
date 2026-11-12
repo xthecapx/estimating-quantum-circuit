@@ -1,0 +1,34 @@
+{
+  "source_repository": "https://github.com/xthecapx/qiskit-qward",
+  "source_commit": "dbf5d506b5de0e869eba956f9ebeb002953e6d70",
+  "files": [
+    {
+      "source": "qward/examples/papers/scalability_regression.py",
+      "destination": "experiments/scalability_regression.py",
+      "source_sha256": "bbca373bb95900e9eacae5965905bbf6f5836086d471d8ab743b76617132c623",
+      "destination_sha256": "d1c8d755dc121a6ead37c986dd1399e7bc970bbc646464931bcdea9e1e03ad65",
+      "adaptation": "Replace qward.examples.papers namespace with experiments; numerical logic unchanged"
+    },
+    {
+      "source": "qward/examples/papers/decay_relationships.py",
+      "destination": "experiments/decay_relationships.py",
+      "source_sha256": "124b07d53c95cb6e1d0c271437141d293a290f2311a79f77ef11d639db68d652",
+      "destination_sha256": "d2ce9e60d45b523490f62704fabc1cddeb324d0429f106b7505ed1ec33bfd09b",
+      "adaptation": "Replace qward.examples.papers namespace with experiments; numerical logic unchanged"
+    },
+    {
+      "source": "qward/examples/papers/decay_groups.py",
+      "destination": "experiments/decay_groups.py",
+      "source_sha256": "feb35b627a54eb18e1caf7191f73b08d1d6bf40d88c1c20aa461b1a1555531a4",
+      "destination_sha256": "feb35b627a54eb18e1caf7191f73b08d1d6bf40d88c1c20aa461b1a1555531a4",
+      "adaptation": "Replace qward.examples.papers namespace with experiments; numerical logic unchanged"
+    },
+    {
+      "source": "tests/test_scalability_regression.py",
+      "destination": "tests/test_scalability_regression.py",
+      "source_sha256": "11476d6690200ec3394af1b76685091d3b51bd920d24107daabb85388bca2c8a",
+      "destination_sha256": "336fb3dab9f3d754e5ec0ba4a41f177ddf369b7ce011e5b6176303795212061f",
+      "adaptation": "Replace qward.examples.papers namespace with experiments; numerical logic unchanged"
+    }
+  ]
+}
