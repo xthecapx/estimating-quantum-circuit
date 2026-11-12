@@ -1,0 +1,421 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:25:43.857141+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/plans/rv-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611116,
+  "job_order": [
+    [
+      4,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      8,
+      0
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      7,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      13,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 30,
+  "items": [
+    {
+      "config": "RV2-D2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV2-D2_IBM_ibm_kingston_20261111_212535_138b8434.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        143
+      ],
+      "isa_depth": 77,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbqdro1abdes73fo3n50",
+        "dbqdropabdes73fo3n6g"
+      ]
+    },
+    {
+      "config": "RV2-D4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV2-D4_IBM_ibm_kingston_20261111_212536_36f2a1f4.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        143
+      ],
+      "isa_depth": 153,
+      "isa_two_qubit_gates": 32,
+      "job_ids": [
+        "dbqdrnmjjaos73ah4k3g",
+        "dbqdroejjaos73ah4k70"
+      ]
+    },
+    {
+      "config": "RV2-D6",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV2-D6_IBM_ibm_kingston_20261111_212536_fc5f4e37.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        143
+      ],
+      "isa_depth": 229,
+      "isa_two_qubit_gates": 48,
+      "job_ids": [
+        "dbqdrnpabdes73fo3n3g",
+        "dbqdrogk09pc73at3g1g"
+      ]
+    },
+    {
+      "config": "RV3-D3",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV3-D3_IBM_ibm_kingston_20261111_212537_93f23c8e.json",
+      "calibrated_at": "2026-11-11 16:18:43-05:00",
+      "physical_layout": [
+        144,
+        136,
+        143
+      ],
+      "isa_depth": 115,
+      "isa_two_qubit_gates": 18,
+      "job_ids": [
+        "dbqdrnhabdes73fo3n30",
+        "dbqdroejjaos73ah4k5g"
+      ]
+    },
+    {
+      "config": "RV3-D6",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV3-D6_IBM_ibm_kingston_20261111_212537_5cf72797.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        136,
+        143
+      ],
+      "isa_depth": 241,
+      "isa_two_qubit_gates": 42,
+      "job_ids": [
+        "dbqdrn9abdes73fo3n2g",
+        "dbqdro0k09pc73at3g0g"
+      ]
+    },
+    {
+      "config": "RV3-D9",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV3-D9_IBM_ibm_kingston_20261111_212538_3cb68b07.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        142,
+        143
+      ],
+      "isa_depth": 355,
+      "isa_two_qubit_gates": 60,
+      "job_ids": [
+        "dbqe0d8k09pc73at3qq0",
+        "dbqe0e6jjaos73ah4v80"
+      ]
+    },
+    {
+      "config": "RV4-D4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV4-D4_IBM_ibm_kingston_20261111_212538_c8fdc8c9.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        141,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 177,
+      "isa_two_qubit_gates": 60,
+      "job_ids": [
+        "dbqe0d6jjaos73ah4v5g",
+        "dbqe0dvv5hds73dftkfg"
+      ]
+    },
+    {
+      "config": "RV4-D8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV4-D8_IBM_ibm_kingston_20261111_212539_fc2951bd.json",
+      "calibrated_at": "2026-11-11 16:18:43-05:00",
+      "physical_layout": [
+        141,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 365,
+      "isa_two_qubit_gates": 126,
+      "job_ids": [
+        "dbqe0dnv5hds73dftkeg",
+        "dbqe0eejjaos73ah4v90"
+      ]
+    },
+    {
+      "config": "RV4-D12",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV4-D12_IBM_ibm_kingston_20261111_212539_d1cc63cd.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        141,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 565,
+      "isa_two_qubit_gates": 186,
+      "job_ids": [
+        "dbqe0cpabdes73fo4220",
+        "dbqe0dhabdes73fo424g"
+      ]
+    },
+    {
+      "config": "RV5-D5",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV5-D5_IBM_ibm_kingston_20261111_212540_fd3ae96e.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        140,
+        142,
+        144,
+        143,
+        141
+      ],
+      "isa_depth": 239,
+      "isa_two_qubit_gates": 72,
+      "job_ids": [
+        "dbqe0d1abdes73fo4230",
+        "dbqe0dpabdes73fo4250"
+      ]
+    },
+    {
+      "config": "RV5-D10",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV5-D10_IBM_ibm_kingston_20261111_212541_d18ec9fd.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        142,
+        140,
+        141,
+        143
+      ],
+      "isa_depth": 537,
+      "isa_two_qubit_gates": 162,
+      "job_ids": [
+        "dbqe16pabdes73fo44eg",
+        "dbqe17gk09pc73at3t10"
+      ]
+    },
+    {
+      "config": "RV5-D15",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV5-D15_IBM_ibm_kingston_20261111_212541_f445290b.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        141,
+        142,
+        144,
+        143,
+        136
+      ],
+      "isa_depth": 943,
+      "isa_two_qubit_gates": 258,
+      "job_ids": [
+        "dbqe177v5hds73dftmrg",
+        "dbqe180k09pc73at3t2g"
+      ]
+    },
+    {
+      "config": "RV6-D6",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV6-D6_IBM_ibm_kingston_20261111_212542_8a767f24.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        53,
+        54,
+        59,
+        55,
+        39,
+        33
+      ],
+      "isa_depth": 319,
+      "isa_two_qubit_gates": 150,
+      "job_ids": [
+        "dbqe176jjaos73ah51fg",
+        "dbqe17vv5hds73dftmsg"
+      ]
+    },
+    {
+      "config": "RV7-D7",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV7-D7_IBM_ibm_kingston_20261111_212543_5938b86c.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        144,
+        142,
+        123,
+        124,
+        143,
+        141,
+        136
+      ],
+      "isa_depth": 462,
+      "isa_two_qubit_gates": 198,
+      "job_ids": [
+        "dbqe17ejjaos73ah51h0",
+        "dbqe18ejjaos73ah51l0"
+      ]
+    },
+    {
+      "config": "RV8-D8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV8-D8_IBM_ibm_kingston_20261111_212543_23883648.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        22,
+        16,
+        3,
+        5,
+        1,
+        23,
+        2,
+        4
+      ],
+      "isa_depth": 677,
+      "isa_two_qubit_gates": 330,
+      "job_ids": [
+        "dbqe16vv5hds73dftmr0",
+        "dbqe17habdes73fo44gg"
+      ]
+    }
+  ],
+  "parts": [
+    "rv-kingston-full-oracle-growth-d2026-11-11_manifest_part01.json",
+    "rv-kingston-full-oracle-growth-d2026-11-11_manifest_part02.json",
+    "rv-kingston-full-oracle-growth-d2026-11-11_manifest_part03.json"
+  ],
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "ec3099a5-21ed-416e-be07-a0da33e5238f",
+    "99a83f83-c58c-4fb3-8a69-c3f755f532d5",
+    "8776fcd2-9d85-45ce-8ae3-7630988c016e"
+  ]
+}

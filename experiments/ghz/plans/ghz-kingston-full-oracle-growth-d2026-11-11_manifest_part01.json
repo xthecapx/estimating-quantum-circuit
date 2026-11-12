@@ -1,0 +1,151 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:23:59.894593+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/plans/ghz-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611110,
+  "job_order": [
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": "56c34abd-c4cd-40bc-918b-c9ed17fc7cc0",
+  "jobs_planned": 10,
+  "items": [
+    {
+      "config": "GHZ2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ2_IBM_ibm_kingston_20261111_212352_35c95288.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        149,
+        148
+      ],
+      "isa_depth": 10,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dbqdr41abdes73fo3ks0",
+        "dbqdr4ok09pc73at3ea0"
+      ]
+    },
+    {
+      "config": "GHZ3",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ3_IBM_ibm_kingston_20261111_212353_35813da4.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        136,
+        143,
+        144
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 2,
+      "job_ids": [
+        "dbqdr3vv5hds73dft7p0",
+        "dbqdr4mjjaos73ah4icg"
+      ]
+    },
+    {
+      "config": "GHZ4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ4_IBM_ibm_kingston_20261111_212353_66a4059f.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        149,
+        150,
+        151,
+        152
+      ],
+      "isa_depth": 16,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dbqdr46jjaos73ah4iag",
+        "dbqdr4vv5hds73dft7r0"
+      ]
+    },
+    {
+      "config": "GHZ5",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ5_IBM_ibm_kingston_20261111_212354_f7a5efca.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        152,
+        151,
+        150,
+        149,
+        148
+      ],
+      "isa_depth": 19,
+      "isa_two_qubit_gates": 4,
+      "job_ids": [
+        "dbqdr3ejjaos73ah4i9g",
+        "dbqdr4ejjaos73ah4ic0"
+      ]
+    },
+    {
+      "config": "GHZ6",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ6_IBM_ibm_kingston_20261111_212354_bb2aa172.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        147,
+        148,
+        149,
+        150,
+        151,
+        152
+      ],
+      "isa_depth": 22,
+      "isa_two_qubit_gates": 5,
+      "job_ids": [
+        "dbqdr3gk09pc73at3e6g",
+        "dbqdr49abdes73fo3kt0"
+      ]
+    }
+  ],
+  "parent_manifest": "ghz-kingston-full-oracle-growth-d2026-11-11_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-11T21:26:44.153204+00:00"
+}

@@ -12,6 +12,7 @@ Review generated plans whenever the workload changes.
 | Shor growth | `ibm --profile shor-growth` | Same dated identity, Shor subset | 39 jobs; growth/degradation study |
 | Original Fez pilot/main windows | `ibm-windows`; `campaign_matrix.py`, per-algorithm `plans/*-w*.json` | `fez-dataset-v2`, windows 0 and 1–3; separate `0-rN` pilot repeats | Original pilot: 15 configs × 2 executions = 30 tasks; do not confuse with dated full profiles |
 | Historical dated IBM profiles | `legacy-full`, `full-shor-growth`, `full-oracle-growth` | Preserve original profile identity for recovery | Compatibility/recovery; inspect existing manifests before choosing |
+| Kingston BV failure replacements | `scripts/prepare_kingston_bv_replacements.py`; per-algorithm `--submit-plan` / `--recover-plan` | `kingston-full-oracle-growth-2026-11-11-bv-replacements-r1`; frozen `payload.replacement_of` | Exactly four jobs replacing terminal error-1217 second repetitions; see [recovery note](kingston-2026-11-11-submission-recovery.md) |
 | Rigetti comparison pilot | `rigetti`; `aws_campaign.py`, `aws_pilot_data.py`; same supported window-0 configs | Unique run UUID; entire caller-selected directory, convention `experiments/data/aws_pilot/CONFIG-rN/` | First milestone: BV3-ALT, 1,024 shots, one task; separate CSV comparison export |
 
 IBM algorithms: GHZ, Bernstein–Vazirani, VTP, QFT, phase estimation, Grover,

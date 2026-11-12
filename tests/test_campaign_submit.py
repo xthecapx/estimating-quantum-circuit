@@ -282,3 +282,30 @@ def test_failed_checkpoint_stops_further_submissions(tmp_path, monkeypatch):
         S.submit_window(service.paths, 3, service, checkpoint=unavailable)
     assert [event[:2] for event in service.events] == [("submit", "ghz")]
     assert json.loads(service.paths["ghz"].read_text(encoding="utf-8"))["status"] == "submitted"
+
+
+def test_reconciled_partial_batch_is_validated_before_resuming(tmp_path, monkeypatch):
+    service = Runtime(tmp_path, monkeypatch)
+    manifest = service.save("ghz", "prepared")
+    manifest["status"] = "resume_ready"
+    service.paths["ghz"].write_text(json.dumps(manifest))
+    validated = []
+    service.validate_resume = lambda path: validated.append(path)
+    S.submit_window(service.paths, None, service, recover_results=False, submit_only=True)
+    assert validated == [service.paths["ghz"]]
+    assert len(service.events) == len(service.paths)
+
+
+def test_reconciliation_failure_blocks_every_new_submission(tmp_path, monkeypatch):
+    service = Runtime(tmp_path, monkeypatch)
+    manifest = service.save("rv", "prepared")
+    manifest["status"] = "resume_ready"
+    service.paths["rv"].write_text(json.dumps(manifest))
+
+    def reject(path):
+        raise ValueError("unknown send")
+
+    service.validate_resume = reject
+    with pytest.raises(ValueError, match="unknown send"):
+        S.submit_window(service.paths, None, service, recover_results=False, submit_only=True)
+    assert not service.events

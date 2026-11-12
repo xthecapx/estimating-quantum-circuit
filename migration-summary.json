@@ -19,11 +19,14 @@
   "copied_files": 4781,
   "copied_bytes": 550888854,
   "qward_public_version": "0.30.0",
-  "source_originals_retained": true,
+  "source_originals_retained": false,
   "notes": [
     "Statuses describe journals, not individual jobs.",
     "No new QPU runs were submitted during migration.",
     "This is the initial migrated collection, not a final thesis cohort.",
-    "Coin-toss supporting source and exclusion tests removed after initial migration; raw thesis data unchanged."
-  ]
+    "Coin-toss supporting source and exclusion tests removed after initial migration; raw thesis data unchanged.",
+    "Migrated files removed from current QWARD branches after verification; original release tags and the report were preserved. The migration manifest remains historical provenance."
+  ],
+  "qward_cleanup_commit": "789e6575aaa62b1b39b522c7852db8a888c68e32",
+  "qward_release_tags_preserved": true
 }

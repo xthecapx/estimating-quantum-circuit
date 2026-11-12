@@ -1,0 +1,52 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:25:17.086051+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611114,
+  "job_order": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": "4e7873ee-1d95-465d-aef0-ab31fab0023a",
+  "jobs_planned": 2,
+  "items": [
+    {
+      "config": "PE-Z8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-Z8_IBM_ibm_kingston_20261111_212517_3abf88e2.json",
+      "calibrated_at": "2026-11-11 16:18:43-05:00",
+      "physical_layout": [
+        46,
+        48,
+        57,
+        47,
+        70,
+        67,
+        69,
+        68,
+        49
+      ],
+      "isa_depth": 190,
+      "isa_two_qubit_gates": 107,
+      "job_ids": [
+        "dbqdrj6jjaos73ah4jmg",
+        "dbqdrj7v5hds73dft96g"
+      ]
+    }
+  ],
+  "parent_manifest": "pe-kingston-full-oracle-growth-d2026-11-11_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-11T21:27:41.144585+00:00"
+}

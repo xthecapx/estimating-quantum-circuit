@@ -1,0 +1,149 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:25:34.258227+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611115,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ]
+  ],
+  "batch_id": "81354d75-8ee3-468b-a7c5-cf7fc88e4d0a",
+  "jobs_planned": 10,
+  "items": [
+    {
+      "config": "H3-2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H3-2_IBM_ibm_kingston_20261111_212526_ce4583af.json",
+      "calibrated_at": "2026-11-11 16:18:43-05:00",
+      "physical_layout": [
+        143,
+        144,
+        136
+      ],
+      "isa_depth": 140,
+      "isa_two_qubit_gates": 37,
+      "job_ids": [
+        "dbqdrlgk09pc73at3fog",
+        "dbqdrmfv5hds73dft9h0"
+      ]
+    },
+    {
+      "config": "H3-3",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H3-3_IBM_ibm_kingston_20261111_212526_67a02734.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        143,
+        144,
+        136
+      ],
+      "isa_depth": 136,
+      "isa_two_qubit_gates": 37,
+      "job_ids": [
+        "dbqdrlfv5hds73dft9e0",
+        "dbqdrm0k09pc73at3fpg"
+      ]
+    },
+    {
+      "config": "H4-0",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H4-0_IBM_ibm_kingston_20261111_212527_930483fe.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        136,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 450,
+      "isa_two_qubit_gates": 113,
+      "job_ids": [
+        "dbqdrlmjjaos73ah4ju0",
+        "dbqdrmnv5hds73dft9i0"
+      ]
+    },
+    {
+      "config": "H4-2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H4-2_IBM_ibm_kingston_20261111_212527_6dfcddb7.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        136,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 458,
+      "isa_two_qubit_gates": 113,
+      "job_ids": [
+        "dbqdrlvv5hds73dft9g0",
+        "dbqdrmnv5hds73dft9j0"
+      ]
+    },
+    {
+      "config": "H4-4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H4-4_IBM_ibm_kingston_20261111_212528_22ea9015.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        136,
+        142,
+        144,
+        143
+      ],
+      "isa_depth": 449,
+      "isa_two_qubit_gates": 113,
+      "job_ids": [
+        "dbqdrm1abdes73fo3mu0",
+        "dbqdrmpabdes73fo3n00"
+      ]
+    }
+  ],
+  "parent_manifest": "grover-kingston-full-oracle-growth-d2026-11-11_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-11T21:27:55.703149+00:00"
+}

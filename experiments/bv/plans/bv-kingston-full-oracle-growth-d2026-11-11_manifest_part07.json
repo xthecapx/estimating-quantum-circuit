@@ -1,0 +1,198 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:24:20.355459+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611111,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": "ca4d48b4-c893-4beb-b8a4-184e1a30a33b",
+  "jobs_planned": 10,
+  "items": [
+    {
+      "config": "BV12-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-ONES_IBM_ibm_kingston_20261111_212416_ee831251.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        50,
+        38,
+        49,
+        51,
+        58,
+        71,
+        70,
+        69,
+        68,
+        67,
+        66,
+        64,
+        65
+      ],
+      "isa_depth": 75,
+      "isa_two_qubit_gates": 26,
+      "job_ids": [
+        "dbqdr9habdes73fo3li0",
+        "dbqdra9abdes73fo3llg"
+      ]
+    },
+    {
+      "config": "BV12-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-ALT_IBM_ibm_kingston_20261111_212416_4c68d1c3.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        129,
+        91,
+        118,
+        89,
+        109,
+        149,
+        110,
+        148,
+        97,
+        128,
+        105,
+        117,
+        106
+      ],
+      "isa_depth": 50,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbqdr8ujjaos73ah4ip0",
+        "dbqdr9ujjaos73ah4iqg"
+      ]
+    },
+    {
+      "config": "BV12-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-SINGLE_IBM_ibm_kingston_20261111_212417_255c30c9.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        79,
+        95,
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        141,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdr99abdes73fo3lgg",
+        "dbqdra9abdes73fo3lkg"
+      ]
+    },
+    {
+      "config": "BV13-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV13-ONES_IBM_ibm_kingston_20261111_212417_af5bdd88.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        51,
+        71,
+        58,
+        50,
+        49,
+        48,
+        47,
+        57,
+        67,
+        68,
+        69,
+        88,
+        89,
+        78
+      ],
+      "isa_depth": 82,
+      "isa_two_qubit_gates": 30,
+      "job_ids": [
+        "dbqdr9ejjaos73ah4ipg",
+        "dbqdra6jjaos73ah4irg"
+      ]
+    },
+    {
+      "config": "BV13-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV13-ALT_IBM_ibm_kingston_20261111_212418_efefc062.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        57,
+        148,
+        67,
+        128,
+        69,
+        149,
+        68,
+        91,
+        77,
+        118,
+        64,
+        89,
+        66,
+        65
+      ],
+      "isa_depth": 41,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbqdr91abdes73fo3lf0",
+        "dbqdr9pabdes73fo3ljg"
+      ]
+    }
+  ],
+  "parent_manifest": "bv-kingston-full-oracle-growth-d2026-11-11_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-11T21:27:06.421640+00:00"
+}

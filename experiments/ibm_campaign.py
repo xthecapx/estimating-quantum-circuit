@@ -72,6 +72,21 @@ DEFAULT_RUNTIME_OPTIONS: Dict[str, Any] = {
 # ---------------------------------------------------------------------------
 
 
+def sampler_class(options):
+    """Keep gate-twirled studies on the server-side primitive after Runtime 0.52.
+
+    Runtime's new default performs twirling in samplomatic, which rejects some
+    frozen Shor RZ circuits. Preserve the requested suppression settings.
+    """
+    from qiskit_ibm_runtime import SamplerV2
+
+    if options.get("twirling", {}).get("enable_gates") and SamplerV2.__module__.startswith(
+        "qiskit_ibm_runtime.executor_sampler"
+    ):
+        from qiskit_ibm_runtime.server_side import SamplerV2
+    return SamplerV2
+
+
 def now() -> str:
     """UTC timestamp in ISO-8601."""
     return datetime.now(timezone.utc).isoformat()
@@ -369,7 +384,10 @@ class RecordStore:
             other = json.loads(path.read_text(encoding="utf-8"))
             if other.get("algorithm") == self.hooks.algorithm:
                 key = (other.get("campaign_id"), other.get("window"))
-                counts[key] = counts.get(key, 0) + len(other.get("submission_journal", []))
+                counts[key] = counts.get(key, 0) + sum(
+                    entry.get("status") != "submission_rejected"
+                    for entry in other.get("submission_journal", [])
+                )
         return counts
 
     def check_submittable(self, record_path: Path, backend: Any, runs: int):
@@ -432,6 +450,9 @@ class RecordStore:
             "status": "submitting",
             "submitted_at": now(),
             "job_id": None,
+            "batch_id": batch_id,
+            "sampler_implementation": f"{type(sampler).__module__}.{type(sampler).__name__}",
+            "versions": package_versions(),
             **calibration,
         }
         journal["submission_journal"].append(entry)
@@ -450,12 +471,12 @@ class RecordStore:
 
     def submit(self, record_path: Path, backend: Any, *, runs: int = 1) -> Dict[str, Any]:
         """Job mode: each run is one independent Runtime job, no Batch."""
-        from qiskit_ibm_runtime import SamplerV2  # pylint: disable=import-outside-toplevel
-
         loaded = self.check_submittable(record_path, backend, runs)
         calibration = self.calibration_flag(loaded[1], current_calibration_date(backend))
         self.announce_recalibration(Path(record_path).name, [calibration])
-        sampler = SamplerV2(mode=backend, options=loaded[1]["runtime_options"])
+        sampler = sampler_class(loaded[1]["runtime_options"])(
+            mode=backend, options=loaded[1]["runtime_options"]
+        )
         for run_index in range(runs):
             self.submit_job(
                 record_path, loaded, sampler, run_index=run_index, calibration=calibration
@@ -477,6 +498,11 @@ class RecordStore:
         for entry in journal["submission_journal"]:
             job_id = entry.get("job_id")
             if not job_id:
+                if entry.get("status") == "submission_rejected" and any(
+                    other.get("job_id") and other["run_index"] == entry["run_index"]
+                    for other in journal["submission_journal"]
+                ):
+                    continue
                 incomplete = True
                 continue
             if entry.get("status") == "completed" and job_id in results:
@@ -659,11 +685,56 @@ class Campaign:
         write_json(manifest_path, manifest)
         return {**manifest, "manifest_path": str(manifest_path)}
 
+    def validate_resume(self, manifest_path):
+        """Verify an explicitly reconciled partial Batch without contacting IBM.
+
+        Unknown sends remain blocked. A rejected attempt must have documented
+        pre-send evidence; neither a missing ID nor an error string is enough.
+        """
+        path = Path(manifest_path)
+        manifest = json.loads(path.read_text())
+        if manifest["status"] != "resume_ready":
+            raise ValueError("Partial Batch requires explicit reconciliation")
+        loaded, known_ids = [], []
+        for item in manifest["items"]:
+            record = self.store.load(manifest_record_path(path, item))
+            journal, prepared, _ = record
+            if any(
+                prepared[field] != manifest[field]
+                for field in ("backend_name", "campaign_id", "window")
+            ):
+                raise ValueError("Resume record belongs to another collection")
+            sent = {}
+            for entry in journal["submission_journal"]:
+                index = entry["run_index"]
+                if not isinstance(index, int) or not 0 <= index < item["runs"]:
+                    raise ValueError("Invalid resume repetition")
+                if entry.get("job_id"):
+                    if index in sent or entry["status"] not in (
+                        "submitted",
+                        "completed",
+                        "incomplete",
+                    ):
+                        raise ValueError("Duplicate or uncertain saved repetition")
+                    sent[index] = entry["job_id"]
+                elif not (
+                    entry["status"] == "submission_rejected"
+                    and entry.get("reconciliation", {}).get("confirmed_before_send") is True
+                ):
+                    raise ValueError("Unknown submission; reconcile before resuming")
+            if list(sent.values()) != item["job_ids"]:
+                raise ValueError("Manifest job IDs differ from the durable journal")
+            known_ids.extend(sent.values())
+            loaded.append((record, sent))
+        if len(known_ids) != len(set(known_ids)):
+            raise ValueError("Duplicate saved job IDs")
+        return loaded
+
     def submit_manifest(
         self, manifest_path: Path, backend: Any, *, batch_max_time: Optional[int] = None
     ) -> Dict[str, Any]:
         """Validate every record, then submit all jobs in one Runtime Batch."""
-        from qiskit_ibm_runtime import Batch, SamplerV2  # pylint: disable=import-outside-toplevel
+        from qiskit_ibm_runtime import Batch  # pylint: disable=import-outside-toplevel
 
         if batch_max_time is not None and (
             isinstance(batch_max_time, bool)
@@ -673,18 +744,27 @@ class Campaign:
             raise ValueError("batch_max_time must be a positive number of seconds")
         manifest_path = Path(manifest_path)
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("status") != "prepared":
-            raise ValueError("Only a fresh prepared manifest can be submitted")
-        loaded = []
-        for item in manifest["items"]:
-            path = manifest_record_path(manifest_path, item)
-            loaded.append(self.store.check_submittable(path, backend, item["runs"]))
+        resuming = manifest.get("status") == "resume_ready"
+        if resuming:
+            verified = self.validate_resume(manifest_path)
+            loaded = [record for record, _ in verified]
+            sent_runs = [sent for _, sent in verified]
+            if backend.name != manifest["backend_name"]:
+                raise ValueError("Submission backend differs from the calibration snapshot")
+        else:
+            if manifest.get("status") != "prepared":
+                raise ValueError("Only a fresh prepared manifest can be submitted")
+            loaded = []
+            for item in manifest["items"]:
+                path = manifest_record_path(manifest_path, item)
+                loaded.append(self.store.check_submittable(path, backend, item["runs"]))
+            sent_runs = [{} for _ in loaded]
         prior = self.store.submitted_runs()
         totals: Dict[Tuple[str, int], int] = {}
         limits: Dict[Tuple[str, int], int] = {}
-        for (_, prepared, _), item in zip(loaded, manifest["items"]):
+        for (_, prepared, _), item, sent in zip(loaded, manifest["items"], sent_runs):
             key = (prepared["campaign_id"], prepared["window"])
-            totals[key] = totals.get(key, 0) + item["runs"]
+            totals[key] = totals.get(key, 0) + item["runs"] - len(sent)
             limits[key] = min(limits.get(key, 10**9), prepared["planned_executions_per_window"])
         for key, total in totals.items():
             if prior.get(key, 0) + total > limits[key]:
@@ -704,6 +784,13 @@ class Campaign:
                 f"Could not open a Batch; no job was sent and the manifest is still "
                 f"prepared: {exc}"
             ) from exc
+        if resuming and manifest.get("batch_id"):
+            manifest.setdefault("previous_batches", []).append(
+                {
+                    "batch_id": manifest["batch_id"],
+                    "job_ids": [job for item in manifest["items"] for job in item["job_ids"]],
+                }
+            )
         manifest["status"] = "submitting"
         manifest["requested_batch_max_time_seconds"] = batch_max_time
         write_json(manifest_path, manifest)
@@ -713,6 +800,11 @@ class Campaign:
             samplers = {}
             for number, (item_index, run_index) in enumerate(manifest["job_order"], 1):
                 item = manifest["items"][item_index]
+                if run_index in sent_runs[item_index]:
+                    report(
+                        f"{manifest['algorithm']}: preserving saved job {sent_runs[item_index][run_index]}"
+                    )
+                    continue
                 report(
                     f"{manifest['algorithm']}: submitting job {number}/{manifest['jobs_planned']} "
                     f"({item['config']}, repetition {run_index + 1})"
@@ -720,7 +812,9 @@ class Campaign:
                 journal, prepared, circuits = loaded[item_index]
                 key = json.dumps(prepared["runtime_options"], sort_keys=True)
                 if key not in samplers:
-                    samplers[key] = SamplerV2(mode=batch, options=prepared["runtime_options"])
+                    samplers[key] = sampler_class(prepared["runtime_options"])(
+                        mode=batch, options=prepared["runtime_options"]
+                    )
                 job_id = self.store.submit_job(
                     manifest_record_path(manifest_path, item),
                     (journal, prepared, circuits),
@@ -830,8 +924,16 @@ class Campaign:
                 for entry in record["submission_journal"]:
                     usage = (entry.get("execution_metrics") or {}).get("usage") or {}
                     saved += usage.get("quantum_seconds") or 0
+            batch_ids = list(
+                dict.fromkeys(
+                    [old["batch_id"] for old in manifest.get("previous_batches", [])]
+                    + [manifest["batch_id"]]
+                )
+            )
             try:
-                billed = Batch.from_id(manifest["batch_id"], service=service).usage()
+                billed = sum(
+                    Batch.from_id(batch_id, service=service).usage() for batch_id in batch_ids
+                )
             except Exception as exc:  # pylint: disable=broad-except
                 billed = None
                 note = f"{type(exc).__name__}: {exc}"
@@ -842,6 +944,7 @@ class Campaign:
                     "algorithm": manifest.get("algorithm"),
                     "window": manifest.get("window"),
                     "batch_id": manifest["batch_id"],
+                    "batch_ids": batch_ids,
                     "jobs": sum(len(i.get("job_ids", [])) for i in manifest["items"]),
                     "batch_usage_seconds": billed,
                     "saved_job_quantum_seconds": saved,

@@ -1,0 +1,403 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV2-D2",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "run_id": "138b8434bd7b45e090998b46926f1544",
+  "status": "completed",
+  "saved_at": "2026-11-12T01:01:08.457558+00:00",
+  "batch_id": "ec3099a5-21ed-416e-be07-a0da33e5238f",
+  "config": {
+    "config_id": "RV2-D2",
+    "num_qubits": 2,
+    "depth": 2,
+    "depth_multiplier": 1.0,
+    "seed": 42,
+    "search_space": 4,
+    "classical_random_prob": 0.25,
+    "theoretical_success": 1.0,
+    "expected_outcome": "00",
+    "description": "2 qubits, depth 2 (1x n)"
+  },
+  "submission_journal": [
+    {
+      "run_index": 0,
+      "status": "completed",
+      "submitted_at": "2026-11-11T21:27:59.620884+00:00",
+      "job_id": "dbqdro1abdes73fo3n50",
+      "calibrated_at_submission": "2026-11-11 16:06:30-05:00",
+      "recalibrated_before_submission": false,
+      "collected_at": "2026-11-12T01:01:06.053913+00:00",
+      "pub_metadata": {
+        "circuit_metadata": {}
+      },
+      "execution_metrics": {
+        "caller": "qiskit",
+        "qiskit_version": "qiskit_ibm_runtime-0.52.0,qiskit-2.6.2*,qiskit_aer-0.18.2*",
+        "timestamps": {
+          "created": "2026-11-11T21:28:00.227196Z",
+          "finished": "2026-11-11T22:30:34.01548Z",
+          "running": "2026-11-11T22:30:29.669825Z"
+        },
+        "usage": {
+          "qpu_charge_time_seconds": 2,
+          "value": 0.032852,
+          "unit": "resource_units",
+          "status": "complete",
+          "details": [
+            {
+              "value": 0.032852,
+              "unit": "resource_units",
+              "metric": {
+                "id": "caffe3ca-729c-5750-8777-df63bbf8bfd9",
+                "value": 2
+              }
+            }
+          ]
+        },
+        "circuits_execution_time_ns": 269049088
+      },
+      "hardware_at_execution": {
+        "available": true,
+        "calibrated_at": "2026-11-11 17:08:14-05:00",
+        "collected_at": "2026-11-11T21:25:35.587054+00:00",
+        "source": "job.properties()",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 0,
+        "one_qubit_gate_error": {
+          "mean": 9.324047920198935e-05,
+          "max": 0.00019543029971251787,
+          "min": 0.0,
+          "median": 0.0
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.0009646403146711391,
+          "max": 0.0009646403146711391,
+          "min": 0.0009646403146711391,
+          "median": 0.0009646403146711391
+        },
+        "readout_error": {
+          "mean": 0.006591796875,
+          "max": 0.00927734375,
+          "min": 0.00390625,
+          "median": 0.006591796875
+        },
+        "readout_p1_given_0": {
+          "mean": 0.005859375,
+          "max": 0.0087890625,
+          "min": 0.0029296875,
+          "median": 0.005859375
+        },
+        "readout_p0_given_1": {
+          "mean": 0.00732421875,
+          "max": 0.009765625,
+          "min": 0.0048828125,
+          "median": 0.00732421875
+        },
+        "t1_us": {
+          "mean": 290.44663717539595,
+          "max": 385.95451543484194,
+          "min": 194.93875891594996,
+          "median": 290.44663717539595
+        },
+        "t2_us": {
+          "mean": 162.42557073996556,
+          "max": 294.9317305720415,
+          "min": 29.91941090788963,
+          "median": 162.42557073996556
+        },
+        "idle_over_t1": {
+          "mean": 0.0004941308842822905,
+          "max": 0.0006566164713051695,
+          "min": 0.00033164529725941135,
+          "median": 0.0004941308842822905
+        },
+        "scheduled": true,
+        "duration_s": 4.0200000000000005e-06,
+        "num_used_qubits": 2,
+        "changed_since_prepare": true,
+        "changed_values": false
+      },
+      "baselines_at_execution": {
+        "available": true,
+        "esp_score": 0.9649946163461192,
+        "m1_error": 0.03500538365388084,
+        "m1_tvd": 0.03500538365388084,
+        "m1_mixture_error": 0.026254037740410574,
+        "m1_mixture_tvd": 0.02625403774041063,
+        "m2_error": 0.038541509558292164,
+        "m2_tvd": 0.038541509558292164,
+        "m2_polarization": 0.9635988997622897,
+        "ideal_success_mass": 1.0,
+        "calibration_coverage": 1.0
+      }
+    },
+    {
+      "run_index": 1,
+      "status": "completed",
+      "submitted_at": "2026-11-11T21:28:02.886455+00:00",
+      "job_id": "dbqdropabdes73fo3n6g",
+      "calibrated_at_submission": "2026-11-11 16:06:30-05:00",
+      "recalibrated_before_submission": false,
+      "collected_at": "2026-11-12T01:01:07.612567+00:00",
+      "pub_metadata": {
+        "circuit_metadata": {}
+      },
+      "execution_metrics": {
+        "caller": "qiskit",
+        "qiskit_version": "qiskit_ibm_runtime-0.52.0,qiskit-2.6.2*,qiskit_aer-0.18.2*",
+        "timestamps": {
+          "created": "2026-11-11T21:28:03.393772Z",
+          "finished": "2026-11-11T22:30:41.677197Z",
+          "running": "2026-11-11T22:30:37.373169Z"
+        },
+        "usage": {
+          "qpu_charge_time_seconds": 2,
+          "value": 0.032852,
+          "unit": "resource_units",
+          "status": "complete",
+          "details": [
+            {
+              "value": 0.032852,
+              "unit": "resource_units",
+              "metric": {
+                "id": "caffe3ca-729c-5750-8777-df63bbf8bfd9",
+                "value": 2
+              }
+            }
+          ]
+        },
+        "circuits_execution_time_ns": 269049088
+      },
+      "hardware_at_execution": {
+        "available": true,
+        "calibrated_at": "2026-11-11 17:08:14-05:00",
+        "collected_at": "2026-11-11T21:25:35.587054+00:00",
+        "source": "job.properties()",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 0,
+        "one_qubit_gate_error": {
+          "mean": 9.324047920198935e-05,
+          "max": 0.00019543029971251787,
+          "min": 0.0,
+          "median": 0.0
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.0009646403146711391,
+          "max": 0.0009646403146711391,
+          "min": 0.0009646403146711391,
+          "median": 0.0009646403146711391
+        },
+        "readout_error": {
+          "mean": 0.006591796875,
+          "max": 0.00927734375,
+          "min": 0.00390625,
+          "median": 0.006591796875
+        },
+        "readout_p1_given_0": {
+          "mean": 0.005859375,
+          "max": 0.0087890625,
+          "min": 0.0029296875,
+          "median": 0.005859375
+        },
+        "readout_p0_given_1": {
+          "mean": 0.00732421875,
+          "max": 0.009765625,
+          "min": 0.0048828125,
+          "median": 0.00732421875
+        },
+        "t1_us": {
+          "mean": 290.44663717539595,
+          "max": 385.95451543484194,
+          "min": 194.93875891594996,
+          "median": 290.44663717539595
+        },
+        "t2_us": {
+          "mean": 162.42557073996556,
+          "max": 294.9317305720415,
+          "min": 29.91941090788963,
+          "median": 162.42557073996556
+        },
+        "idle_over_t1": {
+          "mean": 0.0004941308842822905,
+          "max": 0.0006566164713051695,
+          "min": 0.00033164529725941135,
+          "median": 0.0004941308842822905
+        },
+        "scheduled": true,
+        "duration_s": 4.0200000000000005e-06,
+        "num_used_qubits": 2,
+        "changed_since_prepare": true,
+        "changed_values": false
+      },
+      "baselines_at_execution": {
+        "available": true,
+        "esp_score": 0.9649946163461192,
+        "m1_error": 0.03500538365388084,
+        "m1_tvd": 0.03500538365388084,
+        "m1_mixture_error": 0.026254037740410574,
+        "m1_mixture_tvd": 0.02625403774041063,
+        "m2_error": 0.038541509558292164,
+        "m2_tvd": 0.038541509558292164,
+        "m2_polarization": 0.9635988997622897,
+        "ideal_success_mass": 1.0,
+        "calibration_coverage": 1.0
+      }
+    }
+  ],
+  "individual_results": [
+    {
+      "experiment_id": "138b8434bd7b45e090998b46926f1544-000",
+      "config_id": "RV2-D2",
+      "job_id": "dbqdro1abdes73fo3n50",
+      "run_index": 0,
+      "optimization_level": 3,
+      "backend_name": "ibm_kingston",
+      "shots": 1024,
+      "counts": {
+        "00": 978,
+        "10": 17,
+        "01": 17,
+        "11": 12
+      },
+      "status": "completed",
+      "success_rate": 0.955078125,
+      "success_count": 978,
+      "num_qubits": 2,
+      "depth": 2,
+      "depth_multiplier": 1.0,
+      "random_chance": 0.25,
+      "advantage_ratio": 3.8203125,
+      "quantum_advantage": true,
+      "threshold_30": true,
+      "threshold_50": true,
+      "threshold_70": true,
+      "threshold_90": true,
+      "targets": {
+        "available": true,
+        "shots": 1024,
+        "fidelity": {
+          "available": true,
+          "shots": 1024,
+          "unique_outcomes": 4,
+          "success_rate": 0.955078,
+          "dsr": 0.965829,
+          "peak_mismatch": false,
+          "hellinger_fidelity": 0.955078,
+          "tvd": 0.044922,
+          "tvd_fidelity": 0.955078,
+          "chance_baseline": 0.25,
+          "chance_corrected_success": 0.940104,
+          "coarse_tvd": 0.044922,
+          "coarse_tvd_similarity": 0.955078,
+          "coarse_hellinger_distance": 0.150728,
+          "coarse_hellinger_fidelity": 0.955078
+        },
+        "histogram_assessment": {
+          "available": true,
+          "schema_version": "1.3",
+          "shots": 1024,
+          "alpha": 0.01,
+          "tvd": 0.044921875,
+          "tvd_interval": [
+            0.029909716038312273,
+            0.06431615794106282
+          ],
+          "success_rate": 0.955078125,
+          "success_interval": [
+            0.9356838420589372,
+            0.9700902839616877
+          ],
+          "model_status": "not_applicable",
+          "rank_status": "verified",
+          "normalized_entropy": 0.16741076799099122,
+          "gap_standard_error": 0.009423905209240881,
+          "rank_pvalue": 1.3677791285342975e-263,
+          "prediction_residual": null,
+          "prediction_snapshot_hash": null,
+          "interval_method": "exact_clopper_pearson_deterministic_target",
+          "m2_model_status": "not_applicable"
+        }
+      }
+    },
+    {
+      "experiment_id": "138b8434bd7b45e090998b46926f1544-001",
+      "config_id": "RV2-D2",
+      "job_id": "dbqdropabdes73fo3n6g",
+      "run_index": 1,
+      "optimization_level": 3,
+      "backend_name": "ibm_kingston",
+      "shots": 1024,
+      "counts": {
+        "00": 985,
+        "10": 18,
+        "01": 10,
+        "11": 11
+      },
+      "status": "completed",
+      "success_rate": 0.9619140625,
+      "success_count": 985,
+      "num_qubits": 2,
+      "depth": 2,
+      "depth_multiplier": 1.0,
+      "random_chance": 0.25,
+      "advantage_ratio": 3.84765625,
+      "quantum_advantage": true,
+      "threshold_30": true,
+      "threshold_50": true,
+      "threshold_70": true,
+      "threshold_90": true,
+      "targets": {
+        "available": true,
+        "shots": 1024,
+        "fidelity": {
+          "available": true,
+          "shots": 1024,
+          "unique_outcomes": 4,
+          "success_rate": 0.961914,
+          "dsr": 0.964108,
+          "peak_mismatch": false,
+          "hellinger_fidelity": 0.961914,
+          "tvd": 0.038086,
+          "tvd_fidelity": 0.961914,
+          "chance_baseline": 0.25,
+          "chance_corrected_success": 0.949219,
+          "coarse_tvd": 0.038086,
+          "coarse_tvd_similarity": 0.961914,
+          "coarse_hellinger_distance": 0.138664,
+          "coarse_hellinger_fidelity": 0.961914
+        },
+        "histogram_assessment": {
+          "available": true,
+          "schema_version": "1.3",
+          "shots": 1024,
+          "alpha": 0.01,
+          "tvd": 0.0380859375,
+          "tvd_interval": [
+            0.024368149240333925,
+            0.056264390949874565
+          ],
+          "success_rate": 0.9619140625,
+          "success_interval": [
+            0.9437356090501254,
+            0.9756318507596661
+          ],
+          "model_status": "not_applicable",
+          "rank_status": "verified",
+          "normalized_entropy": 0.14592192655838473,
+          "gap_standard_error": 0.00925558449698643,
+          "rank_pvalue": 3.360285756817506e-264,
+          "prediction_residual": null,
+          "prediction_snapshot_hash": null,
+          "interval_method": "exact_clopper_pearson_deterministic_target",
+          "m2_model_status": "not_applicable"
+        }
+      }
+    }
+  ],
+  "artifact_directory": "artifacts/RV2-D2_IBM_ibm_kingston_20261111_212535_138b8434",
+  "prepared_hash": "151043a83b1eac8daa7f326c50d17e8c6fc3b5e3bd880524b7af46304985095f"
+}

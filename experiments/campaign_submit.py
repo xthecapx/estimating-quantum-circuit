@@ -69,6 +69,9 @@ def submit_window(
             if manifest["batch_id"] or any(item["job_ids"] for item in manifest["items"]):
                 raise ValueError(f"{path}: prepared manifest already contains submission IDs")
             pending.append((key, manifest["backend_name"]))
+        elif status == "resume_ready":
+            load_runner(key.split(":", 1)[0]).campaign().validate_resume(path)
+            pending.append((key, manifest["backend_name"]))
         elif status in ("submitted", "submitting", "incomplete", "completed"):
             ids = submitted_ids(manifest)
             if status == "completed":

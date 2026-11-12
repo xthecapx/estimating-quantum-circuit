@@ -62,7 +62,9 @@ hashes for provenance. Source changes made after
 migration will be reported as changes, not silently accepted. This baseline is a
 migration record; keep subsequent scientific updates in new commits/snapshots.
 It does not hash files newly created for this repository, such as this README.
-The same check can additionally prove preservation of the original dataset:
+For a pre-cleanup QWARD checkout restored from the recovery bundle, the same
+check can additionally compare the original dataset. The current cleaned QWARD
+checkout no longer contains those files:
 
 ```sh
 python scripts/verify_migration.py --source /absolute/path/to/qiskit-qward
@@ -140,13 +142,18 @@ Keep **all files from one export together**: `dataset-*.csv`,
 the existing tables uses only Python's standard library. See
 [dashboard setup](dashboard/README.md) for Node requirements and production build.
 
-QWARD retains its original dataset copy during this migration. New collections in
-this repository do not automatically synchronize back. To refresh the QWARD-hosted
-dashboard, copy a complete reviewed `experiments/dataset_out/` export into its
-`qward/examples/papers/dataset_out/`, then run its `dashboard/build.py`. Copy files
-without merging stale CSV parts; back up the previous complete export first.
-A shared job/task ID denotes one observation even when stored in both repositories.
-No original QWARD data will be removed until the migration is explicitly confirmed.
+This repository is the authoritative home for the migrated experiments, dataset,
+and dashboard. QWARD's current branches no longer contain the migrated files;
+its cleanup commit is `789e6575aaa62b1b39b522c7852db8a888c68e32`. Existing QWARD
+release tags were deliberately preserved and still expose historical snapshots.
+The manuscript/report and its assets remain in QWARD pending a later migration.
+Publish new measurements through this repository's export and Pages workflow;
+there is no longer a second current dashboard dataset to synchronize back.
+
+`migration-manifest.json` describes the initial migration and its original source
+hashes. Its original commit/file references are historical provenance, not paths
+that must exist in the cleaned QWARD checkout. Duplicate historical job/task IDs
+still denote the same observations, not independent samples.
 
 ## Publish the website on GitHub Pages
 

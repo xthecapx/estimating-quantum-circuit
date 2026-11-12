@@ -1,0 +1,1247 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "status": "incomplete",
+  "prepared_at": "2026-11-11T21:24:20.355459+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611111,
+  "job_order": [
+    [
+      8,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      31,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      28,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      19,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      34,
+      0
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      7,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      37,
+      0
+    ],
+    [
+      17,
+      0
+    ],
+    [
+      36,
+      0
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      35,
+      0
+    ],
+    [
+      38,
+      0
+    ],
+    [
+      23,
+      0
+    ],
+    [
+      33,
+      0
+    ],
+    [
+      21,
+      0
+    ],
+    [
+      18,
+      0
+    ],
+    [
+      16,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      32,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      31,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      27,
+      1
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      28,
+      1
+    ],
+    [
+      26,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      34,
+      1
+    ],
+    [
+      25,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      29,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      37,
+      1
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      36,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      20,
+      1
+    ],
+    [
+      15,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      35,
+      1
+    ],
+    [
+      38,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      33,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      18,
+      1
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      32,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 78,
+  "items": [
+    {
+      "config": "BV2-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV2-ONES_IBM_ibm_kingston_20261111_212401_5997bd70.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        118,
+        128,
+        129
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": [
+        "dbqdr58k09pc73at3eb0",
+        "dbqdr66jjaos73ah4ii0"
+      ]
+    },
+    {
+      "config": "BV2-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV2-ALT_IBM_ibm_kingston_20261111_212401_91fb04e2.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        149,
+        56,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdr5mjjaos73ah4if0",
+        "dbqdr6fv5hds73dft7vg"
+      ]
+    },
+    {
+      "config": "BV2-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV2-SINGLE_IBM_ibm_kingston_20261111_212402_4824a65a.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        56,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdr5gk09pc73at3ed0",
+        "dbqdr6fv5hds73dft810"
+      ]
+    },
+    {
+      "config": "BV3-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV3-ONES_IBM_ibm_kingston_20261111_212402_54970b61.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        126,
+        128,
+        137,
+        127
+      ],
+      "isa_depth": 15,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dbqdr5ujjaos73ah4ih0",
+        "dbqdr6habdes73fo3l50"
+      ]
+    },
+    {
+      "config": "BV3-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV3-ALT_IBM_ibm_kingston_20261111_212403_5630cbe4.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        118,
+        56,
+        128,
+        129
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": [
+        "dbqdr5pabdes73fo3l2g",
+        "dbqdr6mjjaos73ah4ij0"
+      ]
+    },
+    {
+      "config": "BV3-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV3-SINGLE_IBM_ibm_kingston_20261111_212403_ae59aba0.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        118,
+        128,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvqhabdes73fo4080",
+        "dbqdvrfv5hds73dftip0"
+      ]
+    },
+    {
+      "config": "BV4-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV4-ONES_IBM_ibm_kingston_20261111_212404_29ad2d20.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        69,
+        57,
+        68,
+        66,
+        67
+      ],
+      "isa_depth": 20,
+      "isa_two_qubit_gates": 7,
+      "job_ids": [
+        "dbqdvq6jjaos73ah4teg",
+        "dbqdvqok09pc73at3p10"
+      ]
+    },
+    {
+      "config": "BV4-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV4-ALT_IBM_ibm_kingston_20261111_212404_153979b6.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        118,
+        89,
+        128,
+        149,
+        129
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": [
+        "dbqdvqfv5hds73dftikg",
+        "dbqdvr7v5hds73dftin0"
+      ]
+    },
+    {
+      "config": "BV4-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV4-SINGLE_IBM_ibm_kingston_20261111_212405_66ff295e.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        128,
+        118,
+        89,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvpok09pc73at3otg",
+        "dbqdvqujjaos73ah4th0"
+      ]
+    },
+    {
+      "config": "BV5-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV5-ONES_IBM_ibm_kingston_20261111_212405_6fd517a1.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        136,
+        144,
+        140,
+        141,
+        143,
+        142
+      ],
+      "isa_depth": 31,
+      "isa_two_qubit_gates": 11,
+      "job_ids": [
+        "dbqdvq9abdes73fo406g",
+        "dbqdvr7v5hds73dfting"
+      ]
+    },
+    {
+      "config": "BV5-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV5-ALT_IBM_ibm_kingston_20261111_212406_1d7ec3f5.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        64,
+        149,
+        66,
+        118,
+        77,
+        65
+      ],
+      "isa_depth": 15,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dbqe0jvv5hds73dftl10",
+        "dbqe0kok09pc73at3rd0"
+      ]
+    },
+    {
+      "config": "BV5-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV5-SINGLE_IBM_ibm_kingston_20261111_212406_fad4944e.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        89,
+        128,
+        118,
+        91,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqe0k0k09pc73at3rag",
+        "dbqe0kujjaos73ah4vvg"
+      ]
+    },
+    {
+      "config": "BV6-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV6-ONES_IBM_ibm_kingston_20261111_212407_6860403d.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        66,
+        68,
+        67,
+        69,
+        70,
+        89,
+        78
+      ],
+      "isa_depth": 47,
+      "isa_two_qubit_gates": 15,
+      "job_ids": [
+        "dbqe0jfv5hds73dftl0g",
+        "dbqe0k6jjaos73ah4vsg"
+      ]
+    },
+    {
+      "config": "BV6-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV6-ALT_IBM_ibm_kingston_20261111_212407_0b4d7c0f.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        64,
+        149,
+        66,
+        128,
+        77,
+        118,
+        65
+      ],
+      "isa_depth": 15,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dbqe0jmjjaos73ah4vog",
+        "dbqe0kejjaos73ah4vtg"
+      ]
+    },
+    {
+      "config": "BV6-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV6-SINGLE_IBM_ibm_kingston_20261111_212408_92741e7c.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        91,
+        89,
+        128,
+        118,
+        117,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqe0jhabdes73fo42m0",
+        "dbqe0kmjjaos73ah4vug"
+      ]
+    },
+    {
+      "config": "BV7-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV7-ONES_IBM_ibm_kingston_20261111_212408_ece08d8a.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        66,
+        67,
+        68,
+        71,
+        69,
+        70,
+        89,
+        78
+      ],
+      "isa_depth": 46,
+      "isa_two_qubit_gates": 15,
+      "job_ids": [
+        "dbqdr78k09pc73at3efg",
+        "dbqdr87v5hds73dft850"
+      ]
+    },
+    {
+      "config": "BV7-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV7-ALT_IBM_ibm_kingston_20261111_212409_027b6c2b.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        57,
+        118,
+        66,
+        128,
+        69,
+        149,
+        67,
+        68
+      ],
+      "isa_depth": 24,
+      "isa_two_qubit_gates": 7,
+      "job_ids": [
+        "dbqdr7gk09pc73at3egg",
+        "dbqdr88k09pc73at3ejg"
+      ]
+    },
+    {
+      "config": "BV7-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV7-SINGLE_IBM_ibm_kingston_20261111_212409_670cc039.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        117,
+        91,
+        89,
+        128,
+        118,
+        42,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdr79abdes73fo3l7g",
+        "dbqdr7ujjaos73ah4im0"
+      ]
+    },
+    {
+      "config": "BV8-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV8-ONES_IBM_ibm_kingston_20261111_212409_6ac0e44e.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        88,
+        89,
+        78,
+        66,
+        67,
+        69,
+        68,
+        71,
+        70
+      ],
+      "isa_depth": 70,
+      "isa_two_qubit_gates": 22,
+      "job_ids": [
+        "dbqdr7nv5hds73dft83g",
+        "dbqdr88k09pc73at3eig"
+      ]
+    },
+    {
+      "config": "BV8-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV8-ALT_IBM_ibm_kingston_20261111_212410_016c5474.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        66,
+        128,
+        67,
+        149,
+        64,
+        118,
+        77,
+        89,
+        65
+      ],
+      "isa_depth": 27,
+      "isa_two_qubit_gates": 7,
+      "job_ids": [
+        "dbqdr70k09pc73at3ee0",
+        "dbqdr7pabdes73fo3la0"
+      ]
+    },
+    {
+      "config": "BV8-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV8-SINGLE_IBM_ibm_kingston_20261111_212410_3ca71266.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        15,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvs6jjaos73ah4tlg",
+        "dbqdvt1abdes73fo40g0"
+      ]
+    },
+    {
+      "config": "BV9-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-ONES_IBM_ibm_kingston_20261111_212411_a5ca301d.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        49,
+        48,
+        47,
+        57,
+        67,
+        68,
+        69,
+        88,
+        89,
+        78
+      ],
+      "isa_depth": 57,
+      "isa_two_qubit_gates": 20,
+      "job_ids": [
+        "dbqdvs8k09pc73at3p70",
+        "dbqdvt9abdes73fo40hg"
+      ]
+    },
+    {
+      "config": "BV9-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-ALT_IBM_ibm_kingston_20261111_212412_2dde198b.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        109,
+        148,
+        108,
+        149,
+        110,
+        91,
+        128,
+        89,
+        129,
+        118
+      ],
+      "isa_depth": 33,
+      "isa_two_qubit_gates": 11,
+      "job_ids": [
+        "dbqdvs6jjaos73ah4tl0",
+        "dbqdvsvv5hds73dftitg"
+      ]
+    },
+    {
+      "config": "BV9-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-SINGLE_IBM_ibm_kingston_20261111_212412_dff29b83.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        86,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvs8k09pc73at3p60",
+        "dbqdvt6jjaos73ah4to0"
+      ]
+    },
+    {
+      "config": "BV10-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV10-ONES_IBM_ibm_kingston_20261111_212413_aa944b05.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        38,
+        49,
+        48,
+        47,
+        57,
+        67,
+        68,
+        69,
+        88,
+        89,
+        78
+      ],
+      "isa_depth": 62,
+      "isa_two_qubit_gates": 22,
+      "job_ids": [
+        "dbqdvrpabdes73fo40cg",
+        "dbqdvsnv5hds73dftirg"
+      ]
+    },
+    {
+      "config": "BV10-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV10-ALT_IBM_ibm_kingston_20261111_212413_617d13e8.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        109,
+        91,
+        108,
+        89,
+        110,
+        148,
+        128,
+        149,
+        129,
+        117,
+        118
+      ],
+      "isa_depth": 33,
+      "isa_two_qubit_gates": 11,
+      "job_ids": [
+        "dbqe0m6jjaos73ah502g",
+        "dbqe0mvv5hds73dftla0"
+      ]
+    },
+    {
+      "config": "BV10-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV10-SINGLE_IBM_ibm_kingston_20261111_212414_54ebe021.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        95,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqe0lok09pc73at3reg",
+        "dbqe0mnv5hds73dftl90"
+      ]
+    },
+    {
+      "config": "BV11-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-ONES_IBM_ibm_kingston_20261111_212414_27bef4b3.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        49,
+        51,
+        50,
+        48,
+        47,
+        57,
+        67,
+        68,
+        69,
+        88,
+        89,
+        78
+      ],
+      "isa_depth": 74,
+      "isa_two_qubit_gates": 26,
+      "job_ids": [
+        "dbqe0lfv5hds73dftl5g",
+        "dbqe0mejjaos73ah5040"
+      ]
+    },
+    {
+      "config": "BV11-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-ALT_IBM_ibm_kingston_20261111_212415_82572d21.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        69,
+        89,
+        66,
+        118,
+        67,
+        148,
+        68,
+        149,
+        77,
+        128,
+        64,
+        65
+      ],
+      "isa_depth": 49,
+      "isa_two_qubit_gates": 18,
+      "job_ids": [
+        "dbqe0lnv5hds73dftl6g",
+        "dbqe0mhabdes73fo42u0"
+      ]
+    },
+    {
+      "config": "BV11-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-SINGLE_IBM_ibm_kingston_20261111_212415_c893a4e1.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        95,
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        79,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqe0m0k09pc73at3rfg",
+        "dbqe0mvv5hds73dftlb0"
+      ]
+    },
+    {
+      "config": "BV12-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-ONES_IBM_ibm_kingston_20261111_212416_ee831251.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        50,
+        38,
+        49,
+        51,
+        58,
+        71,
+        70,
+        69,
+        68,
+        67,
+        66,
+        64,
+        65
+      ],
+      "isa_depth": 75,
+      "isa_two_qubit_gates": 26,
+      "job_ids": [
+        "dbqdr9habdes73fo3li0",
+        "dbqdra9abdes73fo3llg"
+      ]
+    },
+    {
+      "config": "BV12-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-ALT_IBM_ibm_kingston_20261111_212416_4c68d1c3.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        129,
+        91,
+        118,
+        89,
+        109,
+        149,
+        110,
+        148,
+        97,
+        128,
+        105,
+        117,
+        106
+      ],
+      "isa_depth": 50,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbqdr8ujjaos73ah4ip0",
+        "dbqdr9ujjaos73ah4iqg"
+      ]
+    },
+    {
+      "config": "BV12-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV12-SINGLE_IBM_ibm_kingston_20261111_212417_255c30c9.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        79,
+        95,
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        141,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdr99abdes73fo3lgg",
+        "dbqdra9abdes73fo3lkg"
+      ]
+    },
+    {
+      "config": "BV13-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV13-ONES_IBM_ibm_kingston_20261111_212417_af5bdd88.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        51,
+        71,
+        58,
+        50,
+        49,
+        48,
+        47,
+        57,
+        67,
+        68,
+        69,
+        88,
+        89,
+        78
+      ],
+      "isa_depth": 82,
+      "isa_two_qubit_gates": 30,
+      "job_ids": [
+        "dbqdr9ejjaos73ah4ipg",
+        "dbqdra6jjaos73ah4irg"
+      ]
+    },
+    {
+      "config": "BV13-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV13-ALT_IBM_ibm_kingston_20261111_212418_efefc062.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        57,
+        148,
+        67,
+        128,
+        69,
+        149,
+        68,
+        91,
+        77,
+        118,
+        64,
+        89,
+        66,
+        65
+      ],
+      "isa_depth": 41,
+      "isa_two_qubit_gates": 16,
+      "job_ids": [
+        "dbqdr91abdes73fo3lf0",
+        "dbqdr9pabdes73fo3ljg"
+      ]
+    },
+    {
+      "config": "BV13-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV13-SINGLE_IBM_ibm_kingston_20261111_212418_ce2e9abd.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        141,
+        79,
+        95,
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        97,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvu1abdes73fo40k0",
+        "dbqdvuvv5hds73dftj1g"
+      ]
+    },
+    {
+      "config": "BV14-ONES",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV14-ONES_IBM_ibm_kingston_20261111_212419_a52eb305.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        78,
+        88,
+        89,
+        69,
+        68,
+        67,
+        57,
+        47,
+        48,
+        49,
+        50,
+        51,
+        70,
+        71,
+        58
+      ],
+      "isa_depth": 87,
+      "isa_two_qubit_gates": 32,
+      "job_ids": [
+        "dbqdvtok09pc73at3pa0",
+        "dbqdvuhabdes73fo40m0"
+      ]
+    },
+    {
+      "config": "BV14-ALT",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV14-ALT_IBM_ibm_kingston_20261111_212419_603ee610.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        65,
+        91,
+        66,
+        89,
+        67,
+        118,
+        57,
+        148,
+        49,
+        149,
+        48,
+        128,
+        46,
+        117,
+        47
+      ],
+      "isa_depth": 42,
+      "isa_two_qubit_gates": 13,
+      "job_ids": [
+        "dbqdvtmjjaos73ah4tq0",
+        "dbqdvu8k09pc73at3pbg"
+      ]
+    },
+    {
+      "config": "BV14-SINGLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV14-SINGLE_IBM_ibm_kingston_20261111_212420_fa6e6e56.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        97,
+        141,
+        79,
+        95,
+        86,
+        15,
+        42,
+        117,
+        91,
+        89,
+        128,
+        118,
+        59,
+        149,
+        148
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 1,
+      "job_ids": [
+        "dbqdvuejjaos73ah4ts0",
+        "dbqdvuok09pc73at3pd0"
+      ]
+    }
+  ],
+  "parts": [
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part01.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part02.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part03.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part04.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part05.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part06.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part07.json",
+    "bv-kingston-full-oracle-growth-d2026-11-11_manifest_part08.json"
+  ],
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "1c000ad4-59a3-43c3-9394-d965e8e92972",
+    "024fff62-506d-42d3-bf45-15921a6a24c1",
+    "bf779f0a-fb25-4968-be43-16f860b69826",
+    "d4c4eed0-40ea-4915-aaf5-fe0f5ac465f1",
+    "95377ebb-5609-4871-8f08-b4012e10e5cc",
+    "c58a991e-9575-4447-abf0-2b8921de4d12",
+    "ca4d48b4-c893-4beb-b8a4-184e1a30a33b",
+    "5e10a6ff-2dc1-45b8-974b-c30526696a4e"
+  ]
+}

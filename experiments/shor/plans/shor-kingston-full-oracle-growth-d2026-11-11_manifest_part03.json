@@ -1,0 +1,129 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "SHOR",
+  "status": "completed",
+  "prepared_at": "2026-11-11T21:25:55.274461+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/plans/shor-kingston-full-oracle-growth-d2026-11-11.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-full-oracle-growth-v1-2026-11-11",
+  "window": 20261111,
+  "order_seed": 202611117,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "batch_id": "fe488d8d-7a17-4201-acbf-530267741a36",
+  "jobs_planned": 9,
+  "items": [
+    {
+      "config": "SHOR-N15-A2-M4",
+      "runs": 3,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/data/qpu/v2/SHOR-N15-A2-M4_IBM_ibm_kingston_20261111_212548_3b52b6ab.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        5,
+        16,
+        4,
+        3,
+        23,
+        2,
+        22,
+        1
+      ],
+      "isa_depth": 521,
+      "isa_two_qubit_gates": 164,
+      "job_ids": [
+        "dbqe196jjaos73ah51mg",
+        "dbqe19gk09pc73at3t80",
+        "dbqe1a0k09pc73at3ta0"
+      ]
+    },
+    {
+      "config": "SHOR-N15-A2-M5",
+      "runs": 3,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/data/qpu/v2/SHOR-N15-A2-M5_IBM_ibm_kingston_20261111_212549_bd4bd5ec.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        124,
+        123,
+        144,
+        143,
+        136,
+        141,
+        145,
+        140,
+        142
+      ],
+      "isa_depth": 570,
+      "isa_two_qubit_gates": 188,
+      "job_ids": [
+        "dbqe18pabdes73fo44kg",
+        "dbqe198k09pc73at3t5g",
+        "dbqe19ok09pc73at3t8g"
+      ]
+    },
+    {
+      "config": "SHOR-N15-A2-M6",
+      "runs": 3,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/data/qpu/v2/SHOR-N15-A2-M6_IBM_ibm_kingston_20261111_212549_390c52c2.json",
+      "calibrated_at": "2026-11-11 16:06:30-05:00",
+      "physical_layout": [
+        5,
+        16,
+        4,
+        1,
+        3,
+        2,
+        22,
+        6,
+        21,
+        23
+      ],
+      "isa_depth": 629,
+      "isa_two_qubit_gates": 225,
+      "job_ids": [
+        "dbqe18ujjaos73ah51m0",
+        "dbqe198k09pc73at3t6g",
+        "dbqe1a0k09pc73at3t90"
+      ]
+    }
+  ],
+  "parent_manifest": "shor-kingston-full-oracle-growth-d2026-11-11_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-11T21:39:53.155282+00:00"
+}
