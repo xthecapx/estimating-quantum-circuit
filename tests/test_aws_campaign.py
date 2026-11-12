@@ -397,3 +397,88 @@ def test_export_matches_logical_circuits_and_preserves_ibm_repetitions(run, tmp_
     report = campaign.export(run, root)
     assert report["ibm_matches"] == 0
     assert report["skipped"][0]["reason"] == "logical_circuit_hash_mismatch"
+
+
+def test_bucket_free_profile_capture_only_reads_device(tmp_path):
+    class ReadOnlyDevice:
+        def device(self, arn):
+            return FakeAWS().device(arn)
+
+    out = tmp_path / "profile"
+    result = campaign.capture_profile(out, ReadOnlyDevice())
+    assert result["tasks_submitted"] == 0
+    snapshot = json.loads((out / "device_profile.json").read_text())
+    assert snapshot["raw"]["deviceArn"] == campaign.DEVICE_ARN
+    assert snapshot["profile"]["coverage"]["qubits_with_standardized_properties"] == 1
+    with pytest.raises(FileExistsError):
+        campaign.capture_profile(out, ReadOnlyDevice())
+
+
+def test_boto_client_advertises_schema_without_enabling_submit_retries(monkeypatch):
+    import boto3
+
+    configs = {}
+
+    class Session:
+        def __init__(self, **kwargs):
+            assert kwargs == {"profile_name": "default", "region_name": "us-west-1"}
+
+        def client(self, name, **kwargs):
+            configs[name] = kwargs.get("config")
+            return object()
+
+    monkeypatch.setattr(boto3, "Session", Session)
+    campaign.AWSClient("default")
+    assert "BraketSchemas/" in configs["braket"].user_agent_extra
+    assert configs["braket"].retries["total_max_attempts"] == 1
+
+
+def test_default_chain_loads_repo_env_without_overriding_shell(monkeypatch):
+    import boto3
+    import dotenv
+    from pathlib import Path
+
+    loaded = []
+    sessions = []
+    monkeypatch.setattr(
+        dotenv, "load_dotenv", lambda path, override: loaded.append((path, override))
+    )
+
+    class Session:
+        def __init__(self, **kwargs):
+            sessions.append(kwargs)
+
+        def client(self, *args, **kwargs):
+            return object()
+
+    monkeypatch.setattr(boto3, "Session", Session)
+    campaign.AWSClient()
+    assert loaded == [(Path(campaign.__file__).resolve().parents[1] / ".env", False)]
+    assert sessions == [{"profile_name": None, "region_name": "us-west-1"}]
+    loaded.clear()
+    campaign.AWSClient("default")
+    assert not loaded
+
+
+@pytest.mark.parametrize("region", ["us-west-1", "us-east-1"])
+def test_bucket_region_uses_head_response_without_extra_permission(region):
+    from types import SimpleNamespace
+
+    client = object.__new__(campaign.AWSClient)
+    client.s3 = SimpleNamespace(
+        head_bucket=lambda **kwargs: {
+            "ResponseMetadata": {"HTTPHeaders": {"x-amz-bucket-region": region}}
+        }
+    )
+    if region == "us-west-1":
+        client.check_bucket("test-bucket")
+    else:
+        with pytest.raises(ValueError, match="us-west-1"):
+            client.check_bucket("test-bucket")
+
+
+def test_rigetti_uppercase_seconds_are_normalized():
+    aws = FakeAWS()
+    aws.properties["standardized"]["oneQubitProperties"]["7"]["T1"] = {"value": 3e-5, "unit": "S"}
+    summary = data.profile_summary(aws.device(campaign.DEVICE_ARN))
+    assert summary["coherence_us"]["7"]["T1"]["value_us"] == pytest.approx(30)

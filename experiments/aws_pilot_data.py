@@ -217,6 +217,7 @@ def profile_summary(device):
         for field in ("T1", "T2"):
             entry = values.get(field) or {}
             value, unit = entry.get("value"), entry.get("unit")
+            unit = unit.lower() if isinstance(unit, str) else unit
             supported = value is not None and unit in unit_scale
             durations[qubit][field] = {
                 "value_us": value * unit_scale[unit] if supported else None,

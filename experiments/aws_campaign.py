@@ -181,11 +181,20 @@ class AWSClient:
     def __init__(self, profile=None):
         import boto3
         from botocore.config import Config
+        from dotenv import load_dotenv
 
+        # Explicit profiles use their own credential provider. With no profile,
+        # load the thesis-root .env without replacing existing shell variables.
+        if profile is None:
+            load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
         self.session = boto3.Session(profile_name=profile, region_name=REGION)
         # Persist ambiguous attempts rather than repeatedly submitting on HTTP errors.
         self.braket = self.session.client(
-            "braket", config=Config(retries={"total_max_attempts": 1})
+            "braket",
+            config=Config(
+                retries={"total_max_attempts": 1},
+                user_agent_extra=f"BraketSchemas/{package_versions(('amazon-braket-schemas',))['amazon-braket-schemas']}",
+            ),
         )
         self.s3 = self.session.client("s3")
 
@@ -200,9 +209,14 @@ class AWSClient:
 
     def check_bucket(self, bucket):
         """Verify access and same-region location; never create a bucket."""
-        self.s3.head_bucket(Bucket=bucket)
-        location = self.s3.get_bucket_location(Bucket=bucket)["LocationConstraint"]
-        if (location or "us-east-1") != REGION:
+        response = self.s3.head_bucket(Bucket=bucket)
+        headers = response.get("ResponseMetadata", {}).get("HTTPHeaders", {})
+        location = response.get("BucketRegion") or headers.get("x-amz-bucket-region")
+        if not location:
+            location = (
+                self.s3.get_bucket_location(Bucket=bucket)["LocationConstraint"] or "us-east-1"
+            )
+        if location != REGION:
             raise ValueError(f"Use an S3 bucket in {REGION}")
 
     def create(self, request):
@@ -485,10 +499,31 @@ def export(record, ibm_root=PAPERS):
     return report
 
 
+def capture_profile(out, client):
+    """Read GetDevice only; no task, S3 bucket or account-identity call required."""
+    out = Path(out)
+    raw = client.device(DEVICE_ARN)
+    snapshot = {"captured_at": now(), "raw": raw, "profile": data.profile_summary(raw)}
+    out.mkdir(parents=True, exist_ok=False)
+    write_json(out / "device_profile.json", snapshot)
+    return {
+        "device": snapshot["profile"]["name"],
+        "region": REGION,
+        "profile_coverage": snapshot["profile"]["coverage"],
+        "snapshot": str(out / "device_profile.json"),
+        "tasks_submitted": 0,
+    }
+
+
 def main(argv=None):
     """CLI with explicit paid submission and otherwise offline/read-only stages."""
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    profile = commands.add_parser(
+        "profile", help="Read-only GetDevice snapshot; no result bucket needed"
+    )
+    profile.add_argument("--out", type=Path, required=True)
+    profile.add_argument("--profile", help="AWS credential profile")
     prep = commands.add_parser("prepare", help="Offline: freeze and locally verify one task")
     prep.add_argument("--out", type=Path, required=True)
     prep.add_argument("--bucket", required=True, help="Existing Braket result bucket in us-west-1")
@@ -516,7 +551,9 @@ def main(argv=None):
             sub.add_argument("--ibm-root", type=Path, default=PAPERS)
     args = parser.parse_args(argv)
     try:
-        if args.command == "prepare":
+        if args.command == "profile":
+            result = capture_profile(args.out, AWSClient(args.profile))
+        elif args.command == "prepare":
             result = prepare(
                 args.out,
                 bucket=args.bucket,

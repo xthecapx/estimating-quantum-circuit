@@ -18,6 +18,13 @@ with the direct AWS stack. The repository pins `qiskit-braket-provider==0.23.2`
 and `amazon-braket-sdk==1.126.1`. Each prepared record saves the actual installed
 versions. If using pip in a dedicated environment, use `python -m pip install -e '.[aws]'`.
 
+Without `--profile`, AWS commands load the thesis-root `.env` with
+`override=False`, then use boto3's normal credential chain. Use
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, plus `AWS_SESSION_TOKEN` only
+for temporary credentials. Existing shell variables take precedence. An explicit
+`--profile`, including `--profile default`, selects credentials from that AWS
+profile instead; omit it to use `.env`. Never commit the credential file.
+
 Use your normal AWS credential chain or pass `--profile YOUR_PROFILE` on the AWS
 commands. Temporary credentials and SSO profiles work through boto3; the script
 does not read or save secret keys. Supply an existing result bucket in `us-west-1`.
@@ -162,3 +169,81 @@ uv run --extra aws python -m pytest tests/test_aws_campaign.py -q
 
 Install pytest in the environment if it is not already available. Tests use local
 simulation and fake AWS clients; they do not require account credentials.
+
+## Inspect hardware metadata before paying for a task
+
+The bucket-free profile command uses only GetDevice. It does not submit a task,
+require a result bucket, or retrieve account identity:
+
+```sh
+python scripts/run.py rigetti profile \
+  --out experiments/data/aws_profiles/cepheus-2026-11-12
+```
+
+Use a fresh output directory for each capture; existing snapshots are not
+overwritten. `device_profile.json` contains the full raw response, capture time,
+normalized profile and per-qubit/per-edge coverage. Capture time is not a
+claim about the provider's calibration or execution time. The boto3 client
+advertises its installed BraketSchemas version, as required by AWS to include
+OpenQASM capabilities in GetDevice responses. The single-attempt policy for
+CreateQuantumTask remains unchanged.
+
+On 2026-11-12, both GetDevice and S3 discovery were rejected by the local default
+profile (invalid security token / InvalidAccessKeyId). No live profile was
+collected and no task was submitted. Refresh the default credentials locally;
+never put keys in this repository or pass them as CLI arguments. The pilot
+still needs an existing result bucket in us-west-1 before preparation/preflight.
+
+## Access routes and what to inspect in the first task
+
+AWS lists Rigetti Cepheus-1-108Q in us-west-1. GetDevice can expose topology,
+operations, standardized gate/readout fidelities, provider properties and any
+available coherence measurements without a QPU submission. The live response,
+not an expected schema field, determines actual coverage. See the official
+[AWS device list](https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html)
+and [GetDevice header requirement](https://docs.aws.amazon.com/braket/latest/APIReference/API_GetDevice.html).
+
+The one-task pilot remains BV3-ALT, 1,024 shots. At the published $0.30/task plus
+$0.000425/shot rate, QPU usage is approximately $0.7352 before storage/tax; verify
+the [current pricing](https://aws.amazon.com/braket/pricing/) before submission.
+Only `submit` is paid. A completed task adds actual measurements, measured-qubit
+ordering, task timestamps, and Rigetti compilation metadata. The saved
+`raw_result.json` preserves `additionalMetadata.rigettiMetadata.compiledProgram`
+and optional `nativeQuilMetadata` if provided; inspect these rather than treating
+the intermediate Qiskit circuit as the final native hardware circuit. Native
+metadata is optional and estimates are not measured gate errors. AWS documents
+[compiled-circuit inspection](https://docs.aws.amazon.com/braket/latest/developerguide/braket-compiled-circuits-inspecting.html).
+
+Direct Rigetti QCS is an alternative, using its own access and credentials.
+Its HTTP API exposes architecture and calibration data; pyQuil/QCS supports
+execution. Rigetti identifies the ISA document as the source of gate fidelities,
+and Quil calibrations as the source of native gates and durations. QCS is not
+a guarantee of IBM-equivalent metadata: Rigetti notes that some benchmarks are
+not routinely published (including T1/T2 on Ankaa). This says nothing definitive
+about the available Cepheus response until inspected. Different access routes
+must be matched by actual processor ID and observation time before comparing.
+See [QCS API guidance](https://docs.rigetti.com/qcs/guides/the-rigetti-qcs-api)
+and [QPU data FAQ](https://docs.rigetti.com/qcs/faq).
+
+Start with Braket because the thesis runner already preserves its task and
+measurement provenance. Evaluate direct QCS if a required field is absent or
+if native calibration access is needed; it does not require changing providers
+for the first one-task pilot. One BV task validates collection plumbing and a
+single observed distribution, not a calibrated hardware noise model.
+
+### Successful `.env` preflight
+
+After loading the repository `.env` without `--profile`, preflight succeeded for
+Cepheus-1-108Q in us-west-1. The raw and normalized response is saved in the
+pilot directory's `preflight.json`: 107 qubits and 193 edges have standardized
+properties. Zero tasks were submitted by this check. The bucket region comes
+from HeadBucket when available; GetBucketLocation is only a fallback.
+
+For this environment, the manual paid step is:
+
+```sh
+python scripts/run.py rigetti submit \
+  --record experiments/data/aws_pilot/bv3-alt-r1
+```
+
+Do not add `--profile default` unless intentionally switching away from `.env`.

@@ -1,0 +1,7 @@
+{
+  "rows": 19,
+  "ibm_matches": 18,
+  "skipped": [],
+  "interpretation": "Descriptive comparison; compiler/device/date differ. One AWS repetition.",
+  "native_isa_comparable": false
+}
