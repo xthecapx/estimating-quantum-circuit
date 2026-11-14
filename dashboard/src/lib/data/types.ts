@@ -84,6 +84,7 @@ export interface CalibrationRecord {
 
 export interface IndexData {
   decayReports?: Record<string, string>;
+  estimationReports?: Record<string, string>;
   schemaVersion: number;
   jobs: Job[];
   refs: Record<string, Reference>;

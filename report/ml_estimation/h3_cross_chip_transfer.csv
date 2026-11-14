@@ -1,0 +1,49 @@
+target,sourceBackend,sourceProvider,targetBackend,targetProvider,regime,regimeLabel,mode,nTrain,nTest,n,r2,mae,rmse,spearmanRho,meetsH1
+dsr,ibm_fez,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1236,1236,1236,0.6003075425319024,0.11581752641125417,0.20061527663402073,0.7564025524295255,False
+dsr,ibm_fez,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1236,1236,1236,0.7138931864437315,0.10314064399802365,0.16973254565794793,0.7931863084551949,False
+dsr,ibm_fez,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1236,1236,1236,0.7714872474742391,0.08645611941010253,0.15168975342221425,0.8150783050154876,False
+dsr,ibm_fez,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1236,1173,1173,0.6882586456899045,0.112721795815595,0.17263788886570555,0.7870620928555495,False
+dsr,ibm_fez,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1236,1173,1173,0.498242060293566,0.14345918468439364,0.21902113959419572,0.6029386360133879,False
+dsr,ibm_fez,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1236,1173,1173,0.7400100158226258,0.09843806351328582,0.15765843688815182,0.7711744014592803,False
+dsr,ibm_kingston,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1173,1236,1236,0.5544445383945396,0.1145951814715314,0.2118126581160841,0.7577491038384453,False
+dsr,ibm_kingston,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1173,1236,1236,0.34201819966758507,0.2043955418378145,0.2573996578076808,0.6350123442853192,False
+dsr,ibm_kingston,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1173,1236,1236,0.593247695345476,0.13496649800411936,0.20237927498646816,0.7664932396801329,False
+dsr,ibm_kingston,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1173,1173,1173,0.7780373466278496,0.08489852535764743,0.1456729320123364,0.7767726293479184,False
+dsr,ibm_kingston,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1173,1173,1173,0.6110564742065628,0.11583762503541538,0.1928333655007984,0.752138389675497,False
+dsr,ibm_kingston,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1173,1173,1173,0.7962960208901433,0.08063314126948253,0.13955283510114597,0.8118885187802954,False
+hellinger,ibm_fez,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1236,1236,1236,0.7822230705637325,0.07053930928813,0.11826934156801913,0.9256662012657418,False
+hellinger,ibm_fez,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1236,1236,1236,0.8638602695784089,0.05915257349467056,0.09351013566628891,0.9425260899996174,True
+hellinger,ibm_fez,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1236,1236,1236,0.8765638212533761,0.05340703925489806,0.08904047707544657,0.9574414426499711,True
+hellinger,ibm_fez,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1236,1173,1173,0.7255873021005308,0.08811513667982554,0.12755340081327995,0.9000473522095833,False
+hellinger,ibm_fez,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1236,1173,1173,0.7489632163097226,0.08279197851634616,0.1219996603045028,0.8404480934472431,False
+hellinger,ibm_fez,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1236,1173,1173,0.8107929340265823,0.07531405326819608,0.10591527934846957,0.9064553838548264,True
+hellinger,ibm_kingston,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1173,1236,1236,0.6648837798615259,0.08249531606932045,0.14671143613776075,0.9078750862456876,False
+hellinger,ibm_kingston,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1173,1236,1236,0.6136405545089003,0.11235317663116784,0.1575295422290563,0.8315256189299804,False
+hellinger,ibm_kingston,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1173,1236,1236,0.6870254830368439,0.07884709650141956,0.14178188069523148,0.8981925341802729,False
+hellinger,ibm_kingston,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1173,1173,1173,0.8851409003898373,0.05143611366058392,0.08252255088520581,0.9440708084223475,True
+hellinger,ibm_kingston,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1173,1173,1173,0.8870770869801504,0.051587063042123994,0.08182405096629962,0.946211256231158,True
+hellinger,ibm_kingston,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1173,1173,1173,0.8915711288331516,0.04763874759474572,0.08017932737324611,0.9520004770977959,True
+tvd,ibm_fez,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1236,1236,1236,0.7876620772630165,0.06948732404720204,0.11649704705070076,0.9282638717777659,False
+tvd,ibm_fez,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1236,1236,1236,0.8708117380903571,0.05674466881264463,0.09086835426189042,0.951689147480823,True
+tvd,ibm_fez,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1236,1236,1236,0.8884976666404748,0.050337927399791975,0.08441956553813891,0.9654878057579788,True
+tvd,ibm_fez,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1236,1173,1173,0.7310327926255026,0.0877806844841685,0.12527564117806253,0.9063980251400081,False
+tvd,ibm_fez,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1236,1173,1173,0.7238036181880755,0.08512949433193438,0.1269480282405016,0.839638722915655,False
+tvd,ibm_fez,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1236,1173,1173,0.7501561656691773,0.08541630483340543,0.12074003167980718,0.9062266436500884,False
+tvd,ibm_kingston,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1173,1236,1236,0.6656951732593662,0.08371976705869119,0.14617478320020486,0.9113936648846194,False
+tvd,ibm_kingston,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1173,1236,1236,0.6588144162650338,0.10309350351422562,0.1476714268122694,0.8534220299237609,False
+tvd,ibm_kingston,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1173,1236,1236,0.6891087701290137,0.07945501025540357,0.14096307673881467,0.8981855527259772,False
+tvd,ibm_kingston,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1173,1173,1173,0.8854179828708005,0.0498673164456894,0.08176646060169321,0.9467292472301102,True
+tvd,ibm_kingston,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1173,1173,1173,0.8799213992442733,0.05162105198183672,0.08370468696129628,0.9481281985843273,True
+tvd,ibm_kingston,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1173,1173,1173,0.8940205145829009,0.04625646990277207,0.07863716906592323,0.9580758687545616,True
+success,ibm_fez,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1236,1236,1236,0.7918468139554458,0.07447375450402298,0.12074376322710814,0.8793971901266939,False
+success,ibm_fez,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1236,1236,1236,0.8383638463987925,0.06538906644202544,0.10640019640571596,0.8914402562947428,True
+success,ibm_fez,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1236,1236,1236,0.8564572383400788,0.059691818207030026,0.10026833995379884,0.90672139345357,True
+success,ibm_fez,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1236,1173,1173,0.8290070356636021,0.07736492305622729,0.109624622192436,0.9259792545815613,True
+success,ibm_fez,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1236,1173,1173,0.7051235413747772,0.10001890486563371,0.14395907254817822,0.8061556248628048,False
+success,ibm_fez,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1236,1173,1173,0.8606801492067955,0.06867049545263683,0.0989522079779767,0.9151982504222153,True
+success,ibm_kingston,ibm,ibm_fez,ibm,circuit_only,Circuit Footprint Only,cross_chip_zero_shot,1173,1236,1236,0.7321155233306716,0.07957530541920191,0.13697677913393902,0.9151821172293124,False
+success,ibm_kingston,ibm,ibm_fez,ibm,hardware_only,Hardware Calibration Only,cross_chip_zero_shot,1173,1236,1236,0.624541572313221,0.11639356989705103,0.16216387167342247,0.8025759863646609,False
+success,ibm_kingston,ibm,ibm_fez,ibm,mixed_submit,Mixed (Footprint + Hardware),cross_chip_zero_shot,1173,1236,1236,0.7417519959063411,0.0780349743728686,0.13449051694832465,0.8921306771711687,False
+success,ibm_kingston,ibm,ibm_kingston,ibm,circuit_only,Circuit Footprint Only,within_chip_cv,1173,1173,1173,0.8875882335139651,0.0555200682712255,0.08888426290164304,0.9129797891908237,True
+success,ibm_kingston,ibm,ibm_kingston,ibm,hardware_only,Hardware Calibration Only,within_chip_cv,1173,1173,1173,0.8443358995383596,0.06380565139818822,0.10459555342131968,0.893761602199695,True
+success,ibm_kingston,ibm,ibm_kingston,ibm,mixed_submit,Mixed (Footprint + Hardware),within_chip_cv,1173,1173,1173,0.8714046741285004,0.0548990300430389,0.09506739214051345,0.9157845922527261,True

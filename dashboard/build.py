@@ -217,6 +217,23 @@ def write_json(path, payload):
     )
 
 
+def _collect_validated_reports(project_subdir, output_prefix, tables, output, digest):
+    reports = {}
+    for path in sorted((PROJECT / project_subdir).glob("*.json")):
+        snapshot = json.loads(path.read_text(encoding="utf-8"))
+        if snapshot.get("manifestHash") != digest:
+            continue
+        if any(
+            hashlib.sha256((Path(tables) / name).read_bytes()).hexdigest() != expected
+            for name, expected in snapshot.get("inputs", {}).items()
+        ):
+            continue
+        filename = f"{output_prefix}-{path.stem}-{digest[:12]}.json"
+        write_json(output / filename, snapshot)
+        reports[snapshot["backend"]] = filename
+    return reports
+
+
 def build(tables, output):
     """Validate the tables and write the public data files that the Vite app fetches.
 
@@ -226,21 +243,16 @@ def build(tables, output):
     data = load_tables(tables)
     output.mkdir(parents=True, exist_ok=True)
     decay_reports = {}
+    estimation_reports = {}
     manifest = Path(tables) / "dataset_manifest.json"
     if manifest.is_file():
         digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
-        for path in sorted((PROJECT / "experiments/decay").glob("*.json")):
-            snapshot = json.loads(path.read_text(encoding="utf-8"))
-            if snapshot["manifestHash"] != digest:
-                continue
-            if any(
-                hashlib.sha256((Path(tables) / name).read_bytes()).hexdigest() != expected
-                for name, expected in snapshot["inputs"].items()
-            ):
-                continue
-            filename = f"decay-{path.stem}-{digest[:12]}.json"
-            write_json(output / filename, snapshot)
-            decay_reports[snapshot["backend"]] = filename
+        decay_reports = _collect_validated_reports(
+            "experiments/decay", "decay", tables, output, digest
+        )
+        estimation_reports = _collect_validated_reports(
+            "experiments/estimation", "estimation", tables, output, digest
+        )
     write_json(
         output / "index.json",
         {
@@ -248,6 +260,7 @@ def build(tables, output):
             "jobs": data["jobs"],
             "refs": data["refs"],
             "decayReports": decay_reports,
+            "estimationReports": estimation_reports,
         },
     )
     write_json(

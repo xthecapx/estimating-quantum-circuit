@@ -12,6 +12,7 @@ dependencies = ["qiskit-qward==0.30.0"]
 [project.optional-dependencies]
 aws = ["qiskit-braket-provider==0.23.2", "amazon-braket-sdk==1.126.1"]
 torch = ["torch==2.8.0"]
+ml = ["scikit-learn>=1.5", "xgboost>=2.1", "lightgbm>=4.5", "shap>=0.46"]
 dev = ["pytest>=8", "black==26.1.0"]
 
 [tool.setuptools.packages.find]

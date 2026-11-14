@@ -11,6 +11,10 @@ export interface UrlState {
   matrix?: string;
   resource?: string;
   outcome?: string;
+  estScope?: string;
+  estTarget?: string;
+  estSplit?: string;
+  estView?: string;
   backend?: string;
   period?: string;
   algorithm?: string;
@@ -34,6 +38,7 @@ export interface UrlState {
 
 const keys: Record<Exclude<keyof UrlState, "calScoped" | "calExpanded">, string> = {
   section: "section", pair: "pair", matrix: "matrix", resource: "resource", outcome: "outcome",
+  estScope: "eb", estTarget: "et", estSplit: "es", estView: "ev",
   backend: "b",
   period: "p",
   algorithm: "a",
