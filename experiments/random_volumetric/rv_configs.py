@@ -76,6 +76,17 @@ def _generate_configs() -> List[RVExperimentConfig]:
                     description=f"{n} qubits, depth {d} ({mult}x n)",
                 )
             )
+    # Prospective validation (validation-v1): a new random seed at measured shapes.
+    for n, d in ((2, 4), (3, 6), (4, 8), (5, 10)):
+        configs.append(
+            RVExperimentConfig(
+                config_id=f"RV{n}-D{d}-S7",
+                num_qubits=n,
+                depth=d,
+                seed=7,
+                description=f"{n} qubits, depth {d}, seed 7 (validation-v1)",
+            )
+        )
     return configs
 
 

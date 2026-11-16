@@ -395,3 +395,22 @@ def test_summarize_repeats_reports_spread() -> None:
     assert out["nRepeats"] == 2 and len(out["r2PerRepeat"]) == 2
     assert out["r2Sd"] > 0
     assert out["h1Verdict"] in {"pass", "fail", "inconclusive"}
+
+
+def test_prospective_row_matches_export_columns(tmp_path: Path) -> None:
+    """Pre-registration features must equal the exporter's for the same prepared record."""
+    import glob
+
+    from experiments.qaqs_prospective import prepared_row
+
+    root = Path(__file__).resolve().parents[1]
+    record = sorted(glob.glob(str(root / "experiments/ghz/data/qpu/v2/GHZ8_IBM_ibm_kingston_20261111*.json")))[0]
+    journal = json.loads(Path(record).read_text(encoding="utf-8"))
+    prepared = json.loads(
+        (Path(record).parent / journal["artifact_directory"] / "prepared.json").read_text(encoding="utf-8")
+    )
+    row = prepared_row(prepared)
+    exported = load_ml_dataset(root / "experiments" / "dataset_out").frame
+    exported = exported[exported["meta.record_path"].astype(str).str.endswith(Path(record).name)].iloc[0]
+    for col in ("b.ComplexityMetrics.standardized_metrics.circuit_volume", "c.t1_us.median", "e.m2_error"):
+        assert float(row[col]) == float(exported[col])

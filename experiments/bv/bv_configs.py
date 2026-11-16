@@ -90,6 +90,23 @@ def _generate_configs() -> List[BVExperimentConfig]:
                 description=f"{n} qubits, single-bit secret",
             )
         )
+    # Prospective validation (validation-v1): new secrets at already-measured widths.
+    # (Wider BV does not compile to more two-qubit gates than BV14-ONES on Heron, so it
+    # cannot serve as an extrapolation test.)
+    for n, label, secret in (
+        (5, "PAIR", "11000"),
+        (7, "HALF", "1111000"),
+        (9, "EDGE", "100000001"),
+        (11, "PAIR", "11000000000"),
+    ):
+        configs.append(
+            BVExperimentConfig(
+                config_id=f"BV{n}-{label}",
+                num_qubits=n,
+                secret_string=secret,
+                description=f"{n} qubits, {label.lower()} secret (validation-v1)",
+            )
+        )
     return configs
 
 

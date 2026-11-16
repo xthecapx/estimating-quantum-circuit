@@ -525,7 +525,7 @@ def test_oracle_growth_window(ci, cloud_runtime, backend, profile, configs, jobs
 @pytest.mark.parametrize("backend", ["ibm_fez", "ibm_kingston", "ibm_marrakesh"])
 def test_public_full_has_every_extension_and_keeps_expanded_identity(ci, cloud_runtime, backend):
     day = "2026-11-08"
-    assert ci.PUBLIC_PROFILES == ("full", "oracle-growth", "shor-growth")
+    assert ci.PUBLIC_PROFILES == ("full", "oracle-growth", "shor-growth", "validation-v1")
     assert ci.templates("full") == ci.templates("full-oracle-growth")
     assert ci.identity(day, backend, "full") == ci.identity(day, backend, "full-oracle-growth")
     paths = ci.plans(day, create=True, backend=backend, profile="full")
@@ -541,3 +541,41 @@ def test_public_full_has_every_extension_and_keeps_expanded_identity(ci, cloud_r
         ci.identity("2026-11-05", profile="legacy-full")["campaign_id"]
         == "fez-dataset-v2-2026-11-05"
     )
+
+
+@pytest.mark.parametrize("backend", ["ibm_fez", "ibm_kingston"])
+def test_validation_profile_is_isolated_and_runs_offline(ci, cloud_runtime, backend):
+    from experiments import validation_profile as vp
+
+    day = "2026-11-17"
+    ident = ci.identity(day, backend, "validation-v1")
+    assert ident["campaign_id"] == f"{backend.removeprefix('ibm_')}-validation-v1-{day}"
+    paths = ci.plans(day, create=True, backend=backend, profile="validation-v1")
+    plans = {key: json.loads(path.read_text()) for key, path in paths.items()}
+    configs = [item["config"] for plan in plans.values() for item in plan["items"]]
+    assert sorted(configs) == sorted(c for _, c, _ in vp.ITEMS)
+    assert sum(plan["planned_executions"] for plan in plans.values()) == vp.planned_jobs() == 2 * len(vp.ITEMS)
+    assert all(
+        plan["shots"] == 1024 and plan["optimization_level"] == 3 and plan["seed_transpiler"] == 11
+        and plan["runs"] == 2 and plan["campaign_id"] == ident["campaign_id"]
+        for plan in plans.values()
+    )
+    # Existing dated collections are untouched by the new profile.
+    assert not ci.manifests(ci.plans(day, backend=backend, profile="full"))["ghz"].exists()
+    ci.execute(day, "prepare", 3, backend=backend, profile="validation-v1")
+    assert not cloud_runtime.sent
+    ci.execute(day, "submit", 3, backend=backend, profile="validation-v1")
+    ci.execute(day, "recover", 3, backend=backend, profile="validation-v1")
+    ci.execute(day, "complete", 3, backend=backend, profile="validation-v1")
+
+
+def test_validation_profile_groups_match_training_data():
+    """anchor = in the training export; new/extrapolation = never executed."""
+    from experiments import validation_profile as vp
+    from experiments.ml_dataset import load_ml_dataset
+
+    vp.validate()
+    tables = Path(__file__).resolve().parents[1] / "experiments" / "dataset_out"
+    seen = set(load_ml_dataset(tables).frame["meta.config_id"].astype(str))
+    for _, config, group in vp.ITEMS:
+        assert (config in seen) == (group == "anchor"), config

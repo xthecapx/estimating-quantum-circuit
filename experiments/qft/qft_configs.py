@@ -473,11 +473,25 @@ NOISE_CONFIGS = [
 # All Configurations
 # =============================================================================
 
+# Prospective validation (validation-v1): new input states at already-measured sizes.
+VALIDATION_INPUT_CONFIGS = [
+    QFTExperimentConfig(
+        config_id=f"IV{len(state)}-{state}",
+        experiment_type="input_variation",
+        num_qubits=len(state),
+        test_mode="roundtrip",
+        input_state=state,
+        description=f"{len(state)} qubits, input |{state}⟩ (validation-v1)",
+    )
+    for state in ("011", "10011", "110100", "1001011")
+]
+
 ALL_EXPERIMENT_CONFIGS = (
     SCALABILITY_ROUNDTRIP_CONFIGS
     + SCALABILITY_PERIOD_CONFIGS
     + PERIOD_VARIATION_CONFIGS
     + INPUT_VARIATION_CONFIGS
+    + VALIDATION_INPUT_CONFIGS
 )
 
 # Separate configs by execution target

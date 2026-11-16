@@ -12,7 +12,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 ROOT = Path(__file__).resolve().parents[1]
 PAPERS = ROOT / "experiments"
-PUBLIC_PROFILES = ("full", "oracle-growth", "shor-growth")
+PUBLIC_PROFILES = ("full", "oracle-growth", "shor-growth", "validation-v1")
 HISTORICAL_PROFILES = ("legacy-full", "full-shor-growth", "full-oracle-growth")
 PROFILES = PUBLIC_PROFILES + HISTORICAL_PROFILES
 MODES = (
@@ -84,6 +84,8 @@ def templates(profile="legacy-full"):
         raise ValueError(f"Unknown campaign profile: {profile}")
     if profile == "full":
         profile = "full-oracle-growth"
+    if profile == "validation-v1":
+        return validation_templates()
     plans_by_key = {}
     for key, directory in DIRECTORIES.items():
         path = PAPERS / directory / "plans" / f"{key}-w2.json"
@@ -146,6 +148,30 @@ def templates(profile="legacy-full"):
     return plans_by_key
 
 
+def validation_templates():
+    """QAQS prospective validation workload (experiments/validation_profile.py).
+
+    Same shots, optimization level and transpiler seed as every earlier collection,
+    so the only differences from training are the calibration cycle and the circuits.
+    """
+    from experiments import validation_profile as vp
+
+    vp.validate()
+    out = {}
+    for key, configs in vp.items_by_algorithm().items():
+        out[key] = {
+            "shots": vp.SHOTS,
+            "optimization_level": 3,
+            "seed_transpiler": 11,
+            "runs": vp.RUNS,
+            "items": [{"config": config} for config in configs],
+            "planned_executions": vp.RUNS * len(configs),
+        }
+    if sum(p["planned_executions"] for p in out.values()) != vp.planned_jobs():
+        raise ValueError("Unexpected validation-v1 job count")
+    return out
+
+
 def identity(campaign_date, backend="ibm_fez", profile="legacy-full"):
     """Keep existing Fez identities stable while isolating other chips."""
     day = campaign_day(campaign_date).isoformat()
@@ -161,7 +187,10 @@ def identity(campaign_date, backend="ibm_fez", profile="legacy-full"):
             "branch": f"codex/ibm-{chip}-{profile}-{day}",
             "marker": f".github/campaign-runs/{chip}-{profile}-{day}.json",
             "plan_suffix": f"{chip}-{profile}-d{day}",
-            "campaign_id": f"{chip}-{profile}-v1-{day}",
+            # Profiles that already carry a version (validation-v1) are not re-suffixed.
+            "campaign_id": (
+                f"{chip}-{profile}-{day}" if profile[-3:-1] == "-v" else f"{chip}-{profile}-v1-{day}"
+            ),
         }
     return {
         "branch": f"codex/ibm-{chip}-{day}",
