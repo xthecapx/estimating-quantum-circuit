@@ -77,8 +77,13 @@ def _git_commit() -> str | None:
         out = subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
         )
+        # Only tracked files count: a fresh `prepare` legitimately leaves new, untracked
+        # plans and records, which are committed together with the predictions.
         dirty = subprocess.run(
-            ["git", "status", "--porcelain", "--", "report/ml_estimation/models", "experiments"],
+            [
+                "git", "status", "--porcelain", "--untracked-files=no", "--",
+                "report/ml_estimation/models", "experiments", "scripts",
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
