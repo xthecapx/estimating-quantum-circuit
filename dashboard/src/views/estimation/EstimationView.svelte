@@ -8,6 +8,7 @@
     ALGO_SHORT,
     SCOPE_LABELS,
     SPLIT_LABELS,
+    VALIDATION,
     sortTargetsByScore,
     targetScore,
     TARGET_LABELS,
@@ -195,11 +196,12 @@
     <div class="heading">
       <div>
         <p class="eyebrow">
-          {SCOPE_LABELS[data.backend] ?? data.backend} · {data.jobs} jobs ({data.trainJobs} train/CV,
+          {SCOPE_LABELS[data.backend] ?? data.backend} · {data.jobs} jobs ·
           {#if data.split?.mode === "kfold"}
-            {data.split.nSplits}-fold × {data.split.nRepeats} repeated grouped CV over {data.split.totalConfigs} configurations)
+            {VALIDATION.unseenCircuit.name} ({data.split.nSplits}-fold × {data.split.nRepeats} repeats over
+            {data.split.totalConfigs} configurations)
           {:else}
-            {data.holdoutJobs} holdout)
+            {data.trainJobs} train, {data.holdoutJobs} held out
           {/if}
         </p>
         <h2>{TARGET_LABELS[targetKey] ?? report.label}</h2>
@@ -274,11 +276,13 @@
             <tr>
               <th>Model</th>
               <th>Type</th>
-              <th>Holdout R²</th>
-              <th>Holdout MAE</th>
-              <th>Holdout RMSE</th>
-              <th>CV R²</th>
-              <th>CV MAE</th>
+              {#if hasHoldout}
+                <th>{VALIDATION.calibrationCycle.short} R²</th>
+                <th>{VALIDATION.calibrationCycle.short} MAE</th>
+                <th>{VALIDATION.calibrationCycle.short} RMSE</th>
+              {/if}
+              <th>{VALIDATION.unseenCircuit.short} R²</th>
+              <th>{VALIDATION.unseenCircuit.short} MAE</th>
               <th>Spearman ρ</th>
               <th>H1 (&ge; 0.80)</th>
             </tr>
@@ -289,9 +293,11 @@
               <tr>
                 <td><strong>{row.label}</strong></td>
                 <td>{row.kind === "procedure" ? "QAQS procedure (nested)" : row.kind === "analytical_baseline" ? "Analytical baseline" : row.kind === "ml_ensemble" ? "AutoML Ensemble" : "ML Regressor"}</td>
-                <td>{fmt(row.holdout?.r2, 3)}</td>
-                <td>{fmt(row.holdout?.mae, 4)}</td>
-                <td>{fmt(row.holdout?.rmse, 4)}</td>
+                {#if hasHoldout}
+                  <td>{fmt(row.holdout?.r2, 3)}</td>
+                  <td>{fmt(row.holdout?.mae, 4)}</td>
+                  <td>{fmt(row.holdout?.rmse, 4)}</td>
+                {/if}
                 <td>{fmt(row.cv.r2, 3)}</td>
                 <td>{fmt(row.cv.mae, 4)}</td>
                 <td>{fmt(activeM.spearmanRho, 3)}</td>
@@ -364,11 +370,23 @@
       </article>
 
       {#if temporal}
-        <p class="note">
-          CV = unseen circuits, same calibration windows. Temporal = trained on earlier windows, tested on
-          {temporal.holdoutPeriods.join(", ")}; {temporal.holdoutConfigsSeenInTrain} of
-          {temporal.holdoutConfigs} test circuits were also in training, so it measures calibration drift.
-        </p>
+        <dl class="tests">
+          <div>
+            <dt>{VALIDATION.unseenCircuit.name}</dt>
+            <dd>
+              {VALIDATION.unseenCircuit.question} Every circuit configuration is predicted by a model that
+              never saw it; calibration windows are shared with training ({VALIDATION.unseenCircuit.method}).
+            </dd>
+          </div>
+          <div>
+            <dt>{VALIDATION.calibrationCycle.name}</dt>
+            <dd>
+              {VALIDATION.calibrationCycle.question} Trained on earlier windows, tested on
+              {temporal.holdoutPeriods.join(", ")}. {temporal.holdoutConfigsSeenInTrain} of
+              {temporal.holdoutConfigs} test circuits were also in training, so this isolates calibration drift.
+            </dd>
+          </div>
+        </dl>
       {/if}
       <div class="scroll">
         <table>
@@ -376,11 +394,11 @@
             <tr>
               <th>Input Configuration</th>
               <th>Features</th>
-              <th>{temporal ? "Temporal R²" : "Holdout R²"}</th>
-              <th>{temporal ? "Temporal MAE" : "Holdout MAE"}</th>
-              <th>{temporal ? "Temporal RMSE" : "Holdout RMSE"}</th>
-              <th>CV R²</th>
-              <th>CV MAE</th>
+              <th>{VALIDATION.unseenCircuit.short} R²</th>
+              <th>{VALIDATION.unseenCircuit.short} MAE</th>
+              <th>{VALIDATION.calibrationCycle.short} R²</th>
+              <th>{VALIDATION.calibrationCycle.short} MAE</th>
+              <th>{VALIDATION.calibrationCycle.short} RMSE</th>
             </tr>
           </thead>
           <tbody>
@@ -389,11 +407,11 @@
               <tr>
                 <td><strong>{reg.label}</strong></td>
                 <td>{reg.featureCount}</td>
+                <td>{fmt(reg.cv.r2, 3)}</td>
+                <td>{fmt(reg.cv.mae, 4)}</td>
                 <td>{fmt(ho?.r2, 3)}</td>
                 <td>{fmt(ho?.mae, 4)}</td>
                 <td>{fmt(ho?.rmse, 4)}</td>
-                <td>{fmt(reg.cv.r2, 3)}</td>
-                <td>{fmt(reg.cv.mae, 4)}</td>
               </tr>
             {/each}
           </tbody>
@@ -406,7 +424,7 @@
           <table>
             <thead>
               <tr>
-                <th>Holdout Subset</th>
+                <th>{VALIDATION.calibrationCycle.short} subset</th>
                 <th>Jobs</th>
                 <th>Submit R²</th>
                 <th>Submit MAE</th>
@@ -565,6 +583,9 @@
   .controls :global(label) { flex: 1 1 165px; min-width: 0; }
   .controls :global(select) { width: 100%; min-width: 0; }
   .heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .tests { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.6rem 1.4rem; margin: 0.6rem 0 1rem; }
+  .tests dt { font-weight: 600; }
+  .tests dd { margin: 0.15rem 0 0; color: var(--muted, #52615c); font-size: 0.9rem; line-height: 1.4; }
   .heading h2 { font: 500 clamp(1.5rem, 2.8vw, 2.3rem) Georgia, serif; }
   .stat { border-left: 3px solid #c44d16; padding-left: 14px; display: grid; gap: 2px; }
   .stat.pass { border-left-color: var(--teal); }

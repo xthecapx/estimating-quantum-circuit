@@ -2,40 +2,48 @@
 
 Scopes evaluated: ibm_fez, ibm_kingston, pooled
 
-Evaluation: nested repeated grouped K-fold (5 folds x 3 repeats) over 189 circuit configurations. Every configuration is predicted once per repeat by a model that never saw it, on any chip. Footprint selection, calibration-feature selection, tuning and model choice happen inside each training fold.
+## Validation tests
+
+| Test | Question | Method | Where reported |
+|---|---|---|---|
+| **Unseen-circuit validation** | Does QAQS predict circuits it has never seen? | Repeated grouped K-fold by circuit configuration (5 folds x 3 repeats, 189 configurations, folds shared across chips) | H1 tables below; H2; H4 |
+| **Calibration-cycle validation** | Does QAQS predict a later calibration cycle? | Forward temporal holdout: train on earlier windows, test on the latest window (mostly the same circuits) | H3 section |
+| **Prospective validation** | Does QAQS predict a run that did not exist at training time? | Frozen models scored on a new IBM run, predictions committed before results | Not yet run |
+
+Unseen-circuit validation: every configuration is predicted once per repeat by a model that never saw it, on any chip. Footprint selection, calibration-feature selection, tuning and model choice happen inside each training fold.
 
 **QAQS row** = score of that whole procedure (the honest H1 estimate). Per-model rows are shown for comparison; choosing the best of them afterwards is optimistic.
 
 R² = mean over repeats ± sd between repeats. CI = mean of per-repeat 95% cluster-bootstrap intervals (resampling configurations). H1 PASS needs the CI above 0.80.
 
-Drift is *not* tested here: every configuration also ran in the training windows. See the temporal drift section and the external validation run.
+Calibration drift is *not* tested by unseen-circuit validation: every configuration also ran in the training windows. See calibration-cycle validation (H3) and prospective validation.
 
-## Scope: `ibm_fez` (1236 jobs, 189 configurations)
+## Scope: `ibm_fez` (1236 jobs, 189 configurations) · unseen-circuit validation
 
 | Target | QAQS circuit-only R² ± sd [95% CI] | MAE | Mixed (+calib) R² | Best single model (R²) | Deployed model | k* (fold range) | H1 |
 |---|---:|---:|---:|---|---|---|:---:|
 | Differential Success Rate (`dsr`) | 0.615 ± 0.007 [0.48, 0.71] | 0.1145 | 0.777 | RF (0.619) | XGBoost | 6 (6–10) | FAIL |
 | Hellinger Fidelity (`hellinger`) | 0.785 ± 0.006 [0.71, 0.84] | 0.0712 | 0.879 | XGBoost (0.783) | XGBoost | 10 (3–10) | INCONCLUSIVE |
-| Total Variation Distance (`tvd`) | 0.801 ± 0.002 [0.73, 0.85] | 0.0684 | 0.876 | XGBoost (0.794) | RF | 10 (3–10) | INCONCLUSIVE |
 | Success Rate (`success`) | 0.777 ± 0.015 [0.68, 0.85] | 0.0734 | 0.861 | XGBoost (0.793) | RF | 8 (3–10) | INCONCLUSIVE |
+| Total Variation Distance (`tvd`) | 0.801 ± 0.002 [0.73, 0.85] | 0.0684 | 0.876 | XGBoost (0.794) | RF | 10 (3–10) | INCONCLUSIVE |
 
-## Scope: `ibm_kingston` (1173 jobs, 189 configurations)
+## Scope: `ibm_kingston` (1173 jobs, 189 configurations) · unseen-circuit validation
 
 | Target | QAQS circuit-only R² ± sd [95% CI] | MAE | Mixed (+calib) R² | Best single model (R²) | Deployed model | k* (fold range) | H1 |
 |---|---:|---:|---:|---|---|---|:---:|
 | Differential Success Rate (`dsr`) | 0.771 ± 0.011 [0.63, 0.86] | 0.0844 | 0.780 | LightGBM (0.783) | SVR | 6 (5–8) | INCONCLUSIVE |
 | Hellinger Fidelity (`hellinger`) | 0.888 ± 0.008 [0.83, 0.93] | 0.0506 | 0.889 | SVR (0.892) | SVR | 8 (5–10) | PASS |
-| Total Variation Distance (`tvd`) | 0.896 ± 0.005 [0.84, 0.94] | 0.0483 | 0.889 | SVR (0.892) | SVR | 7 (4–10) | PASS |
 | Success Rate (`success`) | 0.909 ± 0.016 [0.85, 0.94] | 0.0512 | 0.877 | SVR (0.915) | SVR | 10 (4–10) | PASS |
+| Total Variation Distance (`tvd`) | 0.896 ± 0.005 [0.84, 0.94] | 0.0483 | 0.889 | SVR (0.892) | SVR | 7 (4–10) | PASS |
 
-## Scope: `pooled` (2409 jobs, 189 configurations)
+## Scope: `pooled` (2409 jobs, 189 configurations) · unseen-circuit validation
 
 | Target | QAQS circuit-only R² ± sd [95% CI] | MAE | Mixed (+calib) R² | Best single model (R²) | Deployed model | k* (fold range) | H1 |
 |---|---:|---:|---:|---|---|---|:---:|
 | Differential Success Rate (`dsr`) | 0.661 ± 0.018 [0.51, 0.76] | 0.1052 | 0.794 | RF (0.664) | RF | 10 (5–10) | FAIL |
 | Hellinger Fidelity (`hellinger`) | 0.798 ± 0.010 [0.72, 0.85] | 0.0697 | 0.885 | LightGBM (0.801) | LightGBM | 8 (5–10) | INCONCLUSIVE |
-| Total Variation Distance (`tvd`) | 0.798 ± 0.004 [0.72, 0.85] | 0.0675 | 0.890 | XGBoost (0.803) | LightGBM | 8 (5–10) | INCONCLUSIVE |
 | Success Rate (`success`) | 0.809 ± 0.004 [0.73, 0.86] | 0.0709 | 0.867 | LightGBM (0.821) | LightGBM | 10 (5–10) | INCONCLUSIVE |
+| Total Variation Distance (`tvd`) | 0.798 ± 0.004 [0.72, 0.85] | 0.0675 | 0.890 | XGBoost (0.803) | LightGBM | 8 (5–10) | INCONCLUSIVE |
 
 ## Selected Best Pre-Runtime Predictors (Global Core Footprint)
 
@@ -63,20 +71,20 @@ Drift is *not* tested here: every configuration also ran in the training windows
 |---|---|---|---:|
 | `ibm_fez` | `dsr` | k=6 (0.641) | k=11 (0.639) |
 | `ibm_fez` | `hellinger` | k=10 (0.790) | k=16 (0.785) |
-| `ibm_fez` | `tvd` | k=10 (0.793) | k=15 (0.798) |
 | `ibm_fez` | `success` | k=8 (0.787) | k=15 (0.791) |
+| `ibm_fez` | `tvd` | k=10 (0.793) | k=15 (0.798) |
 | `ibm_kingston` | `dsr` | k=6 (0.773) | k=16 (0.754) |
 | `ibm_kingston` | `hellinger` | k=8 (0.899) | k=12 (0.904) |
-| `ibm_kingston` | `tvd` | k=7 (0.894) | k=14 (0.895) |
 | `ibm_kingston` | `success` | k=10 (0.905) | k=13 (0.902) |
+| `ibm_kingston` | `tvd` | k=7 (0.894) | k=14 (0.895) |
 | `pooled` | `dsr` | k=10 (0.658) | k=16 (0.662) |
 | `pooled` | `hellinger` | k=8 (0.800) | k=10 (0.797) |
-| `pooled` | `tvd` | k=8 (0.809) | k=11 (0.796) |
 | `pooled` | `success` | k=10 (0.832) | k=11 (0.829) |
+| `pooled` | `tvd` | k=8 (0.809) | k=11 (0.796) |
 
 ## H2 · Generalization to unseen configurations (success rate)
 
-Footprint chosen on each protocol's own training set. `M2 prior + residual` adds the analytical M2 estimate (uses submit-time calibration) as a decay prior and learns its residual from the footprint; it is calibration-aware, so it is reported separately from the circuit-only claim.
+Protocol-specific unseen-circuit tests (the held-out circuits are larger, or from another algorithm). Footprint chosen on each protocol's own training set. `M2 prior + residual` adds the analytical M2 estimate (uses submit-time calibration) as a decay prior and learns its residual from the footprint; it is calibration-aware, so it is reported separately from the circuit-only claim.
 
 | Scope | Protocol | Task | nTrain / nTest | R² [95% CI] | MAE |
 |---|---|---|---:|---:|---:|
@@ -120,11 +128,11 @@ Footprint chosen on each protocol's own training set. `M2 prior + residual` adds
 | `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 1830 / 188 | -1.882 [-5.17, -0.50] | 0.1314 |
 | `pooled` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 2018 / 203 | -5.804 [-16.36, -2.47] | 0.2149 |
 
-## H3 · Hardware context and drift (success rate)
+## H3 · Hardware context and calibration drift (success rate)
 
-K-fold columns: unseen configurations, same calibration windows. Temporal columns: train on earlier windows, test on the latest window (mostly the same configurations), so they measure drift.
+**Unseen-circuit** columns: new circuits, calibration windows shared with training. **Calibration-cycle** columns: trained on earlier windows, tested on the latest window (mostly the same circuits), so they isolate calibration drift.
 
-| Scope | Regime | K-fold R² ± sd | Temporal R² [95% CI] | Temporal MAE |
+| Scope | Regime | Unseen-circuit R² ± sd | Calibration-cycle R² [95% CI] | Calibration-cycle MAE |
 |---|---|---:|---:|---:|
 | `ibm_fez` | Circuit Footprint Only (a.* + b.*) | 0.777 ± 0.015 | 0.745 [0.63, 0.82] | 0.0815 |
 | `ibm_fez` | Hardware Calibration Only (c.*, device-level) | 0.637 ± 0.005 | 0.334 [0.19, 0.44] | 0.1893 |
@@ -165,23 +173,23 @@ Every paradigm configuration predicted once (repeat-0 folds). `size-matched` tra
 | `ibm_fez` | `dsr` | `mixed_submit` | LightGBM | 13 | 0.777 | 0.0859 | 75.5 | `models/ibm_fez_dsr_mixed_submit.joblib` |
 | `ibm_fez` | `hellinger` | `circuit_only` | XGBoost | 10 | 0.785 | 0.0712 | 78.7 | `models/ibm_fez_hellinger_circuit_only.joblib` |
 | `ibm_fez` | `hellinger` | `mixed_submit` | LightGBM | 17 | 0.879 | 0.0556 | 64.5 | `models/ibm_fez_hellinger_mixed_submit.joblib` |
-| `ibm_fez` | `tvd` | `circuit_only` | RF | 10 | 0.801 | 0.0684 | 1613.5 | `models/ibm_fez_tvd_circuit_only.joblib` |
-| `ibm_fez` | `tvd` | `mixed_submit` | XGBoost | 17 | 0.876 | 0.0549 | 25.7 | `models/ibm_fez_tvd_mixed_submit.joblib` |
 | `ibm_fez` | `success` | `circuit_only` | RF | 8 | 0.777 | 0.0734 | 670.2 | `models/ibm_fez_success_circuit_only.joblib` |
 | `ibm_fez` | `success` | `mixed_submit` | XGBoost | 15 | 0.861 | 0.0584 | 80.6 | `models/ibm_fez_success_mixed_submit.joblib` |
+| `ibm_fez` | `tvd` | `circuit_only` | RF | 10 | 0.801 | 0.0684 | 1613.5 | `models/ibm_fez_tvd_circuit_only.joblib` |
+| `ibm_fez` | `tvd` | `mixed_submit` | XGBoost | 17 | 0.876 | 0.0549 | 25.7 | `models/ibm_fez_tvd_mixed_submit.joblib` |
 | `ibm_kingston` | `dsr` | `circuit_only` | SVR | 6 | 0.771 | 0.0844 | 10.1 | `models/ibm_kingston_dsr_circuit_only.joblib` |
 | `ibm_kingston` | `dsr` | `mixed_submit` | XGBoost | 13 | 0.780 | 0.0826 | 74.4 | `models/ibm_kingston_dsr_mixed_submit.joblib` |
 | `ibm_kingston` | `hellinger` | `circuit_only` | SVR | 8 | 0.888 | 0.0506 | 12.4 | `models/ibm_kingston_hellinger_circuit_only.joblib` |
 | `ibm_kingston` | `hellinger` | `mixed_submit` | XGBoost | 15 | 0.889 | 0.0487 | 25.6 | `models/ibm_kingston_hellinger_mixed_submit.joblib` |
-| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 7 | 0.896 | 0.0483 | 11.3 | `models/ibm_kingston_tvd_circuit_only.joblib` |
-| `ibm_kingston` | `tvd` | `mixed_submit` | XGBoost | 14 | 0.889 | 0.0485 | 80.1 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
 | `ibm_kingston` | `success` | `circuit_only` | SVR | 10 | 0.909 | 0.0512 | 13.7 | `models/ibm_kingston_success_circuit_only.joblib` |
 | `ibm_kingston` | `success` | `mixed_submit` | SVR | 17 | 0.877 | 0.0568 | 21.6 | `models/ibm_kingston_success_mixed_submit.joblib` |
+| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 7 | 0.896 | 0.0483 | 11.3 | `models/ibm_kingston_tvd_circuit_only.joblib` |
+| `ibm_kingston` | `tvd` | `mixed_submit` | XGBoost | 14 | 0.889 | 0.0485 | 80.1 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
 | `pooled` | `dsr` | `circuit_only` | RF | 10 | 0.661 | 0.1052 | 980.8 | `models/pooled_dsr_circuit_only.joblib` |
 | `pooled` | `dsr` | `mixed_submit` | LightGBM | 17 | 0.794 | 0.0811 | 93.6 | `models/pooled_dsr_mixed_submit.joblib` |
 | `pooled` | `hellinger` | `circuit_only` | LightGBM | 8 | 0.798 | 0.0697 | 62.0 | `models/pooled_hellinger_circuit_only.joblib` |
 | `pooled` | `hellinger` | `mixed_submit` | LightGBM | 15 | 0.885 | 0.0527 | 65.0 | `models/pooled_hellinger_mixed_submit.joblib` |
-| `pooled` | `tvd` | `circuit_only` | LightGBM | 8 | 0.798 | 0.0675 | 61.5 | `models/pooled_tvd_circuit_only.joblib` |
-| `pooled` | `tvd` | `mixed_submit` | LightGBM | 15 | 0.890 | 0.0508 | 128.2 | `models/pooled_tvd_mixed_submit.joblib` |
 | `pooled` | `success` | `circuit_only` | LightGBM | 10 | 0.809 | 0.0709 | 58.8 | `models/pooled_success_circuit_only.joblib` |
 | `pooled` | `success` | `mixed_submit` | LightGBM | 17 | 0.867 | 0.0591 | 107.6 | `models/pooled_success_mixed_submit.joblib` |
+| `pooled` | `tvd` | `circuit_only` | LightGBM | 8 | 0.798 | 0.0675 | 61.5 | `models/pooled_tvd_circuit_only.joblib` |
+| `pooled` | `tvd` | `mixed_submit` | LightGBM | 15 | 0.890 | 0.0508 | 128.2 | `models/pooled_tvd_mixed_submit.joblib` |

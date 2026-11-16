@@ -145,7 +145,7 @@ export interface TargetReport {
   h3: {
     regimes: H3Regime[];
     drift: { available: boolean; rows: DriftRow[] };
-    /** K-fold snapshots: train on earlier windows, test on the latest (per chip). */
+    /** Calibration-cycle validation (per chip): train on earlier windows, test on the latest. */
     temporal?: {
       holdoutPeriods: string[];
       holdoutConfigs: number;
@@ -206,9 +206,35 @@ export const VIEW_LABELS: Record<string, string> = {
   h2_h4: "H2 · Scalability & H4 · Random vs. Paradigm",
 };
 
+/**
+ * Thesis names for the three QAQS validation tests. Keep in sync with
+ * VALIDATION_NAMES in experiments/qaqs_kfold.py and the manuscript.
+ */
+export const VALIDATION = {
+  unseenCircuit: {
+    name: "Unseen-circuit validation",
+    short: "Unseen circuits",
+    method: "repeated grouped K-fold by circuit configuration",
+    question: "Does QAQS predict circuits it has never seen?",
+  },
+  calibrationCycle: {
+    name: "Calibration-cycle validation",
+    short: "Later calibration cycle",
+    method: "forward temporal holdout: earlier windows → latest window",
+    question: "Does QAQS predict a later calibration cycle?",
+  },
+  prospective: {
+    name: "Prospective validation",
+    short: "New QPU run",
+    method: "frozen models, new IBM run, predictions committed first",
+    question: "Does QAQS predict a run that did not exist at training time?",
+  },
+} as const;
+
+/** Selector labels: `cv` = unseen-circuit validation, `holdout` = calibration-cycle validation. */
 export const SPLIT_LABELS: Record<string, string> = {
-  holdout: "Temporal holdout (later window, same circuits)",
-  cv: "Grouped CV (unseen circuits)",
+  holdout: VALIDATION.calibrationCycle.name,
+  cv: VALIDATION.unseenCircuit.name,
 };
 
 export const ALGO_COLORS: Record<string, string> = {

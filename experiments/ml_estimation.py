@@ -1216,7 +1216,7 @@ def _collect_target_rows(
             {
                 "scope": scope,
                 "target": tkey,
-                "evaluation": "kfold",
+                "evaluation": "unseen_circuit",
                 "regime": item["regime"],
                 "label": item["label"],
                 "r2": item["cv"].get("r2"),
@@ -1230,7 +1230,7 @@ def _collect_target_rows(
             {
                 "scope": scope,
                 "target": tkey,
-                "evaluation": "temporal_drift",
+                "evaluation": "calibration_cycle",
                 "regime": item["regime"],
                 "label": item["label"],
                 "r2": (item.get("holdout") or {}).get("r2"),
@@ -1272,6 +1272,7 @@ def _hypothesis_sections(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
     out += [
         "## H2 · Generalization to unseen configurations (success rate)",
         "",
+        "Protocol-specific unseen-circuit tests (the held-out circuits are larger, or from another algorithm). "
         "Footprint chosen on each protocol's own training set. `M2 prior + residual` adds the analytical "
         "M2 estimate (uses submit-time calibration) as a decay prior and learns its residual from the "
         "footprint; it is calibration-aware, so it is reported separately from the circuit-only claim.",
@@ -1291,12 +1292,13 @@ def _hypothesis_sections(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
     out.append("")
 
     out += [
-        "## H3 · Hardware context and drift (success rate)",
+        "## H3 · Hardware context and calibration drift (success rate)",
         "",
-        "K-fold columns: unseen configurations, same calibration windows. Temporal columns: train on "
-        "earlier windows, test on the latest window (mostly the same configurations), so they measure drift.",
+        "**Unseen-circuit** columns: new circuits, calibration windows shared with training. "
+        "**Calibration-cycle** columns: trained on earlier windows, tested on the latest window "
+        "(mostly the same circuits), so they isolate calibration drift.",
         "",
-        "| Scope | Regime | K-fold R² ± sd | Temporal R² [95% CI] | Temporal MAE |",
+        "| Scope | Regime | Unseen-circuit R² ± sd | Calibration-cycle R² [95% CI] | Calibration-cycle MAE |",
         "|---|---|---:|---:|---:|",
     ]
     for scope, snap in snapshots.items():
@@ -1372,10 +1374,22 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
         any_snap = next(iter(snapshots.values()))
         sp = any_snap["split"]
         lines += [
-            f"Evaluation: nested repeated grouped K-fold ({sp['nSplits']} folds x {sp['nRepeats']} repeats) "
-            f"over {sp['totalConfigs']} circuit configurations. Every configuration is predicted once per "
-            "repeat by a model that never saw it, on any chip. Footprint selection, calibration-feature "
-            "selection, tuning and model choice happen inside each training fold.",
+            "## Validation tests",
+            "",
+            "| Test | Question | Method | Where reported |",
+            "|---|---|---|---|",
+            "| **Unseen-circuit validation** | Does QAQS predict circuits it has never seen? "
+            f"| Repeated grouped K-fold by circuit configuration ({sp['nSplits']} folds x {sp['nRepeats']} repeats, "
+            f"{sp['totalConfigs']} configurations, folds shared across chips) | H1 tables below; H2; H4 |",
+            "| **Calibration-cycle validation** | Does QAQS predict a later calibration cycle? "
+            "| Forward temporal holdout: train on earlier windows, test on the latest window (mostly the same "
+            "circuits) | H3 section |",
+            "| **Prospective validation** | Does QAQS predict a run that did not exist at training time? "
+            "| Frozen models scored on a new IBM run, predictions committed before results | Not yet run |",
+            "",
+            "Unseen-circuit validation: every configuration is predicted once per repeat by a model that "
+            "never saw it, on any chip. Footprint selection, calibration-feature selection, tuning and model "
+            "choice happen inside each training fold.",
             "",
             "**QAQS row** = score of that whole procedure (the honest H1 estimate). "
             "Per-model rows are shown for comparison; choosing the best of them afterwards is optimistic.",
@@ -1383,15 +1397,18 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
             "R² = mean over repeats ± sd between repeats. CI = mean of per-repeat 95% cluster-bootstrap "
             "intervals (resampling configurations). H1 PASS needs the CI above 0.80.",
             "",
-            "Drift is *not* tested here: every configuration also ran in the training windows. "
-            "See the temporal drift section and the external validation run.",
+            "Calibration drift is *not* tested by unseen-circuit validation: every configuration also ran in "
+            "the training windows. See calibration-cycle validation (H3) and prospective validation.",
             "",
         ]
 
     for scope, snap in snapshots.items():
         by_scope_target[scope] = {}
         if kfold_mode:
-            lines.append(f"## Scope: `{scope}` ({snap['jobs']} jobs, {snap['split']['totalConfigs']} configurations)")
+            lines.append(
+                f"## Scope: `{scope}` ({snap['jobs']} jobs, {snap['split']['totalConfigs']} configurations) "
+                "· unseen-circuit validation"
+            )
             lines.append("")
             lines.append(
                 "| Target | QAQS circuit-only R² ± sd [95% CI] | MAE | Mixed (+calib) R² | Best single model (R²) "
@@ -1814,7 +1831,7 @@ def main() -> None:
     parser.add_argument(
         "--holdout-campaign",
         action="append",
-        help="Repeatable campaign ID to hold out as temporal unseen validation set.",
+        help="Repeatable campaign ID to hold out (calibration-cycle validation).",
     )
     parser.add_argument(
         "--backend",
@@ -1826,8 +1843,9 @@ def main() -> None:
         choices=("kfold", "config", "temporal"),
         default="kfold",
         help=(
-            "kfold: nested repeated grouped K-fold over configurations (default); "
-            "config: single 15%% configuration holdout; temporal: hold out later campaigns."
+            "kfold: unseen-circuit validation, nested repeated grouped K-fold over configurations (default); "
+            "config: single 15%% configuration holdout; "
+            "temporal: calibration-cycle validation, hold out the latest campaigns."
         ),
     )
     parser.add_argument("--folds", type=int, default=5)

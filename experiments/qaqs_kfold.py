@@ -14,8 +14,12 @@ reported too, but picking the best of them after the fact is optimistic.
 Fold assignment is by ``meta.config_id`` and is shared across chips, so the pooled
 scope never trains on a circuit that is being tested on the other chip.
 
-The temporal split is kept as a separate drift report: it is the only internal
-evidence on predicting a later calibration cycle.
+Naming used in the thesis (see ``VALIDATION_NAMES``):
+
+* **Unseen-circuit validation** -- this module's repeated grouped K-fold.
+* **Calibration-cycle validation** -- the forward temporal holdout, kept per chip
+  (``_temporal_drift``); the only internal evidence on a later calibration cycle.
+* **Prospective validation** -- frozen models scored on a new IBM run.
 """
 
 from __future__ import annotations
@@ -60,6 +64,26 @@ from experiments.ml_estimation import (
     evaluate_predictions,
     h1_verdict,
 )
+
+# Thesis names for the three QAQS validation tests. Keep in sync with VALIDATION in
+# dashboard/src/views/estimation/model.ts and with the manuscript.
+VALIDATION_NAMES: dict[str, dict[str, str]] = {
+    "unseen_circuit": {
+        "name": "Unseen-circuit validation",
+        "method": "repeated grouped K-fold by circuit configuration",
+        "question": "Does QAQS predict circuits it has never seen?",
+    },
+    "calibration_cycle": {
+        "name": "Calibration-cycle validation",
+        "method": "forward temporal holdout: earlier windows -> latest window",
+        "question": "Does QAQS predict a later calibration cycle?",
+    },
+    "prospective": {
+        "name": "Prospective validation",
+        "method": "frozen models, new IBM run, predictions committed before results",
+        "question": "Does QAQS predict a run that did not exist at training time?",
+    },
+}
 
 PARAM_GRIDS: dict[str, list[dict[str, Any]]] = {
     "LR": [{"model__alpha": a} for a in (0.1, 1.0, 10.0)],
