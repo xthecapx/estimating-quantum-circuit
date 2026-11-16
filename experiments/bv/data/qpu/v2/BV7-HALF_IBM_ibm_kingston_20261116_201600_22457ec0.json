@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV7-HALF",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "22457ec040ab4910ba07b1b066b15e5c",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:16:00.253736+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV7-HALF",
+    "num_qubits": 7,
+    "secret_string": "1111000",
+    "expected_outcome": "0001111",
+    "search_space": 128,
+    "classical_random_prob": 0.0078125,
+    "theoretical_success": 1.0,
+    "description": "7 qubits, half secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV7-HALF_IBM_ibm_kingston_20261116_201600_22457ec0",
+  "prepared_hash": "4d6cd5242adf87c566de34aa0b3c939d6cd61d171dff7d99bfb39dbf5d84dc32"
+}

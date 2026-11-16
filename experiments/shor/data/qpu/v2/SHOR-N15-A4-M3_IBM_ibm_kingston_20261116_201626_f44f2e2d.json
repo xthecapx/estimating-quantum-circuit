@@ -1,0 +1,30 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "SHOR",
+  "config_id": "SHOR-N15-A4-M3",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "f44f2e2d851e459f86f1061c1f3e4c3c",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:16:26.962719+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SHOR-N15-A4-M3",
+    "N": 15,
+    "a": 4,
+    "num_control": 3,
+    "num_target": 4,
+    "num_qubits": 7,
+    "strategy": "swap_network",
+    "true_order": 2,
+    "description": "N=15 a=4 m=3 order-finding growth sweep",
+    "for_qpu": true,
+    "classical_random_prob": 0.125
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SHOR-N15-A4-M3_IBM_ibm_kingston_20261116_201626_f44f2e2d",
+  "prepared_hash": "78b419dd19af9b532ddf689ac9d14c717d6c78c3703f2bdf6ff0e8ba4b4e6171"
+}

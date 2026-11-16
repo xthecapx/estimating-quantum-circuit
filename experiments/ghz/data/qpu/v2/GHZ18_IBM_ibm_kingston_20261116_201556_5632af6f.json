@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "config_id": "GHZ18",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "5632af6f0a504568ace5be731f8d8c38",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:15:56.343665+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "GHZ18",
+    "num_qubits": 18,
+    "expected_outcomes": [
+      "000000000000000000",
+      "111111111111111111"
+    ],
+    "search_space": 262144,
+    "classical_random_prob": 7.62939453125e-06,
+    "theoretical_success": 1.0,
+    "description": "18-qubit GHZ state"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/GHZ18_IBM_ibm_kingston_20261116_201556_5632af6f",
+  "prepared_hash": "fdd5d343a629ad9e1dbac6b4920692047050b7341ce002a02d73579616b82d9a"
+}

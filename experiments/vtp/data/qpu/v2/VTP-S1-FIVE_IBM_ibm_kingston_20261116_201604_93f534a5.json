@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "config_id": "VTP-S1-FIVE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "93f534a5b5ce4342b7ae66c49ec6d808",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:16:04.188679+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "VTP-S1-FIVE",
+    "payload_size": 1,
+    "total_qubits": 4,
+    "gates": [
+      "h",
+      "s",
+      "x",
+      "z",
+      "h"
+    ],
+    "gates_per_qubit": 5,
+    "protocol_type": "standard",
+    "search_space": 2,
+    "classical_random_prob": 0.5,
+    "theoretical_success": 1.0,
+    "expected_outcome": "0",
+    "description": "standard protocol, 1 payload qubits, 5 gates/qubit"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/VTP-S1-FIVE_IBM_ibm_kingston_20261116_201604_93f534a5",
+  "prepared_hash": "a61483e380ce9327398252fa4214af3cdac0bea34acf983ee2faaeabc1e195aa"
+}

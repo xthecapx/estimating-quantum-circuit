@@ -1,0 +1,40 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "config_id": "VTP-S3-TRIPLE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "d5a0fd5aca8648fab45fdcd239ef658a",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:16:07.434952+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "VTP-S3-TRIPLE",
+    "payload_size": 3,
+    "total_qubits": 6,
+    "gates": [
+      "h",
+      "s",
+      "x",
+      "h",
+      "s",
+      "x",
+      "h",
+      "s",
+      "x"
+    ],
+    "gates_per_qubit": 3,
+    "protocol_type": "standard",
+    "search_space": 8,
+    "classical_random_prob": 0.125,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000",
+    "description": "standard protocol, 3 payload qubits, 3 gates/qubit"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/VTP-S3-TRIPLE_IBM_ibm_kingston_20261116_201607_d5a0fd5a",
+  "prepared_hash": "7299bf6d7d032bdd37dd2493aefb133f3a0f8d5277de428ae863095a4f783d1d"
+}

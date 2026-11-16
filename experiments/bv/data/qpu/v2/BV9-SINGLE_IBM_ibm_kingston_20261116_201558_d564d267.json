@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV9-SINGLE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "d564d267d85e49f38c5c8eea3f359b0d",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:15:58.810545+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV9-SINGLE",
+    "num_qubits": 9,
+    "secret_string": "000000001",
+    "expected_outcome": "100000000",
+    "search_space": 512,
+    "classical_random_prob": 0.001953125,
+    "theoretical_success": 1.0,
+    "description": "9 qubits, single-bit secret"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV9-SINGLE_IBM_ibm_kingston_20261116_201558_d564d267",
+  "prepared_hash": "6d374da072f1e772dfec6dab657f7bcf7ce5b04d7d6c5a11a02ec6f6a7e4a2b7"
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "SHOR",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:16:26.967614+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/plans/shor-kingston-validation-v1-d2026-11-17.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "order_seed": 202611177,
+  "job_order": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 2,
+  "items": [
+    {
+      "config": "SHOR-N15-A4-M3",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/data/qpu/v2/SHOR-N15-A4-M3_IBM_ibm_kingston_20261116_201626_f44f2e2d.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        53,
+        33,
+        39,
+        55,
+        52,
+        59,
+        54
+      ],
+      "isa_depth": 207,
+      "isa_two_qubit_gates": 59,
+      "job_ids": []
+    }
+  ]
+}

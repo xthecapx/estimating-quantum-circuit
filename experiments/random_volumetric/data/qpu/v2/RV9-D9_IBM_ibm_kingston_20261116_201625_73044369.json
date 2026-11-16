@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV9-D9",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "run_id": "73044369fe8c4988ad7d8e42f05f8638",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:16:25.718954+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "RV9-D9",
+    "num_qubits": 9,
+    "depth": 9,
+    "depth_multiplier": 1.0,
+    "seed": 42,
+    "search_space": 512,
+    "classical_random_prob": 0.001953125,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000000000",
+    "description": "9 qubits, depth 9 (1x n)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/RV9-D9_IBM_ibm_kingston_20261116_201625_73044369",
+  "prepared_hash": "b1212a848aecc959084f5b3a6bc248c7aa2bdff01c2c4a18ff0ffddc686cd6f6"
+}

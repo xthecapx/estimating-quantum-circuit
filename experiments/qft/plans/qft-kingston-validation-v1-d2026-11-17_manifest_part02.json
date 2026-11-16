@@ -1,0 +1,130 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:16:13.373429+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-kingston-validation-v1-d2026-11-17.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-17",
+  "window": 20261117,
+  "order_seed": 202611173,
+  "job_order": [
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 8,
+  "items": [
+    {
+      "config": "IV6-110100",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV6-110100_IBM_ibm_kingston_20261116_201611_0c8d5d45.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        59,
+        55,
+        52,
+        54,
+        39,
+        53
+      ],
+      "isa_depth": 248,
+      "isa_two_qubit_gates": 92,
+      "job_ids": []
+    },
+    {
+      "config": "IV7-1001011",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV7-1001011_IBM_ibm_kingston_20261116_201612_34e3331a.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        75,
+        59,
+        55,
+        52,
+        39,
+        53,
+        54
+      ],
+      "isa_depth": 340,
+      "isa_two_qubit_gates": 134,
+      "job_ids": []
+    },
+    {
+      "config": "SR10",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR10_IBM_ibm_kingston_20261116_201612_2f5fbd3e.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        79,
+        73,
+        74,
+        75,
+        59,
+        55,
+        52,
+        39,
+        53,
+        54
+      ],
+      "isa_depth": 588,
+      "isa_two_qubit_gates": 288,
+      "job_ids": []
+    },
+    {
+      "config": "SP12-P8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SP12-P8_IBM_ibm_kingston_20261116_201613_5cea7e19.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        47,
+        48,
+        38,
+        49,
+        50,
+        52,
+        51,
+        54,
+        53,
+        59,
+        55,
+        74,
+        75
+      ],
+      "isa_depth": 357,
+      "isa_two_qubit_gates": 280,
+      "job_ids": []
+    }
+  ],
+  "parent_manifest": "qft-kingston-validation-v1-d2026-11-17_manifest.json"
+}
