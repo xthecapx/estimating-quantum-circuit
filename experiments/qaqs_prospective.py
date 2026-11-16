@@ -22,6 +22,11 @@ Pre-registered pass criteria (fixed before any execution; see ``CRITERIA``):
 * Calibration drift (``anchor`` group): MAE compared with the unseen-circuit
   validation MAE of the same scope/target; reported, no threshold.
 * H2 (``extrapolation`` group): reported as measured, no threshold.
+
+Seen vs unseen QPU: a chip with training data (Fez, Kingston) is *seen*; any other chip
+(Marrakesh) is *unseen* and is predicted by the pooled model and by every single-chip
+model (zero-shot cross-chip). Every prediction and score row carries ``qpu`` = seen /
+unseen; the two are reported separately and never pooled into one headline.
 """
 
 from __future__ import annotations
@@ -54,7 +59,9 @@ def models_dir() -> Path:
 
 def default_out_dir() -> Path:
     return ROOT / OUT_SUBDIR
-SCHEMA_VERSION = 1
+
+
+SCHEMA_VERSION = 2
 
 CRITERIA = {
     "h1": {
@@ -65,6 +72,13 @@ CRITERIA = {
     },
     "drift": {"group": "anchor", "rule": "report MAE vs unseen-circuit validation MAE; no threshold"},
     "h2": {"group": "extrapolation", "rule": "report as measured; no threshold"},
+    "unseen_qpu": {
+        "rule": (
+            "chips without training data are predicted zero-shot by the pooled model and by each "
+            "single-chip model; same H1 rule applied per scope; seen and unseen QPU results are "
+            "reported separately and never pooled"
+        )
+    },
 }
 
 
@@ -123,12 +137,15 @@ def check_group_sizes(frame: pd.DataFrame, tables: Path) -> List[str]:
     """Verify group labels against the compiled circuits of *this* preparation.
 
     ``new`` must stay within, and ``extrapolation`` must exceed, the largest compiled
-    two-qubit-gate count measured for the same algorithm on the same chip. Returns
+    two-qubit-gate count measured for the same algorithm on the same chip. A chip with
+    no training data is checked against every training chip combined. Returns
     violations; ``predict`` refuses to pre-register if any exist.
     """
     train = load_ml_dataset(tables).frame
     backend = str(frame["meta.backend_name"].iloc[0])
-    measured = train[train["meta.backend_name"] == backend].groupby("meta.algorithm")["b.two_qubit_gates"].max()
+    if backend in set(train["meta.backend_name"]):
+        train = train[train["meta.backend_name"] == backend]
+    measured = train.groupby("meta.algorithm")["b.two_qubit_gates"].max()
     problems = []
     for idx in frame.index:
         algo = frame.at[idx, "meta.algorithm"]
@@ -156,6 +173,12 @@ def _collection_records(campaign_id: str) -> List[Path]:
                 record = manifest.parent.parent / "data" / "qpu" / "v2" / Path(item["record_path"]).name
             paths.append(record)
     return paths
+
+
+def trained_chips() -> set:
+    """Chips the frozen models were trained on (from the model manifest, not the export)."""
+    manifest = json.loads((models_dir() / "models_manifest.json").read_text(encoding="utf-8"))
+    return {m["scope"] for m in manifest["models"] if m["scope"] != "pooled"}
 
 
 def _load_bundles(scopes: Sequence[str]) -> Dict[tuple, Dict[str, Any]]:
@@ -212,7 +235,9 @@ def predict(
     problems = check_group_sizes(frame, tables)
     if problems:
         raise ValueError("Group labels contradict the compiled circuits:\n  " + "\n  ".join(problems))
-    scopes = [backend, "pooled"]
+    trained = trained_chips()
+    qpu = "seen" if backend in trained else "unseen"
+    scopes = [backend, "pooled"] if qpu == "seen" else sorted(trained) + ["pooled"]
     bundles = _load_bundles(scopes)
     if not bundles:
         raise FileNotFoundError(f"No frozen models for {scopes} in {models_dir()}")
@@ -243,6 +268,12 @@ def predict(
                     "algorithm": frame.at[idx, "meta.algorithm"],
                     "group": frame.at[idx, "validation.group"],
                     "scope": scope,
+                    "qpu": qpu,
+                    "transfer": (
+                        "pooled_zero_shot" if qpu == "unseen" and scope == "pooled"
+                        else "cross_chip_zero_shot" if qpu == "unseen"
+                        else "same_chip" if scope == backend else "pooled"
+                    ),
                     "target": target,
                     "regime": regime,
                     "model": bundle["model_name"],
@@ -256,6 +287,8 @@ def predict(
         "profile": vp.PROFILE_NAME,
         "campaignId": campaign_id,
         "backend": backend,
+        "qpu": qpu,
+        "trainingChips": sorted(trained),
         "createdAt": datetime.now(timezone.utc).isoformat(),
         "gitCommit": commit,
         "criteria": CRITERIA,
@@ -303,7 +336,10 @@ def score(predictions_path: Path, tables: Path, out_dir: Path | None = None) -> 
     unseen = _unseen_circuit_mae()
 
     rows: List[Dict[str, Any]] = []
+    if "qpu" not in pred.columns:  # schema 1 predictions: seen-QPU only
+        pred["qpu"], pred["transfer"] = "seen", "same_chip"
     for (scope, target, regime), p in pred.groupby(["scope", "target", "regime"]):
+        qpu, transfer = p["qpu"].iloc[0], p["transfer"].iloc[0]
         col = TARGETS[target][0]
         joined = obs[["meta.config_id", col]].merge(
             p[["config_id", "group", "predicted"]], left_on="meta.config_id", right_on="config_id"
@@ -319,7 +355,10 @@ def score(predictions_path: Path, tables: Path, out_dir: Path | None = None) -> 
             )
             rows.append(
                 {
+                    "backend": reg["backend"],
+                    "qpu": qpu,
                     "scope": scope,
+                    "transfer": transfer,
                     "target": target,
                     "regime": regime,
                     "group": group,
@@ -345,20 +384,65 @@ def score(predictions_path: Path, tables: Path, out_dir: Path | None = None) -> 
         "95% CI above 0.80). `anchor` = known circuits, new calibration cycle (drift). "
         "`extrapolation` = larger than any measured circuit (H2).",
         "",
-        "| Scope | Target | Regime | Group | Configs / jobs | R² [95% CI] | MAE | Unseen-circuit MAE | Verdict |",
-        "|---|---|---|---|---:|---:|---:|---:|:---:|",
+        f"QPU: **{reg.get('qpu', 'seen')}** (training chips: {', '.join(reg.get('trainingChips', [])) or 'n/a'}).",
+        "",
+        "| Model scope | Transfer | Target | Regime | Group | Configs / jobs | R² [95% CI] | MAE | Unseen-circuit MAE | Verdict |",
+        "|---|---|---|---|---|---:|---:|---:|---:|:---:|",
     ]
     fmt = lambda v, nd=3: "—" if v is None or (isinstance(v, float) and np.isnan(v)) else f"{v:.{nd}f}"  # noqa: E731
     for r in result.sort_values(["scope", "regime", "target", "group"]).itertuples():
         ci = f" [{r.r2CiLow:.2f}, {r.r2CiHigh:.2f}]" if pd.notna(r.r2CiLow) else ""
         verdict = r.h1Verdict.upper() if r.group == "new" and r.regime == "circuit_only" else ""
         lines.append(
-            f"| `{r.scope}` | {r.target} | {r.regime} | {r.group} | {r.configs} / {r.jobs} "
+            f"| `{r.scope}` | {r.transfer} | {r.target} | {r.regime} | {r.group} | {r.configs} / {r.jobs} "
             f"| {fmt(r.r2)}{ci} | {fmt(r.mae, 4)} | {fmt(r.unseenCircuitMae, 4)} | {verdict} |"
         )
     report = out_dir / f"{stem}_report.md"
     report.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return report
+
+
+def summarize(scores: Sequence[Path], out: Path) -> Path:
+    """Combined seen/unseen QPU table from several ``*_scores.csv`` (one per chip)."""
+    frame = pd.concat([pd.read_csv(p) for p in scores], ignore_index=True)
+    frame = frame[frame["group"] != "all"]
+    key = ["qpu", "backend", "scope", "transfer", "regime", "target", "group"]
+    frame = frame.sort_values(key)
+    lines = [
+        "# Prospective validation · seen vs unseen QPU",
+        "",
+        "Seen QPU = a chip with training data; unseen QPU = no training data (zero-shot). "
+        "Rows are never pooled across `qpu`. Groups: `anchor` known circuits, `new` unseen "
+        "circuits in range, `extrapolation` larger circuits.",
+        "",
+    ]
+    fmt = lambda v, nd=3: "—" if pd.isna(v) else f"{v:.{nd}f}"  # noqa: E731
+    for target in ("success", "hellinger", "tvd", "dsr"):
+        sub = frame[frame["target"] == target]
+        if sub.empty:
+            continue
+        lines += [
+            f"## {target}",
+            "",
+            "| QPU | Chip | Model scope | Transfer | Regime | anchor R² | new R² [95% CI] | extrapolation R² | new verdict |",
+            "|---|---|---|---|---|---:|---:|---:|:---:|",
+        ]
+        for keys, g in sub.groupby(["qpu", "backend", "scope", "transfer", "regime"], sort=True):
+            by = {r.group: r for r in g.itertuples()}
+            new = by.get("new")
+            ci = f" [{new.r2CiLow:.2f}, {new.r2CiHigh:.2f}]" if new is not None and pd.notna(new.r2CiLow) else ""
+            lines.append(
+                f"| {keys[0]} | `{keys[1]}` | `{keys[2]}` | {keys[3]} | {keys[4]} "
+                f"| {fmt(getattr(by.get('anchor'), 'r2', np.nan))} "
+                f"| {fmt(getattr(new, 'r2', np.nan))}{ci} "
+                f"| {fmt(getattr(by.get('extrapolation'), 'r2', np.nan))} "
+                f"| {(new.h1Verdict.upper() if new is not None and keys[4] == 'circuit_only' else '')} |"
+            )
+        lines.append("")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    frame.to_csv(out.with_suffix(".csv"), index=False)
+    return out
 
 
 def _unseen_circuit_mae() -> Dict[tuple, float]:
@@ -377,12 +461,17 @@ def main() -> None:
         action="store_true",
         help="Testing only: allow uncommitted models/code (the result is not a valid pre-registration).",
     )
+    m = sub.add_parser("summarize", help="Combined seen/unseen QPU table from several score CSVs.")
+    m.add_argument("scores", type=Path, nargs="+")
+    m.add_argument("--out", type=Path, default=None)
     s = sub.add_parser("score", help="Score committed predictions after recover + export-ibm.")
     s.add_argument("--predictions", type=Path, required=True)
     s.add_argument("--tables", type=Path, default=ROOT / "experiments" / "dataset_out")
     args = parser.parse_args()
     if args.command == "predict":
         print(predict(args.campaign, allow_dirty=args.allow_dirty))
+    elif args.command == "summarize":
+        print(summarize(args.scores, args.out or default_out_dir() / "validation-v1_summary.md"))
     else:
         print(score(args.predictions, args.tables))
 

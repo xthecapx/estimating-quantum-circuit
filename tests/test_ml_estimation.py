@@ -414,3 +414,11 @@ def test_prospective_row_matches_export_columns(tmp_path: Path) -> None:
     exported = exported[exported["meta.record_path"].astype(str).str.endswith(Path(record).name)].iloc[0]
     for col in ("b.ComplexityMetrics.standardized_metrics.circuit_volume", "c.t1_us.median", "e.m2_error"):
         assert float(row[col]) == float(exported[col])
+
+
+def test_unseen_qpu_uses_every_training_chip_and_is_labelled(tmp_path: Path) -> None:
+    import experiments.qaqs_prospective as qp
+
+    trained = qp.trained_chips()
+    assert trained == {"ibm_fez", "ibm_kingston"}
+    assert "ibm_marrakesh" not in trained  # the unseen QPU must never enter training before scoring

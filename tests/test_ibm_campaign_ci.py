@@ -543,7 +543,7 @@ def test_public_full_has_every_extension_and_keeps_expanded_identity(ci, cloud_r
     )
 
 
-@pytest.mark.parametrize("backend", ["ibm_fez", "ibm_kingston"])
+@pytest.mark.parametrize("backend", ["ibm_fez", "ibm_kingston", "ibm_marrakesh"])
 def test_validation_profile_is_isolated_and_runs_offline(ci, cloud_runtime, backend):
     from experiments import validation_profile as vp
 

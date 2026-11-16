@@ -13,7 +13,7 @@ thesis:
 ## Workload
 
 Defined in `experiments/validation_profile.py`: 42 configurations × 2 repetitions =
-**84 jobs per chip**, 1,024 shots, optimization level 3, transpiler seed 11 (identical
+**84 jobs per chip**, 252 jobs on three chips, 1,024 shots, optimization level 3, transpiler seed 11 (identical
 to every training collection). Each configuration belongs to one pre-registered group:
 
 | Group | Configs | Purpose |
@@ -28,12 +28,14 @@ circuits. Extrapolation uses previously defined but never-run sizes: GHZ18/20,
 PE-T9/S9/Z10, QFT SR10/SP12-P8, RV7-D14/RV9-D9. Wider BV was dropped: on Heron it
 does not compile to more two-qubit gates than BV14-ONES, so it cannot test extrapolation.
 
-Expected cost: about 2 QPU-seconds per job on Fez, so roughly 3–5 QPU-minutes per chip.
+Expected cost: about 2 QPU-seconds per job on Fez, so roughly 3–5 QPU-minutes per chip
+(10–15 for all three).
 
 ## Rules
 
 - **Commit the frozen models and code first.** `predict` refuses to run with uncommitted
-  changes under `experiments/` or `report/ml_estimation/models/`, and records the commit.
+  tracked changes under `experiments/`, `scripts/` or `report/ml_estimation/models/`, and
+  records the commit. New untracked files from `prepare` are expected.
 - **Predictions are committed before `submit`.** `predict` refuses to overwrite an
   existing predictions file and refuses records that already have results.
 - **Scoring re-hashes everything.** `score` fails if any prepared record or frozen model
@@ -46,47 +48,89 @@ Expected cost: about 2 QPU-seconds per job on Fez, so roughly 3–5 QPU-minutes 
 - Same durable-submission rules as every other IBM collection: never delete a journal to
   retry, recover with the same identity, never create replacement jobs automatically.
 
-## Steps (per chip; replace the date and backend)
+## Chips: seen and unseen QPU
 
-Use the Bogotá collection date. The run below uses `2026-11-17` and `ibm_kingston`.
+The same workload runs on three chips on the same day, as three collections:
+
+| Chip | QPU | Models that predict it |
+| --- | --- | --- |
+| `ibm_fez` | seen (training data) | Fez model, pooled model |
+| `ibm_kingston` | seen (training data) | Kingston model, pooled model |
+| `ibm_marrakesh` | **unseen** (no training data) | pooled model, Fez model, Kingston model (all zero-shot) |
+
+Seen and unseen QPU results are reported separately and never pooled. All three are
+IBM Heron (156 qubits, CZ basis), so Marrakesh tests an unseen *chip*, not an unseen
+*provider*. **Never add Marrakesh (or any validation) data to training before scoring.**
+
+## Steps
+
+Use one Bogotá date for all three chips. Run each block in order; every command is
+separate on purpose (one failed path in a combined `git add` can leave files unstaged).
+
+### A. Prepare all three chips (no QPU)
 
 ```sh
-DATE=2026-11-17; BACKEND=ibm_kingston; CHIP=kingston
-
-# 1. Offline checks: no credentials, no QPU.
-python scripts/run.py ibm validate --date $DATE --backend $BACKEND --profile validation-v1
-python scripts/run.py ibm plan     --date $DATE --backend $BACKEND --profile validation-v1
-
-# 2. Prepare: reads calibration and transpiles, submits nothing.
-python scripts/run.py ibm prepare  --date $DATE --backend $BACKEND --profile validation-v1
-
-# 3. Pre-register predictions (no QPU). Fails if code/models are uncommitted, or if a
-#    'new'/'extrapolation' label contradicts the compiled two-qubit-gate counts.
-python -m experiments.qaqs_prospective predict --campaign $CHIP-validation-v1-$DATE
-
-# 4. Commit the plans, prepared records and predictions BEFORE submitting.
-git add experiments/*/plans/*validation-v1* experiments/*/data/qpu/v2 \
-        experiments/data/quantum_specific_cache report/ml_estimation/prospective
-git commit -m "data(validation): pre-register $CHIP validation-v1 $DATE"
-
-# 5. Submit (uses QPU allocation), then recover later with the same identity.
-python scripts/run.py ibm submit   --date $DATE --backend $BACKEND --profile validation-v1 --max-batches 3
-python scripts/run.py ibm recover  --date $DATE --backend $BACKEND --profile validation-v1
-python scripts/run.py ibm complete --date $DATE --backend $BACKEND --profile validation-v1
-
-# 6. Export and score.
-python scripts/run.py export-ibm --out experiments/dataset_out
-python -m experiments.qaqs_prospective score \
-  --predictions report/ml_estimation/prospective/$CHIP-validation-v1-${DATE}_predictions.json
+DATE=2026-11-16
+python scripts/run.py ibm prepare --date $DATE --backend ibm_kingston --profile validation-v1
+python scripts/run.py ibm prepare --date $DATE --backend ibm_fez --profile validation-v1
+python scripts/run.py ibm prepare --date $DATE --backend ibm_marrakesh --profile validation-v1
 ```
 
-Step 3 writes `report/ml_estimation/prospective/<campaign>_predictions.json`. Step 6
-writes `<campaign>_scores.csv` and `<campaign>_report.md` next to it.
+### B. Pre-register all three (no QPU)
 
-If `predict` reports a group-label contradiction (possible if IBM recompiles a circuit
-differently from the offline dry run), do not edit the labels after seeing the
-compiled circuits: stop and review the configuration with the thesis advisor first, and
-record the decision.
+```sh
+python -m experiments.qaqs_prospective predict --campaign kingston-validation-v1-$DATE
+python -m experiments.qaqs_prospective predict --campaign fez-validation-v1-$DATE
+python -m experiments.qaqs_prospective predict --campaign marrakesh-validation-v1-$DATE
+git add report/ml_estimation/prospective/
+git add experiments/*/plans/*validation-v1-d$DATE*
+git add experiments/*/data/qpu/v2
+git add experiments/data/quantum_specific_cache
+git status --short            # must print nothing
+git commit -m "data(validation): pre-register validation-v1 $DATE on kingston, fez, marrakesh"
+git push                      # timestamps the pre-registration before any execution
+```
+
+`predict` refuses uncommitted tracked code or models, an existing predictions file, a
+record that already has results, and any `new`/`extrapolation` label contradicted by
+the compiled two-qubit-gate count (for Marrakesh, against Fez and Kingston combined).
+If it refuses a label, stop and review; do not relabel after seeing compiled circuits.
+
+### C. Submit all three without waiting (QPU)
+
+`submit-only` offers every part to IBM, saves all job IDs and exits without waiting for
+results. Do not cancel the Batches afterwards; they keep running with the laptop off.
+
+```sh
+CAMPAIGN_PROGRESS=1 python scripts/run.py ibm submit-only --date $DATE --backend ibm_marrakesh --profile validation-v1
+CAMPAIGN_PROGRESS=1 python scripts/run.py ibm submit-only --date $DATE --backend ibm_fez --profile validation-v1
+CAMPAIGN_PROGRESS=1 python scripts/run.py ibm submit-only --date $DATE --backend ibm_kingston --profile validation-v1
+git add experiments/*/plans/*validation-v1-d$DATE*
+git add experiments/*/data/qpu/v2
+git commit -m "data(validation): submit validation-v1 $DATE on kingston, fez, marrakesh"
+git push
+```
+
+Each `submit-only` must end with `84 distinct IBM job IDs saved`. If one stops with an
+error, paste it before re-running anything: an interrupted send leaves a `submitting`
+journal entry that has to be checked against IBM first.
+
+### D. Later: recover, export, score
+
+```sh
+for B in ibm_kingston ibm_fez ibm_marrakesh; do
+  python scripts/run.py ibm recover  --date $DATE --backend $B --profile validation-v1
+  python scripts/run.py ibm complete --date $DATE --backend $B --profile validation-v1
+done
+python scripts/run.py export-ibm --out experiments/dataset_out
+for C in kingston fez marrakesh; do
+  python -m experiments.qaqs_prospective score \
+    --predictions report/ml_estimation/prospective/$C-validation-v1-${DATE}_predictions.json
+done
+python -m experiments.qaqs_prospective summarize report/ml_estimation/prospective/*-validation-v1-${DATE}_scores.csv
+```
+
+`summarize` writes `validation-v1_summary.md` with seen and unseen QPU side by side.
 
 ## After scoring
 
