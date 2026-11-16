@@ -8,6 +8,8 @@
     ALGO_SHORT,
     SCOPE_LABELS,
     SPLIT_LABELS,
+    sortTargetsByScore,
+    targetScore,
     TARGET_LABELS,
     VIEW_LABELS,
     fmt,
@@ -75,9 +77,12 @@
     return () => controller.abort();
   });
 
-  const targetKeys = $derived(Object.keys(data?.targets ?? {}));
+  const hasHoldout = $derived(Boolean(data && data.holdoutJobs > 0));
+  const targetKeys = $derived(
+    data ? sortTargetsByScore(data.targets, choices.split === "cv" || !hasHoldout ? "cv" : "holdout") : [],
+  );
   const targetKey = $derived(
-    targetKeys.includes(choices.target) ? choices.target : (targetKeys[0] ?? "dsr"),
+    targetKeys.includes(choices.target) ? choices.target : (targetKeys[0] ?? ""),
   );
   const report = $derived(data?.targets[targetKey]);
   const split = $derived<"holdout" | "cv">(
@@ -91,6 +96,7 @@
     report ? [...report.leaderboard, ...report.baselines] : [],
   );
   const topMlRow = $derived(report?.leaderboard[0]);
+  const temporal = $derived(report?.h3.temporal ?? null);
   const topMetrics = $derived(topMlRow ? pickSplit(topMlRow, split) : undefined);
 
   const algoPointsLegend = $derived.by(() => {
@@ -151,17 +157,22 @@
         label="Target quality metric"
         value={targetKey}
         options={targetKeys}
-        format={(k) => TARGET_LABELS[k] ?? k}
+        format={(k) => {
+          const r2 = data ? targetScore(data.targets[k], split) : null;
+          return `${TARGET_LABELS[k] ?? k}${r2 === null ? "" : ` · R² ${r2.toFixed(2)}`}`;
+        }}
         onchange={(target) => change({ target })}
       />
     {/if}
-    <Select
-      label="Evaluation split"
-      value={split}
-      options={["holdout", "cv"]}
-      format={(s) => SPLIT_LABELS[s] ?? s}
-      onchange={(s) => change({ split: s })}
-    />
+    {#if hasHoldout}
+      <Select
+        label="Evaluation split"
+        value={split}
+        options={["holdout", "cv"]}
+        format={(s) => SPLIT_LABELS[s] ?? s}
+        onchange={(s) => change({ split: s })}
+      />
+    {/if}
     <Select
       label="Thesis view"
       value={viewMode}
@@ -352,27 +363,35 @@
         />
       </article>
 
+      {#if temporal}
+        <p class="note">
+          CV = unseen circuits, same calibration windows. Temporal = trained on earlier windows, tested on
+          {temporal.holdoutPeriods.join(", ")}; {temporal.holdoutConfigsSeenInTrain} of
+          {temporal.holdoutConfigs} test circuits were also in training, so it measures calibration drift.
+        </p>
+      {/if}
       <div class="scroll">
         <table>
           <thead>
             <tr>
               <th>Input Configuration</th>
               <th>Features</th>
-              <th>Holdout R²</th>
-              <th>Holdout MAE</th>
-              <th>Holdout RMSE</th>
+              <th>{temporal ? "Temporal R²" : "Holdout R²"}</th>
+              <th>{temporal ? "Temporal MAE" : "Holdout MAE"}</th>
+              <th>{temporal ? "Temporal RMSE" : "Holdout RMSE"}</th>
               <th>CV R²</th>
               <th>CV MAE</th>
             </tr>
           </thead>
           <tbody>
             {#each report.h3.regimes as reg}
+              {@const ho = temporal ? temporal.regimes.find((t) => t.regime === reg.regime)?.holdout : reg.holdout}
               <tr>
                 <td><strong>{reg.label}</strong></td>
                 <td>{reg.featureCount}</td>
-                <td>{fmt(reg.holdout?.r2, 3)}</td>
-                <td>{fmt(reg.holdout?.mae, 4)}</td>
-                <td>{fmt(reg.holdout?.rmse, 4)}</td>
+                <td>{fmt(ho?.r2, 3)}</td>
+                <td>{fmt(ho?.mae, 4)}</td>
+                <td>{fmt(ho?.rmse, 4)}</td>
                 <td>{fmt(reg.cv.r2, 3)}</td>
                 <td>{fmt(reg.cv.mae, 4)}</td>
               </tr>

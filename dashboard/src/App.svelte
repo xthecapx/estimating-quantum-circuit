@@ -15,14 +15,14 @@
 
   let section = $state("range");
   let decay = $state({ matrix: "similarity", pair: "QFT/PHASE-ESTIMATION", resource: "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: "success" });
-  let estimation = $state<EstimationChoices>({ scope: "pooled", target: "dsr", split: "holdout", view: "h1" });
+  let estimation = $state<EstimationChoices>({ scope: "pooled", target: "", split: "holdout", view: "h1" });
   let reports = $state<Record<string,string>>({});
   let estimationReports = $state<Record<string,string>>({});
   function readChoices() {
     const url = parseHash(location.hash);
     section = url.section === "decay" ? "decay" : url.section === "estimation" ? "estimation" : "range";
     decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "QFT/PHASE-ESTIMATION", resource: url.resource || "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: url.outcome || "success"};
-    estimation = {scope: url.estScope || "pooled", target: url.estTarget || "dsr", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
+    estimation = {scope: url.estScope || "pooled", target: url.estTarget || "", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
   }
 
   let explorer = $state<Explorer>();

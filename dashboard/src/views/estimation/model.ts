@@ -145,6 +145,13 @@ export interface TargetReport {
   h3: {
     regimes: H3Regime[];
     drift: { available: boolean; rows: DriftRow[] };
+    /** K-fold snapshots: train on earlier windows, test on the latest (per chip). */
+    temporal?: {
+      holdoutPeriods: string[];
+      holdoutConfigs: number;
+      holdoutConfigsSeenInTrain: number;
+      regimes: H3Regime[];
+    } | null;
     transferMatrix: TransferCell[];
   };
   h4: H4Regime[];
@@ -200,8 +207,8 @@ export const VIEW_LABELS: Record<string, string> = {
 };
 
 export const SPLIT_LABELS: Record<string, string> = {
-  holdout: "Temporal unseen holdout",
-  cv: "Grouped CV (unseen configurations)",
+  holdout: "Temporal holdout (later window, same circuits)",
+  cv: "Grouped CV (unseen circuits)",
 };
 
 export const ALGO_COLORS: Record<string, string> = {
@@ -228,6 +235,27 @@ export const ALGO_SHORT: Record<string, string> = {
 
 export const fmt = (v: number | null | undefined, digits = 3): string =>
   v == null || !Number.isFinite(v) ? "—" : v.toFixed(digits);
+
+/** Headline R² of a target: first leaderboard row (the nested QAQS procedure in K-fold snapshots). */
+export function targetScore(report: TargetReport | undefined, split: "holdout" | "cv"): number | null {
+  const row = report?.leaderboard[0];
+  return row ? pickSplit(row, split).r2 : null;
+}
+
+/** Target keys ordered best to worst by headline R²; targets without a score go last. */
+export function sortTargetsByScore(
+  targets: Record<string, TargetReport>,
+  split: "holdout" | "cv",
+): string[] {
+  return Object.keys(targets).sort((a, b) => {
+    const ra = targetScore(targets[a], split);
+    const rb = targetScore(targets[b], split);
+    if (ra === null && rb === null) return a.localeCompare(b);
+    if (ra === null) return 1;
+    if (rb === null) return -1;
+    return rb - ra;
+  });
+}
 
 export function pickSplit(row: ModelScore | H3Regime, split: "holdout" | "cv"): SplitMetrics {
   return split === "holdout" && row.holdout ? row.holdout : row.cv;
