@@ -8,6 +8,9 @@ export interface SplitMetrics {
   rmse: number | null;
   spearmanRho: number | null;
   meetsH1: boolean;
+  /** Repeated K-fold only: sd of R² between repeats, and the per-repeat values. */
+  r2Sd?: number | null;
+  r2PerRepeat?: number[];
   /** 95% cluster-bootstrap CI of R² (resampled by circuit configuration). */
   r2CiLow?: number | null;
   r2CiHigh?: number | null;
@@ -156,6 +159,13 @@ export interface EstimationSnapshot {
   trainJobs: number;
   holdoutJobs: number;
   holdoutPeriods: string[];
+  split?: {
+    mode: "kfold" | "config" | "temporal";
+    nSplits?: number;
+    nRepeats?: number;
+    totalConfigs?: number;
+    holdoutConfigs?: number;
+  };
   temporalOrdering?: {
     available: boolean;
     strict?: boolean;
@@ -191,7 +201,7 @@ export const VIEW_LABELS: Record<string, string> = {
 
 export const SPLIT_LABELS: Record<string, string> = {
   holdout: "Temporal unseen holdout",
-  cv: "Grouped CV (by config)",
+  cv: "Grouped CV (unseen configurations)",
 };
 
 export const ALGO_COLORS: Record<string, string> = {

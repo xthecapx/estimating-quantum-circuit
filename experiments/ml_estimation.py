@@ -1142,6 +1142,202 @@ def analyze_scope(
     )
 
 
+def _collect_target_rows(
+    scope: str,
+    tkey: str,
+    tdata: Mapping[str, Any],
+    lb_rows: list,
+    fp_rows: list,
+    ablation_rows: list,
+    h2_rows: list,
+    h3_rows: list,
+    xfer_rows: list,
+    h4_rows: list,
+    saved_model_rows: list,
+    global_stats: Mapping[str, dict[str, Any]],
+) -> None:
+    """Flatten one K-fold target payload into the report CSV row lists."""
+    for ab in tdata.get("footprintAblation", []):
+        ablation_rows.append(
+            {
+                "scope": scope,
+                "target": tkey,
+                "k": ab["k"],
+                "cv_r2": ab["cvR2"],
+                "cv_mae": ab["cvMae"],
+                "selected": ab["selected"],
+                "features": ";".join(ab["features"]),
+            }
+        )
+    for _, minfo in sorted(tdata.get("savedModels", {}).items()):
+        saved_model_rows.append(minfo)
+    for regime, board in (
+        ("circuit_only", tdata.get("leaderboard", [])),
+        ("mixed_submit", tdata.get("mixedLeaderboard", [])),
+        ("analytical", tdata.get("baselines", [])),
+    ):
+        for entry in board:
+            cv = entry["cv"] or {}
+            lb_rows.append(
+                {
+                    "scope": scope,
+                    "target": tkey,
+                    "regime": regime,
+                    "model": entry["model"],
+                    "kind": entry["kind"],
+                    "r2": cv.get("r2"),
+                    "r2_sd": cv.get("r2Sd"),
+                    "r2_ci_low": cv.get("r2CiLow"),
+                    "r2_ci_high": cv.get("r2CiHigh"),
+                    "mae": cv.get("mae"),
+                    "rmse": cv.get("rmse"),
+                    "spearman_rho": cv.get("spearmanRho"),
+                    "n_repeats": cv.get("nRepeats"),
+                    "h1_verdict": cv.get("h1Verdict"),
+                    "selection_counts": json.dumps(entry.get("selectionCounts")) if entry.get("selectionCounts") else None,
+                }
+            )
+    for item in tdata.get("footprint", []):
+        fp_rows.append({"scope": scope, "target": tkey, **item})
+        if item.get("selected"):
+            st = global_stats[item["feature"]]
+            st["label"] = item["label"]
+            st["category"] = item["category"]
+            st["selectionCount"] += 1
+            st["ranks"].append(int(item.get("rank", 1)))
+            st["shaps"].append(float(item["shapMeanAbs"]))
+            st["perms"].append(float(item["permutationImportance"]))
+            st.setdefault("foldFreq", []).append(float(item.get("selectionFrequency", 0.0)))
+    for item in tdata.get("h2", []):
+        h2_rows.append({"scope": scope, "target": tkey, **item})
+    h3 = tdata.get("h3", {})
+    for item in h3.get("regimes", []):
+        h3_rows.append(
+            {
+                "scope": scope,
+                "target": tkey,
+                "evaluation": "kfold",
+                "regime": item["regime"],
+                "label": item["label"],
+                "r2": item["cv"].get("r2"),
+                "r2_sd": item["cv"].get("r2Sd"),
+                "mae": item["cv"].get("mae"),
+            }
+        )
+    temporal = h3.get("temporal") or {}
+    for item in temporal.get("regimes", []):
+        h3_rows.append(
+            {
+                "scope": scope,
+                "target": tkey,
+                "evaluation": "temporal_drift",
+                "regime": item["regime"],
+                "label": item["label"],
+                "r2": (item.get("holdout") or {}).get("r2"),
+                "r2_ci_low": (item.get("holdout") or {}).get("r2CiLow"),
+                "r2_ci_high": (item.get("holdout") or {}).get("r2CiHigh"),
+                "mae": (item.get("holdout") or {}).get("mae"),
+                "train_cv_r2": item["cv"].get("r2"),
+            }
+        )
+    if scope == "pooled":
+        for item in h3.get("transferMatrix", []):
+            xfer_rows.append({"target": tkey, **item})
+    for item in tdata.get("h4", []):
+        h4_rows.append(
+            {
+                "scope": scope,
+                "target": tkey,
+                "regime": item["regime"],
+                "r2": item["r2"],
+                "r2_ci_low": item.get("r2CiLow"),
+                "r2_ci_high": item.get("r2CiHigh"),
+                "mae": item["mae"],
+                "rmse": item["rmse"],
+                "nTrain": item["nTrain"],
+                "nTest": item["nTest"],
+                **{f"{fam}_r2": (m or {}).get("r2") for fam, m in (item.get("byFamily") or {}).items()},
+            }
+        )
+
+
+def _fmt(v: Any, nd: int = 3) -> str:
+    return "—" if v is None else f"{v:.{nd}f}"
+
+
+def _hypothesis_sections(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
+    """H2/H3/H4 report sections for the K-fold evaluation (success target as headline)."""
+    out: list[str] = []
+    key = "success"
+    out += [
+        "## H2 · Generalization to unseen configurations (success rate)",
+        "",
+        "Footprint chosen on each protocol's own training set. `M2 prior + residual` adds the analytical "
+        "M2 estimate (uses submit-time calibration) as a decay prior and learns its residual from the "
+        "footprint; it is calibration-aware, so it is reported separately from the circuit-only claim.",
+        "",
+        "| Scope | Protocol | Task | nTrain / nTest | R² [95% CI] | MAE |",
+        "|---|---|---|---:|---:|---:|",
+    ]
+    for scope, snap in snapshots.items():
+        for row in snap["targets"].get(key, {}).get("h2", []):
+            ci = (
+                f" [{row['r2CiLow']:.2f}, {row['r2CiHigh']:.2f}]" if row.get("r2CiLow") is not None else ""
+            )
+            out.append(
+                f"| `{scope}` | {row['protocol']} | {row['task']} | {row['nTrain']} / {row['nTest']} "
+                f"| {_fmt(row.get('r2'))}{ci} | {_fmt(row.get('mae'), 4)} |"
+            )
+    out.append("")
+
+    out += [
+        "## H3 · Hardware context and drift (success rate)",
+        "",
+        "K-fold columns: unseen configurations, same calibration windows. Temporal columns: train on "
+        "earlier windows, test on the latest window (mostly the same configurations), so they measure drift.",
+        "",
+        "| Scope | Regime | K-fold R² ± sd | Temporal R² [95% CI] | Temporal MAE |",
+        "|---|---|---:|---:|---:|",
+    ]
+    for scope, snap in snapshots.items():
+        t = snap["targets"].get(key)
+        if not t:
+            continue
+        temporal = {r["regime"]: r for r in ((t["h3"].get("temporal") or {}).get("regimes") or [])}
+        for reg in t["h3"]["regimes"]:
+            tr = temporal.get(reg["regime"], {}).get("holdout") or {}
+            ci = f" [{tr['r2CiLow']:.2f}, {tr['r2CiHigh']:.2f}]" if tr.get("r2CiLow") is not None else ""
+            out.append(
+                f"| `{scope}` | {reg['label']} | {_fmt(reg['cv'].get('r2'))} ± {_fmt(reg['cv'].get('r2Sd'))} "
+                f"| {_fmt(tr.get('r2'))}{ci} | {_fmt(tr.get('mae'), 4)} |"
+            )
+    out.append("")
+    out.append(
+        "Cross-chip transfer (zero-shot, footprint chosen on the source chip) is in "
+        "`h3_cross_chip_transfer.csv`. Both chips are IBM Heron, so it supports cross-*chip* transfer "
+        "only; the cross-*provider* claim needs Rigetti/IonQ data."
+    )
+    out.append("")
+
+    out += [
+        "## H4 · Paradigm vs random-volumetric training (success rate)",
+        "",
+        "Every paradigm configuration predicted once (repeat-0 folds). `size-matched` trains on as many "
+        "paradigm rows as random-only has, so training size is not confounded with signal.",
+        "",
+        "| Scope | Regime | nTrain | R² [95% CI] | MAE |",
+        "|---|---|---:|---:|---:|",
+    ]
+    for scope, snap in snapshots.items():
+        for row in snap["targets"].get(key, {}).get("h4", []):
+            ci = f" [{row['r2CiLow']:.2f}, {row['r2CiHigh']:.2f}]" if row.get("r2CiLow") is not None else ""
+            out.append(
+                f"| `{scope}` | {row['label']} | {row['nTrain']} | {_fmt(row.get('r2'))}{ci} | {_fmt(row.get('mae'), 4)} |"
+            )
+    out.append("")
+    return out
+
+
 def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> None:
     """Export CSV tables, best pre-runtime predictors JSON, model manifest, and report.md."""
     report_dir.mkdir(parents=True, exist_ok=True)
@@ -1171,8 +1367,75 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
         "",
     ]
 
+    kfold_mode = any((snap.get("split") or {}).get("mode") == "kfold" for snap in snapshots.values())
+    if kfold_mode:
+        any_snap = next(iter(snapshots.values()))
+        sp = any_snap["split"]
+        lines += [
+            f"Evaluation: nested repeated grouped K-fold ({sp['nSplits']} folds x {sp['nRepeats']} repeats) "
+            f"over {sp['totalConfigs']} circuit configurations. Every configuration is predicted once per "
+            "repeat by a model that never saw it, on any chip. Footprint selection, calibration-feature "
+            "selection, tuning and model choice happen inside each training fold.",
+            "",
+            "**QAQS row** = score of that whole procedure (the honest H1 estimate). "
+            "Per-model rows are shown for comparison; choosing the best of them afterwards is optimistic.",
+            "",
+            "R² = mean over repeats ± sd between repeats. CI = mean of per-repeat 95% cluster-bootstrap "
+            "intervals (resampling configurations). H1 PASS needs the CI above 0.80.",
+            "",
+            "Drift is *not* tested here: every configuration also ran in the training windows. "
+            "See the temporal drift section and the external validation run.",
+            "",
+        ]
+
     for scope, snap in snapshots.items():
         by_scope_target[scope] = {}
+        if kfold_mode:
+            lines.append(f"## Scope: `{scope}` ({snap['jobs']} jobs, {snap['split']['totalConfigs']} configurations)")
+            lines.append("")
+            lines.append(
+                "| Target | QAQS circuit-only R² ± sd [95% CI] | MAE | Mixed (+calib) R² | Best single model (R²) "
+                "| Deployed model | k* (fold range) | H1 |"
+            )
+            lines.append("|---|---:|---:|---:|---|---|---|:---:|")
+            for tkey, tdata in snap["targets"].items():
+                proc = tdata["leaderboard"][0]["cv"] if tdata["leaderboard"] else {}
+                mixed = tdata.get("mixedLeaderboard") or []
+                mixed_r2 = mixed[0]["cv"].get("r2") if mixed else None
+                singles = [r for r in tdata["leaderboard"][1:] if r["cv"].get("r2") is not None]
+                best_single = singles[0] if singles else None
+                ci = (
+                    f" [{proc['r2CiLow']:.2f}, {proc['r2CiHigh']:.2f}]"
+                    if proc.get("r2CiLow") is not None
+                    else ""
+                )
+                fs = tdata.get("footprintSizeAcrossFolds", {})
+                r2_txt = f"{proc['r2']:.3f} ± {proc.get('r2Sd', 0):.3f}{ci}" if proc.get("r2") is not None else "—"
+                mae_txt = f"{proc['mae']:.4f}" if proc.get("mae") is not None else "—"
+                mixed_txt = f"{mixed_r2:.3f}" if mixed_r2 is not None else "—"
+                single_txt = (
+                    f"{best_single['model']} ({best_single['cv']['r2']:.3f})" if best_single else "—"
+                )
+                lines.append(
+                    f"| {tdata['label']} (`{tkey}`) | {r2_txt} | {mae_txt} | {mixed_txt} | {single_txt} "
+                    f"| {tdata['bestModel']} | {tdata['footprintCount']} ({fs.get('min', '?')}–{fs.get('max', '?')}) "
+                    f"| {proc.get('h1Verdict', 'inconclusive').upper()} |"
+                )
+                by_scope_target[scope][tkey] = {
+                    "circuit_only": tdata.get("selectedFootprintFeatures", []),
+                    "hardware_submit": tdata.get("selectedHardwareFeatures", []),
+                    "mixed_submit": (
+                        tdata.get("selectedFootprintFeatures", []) + tdata.get("selectedHardwareFeatures", [])
+                    ),
+                    "ablation": tdata.get("footprintAblation", []),
+                }
+                total_targets += 1
+                _collect_target_rows(
+                    scope, tkey, tdata, lb_rows, fp_rows, ablation_rows, h2_rows, h3_rows,
+                    xfer_rows, h4_rows, saved_model_rows, global_stats,
+                )
+            lines.append("")
+            continue
         lines.append(
             f"## Scope: `{scope}` ({snap['jobs']} jobs: {snap['trainJobs']} train/CV, "
             f"{snap['holdoutJobs']} {'config' if (snap.get('split') or {}).get('mode') == 'config' else 'temporal'} holdout)"
@@ -1319,6 +1582,9 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
                 "meanRank": round(float(np.mean(st["ranks"])), 2),
                 "meanShap": round(float(np.mean(st["shaps"])), 6),
                 "meanPermutationImportance": round(float(np.mean(st["perms"])), 6),
+                "meanFoldSelectionFrequency": (
+                    round(float(np.mean(st["foldFreq"])), 4) if st.get("foldFreq") else None
+                ),
             }
         )
     global_core.sort(
@@ -1358,6 +1624,9 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
             )
             lines.append(f"| `{scope}` | `{tkey}` | {sel_s} | {full_s} |")
     lines.append("")
+
+    if kfold_mode:
+        lines += _hypothesis_sections(snapshots)
 
     if saved_model_rows:
         lines.append("## Saved Trained Model Artifacts")
@@ -1415,14 +1684,50 @@ def run_pipeline(
     dashboard_out: Path = DEFAULT_DASHBOARD_OUT,
     holdout_campaigns: Sequence[str] | None = None,
     backends: Sequence[str] | None = None,
-    split_mode: str = "config",
+    split_mode: str = "kfold",
     holdout_frac: float = 0.15,
     split_seed: int = 11,
+    n_splits: int = 5,
+    n_repeats: int = 3,
+    n_jobs: int = -1,
 ) -> dict[str, dict[str, Any]]:
-    """Execute full QAQS ML estimation pipeline and write dashboard, model & report artifacts."""
+    """Execute full QAQS ML estimation pipeline and write dashboard, model & report artifacts.
+
+    ``split_mode``:
+      * ``kfold`` (default): nested repeated grouped K-fold over configurations. Every
+        configuration is tested once per repeat; selection and tuning happen inside folds.
+      * ``config``: single holdout of ``holdout_frac`` configurations.
+      * ``temporal``: hold out the latest campaigns.
+    """
     bundle = load_ml_dataset(tables, backends=backends)
     frame = bundle.frame
     detected_backends = sorted(frame["meta.backend_name"].unique().tolist())
+
+    if split_mode == "kfold" and not holdout_campaigns:
+        from experiments.qaqs_kfold import analyze_scope_kfold, assign_config_folds
+
+        fold_table = assign_config_folds(frame, n_splits=n_splits, n_repeats=n_repeats, seed=split_seed)
+        print(
+            f"K-fold: {n_splits} folds x {n_repeats} repeats over "
+            f"{len(fold_table)} configurations (seed={split_seed}).",
+            flush=True,
+        )
+        scopes = [(b, frame[frame["meta.backend_name"] == b].copy()) for b in detected_backends]
+        if len(detected_backends) > 1:
+            scopes.append(("pooled", frame.copy()))
+        snapshots = {
+            name: analyze_scope_kfold(
+                bundle,
+                name,
+                sub,
+                fold_table,
+                models_dir=report_out / "models",
+                random_state=split_seed,
+                n_jobs=n_jobs,
+            )
+            for name, sub in scopes
+        }
+        return _finish_pipeline(bundle, snapshots, detected_backends, report_out, dashboard_out)
 
     holdout_configs: list[str] | None = None
     if split_mode == "config" and not holdout_campaigns:
@@ -1461,6 +1766,18 @@ def run_pipeline(
             holdout_configs=holdout_configs,
         )
 
+    return _finish_pipeline(bundle, snapshots, detected_backends, report_out, dashboard_out)
+
+
+def _finish_pipeline(
+    bundle: DatasetBundle,
+    snapshots: dict[str, dict[str, Any]],
+    detected_backends: Sequence[str],
+    report_out: Path,
+    dashboard_out: Path,
+) -> dict[str, dict[str, Any]]:
+    """Cross-chip transfer matrix, dashboard snapshots and report files."""
+    dashboard_out.mkdir(parents=True, exist_ok=True)
     chip_scopes = [b for b in detected_backends if b in snapshots]
     if len(chip_scopes) > 1:
         model_for_transfer = build_models()["LightGBM"]
@@ -1506,10 +1823,16 @@ def main() -> None:
     )
     parser.add_argument(
         "--split",
-        choices=("config", "temporal"),
-        default="config",
-        help="config: hold out ~15%% of circuit configurations (default); temporal: hold out later campaigns.",
+        choices=("kfold", "config", "temporal"),
+        default="kfold",
+        help=(
+            "kfold: nested repeated grouped K-fold over configurations (default); "
+            "config: single 15%% configuration holdout; temporal: hold out later campaigns."
+        ),
     )
+    parser.add_argument("--folds", type=int, default=5)
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--jobs", type=int, default=-1, help="Parallel workers for K-fold (-1 = all cores).")
     parser.add_argument("--holdout-frac", type=float, default=0.15)
     parser.add_argument("--split-seed", type=int, default=11)
     args = parser.parse_args()
@@ -1522,14 +1845,18 @@ def main() -> None:
         split_mode=args.split,
         holdout_frac=args.holdout_frac,
         split_seed=args.split_seed,
+        n_splits=args.folds,
+        n_repeats=args.repeats,
+        n_jobs=args.jobs,
     )
     for scope, snap in snapshots.items():
-        dsr_best = snap["targets"]["dsr"]["leaderboard"][0]
-        ho = dsr_best["holdout"] or dsr_best["cv"]
-        print(
-            f"[{scope}] jobs={snap['jobs']} (train={snap['trainJobs']}, holdout={snap['holdoutJobs']}) "
-            f"| DSR best={dsr_best['model']} R2={ho['r2']:.3f} MAE={ho['mae']:.4f}"
-        )
+        parts = []
+        for tkey, tdata in snap["targets"].items():
+            row = tdata["leaderboard"][0]
+            m = row["holdout"] or row["cv"]
+            if m.get("r2") is not None:
+                parts.append(f"{tkey}={m['r2']:.3f}")
+        print(f"[{scope}] jobs={snap['jobs']} | {row['model'] if snap['targets'] else ''} R2: {', '.join(parts)}")
 
 
 if __name__ == "__main__":

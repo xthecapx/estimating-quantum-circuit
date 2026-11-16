@@ -162,6 +162,8 @@ def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
         tables=tables,
         report_out=report_out,
         dashboard_out=dash_out,
+        n_repeats=1,
+        n_jobs=1,
     )
     assert set(snapshots) == {"ibm_fez", "ankaa_3", "ionq_aria", "pooled"}
     pooled = snapshots["pooled"]
@@ -347,3 +349,49 @@ def test_h4_includes_size_matched_control_and_footprint_only() -> None:
     assert {"random_only", "paradigm_only", "combined"} <= set(regimes)
     if "paradigm_matched" in regimes:
         assert regimes["paradigm_matched"]["nTrain"] <= regimes["paradigm_only"]["nTrain"]
+
+
+def test_config_folds_are_shared_across_chips_and_cover_every_config(tmp_path: Path) -> None:
+    from experiments.qaqs_kfold import assign_config_folds
+
+    bundle = load_ml_dataset(_synthetic_multichip_tables(tmp_path))
+    table = assign_config_folds(bundle.frame, n_splits=4, n_repeats=2, seed=3)
+    assert set(table.index) == set(bundle.frame["meta.config_id"].astype(str))
+    assert list(table.columns) == ["r0", "r1"]
+    for col in table.columns:
+        assert set(table[col]) <= {0, 1, 2, 3} and (table[col] >= 0).all()
+        # each algorithm's configs are spread over folds, not lumped into one
+        algo = bundle.frame.groupby("meta.config_id")["meta.algorithm"].first()
+        per_algo = table[col].groupby(algo.reindex(table.index).to_numpy()).nunique()
+        assert (per_algo >= 2).all()
+    assert not table["r0"].equals(table["r1"])  # repeats reshuffle
+
+
+def test_kfold_procedure_scores_unseen_configs_only(tmp_path: Path) -> None:
+    from experiments.qaqs_kfold import _nested_fold
+
+    bundle = load_ml_dataset(_synthetic_multichip_tables(tmp_path))
+    frame = bundle.frame[bundle.frame["meta.backend_name"] == "ibm_fez"]
+    cfgs = sorted(frame["meta.config_id"].unique())
+    test = frame[frame["meta.config_id"].isin(cfgs[::4])]
+    train = frame.drop(test.index)
+    res = _nested_fold(
+        train, test, "f.fidelity.dsr", bundle.circuit_features, bundle.hardware_submit_features, 11
+    )
+    assert set(res["testIndex"]) == set(test.index)
+    reg = res["regimes"]["circuit_only"]
+    assert reg["selected"] in reg["perModel"]
+    assert all(len(m["pred"]) == len(test) for m in reg["perModel"].values() if "pred" in m)
+
+
+def test_summarize_repeats_reports_spread() -> None:
+    from experiments.qaqs_kfold import summarize_repeats
+
+    rng = np.random.default_rng(0)
+    y = pd.Series(rng.uniform(0, 1, 60))
+    groups = pd.Series([f"c{i // 3}" for i in range(60)])
+    preds = [pd.Series(np.clip(y + rng.normal(0, s, 60), 0, 1)) for s in (0.05, 0.10)]
+    out = summarize_repeats(y, groups, preds)
+    assert out["nRepeats"] == 2 and len(out["r2PerRepeat"]) == 2
+    assert out["r2Sd"] > 0
+    assert out["h1Verdict"] in {"pass", "fail", "inconclusive"}

@@ -185,7 +185,11 @@
       <div>
         <p class="eyebrow">
           {SCOPE_LABELS[data.backend] ?? data.backend} · {data.jobs} jobs ({data.trainJobs} train/CV,
-          {data.holdoutJobs} holdout)
+          {#if data.split?.mode === "kfold"}
+            {data.split.nSplits}-fold × {data.split.nRepeats} repeated grouped CV over {data.split.totalConfigs} configurations)
+          {:else}
+            {data.holdoutJobs} holdout)
+          {/if}
         </p>
         <h2>{TARGET_LABELS[targetKey] ?? report.label}</h2>
         <p class="note">
@@ -273,7 +277,7 @@
               {@const activeM = pickSplit(row, split)}
               <tr>
                 <td><strong>{row.label}</strong></td>
-                <td>{row.kind === "analytical_baseline" ? "Analytical baseline" : row.kind === "ml_ensemble" ? "AutoML Ensemble" : "ML Regressor"}</td>
+                <td>{row.kind === "procedure" ? "QAQS procedure (nested)" : row.kind === "analytical_baseline" ? "Analytical baseline" : row.kind === "ml_ensemble" ? "AutoML Ensemble" : "ML Regressor"}</td>
                 <td>{fmt(row.holdout?.r2, 3)}</td>
                 <td>{fmt(row.holdout?.mae, 4)}</td>
                 <td>{fmt(row.holdout?.rmse, 4)}</td>
