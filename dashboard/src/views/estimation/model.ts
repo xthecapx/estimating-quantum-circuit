@@ -8,6 +8,11 @@ export interface SplitMetrics {
   rmse: number | null;
   spearmanRho: number | null;
   meetsH1: boolean;
+  /** 95% cluster-bootstrap CI of R² (resampled by circuit configuration). */
+  r2CiLow?: number | null;
+  r2CiHigh?: number | null;
+  /** pass = CI entirely >= 0.80, fail = CI entirely < 0.80, otherwise inconclusive. */
+  h1Verdict?: "pass" | "fail" | "inconclusive";
 }
 
 export interface ModelScore {
@@ -81,6 +86,8 @@ export interface TransferCell extends SplitMetrics {
   regime: string;
   regimeLabel: string;
   mode: string;
+  /** False for chip-to-chip transfer inside one provider (cannot support the cross-provider claim). */
+  crossProvider?: boolean;
   nTrain: number;
   nTest: number;
 }
@@ -91,6 +98,8 @@ export interface H4Regime extends SplitMetrics {
   nTrain: number;
   nTest: number;
   byFamily?: Record<string, SplitMetrics>;
+  /** R² of each size-matched draw (regime "paradigm_matched" only). */
+  r2PerDraw?: (number | null)[];
 }
 
 export interface SavedModelInfo {
@@ -147,6 +156,13 @@ export interface EstimationSnapshot {
   trainJobs: number;
   holdoutJobs: number;
   holdoutPeriods: string[];
+  temporalOrdering?: {
+    available: boolean;
+    strict?: boolean;
+    trainEnd?: string;
+    holdoutStart?: string;
+    holdoutJobsBeforeTrainEnd?: number;
+  };
   algorithms: string[];
   backendsIncluded: string[];
   providersIncluded: string[];

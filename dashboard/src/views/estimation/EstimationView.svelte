@@ -204,11 +204,22 @@
         </p>
       </div>
       {#if topMetrics}
-        <div class="stat" class:pass={topMetrics.meetsH1}>
-          <strong>R² = {fmt(topMetrics.r2, 3)}</strong>
+        <div class="stat" class:pass={(topMetrics.h1Verdict ?? (topMetrics.meetsH1 ? "pass" : "fail")) === "pass"}>
+          <strong>
+            R² = {fmt(topMetrics.r2, 3)}
+            {#if topMetrics.r2CiLow != null && topMetrics.r2CiHigh != null}
+              [{fmt(topMetrics.r2CiLow, 2)}, {fmt(topMetrics.r2CiHigh, 2)}]
+            {/if}
+          </strong>
           <span>
             MAE {fmt(topMetrics.mae, 4)} · RMSE {fmt(topMetrics.rmse, 4)} ·
-            {topMetrics.meetsH1 ? "Meets H1 (>= 0.80)" : "Below H1 (0.80)"}
+            {#if topMetrics.h1Verdict === "inconclusive"}
+              H1 inconclusive (95% CI straddles 0.80)
+            {:else if (topMetrics.h1Verdict ?? (topMetrics.meetsH1 ? "pass" : "fail")) === "pass"}
+              Meets H1 (CI &ge; 0.80)
+            {:else}
+              Below H1 (0.80)
+            {/if}
           </span>
         </div>
       {/if}
