@@ -102,9 +102,11 @@ EXCLUDED_PREFIXES = (
 
 # Explicit holdout campaign patterns per backend for reproducible thesis evaluation.
 DEFAULT_HOLDOUT_CAMPAIGNS: dict[str, tuple[str, ...]] = {
+    # `fez-dataset-v2-pilot-r2` is deliberately NOT held out: it ran on 2026-11-04 01:43Z,
+    # before the `fez-dataset-v2` window-1 training data (2026-11-04 13:13Z), so holding
+    # it out would break the strictly-later-than-training guarantee of the temporal split.
     "ibm_fez": (
         "fez-full-shor-growth-v1-2026-11-06",
-        "fez-dataset-v2-pilot-r2",
         "fez-oracle-growth-v1-2026-11-07",
         "fez-oracle-growth-v1-2026-11-07-makeup",
         "fez-oracle-growth-v1-2026-11-07-standalone",
@@ -377,6 +379,66 @@ def split_temporal_and_cv(
 
     holdout_periods = sorted(frame.loc[is_holdout, "period"].unique().tolist())
     return is_holdout, holdout_periods
+
+
+def split_by_config(
+    frame: pd.DataFrame,
+    holdout_frac: float = 0.15,
+    seed: int = 11,
+) -> tuple[pd.Series, list[str]]:
+    """Hold out ``holdout_frac`` of circuit *configurations* (never individual jobs).
+
+    All repetitions of a configuration, on every chip and in every window, go to the
+    same side, so train and test never share a circuit. Configurations are stratified
+    by algorithm and by size (median two-qubit gate count): each algorithm's sorted
+    configurations are cut into ``k`` contiguous size bins and one is drawn per bin,
+    so the holdout spans small and large circuits of every algorithm.
+
+    The choice depends only on the set of configuration ids, so the same holdout is
+    obtained for each single-chip scope and for the pooled scope.
+    """
+    size_col = "b.two_qubit_gates" if "b.two_qubit_gates" in frame.columns else "a.num_qubits"
+    cfg = (
+        frame.assign(_size=pd.to_numeric(frame[size_col], errors="coerce"))
+        .groupby("meta.config_id")
+        .agg(algorithm=("meta.algorithm", "first"), size=("_size", "median"))
+        .reset_index()
+    )
+    rng = np.random.default_rng(seed)
+    held: list[str] = []
+    for _, grp in cfg.groupby("algorithm"):
+        grp = grp.sort_values(["size", "meta.config_id"])
+        n = len(grp)
+        k = int(round(holdout_frac * n))
+        if n < 4 or k < 1:
+            continue
+        for chunk in np.array_split(grp["meta.config_id"].to_numpy(), k):
+            held.append(str(rng.choice(chunk)))
+    held_sorted = sorted(held)
+    return frame["meta.config_id"].astype(str).isin(set(held_sorted)), held_sorted
+
+
+def temporal_ordering(frame: pd.DataFrame, is_holdout: pd.Series) -> dict[str, object]:
+    """Report whether every holdout job finished strictly after every training job.
+
+    The thesis validates on executions collected in *later* calibration cycles, so the
+    split is only a genuine temporal holdout when ``holdoutStart > trainEnd``.
+    """
+    if "g.finished_at" not in frame.columns:
+        return {"available": False}
+    t = pd.to_datetime(frame["g.finished_at"], utc=True, errors="coerce")
+    train_t, hold_t = t[~is_holdout].dropna(), t[is_holdout].dropna()
+    if train_t.empty or hold_t.empty:
+        return {"available": False}
+    return {
+        "available": True,
+        "trainStart": train_t.min().isoformat(),
+        "trainEnd": train_t.max().isoformat(),
+        "holdoutStart": hold_t.min().isoformat(),
+        "holdoutEnd": hold_t.max().isoformat(),
+        "strict": bool(hold_t.min() > train_t.max()),
+        "holdoutJobsBeforeTrainEnd": int((hold_t <= train_t.max()).sum()),
+    }
 
 
 def make_exec_feature_frame(

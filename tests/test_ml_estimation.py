@@ -269,3 +269,81 @@ def test_dashboard_build_validates_estimation_snapshots(tmp_path: Path) -> None:
         assert (out_dir / reports["ankaa_3"]).is_file()
     finally:
         mod.PROJECT = old_project
+
+
+def test_footprint_selection_ignores_holdout_labels() -> None:
+    """Selection must not change when holdout targets are scrambled (no label leakage)."""
+    rng = np.random.default_rng(5)
+    n = 160
+    X = pd.DataFrame({f"a.f{i}": rng.normal(size=n) for i in range(6)})
+    X["b.signal"] = rng.normal(size=n)
+    y = np.clip(0.5 + 0.3 * X["b.signal"].to_numpy() + rng.normal(0, 0.05, n), 0, 1)
+    df = X.assign(y=y, cfg=[f"c{i % 40}" for i in range(n)])
+    train, hold = df.iloc[:110].copy(), df.iloc[110:].copy()
+    models = build_models(random_state=11)
+    kwargs = dict(
+        contrib_model=models["XGBoost"],
+        ablation_model=models["LightGBM"],
+        groups=train["cfg"],
+        min_features=2,
+        max_selected=4,
+    )
+    cols = list(X.columns)
+    a, _, _ = select_best_footprint(train, hold, cols, "y", **kwargs)
+    scrambled = hold.copy()
+    scrambled["y"] = rng.permutation(scrambled["y"].to_numpy())
+    b, _, _ = select_best_footprint(train, scrambled, cols, "y", **kwargs)
+    assert a == b
+
+
+def test_h1_verdict_requires_ci_to_clear_threshold() -> None:
+    from experiments.ml_estimation import h1_verdict
+
+    assert h1_verdict(0.85, (0.82, 0.88)) == "pass"
+    assert h1_verdict(0.81, (0.70, 0.90)) == "inconclusive"
+    assert h1_verdict(0.60, (0.50, 0.70)) == "fail"
+    assert h1_verdict(None, None) == "inconclusive"
+
+
+def test_hardware_regime_excludes_circuit_dependent_columns() -> None:
+    from experiments.ml_estimation import _is_device_only_hw
+
+    for col in ("c.num_used_qubits", "c.duration_s", "c.calibration_coverage", "c.idle_over_t1.median"):
+        assert not _is_device_only_hw(col)
+    for col in ("c.t1_us.median", "c.two_qubit_gate_error.median", "c.readout_error.median"):
+        assert _is_device_only_hw(col)
+
+
+def test_temporal_ordering_flags_overlap() -> None:
+    from experiments.ml_dataset import temporal_ordering
+
+    frame = pd.DataFrame(
+        {"g.finished_at": ["2026-11-01T00:00:00Z", "2026-11-03T00:00:00Z", "2026-11-02T00:00:00Z"]}
+    )
+    late = pd.Series([False, True, False])
+    assert temporal_ordering(frame, late)["strict"] is True  # holdout is the latest job
+    overlap = pd.Series([False, False, True])  # holdout (Nov 2) precedes train job (Nov 3)
+    res = temporal_ordering(frame, overlap)
+    assert res["strict"] is False and res["holdoutJobsBeforeTrainEnd"] == 1
+    frame2 = pd.DataFrame({"g.finished_at": ["2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]})
+    assert temporal_ordering(frame2, pd.Series([False, True]))["strict"] is True
+
+
+def test_h4_includes_size_matched_control_and_footprint_only() -> None:
+    from experiments.ml_estimation import _run_h4_benchmarking_regimes
+
+    rng = np.random.default_rng(3)
+    rows = []
+    for algo, n_cfg in (("QFT", 12), ("GROVER", 12), ("RANDOM-VOLUMETRIC", 8)):
+        for c in range(n_cfg):
+            for _ in range(3):
+                x = rng.uniform(0, 1)
+                rows.append({"meta.algorithm": algo, "meta.config_id": f"{algo}-{c}", "x": x,
+                             "y": float(np.clip(1 - 0.8 * x + rng.normal(0, 0.03), 0, 1))})
+    df = pd.DataFrame(rows)
+    train, test = df.sample(frac=0.7, random_state=1), df.sample(frac=0.4, random_state=2)
+    out = _run_h4_benchmarking_regimes(train, test, "y", ["x"], build_models()["LightGBM"])
+    regimes = {r["regime"]: r for r in out}
+    assert {"random_only", "paradigm_only", "combined"} <= set(regimes)
+    if "paradigm_matched" in regimes:
+        assert regimes["paradigm_matched"]["nTrain"] <= regimes["paradigm_only"]["nTrain"]

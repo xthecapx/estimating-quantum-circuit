@@ -445,6 +445,7 @@ def select_best_footprint(
     max_selected: int = 10,
     r2_tolerance: float = 0.0015,
     random_state: int = 11,
+    use_eval_for_contributions: bool = False,
 ) -> tuple[list[str], list[dict[str, Any]], list[dict[str, Any]]]:
     """Two-stage selection of minimal, high-signal pre-runtime Quantum Circuit Footprint.
 
@@ -453,6 +454,12 @@ def select_best_footprint(
     ranks candidates by composite predictive contribution.
     Stage 2 runs a GroupKFold CV ablation over top-k subsets and selects the smallest
     parsimonious subset within ``r2_tolerance`` of peak positive-feature CV R^2.
+
+    Contributions are computed out-of-fold on ``train_frame`` by default so that the
+    temporal holdout never influences which features are selected (otherwise the
+    holdout R^2 reported for H1 would be optimistically biased). Set
+    ``use_eval_for_contributions`` only for exploratory analyses on a non-reported
+    ``eval_frame``.
 
     Returns ``(best_features, ranked_footprint_items, ablation_curve)``.
     """
@@ -473,7 +480,9 @@ def select_best_footprint(
         if getattr(r, "selected", False) and pd.notna(r.vif)
     }
     has_distinct_eval = (
-        len(eval_frame) >= 15 and not eval_frame.index.equals(train_frame.index)
+        use_eval_for_contributions
+        and len(eval_frame) >= 15
+        and not eval_frame.index.equals(train_frame.index)
     )
     if has_distinct_eval:
         fitted_contrib = clone(contrib_model)

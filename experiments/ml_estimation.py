@@ -43,7 +43,9 @@ from experiments.ml_dataset import (
     infer_provider,
     load_ml_dataset,
     make_exec_feature_frame,
+    split_by_config,
     split_temporal_and_cv,
+    temporal_ordering,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -199,8 +201,57 @@ def _fit_predict(model: Pipeline, X_train: pd.DataFrame, y_train: np.ndarray, X_
     return np.clip(np.asarray(preds, dtype=float), 0.0, 1.0)
 
 
-def evaluate_predictions(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, Any]:
-    """Compute R^2, MAE, RMSE, Spearman rho, and H1 pass flag."""
+def _cluster_bootstrap_r2(
+    y: np.ndarray,
+    pred: np.ndarray,
+    groups: Sequence[Any],
+    n_boot: int = 300,
+    seed: int = 11,
+) -> tuple[float, float] | None:
+    """95% percentile CI of R^2, resampling whole circuit configurations.
+
+    Repetitions of one configuration are not independent samples, so jobs are
+    resampled by ``meta.config_id`` cluster rather than individually.
+    """
+    codes, _ = pd.factorize(pd.Series(list(groups)))
+    n_groups = int(codes.max()) + 1 if len(codes) else 0
+    if n_groups < 5:
+        return None
+    members = [np.flatnonzero(codes == g) for g in range(n_groups)]
+    rng = np.random.default_rng(seed)
+    scores: list[float] = []
+    for _ in range(n_boot):
+        pick = rng.integers(0, n_groups, size=n_groups)
+        idx = np.concatenate([members[g] for g in pick])
+        yt = y[idx]
+        if np.std(yt) <= 1e-12:
+            continue
+        scores.append(float(r2_score(yt, pred[idx])))
+    if len(scores) < 20:
+        return None
+    lo, hi = np.percentile(scores, [2.5, 97.5])
+    return float(lo), float(hi)
+
+
+def h1_verdict(r2: float | None, ci: tuple[float, float] | None) -> str:
+    """`pass` only if the whole CI clears the threshold; `fail` if it is entirely below."""
+    if r2 is None:
+        return "inconclusive"
+    if ci is None:
+        return "pass" if r2 >= H1_R2_THRESHOLD else "fail"
+    if ci[0] >= H1_R2_THRESHOLD:
+        return "pass"
+    if ci[1] < H1_R2_THRESHOLD:
+        return "fail"
+    return "inconclusive"
+
+
+def evaluate_predictions(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    groups: Sequence[Any] | None = None,
+) -> dict[str, Any]:
+    """Compute R^2, MAE, RMSE, Spearman rho, H1 flag and (with ``groups``) a cluster CI."""
     mask = np.isfinite(y_true) & np.isfinite(y_pred)
     n = int(mask.sum())
     if n < 3:
@@ -211,6 +262,9 @@ def evaluate_predictions(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, An
             "rmse": None,
             "spearmanRho": None,
             "meetsH1": False,
+            "r2CiLow": None,
+            "r2CiHigh": None,
+            "h1Verdict": "inconclusive",
         }
     yt, yp = y_true[mask], y_pred[mask]
     r2 = float(r2_score(yt, yp)) if np.std(yt) > 1e-12 else 0.0
@@ -222,13 +276,20 @@ def evaluate_predictions(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, An
             rho = float(spearmanr(yt, yp).statistic)
     else:
         rho = 0.0
+    ci = None
+    if groups is not None:
+        ci = _cluster_bootstrap_r2(yt, yp, np.asarray(list(groups))[mask])
+    r2_ok = r2 if math.isfinite(r2) else None
     return {
         "n": n,
-        "r2": r2 if math.isfinite(r2) else None,
+        "r2": r2_ok,
         "mae": mae if math.isfinite(mae) else None,
         "rmse": rmse if math.isfinite(rmse) else None,
         "spearmanRho": rho if math.isfinite(rho) else None,
         "meetsH1": bool(math.isfinite(r2) and r2 >= H1_R2_THRESHOLD),
+        "r2CiLow": ci[0] if ci else None,
+        "r2CiHigh": ci[1] if ci else None,
+        "h1Verdict": h1_verdict(r2_ok, ci),
     }
 
 
@@ -315,7 +376,11 @@ def _run_h2_scalability(
     features: list[str],
     fast_model: Pipeline,
 ) -> list[dict[str, Any]]:
-    """Evaluate H2: within-paradigm largest-circuit scaling extrapolation & zero-shot Shor."""
+    """Evaluate H2 with the circuit footprint only (no calibration features).
+
+    Scaling extrapolation trains on the smaller 75% of configurations and tests on the
+    largest 25%; this is also the closest offline analogue of the decay experiment.
+    """
     rows: list[dict[str, Any]] = []
     valid = train_pool[np.isfinite(train_pool[target_col])].copy()
 
@@ -344,7 +409,9 @@ def _run_h2_scalability(
             sub_tr[target_col].to_numpy(dtype=float),
             sub_te[features],
         )
-        metrics = evaluate_predictions(sub_te[target_col].to_numpy(dtype=float), preds)
+        metrics = evaluate_predictions(
+            sub_te[target_col].to_numpy(dtype=float), preds, sub_te["meta.config_id"].to_numpy()
+        )
         rows.append(
             {
                 "protocol": "scaling_extrapolation",
@@ -371,7 +438,9 @@ def _run_h2_scalability(
             sub_tr[target_col].to_numpy(dtype=float),
             sub_te[features],
         )
-        metrics = evaluate_predictions(sub_te[target_col].to_numpy(dtype=float), preds)
+        metrics = evaluate_predictions(
+            sub_te[target_col].to_numpy(dtype=float), preds, sub_te["meta.config_id"].to_numpy()
+        )
         rows.append(
             {
                 "protocol": "leave_algorithm_out",
@@ -394,7 +463,9 @@ def _run_h2_scalability(
             core_sub[target_col].to_numpy(dtype=float),
             shor_sub[features],
         )
-        metrics = evaluate_predictions(shor_sub[target_col].to_numpy(dtype=float), preds)
+        metrics = evaluate_predictions(
+            shor_sub[target_col].to_numpy(dtype=float), preds, shor_sub["meta.config_id"].to_numpy()
+        )
         rows.append(
             {
                 "protocol": "composite_anchor",
@@ -444,7 +515,7 @@ def _run_h3_hardware_boundary(
         cv_m = evaluate_predictions(y_tr, cv_preds)
         if split_label == "holdout":
             te_preds = _fit_predict(fast_model, train_df[cols], y_tr, holdout_df[cols])
-            te_m = evaluate_predictions(y_te, te_preds)
+            te_m = evaluate_predictions(y_te, te_preds, holdout_df["meta.config_id"].to_numpy())
         else:
             te_m = cv_m
         regimes.append(
@@ -539,8 +610,17 @@ def _run_h4_benchmarking_regimes(
     target_col: str,
     features: list[str],
     fast_model: Pipeline,
+    n_matched_draws: int = 10,
+    random_state: int = 11,
 ) -> list[dict[str, Any]]:
-    """Evaluate H4: Random-Volumetric vs Paradigm-Only vs Combined on held-out paradigm jobs."""
+    """Evaluate H4 on held-out paradigm jobs using the circuit footprint only.
+
+    Regimes: random-only, paradigm-only, combined, and a *size-matched* paradigm-only
+    control. The raw regimes differ in training-set size by ~10x, so a higher paradigm
+    score alone cannot distinguish "more informative" from "more data". The matched
+    control subsamples paradigm configurations to the random-only row count (averaged
+    over ``n_matched_draws`` stratified draws) and is the fair comparison for H4.
+    """
     eval_src = holdout_df if len(holdout_df[holdout_df["meta.algorithm"].isin(CORE_ALGORITHMS)]) >= 15 else train_df
     test_paradigm = eval_src[
         eval_src["meta.algorithm"].isin(CORE_ALGORITHMS) & np.isfinite(eval_src[target_col])
@@ -554,6 +634,17 @@ def _run_h4_benchmarking_regimes(
     comb_tr = tr_valid[tr_valid["meta.algorithm"].isin(CORE_ALGORITHMS + (RANDOM_ALGORITHM,))]
 
     y_te = test_paradigm[target_col].to_numpy(dtype=float)
+    te_groups = test_paradigm["meta.config_id"].to_numpy()
+
+    def _score(preds: np.ndarray, with_ci: bool = True) -> dict[str, Any]:
+        overall = evaluate_predictions(y_te, preds, te_groups if with_ci else None)
+        by_family: dict[str, Any] = {}
+        for fam_key, fam_algos in FAMILIES.items():
+            fmask = test_paradigm["meta.algorithm"].isin(fam_algos).values
+            if fmask.sum() >= 3:
+                by_family[fam_key] = evaluate_predictions(y_te[fmask], preds[fmask])
+        return {**overall, "byFamily": by_family}
+
     out: list[dict[str, Any]] = []
     for key, label, sub_tr in (
         ("random_only", "Random Volumetric Only (RV)", rand_tr),
@@ -568,20 +659,52 @@ def _run_h4_benchmarking_regimes(
             sub_tr[target_col].to_numpy(dtype=float),
             test_paradigm[features],
         )
-        overall = evaluate_predictions(y_te, preds)
-        by_family: dict[str, Any] = {}
-        for fam_key, fam_algos in FAMILIES.items():
-            fmask = test_paradigm["meta.algorithm"].isin(fam_algos).values
-            if fmask.sum() >= 3:
-                by_family[fam_key] = evaluate_predictions(y_te[fmask], preds[fmask])
         out.append(
             {
                 "regime": key,
                 "label": label,
                 "nTrain": int(len(sub_tr)),
                 "nTest": int(len(test_paradigm)),
-                **overall,
-                "byFamily": by_family,
+                **_score(preds),
+            }
+        )
+
+    n_match = len(rand_tr)
+    cfg_ids = para_tr["meta.config_id"].unique()
+    if n_match >= 10 and len(para_tr) > n_match and len(cfg_ids) >= 5:
+        rng = np.random.default_rng(random_state)
+        draw_preds: list[np.ndarray] = []
+        for _ in range(n_matched_draws):
+            order = rng.permutation(cfg_ids)
+            picked: list[Any] = []
+            total = 0
+            counts = para_tr.groupby("meta.config_id").size()
+            for cfg in order:
+                if total >= n_match:
+                    break
+                picked.append(cfg)
+                total += int(counts[cfg])
+            sub = para_tr[para_tr["meta.config_id"].isin(picked)]
+            draw_preds.append(
+                _fit_predict(
+                    fast_model,
+                    sub[features],
+                    sub[target_col].to_numpy(dtype=float),
+                    test_paradigm[features],
+                )
+            )
+        mean_pred = np.mean(draw_preds, axis=0)
+        entry = _score(mean_pred)
+        entry["r2PerDraw"] = [
+            evaluate_predictions(y_te, p)["r2"] for p in draw_preds
+        ]
+        out.append(
+            {
+                "regime": "paradigm_matched",
+                "label": f"Paradigm Only, size-matched to RV (~{n_match} rows)",
+                "nTrain": int(n_match),
+                "nTest": int(len(test_paradigm)),
+                **entry,
             }
         )
     return out
@@ -590,24 +713,30 @@ def _run_h4_benchmarking_regimes(
 def compute_cross_chip_transfer(
     bundle: DatasetBundle,
     target_key: str,
-    footprint_cols: list[str],
-    hw_submit_cols: list[str],
+    features_by_backend: Mapping[str, Mapping[str, list[str]]],
     fast_model: Pipeline,
 ) -> list[dict[str, Any]]:
-    """Compute cross-backend / cross-provider transfer matrix (H3) across all chips in dataset."""
+    """Cross-backend transfer matrix (H3).
+
+    ``features_by_backend[src]`` holds the regime feature lists that were selected on
+    ``src``'s own *training* period. A model trained on ``src`` therefore only ever sees
+    features chosen without looking at ``dst``. Cells where source and target share a
+    provider are flagged ``crossProvider=False``: they measure cross-*chip* transfer and
+    cannot, on their own, support the cross-*provider* claim of H3.
+    """
     frame = bundle.frame
     target_col = TARGETS[target_key][0]
     valid = frame[np.isfinite(frame[target_col])].copy()
-    backends = sorted(valid["meta.backend_name"].unique().tolist())
+    backends = sorted(b for b in valid["meta.backend_name"].unique() if b in features_by_backend)
     if len(backends) < 2:
         return []
 
     cells: list[dict[str, Any]] = []
-    regime_defs = (
-        ("circuit_only", "Circuit Footprint Only", footprint_cols),
-        ("hardware_only", "Hardware Calibration Only", hw_submit_cols),
-        ("mixed_submit", "Mixed (Footprint + Hardware)", footprint_cols + hw_submit_cols),
-    )
+    regime_labels = {
+        "circuit_only": "Circuit Footprint Only",
+        "hardware_only": "Hardware Calibration Only",
+        "mixed_submit": "Mixed (Footprint + Hardware)",
+    }
 
     for src in backends:
         src_df = valid[valid["meta.backend_name"] == src]
@@ -615,7 +744,8 @@ def compute_cross_chip_transfer(
         for dst in backends:
             dst_df = valid[valid["meta.backend_name"] == dst]
             dst_prov, _ = infer_provider(dst)
-            for reg_key, reg_label, cols in regime_defs:
+            for reg_key, reg_label in regime_labels.items():
+                cols = features_by_backend[src].get(reg_key, [])
                 shared_cols = [
                     c
                     for c in cols
@@ -626,6 +756,7 @@ def compute_cross_chip_transfer(
                 ]
                 if not shared_cols:
                     continue
+                groups = dst_df["meta.config_id"].to_numpy()
                 if src == dst:
                     preds = _group_cv_predictions(
                         fast_model,
@@ -642,7 +773,9 @@ def compute_cross_chip_transfer(
                         dst_df[shared_cols],
                     )
                     eval_mode = "cross_chip_zero_shot"
-                metrics = evaluate_predictions(dst_df[target_col].to_numpy(dtype=float), preds)
+                metrics = evaluate_predictions(
+                    dst_df[target_col].to_numpy(dtype=float), preds, groups
+                )
                 cells.append(
                     {
                         "sourceBackend": src,
@@ -652,6 +785,7 @@ def compute_cross_chip_transfer(
                         "regime": reg_key,
                         "regimeLabel": reg_label,
                         "mode": eval_mode,
+                        "crossProvider": src_prov != dst_prov,
                         "nTrain": int(len(src_df)),
                         "nTest": int(len(dst_df)),
                         **metrics,
@@ -660,19 +794,31 @@ def compute_cross_chip_transfer(
     return cells
 
 
+# `c.*` columns summarise the qubits the circuit was mapped to, and some of them
+# describe the circuit itself rather than the device (r=0.998 between c.num_used_qubits
+# and logical width). They would turn the "hardware-only" regime into a circuit-size
+# model, so they are excluded from every calibration-feature regime.
+CIRCUIT_DEPENDENT_HW_COLUMNS = frozenset(
+    {"c.num_used_qubits", "c.duration_s", "c.calibration_coverage"}
+)
+CIRCUIT_DEPENDENT_HW_PREFIXES = ("c.idle_over_t1.",)
+
+
+def _is_device_only_hw(col: str) -> bool:
+    return col not in CIRCUIT_DEPENDENT_HW_COLUMNS and not col.startswith(
+        CIRCUIT_DEPENDENT_HW_PREFIXES
+    )
+
+
 def _select_hardware_predictors(
     tr_t: pd.DataFrame,
     hw_pool: Sequence[str],
     target_col: str,
 ) -> list[str]:
-    """Select VIF-screened `.median` hardware calibration predictors."""
-    preferred_hw = [
-        c
-        for c in hw_pool
-        if c.endswith(".median")
-        or c in ("c.duration_s", "c.num_used_qubits", "c.calibration_coverage")
-    ]
-    hw_candidates = preferred_hw if len(preferred_hw) >= 3 else list(hw_pool)
+    """Select VIF-screened device-only `.median` calibration predictors (no circuit proxies)."""
+    device_pool = [c for c in hw_pool if _is_device_only_hw(c)]
+    preferred_hw = [c for c in device_pool if c.endswith(".median")]
+    hw_candidates = preferred_hw if len(preferred_hw) >= 3 else device_pool
     if not hw_candidates:
         return []
     hw_submit_cols, _ = curate_footprint_vif(
@@ -695,14 +841,16 @@ def _evaluate_leaderboard(
     cv_preds_by_model: dict[str, np.ndarray] = {}
     te_preds_by_model: dict[str, np.ndarray] = {}
 
+    cv_groups = tr_t["meta.config_id"].to_numpy()
+    te_groups = te_t["meta.config_id"].to_numpy() if not te_t.empty else None
     for model_id, pipe in models.items():
         cv_pred = _group_cv_predictions(pipe, tr_t[cols], y_tr, tr_t["meta.config_id"])
-        cv_m = evaluate_predictions(y_tr, cv_pred)
+        cv_m = evaluate_predictions(y_tr, cv_pred, cv_groups)
         cv_preds_by_model[model_id] = cv_pred
 
         if not te_t.empty:
             te_pred = _fit_predict(pipe, tr_t[cols], y_tr, te_t[cols])
-            te_m = evaluate_predictions(y_te, te_pred)
+            te_m = evaluate_predictions(y_te, te_pred, te_groups)
             te_preds_by_model[model_id] = te_pred
         else:
             te_m = None
@@ -717,12 +865,10 @@ def _evaluate_leaderboard(
             }
         )
 
+    # Model selection uses ONLY grouped-CV R^2 on the training period. The temporal
+    # holdout is never consulted, so its R^2 stays an unbiased estimate for H1.
     leaderboard.sort(
-        key=lambda row: (
-            row["holdout"]["r2"]
-            if row["holdout"] and row["holdout"]["r2"] is not None
-            else (row["cv"]["r2"] if row["cv"]["r2"] is not None else -999.0)
-        ),
+        key=lambda row: row["cv"]["r2"] if row["cv"]["r2"] is not None else -999.0,
         reverse=True,
     )
     return leaderboard, cv_preds_by_model, te_preds_by_model
@@ -797,9 +943,22 @@ def analyze_scope(
     transfer_cache: dict[str, list[dict[str, Any]]],
     models_dir: Path | None = None,
     random_state: int = 11,
+    holdout_configs: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """Run full Phase 6-8 analysis for one chip/scope and return a serializable snapshot."""
-    is_holdout, holdout_periods = split_temporal_and_cv(scope_frame, holdout_campaigns)
+    if holdout_configs is not None:
+        is_holdout = scope_frame["meta.config_id"].astype(str).isin(set(holdout_configs))
+        holdout_periods: list[str] = []
+        split_info: dict[str, Any] = {
+            "mode": "config",
+            "holdoutConfigs": len(set(holdout_configs) & set(scope_frame["meta.config_id"].astype(str))),
+            "totalConfigs": int(scope_frame["meta.config_id"].nunique()),
+        }
+        ordering: dict[str, Any] = {"available": False}
+    else:
+        is_holdout, holdout_periods = split_temporal_and_cv(scope_frame, holdout_campaigns)
+        split_info = {"mode": "temporal"}
+        ordering = temporal_ordering(scope_frame, is_holdout)
     train_df = scope_frame.loc[~is_holdout].copy()
     holdout_df = scope_frame.loc[is_holdout].copy()
     if train_df.empty:
@@ -919,7 +1078,7 @@ def analyze_scope(
             )
 
         # Phase 8 Hypotheses H2, H3, H4
-        h2_rows = _run_h2_scalability(scope_frame, target_col, mixed_cols, fast_model)
+        h2_rows = _run_h2_scalability(scope_frame, target_col, footprint_cols, fast_model)
         h3_data = _run_h3_hardware_boundary(
             tr_t,
             te_t,
@@ -929,13 +1088,9 @@ def analyze_scope(
             bundle.exec_to_submit_map,
             fast_model,
         )
-        if target_key not in transfer_cache:
-            transfer_cache[target_key] = compute_cross_chip_transfer(
-                bundle, target_key, footprint_cols, hw_submit_cols, fast_model
-            )
-        h3_data["transferMatrix"] = transfer_cache[target_key]
+        h3_data["transferMatrix"] = []  # filled by run_pipeline once all scopes are fitted
         h4_rows = _run_h4_benchmarking_regimes(
-            tr_t, te_t, target_col, mixed_cols, fast_model
+            tr_t, te_t, target_col, footprint_cols, fast_model
         )
 
         targets_payload[target_key] = {
@@ -977,6 +1132,8 @@ def analyze_scope(
             "trainJobs": int(len(train_df)),
             "holdoutJobs": int(len(holdout_df)),
             "holdoutPeriods": holdout_periods,
+            "split": split_info,
+            "temporalOrdering": ordering,
             "algorithms": sorted(scope_frame["meta.algorithm"].unique().tolist()),
             "backendsIncluded": sorted(scope_frame["meta.backend_name"].unique().tolist()),
             "providersIncluded": sorted(scope_frame["meta.provider"].unique().tolist()),
@@ -1018,11 +1175,26 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
         by_scope_target[scope] = {}
         lines.append(
             f"## Scope: `{scope}` ({snap['jobs']} jobs: {snap['trainJobs']} train/CV, "
-            f"{snap['holdoutJobs']} temporal holdout)"
+            f"{snap['holdoutJobs']} {'config' if (snap.get('split') or {}).get('mode') == 'config' else 'temporal'} holdout)"
         )
+        order = snap.get("temporalOrdering") or {}
+        sp = snap.get("split") or {}
+        if sp.get("mode") == "config":
+            lines.append(
+                f"Holdout: {sp['holdoutConfigs']} of {sp['totalConfigs']} circuit configurations "
+                "(all repetitions, all windows), stratified by algorithm and size; none seen in training."
+            )
+        if order.get("available"):
+            ok = "yes" if order.get("strict") else (
+                f"NO — {order.get('holdoutJobsBeforeTrainEnd')} holdout jobs finished before the last training job"
+            )
+            lines.append(
+                f"Temporal holdout strictly after training: {ok} "
+                f"(train ≤ {order['trainEnd'][:16]}, holdout ≥ {order['holdoutStart'][:16]})."
+            )
         lines.append("")
         lines.append(
-            "| Target | Best Model | k* Pre-Runtime / Candidates | Holdout R² | Holdout MAE | Holdout RMSE | CV R² | H1 (>=0.80) |"
+            "| Target | Best Model (by CV) | k* Pre-Runtime / Candidates | Holdout R² [95% CI] | Holdout MAE | Holdout RMSE | CV R² | H1 (>=0.80) |"
         )
         lines.append("|---|---|---|---:|---:|---:|---:|:---:|")
 
@@ -1031,14 +1203,16 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
             best_row = tdata["leaderboard"][0]
             ho = best_row["holdout"] or {}
             cv = best_row["cv"] or {}
-            passes = ho.get("meetsH1") if ho else cv.get("meetsH1")
+            verdict = (ho or cv).get("h1Verdict", "inconclusive")
             r2_s = f"{ho['r2']:.3f}" if ho.get("r2") is not None else "—"
+            if ho.get("r2") is not None and ho.get("r2CiLow") is not None:
+                r2_s += f" [{ho['r2CiLow']:.2f}, {ho['r2CiHigh']:.2f}]"
             mae_s = f"{ho['mae']:.4f}" if ho.get("mae") is not None else "—"
             rmse_s = f"{ho['rmse']:.4f}" if ho.get("rmse") is not None else "—"
             cv_r2_s = f"{cv['r2']:.3f}" if cv.get("r2") is not None else "—"
             k_info = f"{tdata['footprintCount']} / {tdata.get('candidateFootprintCount', tdata['footprintCount'])}"
             lines.append(
-                f"| {tdata['label']} (`{tkey}`) | {best_row['model']} | {k_info} | {r2_s} | {mae_s} | {rmse_s} | {cv_r2_s} | {'PASS' if passes else 'FAIL'} |"
+                f"| {tdata['label']} (`{tkey}`) | {best_row['model']} | {k_info} | {r2_s} | {mae_s} | {rmse_s} | {cv_r2_s} | {verdict.upper()} |"
             )
 
             by_scope_target[scope][tkey] = {
@@ -1080,7 +1254,10 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
                         "holdout_r2": (entry["holdout"] or {}).get("r2"),
                         "holdout_mae": (entry["holdout"] or {}).get("mae"),
                         "holdout_rmse": (entry["holdout"] or {}).get("rmse"),
+                        "holdout_r2_ci_low": (entry["holdout"] or {}).get("r2CiLow"),
+                        "holdout_r2_ci_high": (entry["holdout"] or {}).get("r2CiHigh"),
                         "meets_h1": (entry["holdout"] or entry["cv"]).get("meetsH1"),
+                        "h1_verdict": (entry["holdout"] or entry["cv"]).get("h1Verdict"),
                     }
                 )
             for item in tdata["footprint"]:
@@ -1122,6 +1299,8 @@ def write_reports(snapshots: Mapping[str, dict[str, Any]], report_dir: Path) -> 
                         "rmse": item["rmse"],
                         "nTrain": item["nTrain"],
                         "nTest": item["nTest"],
+                        "r2_ci_low": item.get("r2CiLow"),
+                        "r2_ci_high": item.get("r2CiHigh"),
                     }
                 )
         lines.append("")
@@ -1236,11 +1415,23 @@ def run_pipeline(
     dashboard_out: Path = DEFAULT_DASHBOARD_OUT,
     holdout_campaigns: Sequence[str] | None = None,
     backends: Sequence[str] | None = None,
+    split_mode: str = "config",
+    holdout_frac: float = 0.15,
+    split_seed: int = 11,
 ) -> dict[str, dict[str, Any]]:
     """Execute full QAQS ML estimation pipeline and write dashboard, model & report artifacts."""
     bundle = load_ml_dataset(tables, backends=backends)
     frame = bundle.frame
     detected_backends = sorted(frame["meta.backend_name"].unique().tolist())
+
+    holdout_configs: list[str] | None = None
+    if split_mode == "config" and not holdout_campaigns:
+        _, holdout_configs = split_by_config(frame, holdout_frac, split_seed)
+        print(
+            f"Config split: {len(holdout_configs)} of {frame['meta.config_id'].nunique()} "
+            f"configurations held out (seed={split_seed}).",
+            flush=True,
+        )
 
     dashboard_out.mkdir(parents=True, exist_ok=True)
     models_dir = report_out / "models"
@@ -1256,6 +1447,7 @@ def run_pipeline(
             holdout_campaigns,
             transfer_cache,
             models_dir=models_dir,
+            holdout_configs=holdout_configs,
         )
 
     if len(detected_backends) > 1:
@@ -1266,7 +1458,24 @@ def run_pipeline(
             holdout_campaigns,
             transfer_cache,
             models_dir=models_dir,
+            holdout_configs=holdout_configs,
         )
+
+    chip_scopes = [b for b in detected_backends if b in snapshots]
+    if len(chip_scopes) > 1:
+        model_for_transfer = build_models()["LightGBM"]
+        for target_key in TARGETS:
+            feats = {}
+            for chip in chip_scopes:
+                tdata = snapshots[chip]["targets"].get(target_key)
+                if tdata:
+                    fp = tdata["selectedFootprintFeatures"]
+                    hw = tdata["selectedHardwareFeatures"]
+                    feats[chip] = {"circuit_only": fp, "hardware_only": hw, "mixed_submit": fp + hw}
+            matrix = compute_cross_chip_transfer(bundle, target_key, feats, model_for_transfer)
+            for scope_payload in snapshots.values():
+                if target_key in scope_payload["targets"]:
+                    scope_payload["targets"][target_key]["h3"]["transferMatrix"] = _clean_json(matrix)
 
     for scope, payload in snapshots.items():
         out_path = dashboard_out / f"{scope}.json"
@@ -1295,6 +1504,14 @@ def main() -> None:
         action="append",
         help="Optional backend filter (e.g., ibm_fez, ibm_kingston, ankaa_3, ionq_aria).",
     )
+    parser.add_argument(
+        "--split",
+        choices=("config", "temporal"),
+        default="config",
+        help="config: hold out ~15%% of circuit configurations (default); temporal: hold out later campaigns.",
+    )
+    parser.add_argument("--holdout-frac", type=float, default=0.15)
+    parser.add_argument("--split-seed", type=int, default=11)
     args = parser.parse_args()
     snapshots = run_pipeline(
         tables=args.tables,
@@ -1302,6 +1519,9 @@ def main() -> None:
         dashboard_out=args.dashboard_out,
         holdout_campaigns=args.holdout_campaign,
         backends=args.backend,
+        split_mode=args.split,
+        holdout_frac=args.holdout_frac,
+        split_seed=args.split_seed,
     )
     for scope, snap in snapshots.items():
         dsr_best = snap["targets"]["dsr"]["leaderboard"][0]
