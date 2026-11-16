@@ -1,0 +1,151 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:54:07.256937+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-kingston-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611164,
+  "job_order": [
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 10,
+  "items": [
+    {
+      "config": "PE-Z2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-Z2_IBM_ibm_kingston_20261116_205404_1430de93.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        55,
+        59,
+        75
+      ],
+      "isa_depth": 15,
+      "isa_two_qubit_gates": 3,
+      "job_ids": []
+    },
+    {
+      "config": "PE-S5",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-S5_IBM_ibm_kingston_20261116_205405_133ac9cc.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        105,
+        108,
+        97,
+        107,
+        106,
+        117
+      ],
+      "isa_depth": 122,
+      "isa_two_qubit_gates": 37,
+      "job_ids": []
+    },
+    {
+      "config": "PE-T8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-T8_IBM_ibm_kingston_20261116_205405_1b6275e0.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        33,
+        52,
+        39,
+        54,
+        53,
+        75,
+        55,
+        59,
+        34
+      ],
+      "isa_depth": 216,
+      "isa_two_qubit_gates": 114,
+      "job_ids": []
+    },
+    {
+      "config": "PE-T9",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-T9_IBM_ibm_kingston_20261116_205406_07061852.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        110,
+        118,
+        109,
+        108,
+        117,
+        104,
+        107,
+        105,
+        106,
+        129
+      ],
+      "isa_depth": 264,
+      "isa_two_qubit_gates": 133,
+      "job_ids": []
+    },
+    {
+      "config": "PE-S9",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-S9_IBM_ibm_kingston_20261116_205406_b5862ce2.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        73,
+        74,
+        75,
+        59,
+        55,
+        39,
+        52,
+        54,
+        53,
+        79
+      ],
+      "isa_depth": 239,
+      "isa_two_qubit_gates": 121,
+      "job_ids": []
+    }
+  ],
+  "parent_manifest": "pe-kingston-validation-v1-d2026-11-16_manifest.json"
+}

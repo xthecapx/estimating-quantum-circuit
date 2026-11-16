@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "IV5-10011",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "9648042779854dc2af95a241d4e28efa",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:03.400179+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "IV5-10011",
+    "num_qubits": 5,
+    "test_mode": "roundtrip",
+    "search_space": 32,
+    "theoretical_gate_count": 17,
+    "description": "5 qubits, input |10011\u27e9 (validation-v1)",
+    "input_state": "10011"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/IV5-10011_IBM_ibm_marrakesh_20261116_205603_96480427",
+  "prepared_hash": "bf8f45f6e37aadb1aea14e33f0e6ad3a2e365024e9f882576d9adfb1e6850314"
+}

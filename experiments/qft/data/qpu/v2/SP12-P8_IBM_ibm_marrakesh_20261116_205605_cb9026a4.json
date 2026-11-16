@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "SP12-P8",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "cb9026a43b1242249d3859f3b5754117",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:05.653486+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SP12-P8",
+    "num_qubits": 12,
+    "test_mode": "period_detection",
+    "search_space": 4096,
+    "theoretical_gate_count": 84,
+    "description": "12 qubits, period=8 (HARDWARE ONLY - extreme test)",
+    "period": 8,
+    "expected_num_peaks": 8
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SP12-P8_IBM_ibm_marrakesh_20261116_205605_cb9026a4",
+  "prepared_hash": "0bb662b2a809c281556d55254dd05d4861db94169758b45b741ea98a42c78c80"
+}

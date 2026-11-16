@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "IV3-011",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "ea028056ecc54d2b9537b984d3f2afc1",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:53:59.835542+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "IV3-011",
+    "num_qubits": 3,
+    "test_mode": "roundtrip",
+    "search_space": 8,
+    "theoretical_gate_count": 7,
+    "description": "3 qubits, input |011\u27e9 (validation-v1)",
+    "input_state": "011"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/IV3-011_IBM_ibm_kingston_20261116_205359_ea028056",
+  "prepared_hash": "993c3b2624356b4182451de2f6cfc9638c32df369986aaecc560c52f1124df0f"
+}

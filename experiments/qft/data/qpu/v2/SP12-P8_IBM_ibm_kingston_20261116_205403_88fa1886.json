@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "SP12-P8",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "88fa1886e5d34efb8b85bdd1a8880a1f",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:54:03.178683+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SP12-P8",
+    "num_qubits": 12,
+    "test_mode": "period_detection",
+    "search_space": 4096,
+    "theoretical_gate_count": 84,
+    "description": "12 qubits, period=8 (HARDWARE ONLY - extreme test)",
+    "period": 8,
+    "expected_num_peaks": 8
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SP12-P8_IBM_ibm_kingston_20261116_205403_88fa1886",
+  "prepared_hash": "b32a0d34795b02d40a0a739fba8c3d642ce0dce6bf115ec2d6742516cf48f00e"
+}

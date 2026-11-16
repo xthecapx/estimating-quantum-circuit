@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV3-ONES",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "c6342771dd994cfabdf56227d542eab4",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:01.713953+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV3-ONES",
+    "num_qubits": 3,
+    "secret_string": "111",
+    "expected_outcome": "111",
+    "search_space": 8,
+    "classical_random_prob": 0.125,
+    "theoretical_success": 1.0,
+    "description": "3 qubits, all-ones secret"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV3-ONES_IBM_ibm_fez_20261116_205501_c6342771",
+  "prepared_hash": "6be6b56886503393b5db1d5811d97719b6dbe979377fa933a052d4e5a9155194"
+}

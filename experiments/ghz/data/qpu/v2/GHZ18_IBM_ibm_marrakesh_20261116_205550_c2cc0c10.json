@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "config_id": "GHZ18",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "c2cc0c106a6242ddaabb489249a85a75",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:50.480435+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "GHZ18",
+    "num_qubits": 18,
+    "expected_outcomes": [
+      "000000000000000000",
+      "111111111111111111"
+    ],
+    "search_space": 262144,
+    "classical_random_prob": 7.62939453125e-06,
+    "theoretical_success": 1.0,
+    "description": "18-qubit GHZ state"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/GHZ18_IBM_ibm_marrakesh_20261116_205550_c2cc0c10",
+  "prepared_hash": "5783b3ac0b9bc0fe524d25f64a22da18414b26e98d688e3a24c7e6f0c8f16bfb"
+}

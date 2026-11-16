@@ -1,0 +1,85 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:54:10.074550+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-kingston-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611165,
+  "job_order": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 6,
+  "items": [
+    {
+      "config": "M3-4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/M3-4_IBM_ibm_kingston_20261116_205408_f61c83f0.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        148,
+        59,
+        149
+      ],
+      "isa_depth": 4,
+      "isa_two_qubit_gates": 0,
+      "job_ids": []
+    },
+    {
+      "config": "H3-2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H3-2_IBM_ibm_kingston_20261116_205409_d7d93048.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        59,
+        55,
+        75
+      ],
+      "isa_depth": 140,
+      "isa_two_qubit_gates": 37,
+      "job_ids": []
+    },
+    {
+      "config": "H5-0",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H5-0_IBM_ibm_kingston_20261116_205410_8b01d35c.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        39,
+        33,
+        53,
+        54,
+        52
+      ],
+      "isa_depth": 1461,
+      "isa_two_qubit_gates": 517,
+      "job_ids": []
+    }
+  ]
+}

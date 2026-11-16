@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV8-D8",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "d1b3a2a44e3443c3a67cab23988ae5ee",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:13.869469+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "RV8-D8",
+    "num_qubits": 8,
+    "depth": 8,
+    "depth_multiplier": 1.0,
+    "seed": 42,
+    "search_space": 256,
+    "classical_random_prob": 0.00390625,
+    "theoretical_success": 1.0,
+    "expected_outcome": "00000000",
+    "description": "8 qubits, depth 8 (1x n)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/RV8-D8_IBM_ibm_marrakesh_20261116_205613_d1b3a2a4",
+  "prepared_hash": "0b3254ed853af27d6ffc2c155d0f2ee2d63b028a600b1b45bde307203ae88b8f"
+}

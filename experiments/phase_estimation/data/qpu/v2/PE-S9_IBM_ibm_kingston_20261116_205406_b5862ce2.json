@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-S9",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "b5862ce28e3142b18fbf19b3ed720f62",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:54:06.781597+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-S9",
+    "test_case": "s_gate",
+    "num_counting_qubits": 9,
+    "total_qubits": 10,
+    "expected_phase": 0.25,
+    "expected_outcome": "010000000",
+    "search_space": 512,
+    "classical_random_prob": 0.001953125,
+    "theoretical_success": 1.0,
+    "description": "s_gate with 9 counting qubits (total=10q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-S9_IBM_ibm_kingston_20261116_205406_b5862ce2",
+  "prepared_hash": "91a3a836e0d6842ced9121b57b9a177a0cb80f13f22202305e3dec7288dd03cc"
+}

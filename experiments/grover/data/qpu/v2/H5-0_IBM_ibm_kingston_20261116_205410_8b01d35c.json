@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "config_id": "H5-0",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "8b01d35c18eb4c02beaf30b1b480c56d",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:54:10.051229+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "H5-0",
+    "num_qubits": 5,
+    "marked_states": [
+      "00000"
+    ],
+    "num_marked": 1,
+    "theoretical_success": 0.9991823155432941,
+    "classical_random_prob": 0.03125,
+    "theoretical_iterations": 4,
+    "description": "5 qubits, single marked state of Hamming weight 0"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/H5-0_IBM_ibm_kingston_20261116_205410_8b01d35c",
+  "prepared_hash": "e72340438a5d3b6fc2b241de879581c4ed84c2907977214739e5ba373e46c149"
+}

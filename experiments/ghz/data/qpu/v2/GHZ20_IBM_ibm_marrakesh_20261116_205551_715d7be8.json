@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "config_id": "GHZ20",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "715d7be8903c4e76b508ba5c61b49e10",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:51.108375+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "GHZ20",
+    "num_qubits": 20,
+    "expected_outcomes": [
+      "00000000000000000000",
+      "11111111111111111111"
+    ],
+    "search_space": 1048576,
+    "classical_random_prob": 1.9073486328125e-06,
+    "theoretical_success": 1.0,
+    "description": "20-qubit GHZ state"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/GHZ20_IBM_ibm_marrakesh_20261116_205551_715d7be8",
+  "prepared_hash": "0e0aed13bd69d5c4e24d0780105880a182705403fb95e6120afc4ec5ac54effb"
+}

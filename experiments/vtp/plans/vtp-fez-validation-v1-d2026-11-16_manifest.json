@@ -1,0 +1,92 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:55:08.148561+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/plans/vtp-fez-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611162,
+  "job_order": [
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 6,
+  "items": [
+    {
+      "config": "VTP-S1-FIVE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-S1-FIVE_IBM_ibm_fez_20261116_205506_79167951.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        2,
+        16,
+        23,
+        3
+      ],
+      "isa_depth": 31,
+      "isa_two_qubit_gates": 7,
+      "job_ids": []
+    },
+    {
+      "config": "VTP-S3-TRIPLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-S3-TRIPLE_IBM_ibm_fez_20261116_205507_fb1d1d42.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        4,
+        2,
+        16,
+        23,
+        22,
+        3
+      ],
+      "isa_depth": 43,
+      "isa_two_qubit_gates": 15,
+      "job_ids": []
+    },
+    {
+      "config": "VTP-V5-TRIPLE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-V5-TRIPLE_IBM_ibm_fez_20261116_205508_c4e551ae.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        123,
+        143,
+        122,
+        144,
+        142,
+        141,
+        145,
+        136
+      ],
+      "isa_depth": 97,
+      "isa_two_qubit_gates": 39,
+      "job_ids": []
+    }
+  ]
+}

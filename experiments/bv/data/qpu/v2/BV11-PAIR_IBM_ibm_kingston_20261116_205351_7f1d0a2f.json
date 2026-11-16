@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV11-PAIR",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "7f1d0a2f59fb498ab54b702a0b061668",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:53:51.512347+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV11-PAIR",
+    "num_qubits": 11,
+    "secret_string": "11000000000",
+    "expected_outcome": "00000000011",
+    "search_space": 2048,
+    "classical_random_prob": 0.00048828125,
+    "theoretical_success": 1.0,
+    "description": "11 qubits, pair secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV11-PAIR_IBM_ibm_kingston_20261116_205351_7f1d0a2f",
+  "prepared_hash": "1888b265540ff60fbc53113b21570d4a10145c760c8bd595129a0af72b830717"
+}

@@ -1,0 +1,41 @@
+{
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "runs": 2,
+  "items": [
+    {
+      "config": "SR2"
+    },
+    {
+      "config": "IV4-0001"
+    },
+    {
+      "config": "SR8"
+    },
+    {
+      "config": "IV3-011"
+    },
+    {
+      "config": "IV5-10011"
+    },
+    {
+      "config": "IV6-110100"
+    },
+    {
+      "config": "IV7-1001011"
+    },
+    {
+      "config": "SR10"
+    },
+    {
+      "config": "SP12-P8"
+    }
+  ],
+  "planned_executions": 18,
+  "backend": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611163,
+  "purpose": "validation-v1 v1 on ibm_fez, collection 2026-11-16"
+}

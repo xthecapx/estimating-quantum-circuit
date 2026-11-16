@@ -1,0 +1,30 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "SHOR",
+  "config_id": "SHOR-N15-A4-M3",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "d98bbaba5d484bedb5a7a1704ac395be",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:19.581375+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SHOR-N15-A4-M3",
+    "N": 15,
+    "a": 4,
+    "num_control": 3,
+    "num_target": 4,
+    "num_qubits": 7,
+    "strategy": "swap_network",
+    "true_order": 2,
+    "description": "N=15 a=4 m=3 order-finding growth sweep",
+    "for_qpu": true,
+    "classical_random_prob": 0.125
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SHOR-N15-A4-M3_IBM_ibm_marrakesh_20261116_205619_d98bbaba",
+  "prepared_hash": "f6e0389aa43f98c6a83406d16f31d52ff8acebb048a6a8d1c4382b420b150ff3"
+}

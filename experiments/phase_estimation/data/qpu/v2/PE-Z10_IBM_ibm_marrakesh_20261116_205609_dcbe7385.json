@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-Z10",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "dcbe738590054d69a34cee232a1c7572",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:09.526143+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-Z10",
+    "test_case": "z_gate",
+    "num_counting_qubits": 10,
+    "total_qubits": 11,
+    "expected_phase": 0.5,
+    "expected_outcome": "1000000000",
+    "search_space": 1024,
+    "classical_random_prob": 0.0009765625,
+    "theoretical_success": 1.0,
+    "description": "z_gate with 10 counting qubits (total=11q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-Z10_IBM_ibm_marrakesh_20261116_205609_dcbe7385",
+  "prepared_hash": "b737dcc7ad5d20cd3d055a1447345942eac411b4d9bb4acdd8bad580cbbfd0ee"
+}

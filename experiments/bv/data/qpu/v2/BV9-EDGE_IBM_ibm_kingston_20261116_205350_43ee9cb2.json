@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV9-EDGE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "43ee9cb2b3ad430da3fd452680a5eb7e",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:53:50.978548+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV9-EDGE",
+    "num_qubits": 9,
+    "secret_string": "100000001",
+    "expected_outcome": "100000001",
+    "search_space": 512,
+    "classical_random_prob": 0.001953125,
+    "theoretical_success": 1.0,
+    "description": "9 qubits, edge secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV9-EDGE_IBM_ibm_kingston_20261116_205350_43ee9cb2",
+  "prepared_hash": "d38d8c3425111c7c0706b030cd511589cce8e1f318dc0dde721bede88a341fde"
+}

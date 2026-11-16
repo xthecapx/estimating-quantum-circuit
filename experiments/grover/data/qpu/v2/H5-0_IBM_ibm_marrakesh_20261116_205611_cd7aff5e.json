@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "config_id": "H5-0",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "cd7aff5ecedc49afa1caf7856538bf21",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:11.899457+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "H5-0",
+    "num_qubits": 5,
+    "marked_states": [
+      "00000"
+    ],
+    "num_marked": 1,
+    "theoretical_success": 0.9991823155432941,
+    "classical_random_prob": 0.03125,
+    "theoretical_iterations": 4,
+    "description": "5 qubits, single marked state of Hamming weight 0"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/H5-0_IBM_ibm_marrakesh_20261116_205611_cd7aff5e",
+  "prepared_hash": "3785b5f51a7b324cccd289550d08a824766011423d8c520cb642bcd1af087aeb"
+}

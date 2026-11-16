@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "config_id": "VTP-S1-FIVE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "791679510863484d8a02b149991c264d",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:06.592266+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "VTP-S1-FIVE",
+    "payload_size": 1,
+    "total_qubits": 4,
+    "gates": [
+      "h",
+      "s",
+      "x",
+      "z",
+      "h"
+    ],
+    "gates_per_qubit": 5,
+    "protocol_type": "standard",
+    "search_space": 2,
+    "classical_random_prob": 0.5,
+    "theoretical_success": 1.0,
+    "expected_outcome": "0",
+    "description": "standard protocol, 1 payload qubits, 5 gates/qubit"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/VTP-S1-FIVE_IBM_ibm_fez_20261116_205506_79167951",
+  "prepared_hash": "5436b2e9fa84c14e4bac4b3c038071ce46f1baa1ac526a80ca71c837acb6c1e6"
+}

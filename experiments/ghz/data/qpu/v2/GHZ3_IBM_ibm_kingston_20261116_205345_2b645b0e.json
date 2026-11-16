@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "config_id": "GHZ3",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "2b645b0e93c640e8b44e7ce969f9d5e1",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:53:45.243035+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "GHZ3",
+    "num_qubits": 3,
+    "expected_outcomes": [
+      "000",
+      "111"
+    ],
+    "search_space": 8,
+    "classical_random_prob": 0.25,
+    "theoretical_success": 1.0,
+    "description": "3-qubit GHZ state"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/GHZ3_IBM_ibm_kingston_20261116_205345_2b645b0e",
+  "prepared_hash": "1610c3135fdd0823b19f3c09ccfccdff6ceb7379939249431982094c7d1d1a55"
+}

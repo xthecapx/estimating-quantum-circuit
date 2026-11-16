@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV14-ONES",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "f0b0e12598ce4f099c329c627bdc77f1",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:53.625974+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV14-ONES",
+    "num_qubits": 14,
+    "secret_string": "11111111111111",
+    "expected_outcome": "11111111111111",
+    "search_space": 16384,
+    "classical_random_prob": 6.103515625e-05,
+    "theoretical_success": 1.0,
+    "description": "14 qubits, all-ones secret"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV14-ONES_IBM_ibm_marrakesh_20261116_205553_f0b0e125",
+  "prepared_hash": "687b9cc691e248fa90f6671bebf601b8d481e1aeeeb256b252d24f82bf618e8a"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV11-PAIR",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "e0addb569ef34017a7ac33e0bb0a4ef4",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:55.959570+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV11-PAIR",
+    "num_qubits": 11,
+    "secret_string": "11000000000",
+    "expected_outcome": "00000000011",
+    "search_space": 2048,
+    "classical_random_prob": 0.00048828125,
+    "theoretical_success": 1.0,
+    "description": "11 qubits, pair secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV11-PAIR_IBM_ibm_marrakesh_20261116_205555_e0addb56",
+  "prepared_hash": "8677e7309a53e68f67a6a4170bd5420add9ab80307d9ed7b04ea9df9b1e8acde"
+}

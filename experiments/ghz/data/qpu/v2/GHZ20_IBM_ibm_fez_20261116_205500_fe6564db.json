@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "config_id": "GHZ20",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "fe6564dbcac74f7bb8561cc27f5971ff",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:00.525885+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "GHZ20",
+    "num_qubits": 20,
+    "expected_outcomes": [
+      "00000000000000000000",
+      "11111111111111111111"
+    ],
+    "search_space": 1048576,
+    "classical_random_prob": 1.9073486328125e-06,
+    "theoretical_success": 1.0,
+    "description": "20-qubit GHZ state"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/GHZ20_IBM_ibm_fez_20261116_205500_fe6564db",
+  "prepared_hash": "25d462140f3eb7db378af73ab263445046d23346f9ead801805ea26e9be9aaa6"
+}

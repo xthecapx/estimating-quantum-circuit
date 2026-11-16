@@ -1,0 +1,35 @@
+{
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "runs": 2,
+  "items": [
+    {
+      "config": "BV3-ONES"
+    },
+    {
+      "config": "BV9-SINGLE"
+    },
+    {
+      "config": "BV14-ONES"
+    },
+    {
+      "config": "BV5-PAIR"
+    },
+    {
+      "config": "BV7-HALF"
+    },
+    {
+      "config": "BV9-EDGE"
+    },
+    {
+      "config": "BV11-PAIR"
+    }
+  ],
+  "planned_executions": 14,
+  "backend": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611161,
+  "purpose": "validation-v1 v1 on ibm_marrakesh, collection 2026-11-16"
+}

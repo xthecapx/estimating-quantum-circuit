@@ -1,0 +1,251 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "status": "partitioned",
+  "prepared_at": "2026-11-16T20:56:05.667742+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-marrakesh-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611163,
+  "job_order": [
+    [
+      8,
+      0
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      7,
+      0
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      4,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 18,
+  "items": [
+    {
+      "config": "SR2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR2_IBM_ibm_marrakesh_20261116_205601_03937800.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        54,
+        55
+      ],
+      "isa_depth": 23,
+      "isa_two_qubit_gates": 8,
+      "job_ids": []
+    },
+    {
+      "config": "IV4-0001",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV4-0001_IBM_ibm_marrakesh_20261116_205601_55c2439c.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        146,
+        149,
+        148,
+        147
+      ],
+      "isa_depth": 126,
+      "isa_two_qubit_gates": 38,
+      "job_ids": []
+    },
+    {
+      "config": "SR8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR8_IBM_ibm_marrakesh_20261116_205602_4622ce5a.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        16,
+        3,
+        4,
+        5,
+        8,
+        17,
+        7,
+        6
+      ],
+      "isa_depth": 421,
+      "isa_two_qubit_gates": 174,
+      "job_ids": []
+    },
+    {
+      "config": "IV3-011",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV3-011_IBM_ibm_marrakesh_20261116_205602_c5b4cb8f.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        55,
+        53,
+        54
+      ],
+      "isa_depth": 62,
+      "isa_two_qubit_gates": 18,
+      "job_ids": []
+    },
+    {
+      "config": "IV5-10011",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV5-10011_IBM_ibm_marrakesh_20261116_205603_96480427.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        55,
+        54,
+        39,
+        52,
+        53
+      ],
+      "isa_depth": 172,
+      "isa_two_qubit_gates": 59,
+      "job_ids": []
+    },
+    {
+      "config": "IV6-110100",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV6-110100_IBM_ibm_marrakesh_20261116_205603_d3f895eb.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        150,
+        149,
+        137,
+        148,
+        146,
+        147
+      ],
+      "isa_depth": 246,
+      "isa_two_qubit_gates": 92,
+      "job_ids": []
+    },
+    {
+      "config": "IV7-1001011",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV7-1001011_IBM_ibm_marrakesh_20261116_205604_86eeb18d.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        35,
+        34,
+        33,
+        52,
+        54,
+        53,
+        39
+      ],
+      "isa_depth": 340,
+      "isa_two_qubit_gates": 134,
+      "job_ids": []
+    },
+    {
+      "config": "SR10",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR10_IBM_ibm_marrakesh_20261116_205605_3966c1f2.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        137,
+        148,
+        147,
+        146
+      ],
+      "isa_depth": 586,
+      "isa_two_qubit_gates": 288,
+      "job_ids": []
+    },
+    {
+      "config": "SP12-P8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SP12-P8_IBM_ibm_marrakesh_20261116_205605_cb9026a4.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        125,
+        124,
+        122,
+        123,
+        136,
+        144,
+        143,
+        146,
+        145,
+        148,
+        147,
+        150,
+        149
+      ],
+      "isa_depth": 356,
+      "isa_two_qubit_gates": 280,
+      "job_ids": []
+    }
+  ],
+  "parts": [
+    "qft-marrakesh-validation-v1-d2026-11-16_manifest_part01.json",
+    "qft-marrakesh-validation-v1-d2026-11-16_manifest_part02.json"
+  ],
+  "batch_job_limit": 10
+}

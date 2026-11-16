@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV3-D6-S7",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "e3d4735caf8c4c06a8dfe336f8c050b4",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:22.513586+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "RV3-D6-S7",
+    "num_qubits": 3,
+    "depth": 6,
+    "depth_multiplier": 2.0,
+    "seed": 7,
+    "search_space": 8,
+    "classical_random_prob": 0.125,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000",
+    "description": "3 qubits, depth 6, seed 7 (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/RV3-D6-S7_IBM_ibm_fez_20261116_205522_e3d4735c",
+  "prepared_hash": "6be6c1e1471c56f1a8964b58add908d4356c060d7f24ec952ebab255ba2828b6"
+}

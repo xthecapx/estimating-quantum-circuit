@@ -1,0 +1,26 @@
+{
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "runs": 2,
+  "items": [
+    {
+      "config": "GHZ3"
+    },
+    {
+      "config": "GHZ16"
+    },
+    {
+      "config": "GHZ18"
+    },
+    {
+      "config": "GHZ20"
+    }
+  ],
+  "planned_executions": 8,
+  "backend": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611160,
+  "purpose": "validation-v1 v1 on ibm_marrakesh, collection 2026-11-16"
+}

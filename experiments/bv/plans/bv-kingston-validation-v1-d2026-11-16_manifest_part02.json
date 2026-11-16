@@ -1,0 +1,78 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:53:51.520944+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-kingston-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611161,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 4,
+  "items": [
+    {
+      "config": "BV9-EDGE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-EDGE_IBM_ibm_kingston_20261116_205350_43ee9cb2.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        106,
+        15,
+        126,
+        148,
+        59,
+        149,
+        134,
+        140,
+        117,
+        105
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": []
+    },
+    {
+      "config": "BV11-PAIR",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-PAIR_IBM_ibm_kingston_20261116_205351_7f1d0a2f.json",
+      "calibrated_at": "2026-11-13 09:57:10-05:00",
+      "physical_layout": [
+        106,
+        117,
+        134,
+        15,
+        126,
+        148,
+        59,
+        149,
+        140,
+        118,
+        91,
+        105
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": []
+    }
+  ],
+  "parent_manifest": "bv-kingston-validation-v1-d2026-11-16_manifest.json"
+}

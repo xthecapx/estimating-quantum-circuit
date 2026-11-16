@@ -1,0 +1,1620 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "VTP",
+  "execution_type": "IBM_QPU",
+  "run_id": "890c766d3f00408f9a6329c7fc0d5b6c",
+  "prepared_at": "2026-11-16T20:55:59.713966+00:00",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "config_id": "VTP-S3-TRIPLE",
+  "config": {
+    "config_id": "VTP-S3-TRIPLE",
+    "payload_size": 3,
+    "total_qubits": 6,
+    "gates": [
+      "h",
+      "s",
+      "x",
+      "h",
+      "s",
+      "x",
+      "h",
+      "s",
+      "x"
+    ],
+    "gates_per_qubit": 3,
+    "protocol_type": "standard",
+    "search_space": 8,
+    "classical_random_prob": 0.125,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000",
+    "description": "standard protocol, 3 payload qubits, 3 gates/qubit"
+  },
+  "backend_name": "ibm_marrakesh",
+  "shots": 1024,
+  "versions": {
+    "qiskit": "2.6.2",
+    "qiskit-aer": "0.18.2",
+    "qiskit-ibm-runtime": "0.52.0",
+    "qiskit-qward": "0.30.0",
+    "numpy": "2.4.6"
+  },
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "initial_layout": null,
+  "physical_layout": [
+    137,
+    146,
+    148,
+    149,
+    150,
+    147
+  ],
+  "scheduling_method": null,
+  "dynamic_circuit": true,
+  "artifact_hashes": {
+    "logical.qpy": "347242596e14c4d74ac04788cef8f8a8859b8dea56b60def56358c0ad03b5818",
+    "isa.qpy": "f75ef0aa17abf1714c1e11a5d8bd96513e714739e23be8b5ed67f815f9f5a508"
+  },
+  "logical_circuit_hash": "656caf8346dd9e70412f05dbed29c32f60990e7d6e77a139543a9b05d778c1fc",
+  "isa_circuit_hash": "3c81bf9a78d747619059b4c8a2ef1279fd047dd27063f12d674316a83d792c0d",
+  "reference": {
+    "000 01": 0.250355,
+    "000 00": 0.25111,
+    "000 11": 0.248295,
+    "000 10": 0.25024
+  },
+  "calibration_snapshot": {
+    "schema_version": "1.0",
+    "backend_name": "ibm_marrakesh",
+    "collected_at": "2026-11-16T20:55:58.655258+00:00",
+    "calibrated_at": "2026-11-13 12:22:56-05:00",
+    "backend_properties": null,
+    "circuit_hash": "3c81bf9a78d747619059b4c8a2ef1279fd047dd27063f12d674316a83d792c0d",
+    "dt_s": 4e-09,
+    "scheduled": false,
+    "instructions": [
+      {
+        "index": 0,
+        "name": "rz",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 1,
+        "name": "sx",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0006813204789951224,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 2,
+        "name": "rz",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 3,
+        "name": "sx",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.000249321369499868,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 4,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 5,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 6,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 7,
+        "name": "cz",
+        "qubits": [
+          137,
+          147
+        ],
+        "clbits": [],
+        "error": 0.004014811719979666,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 8,
+        "name": "sx",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0006813204789951224,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 9,
+        "name": "cz",
+        "qubits": [
+          146,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0016072909840246785,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 10,
+        "name": "sx",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.000249321369499868,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 11,
+        "name": "rz",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 12,
+        "name": "x",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 13,
+        "name": "rz",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 14,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 15,
+        "name": "rz",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 16,
+        "name": "cz",
+        "qubits": [
+          148,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 17,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 18,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 19,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 20,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 22,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 23,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 24,
+        "name": "cz",
+        "qubits": [
+          148,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 25,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 26,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 27,
+        "name": "cz",
+        "qubits": [
+          148,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 28,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 29,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 30,
+        "name": "cz",
+        "qubits": [
+          148,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 31,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 32,
+        "name": "rz",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 33,
+        "name": "sx",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.00026490787253338955,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 34,
+        "name": "rz",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 35,
+        "name": "rz",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 36,
+        "name": "sx",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.00025319709466264153,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 37,
+        "name": "cz",
+        "qubits": [
+          150,
+          149
+        ],
+        "clbits": [],
+        "error": 0.0010630555120081098,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 38,
+        "name": "sx",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.00026490787253338955,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 39,
+        "name": "rz",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 40,
+        "name": "cz",
+        "qubits": [
+          149,
+          148
+        ],
+        "clbits": [],
+        "error": 0.0012729796290104345,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 41,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 42,
+        "name": "sx",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.00026490787253338955,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 43,
+        "name": "cz",
+        "qubits": [
+          149,
+          148
+        ],
+        "clbits": [],
+        "error": 0.0012729796290104345,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 44,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 45,
+        "name": "sx",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.00026490787253338955,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 46,
+        "name": "cz",
+        "qubits": [
+          149,
+          148
+        ],
+        "clbits": [],
+        "error": 0.0012729796290104345,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 47,
+        "name": "sx",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.00025319709466264153,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 48,
+        "name": "rz",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 49,
+        "name": "cz",
+        "qubits": [
+          149,
+          150
+        ],
+        "clbits": [],
+        "error": 0.0010630555120081098,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 50,
+        "name": "rz",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 51,
+        "name": "sx",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.00026490787253338955,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 52,
+        "name": "rz",
+        "qubits": [
+          149
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 53,
+        "name": "sx",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.00025319709466264153,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 54,
+        "name": "rz",
+        "qubits": [
+          150
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 55,
+        "name": "measure",
+        "qubits": [
+          149
+        ],
+        "clbits": [
+          0
+        ],
+        "error": 0.009765625,
+        "duration_s": 2.684e-06,
+        "start_s": null
+      },
+      {
+        "index": 56,
+        "name": "measure",
+        "qubits": [
+          150
+        ],
+        "clbits": [
+          1
+        ],
+        "error": 0.02392578125,
+        "duration_s": 2.684e-06,
+        "start_s": null
+      },
+      {
+        "index": 58,
+        "name": "if_else",
+        "qubits": [
+          148
+        ],
+        "clbits": [
+          1
+        ],
+        "error": null,
+        "duration_s": null,
+        "start_s": null
+      },
+      {
+        "index": 59,
+        "name": "if_else",
+        "qubits": [
+          148
+        ],
+        "clbits": [
+          0
+        ],
+        "error": null,
+        "duration_s": null,
+        "start_s": null
+      },
+      {
+        "index": 61,
+        "name": "rz",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 62,
+        "name": "sx",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0006813204789951224,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 63,
+        "name": "rz",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 64,
+        "name": "rz",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 65,
+        "name": "sx",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.000249321369499868,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 66,
+        "name": "rz",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 67,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 68,
+        "name": "rz",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 69,
+        "name": "cz",
+        "qubits": [
+          147,
+          148
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 70,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 71,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 72,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 73,
+        "name": "sx",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0001332503557860211,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 74,
+        "name": "rz",
+        "qubits": [
+          148
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 75,
+        "name": "cz",
+        "qubits": [
+          147,
+          148
+        ],
+        "clbits": [],
+        "error": 0.0012743142670437746,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 76,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 77,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 78,
+        "name": "cz",
+        "qubits": [
+          146,
+          147
+        ],
+        "clbits": [],
+        "error": 0.0016072909840246785,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 79,
+        "name": "cz",
+        "qubits": [
+          137,
+          147
+        ],
+        "clbits": [],
+        "error": 0.004014811719979666,
+        "duration_s": 6.8e-08,
+        "start_s": null
+      },
+      {
+        "index": 80,
+        "name": "sx",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0006813204789951224,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 81,
+        "name": "rz",
+        "qubits": [
+          137
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 82,
+        "name": "sx",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.000249321369499868,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 83,
+        "name": "rz",
+        "qubits": [
+          146
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 84,
+        "name": "sx",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.00014981521672805906,
+        "duration_s": 3.6e-08,
+        "start_s": null
+      },
+      {
+        "index": 85,
+        "name": "rz",
+        "qubits": [
+          147
+        ],
+        "clbits": [],
+        "error": 0.0,
+        "duration_s": 0.0,
+        "start_s": null
+      },
+      {
+        "index": 87,
+        "name": "measure",
+        "qubits": [
+          137
+        ],
+        "clbits": [
+          2
+        ],
+        "error": 0.00439453125,
+        "duration_s": 2.684e-06,
+        "start_s": null
+      },
+      {
+        "index": 88,
+        "name": "measure",
+        "qubits": [
+          146
+        ],
+        "clbits": [
+          3
+        ],
+        "error": 0.005859375,
+        "duration_s": 2.684e-06,
+        "start_s": null
+      },
+      {
+        "index": 89,
+        "name": "measure",
+        "qubits": [
+          148
+        ],
+        "clbits": [
+          4
+        ],
+        "error": 0.00634765625,
+        "duration_s": 2.684e-06,
+        "start_s": null
+      }
+    ],
+    "qubits": {
+      "137": {
+        "t1_s": 0.00018870156985349216,
+        "t2_s": 2.9700547669011294e-05,
+        "idle_s": null,
+        "prob_meas1_prep0": 0,
+        "prob_meas0_prep1": 0.0087890625
+      },
+      "146": {
+        "t1_s": 0.00018879249475869657,
+        "t2_s": 6.114614752442172e-05,
+        "idle_s": null,
+        "prob_meas1_prep0": 0.001953125,
+        "prob_meas0_prep1": 0.009765625
+      },
+      "147": {
+        "t1_s": 0.0003093089986783112,
+        "t2_s": 0.00010547538818669241,
+        "idle_s": null,
+        "prob_meas1_prep0": 0.0205078125,
+        "prob_meas0_prep1": 0.01171875
+      },
+      "148": {
+        "t1_s": 0.0002358005663810242,
+        "t2_s": 9.98768660209409e-05,
+        "idle_s": null,
+        "prob_meas1_prep0": 0.0009765625,
+        "prob_meas0_prep1": 0.01171875
+      },
+      "149": {
+        "t1_s": 0.0001729311674275792,
+        "t2_s": 8.483358787692298e-05,
+        "idle_s": null,
+        "prob_meas1_prep0": 0.0068359375,
+        "prob_meas0_prep1": 0.0126953125
+      },
+      "150": {
+        "t1_s": 0.00013606562870634205,
+        "t2_s": 0.0001031523154429044,
+        "idle_s": null,
+        "prob_meas1_prep0": 0.0283203125,
+        "prob_meas0_prep1": 0.01953125
+      }
+    },
+    "snapshot_hash": "af0276c7ef9e739b4e305fd7461385becda0f177756969f086163e2893e7dc71"
+  },
+  "payload": {
+    "reference_exact": false,
+    "success_set": [
+      "000 00",
+      "000 01",
+      "000 10",
+      "000 11"
+    ],
+    "features": {
+      "schema_version": "1.0",
+      "logical": {
+        "available": true,
+        "qward_metrics": {
+          "QiskitMetrics": {
+            "basic_metrics.depth": 22,
+            "basic_metrics.width": 11,
+            "basic_metrics.size": 41,
+            "basic_metrics.num_qubits": 6,
+            "basic_metrics.num_clbits": 5,
+            "basic_metrics.num_ancillas": 0,
+            "basic_metrics.num_parameters": 0,
+            "basic_metrics.has_calibrations": false,
+            "basic_metrics.has_layout": false,
+            "basic_metrics.count_ops.h": 14,
+            "basic_metrics.count_ops.cx": 8,
+            "basic_metrics.count_ops.x": 6,
+            "basic_metrics.count_ops.measure": 5,
+            "basic_metrics.count_ops.barrier": 4,
+            "basic_metrics.count_ops.s": 3,
+            "basic_metrics.count_ops.sdg": 3,
+            "basic_metrics.count_ops.if_else": 2,
+            "instruction_metrics.num_connected_components": 1,
+            "instruction_metrics.num_nonlocal_gates": 8,
+            "instruction_metrics.num_tensor_factors": 1,
+            "instruction_metrics.num_unitary_factors": 1,
+            "instruction_metrics.instructions.h": [
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(1, \"A\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(1, \"M\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='h', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.cx": [
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>, <Qubit register=(1, \"M\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>, <Qubit register=(1, \"M\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>, <Qubit register=(1, \"M\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(1, \"A\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(1, \"M\"), index=0>, <Qubit register=(1, \"A\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cx', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())"
+            ],
+            "instruction_metrics.instructions.x": [
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.measure": [
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(1, \"M\"), index=0>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=0>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(1, \"A\"), index=0>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=(<Clbit register=(3, \"test_result\"), index=0>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=(<Clbit register=(3, \"test_result\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=(<Clbit register=(3, \"test_result\"), index=2>,))"
+            ],
+            "instruction_metrics.instructions.barrier": [
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>, <Qubit register=(3, \"R\"), index=1>, <Qubit register=(3, \"R\"), index=2>, <Qubit register=(1, \"M\"), index=0>, <Qubit register=(1, \"A\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=3, num_clbits=0, params=[]), qubits=(<Qubit register=(1, \"M\"), index=0>, <Qubit register=(1, \"A\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>, <Qubit register=(3, \"R\"), index=1>, <Qubit register=(3, \"R\"), index=2>, <Qubit register=(1, \"M\"), index=0>, <Qubit register=(1, \"A\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>, <Qubit register=(3, \"R\"), index=1>, <Qubit register=(3, \"R\"), index=2>, <Qubit register=(1, \"M\"), index=0>, <Qubit register=(1, \"A\"), index=0>, <Qubit register=(1, \"B\"), index=0>), clbits=())"
+            ],
+            "instruction_metrics.instructions.s": [
+              "CircuitInstruction(operation=Instruction(name='s', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='s', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='s', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.sdg": [
+              "CircuitInstruction(operation=Instruction(name='sdg', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sdg', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sdg', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(3, \"R\"), index=0>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.if_else": [
+              "CircuitInstruction(operation=Instruction(name='if_else', num_qubits=1, num_clbits=1, params=[<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x119560450>, None]), qubits=(<Qubit register=(1, \"B\"), index=0>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='if_else', num_qubits=1, num_clbits=1, params=[<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x1194f96d0>, None]), qubits=(<Qubit register=(1, \"B\"), index=0>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=0>,))"
+            ],
+            "scheduling_metrics.is_scheduled": false,
+            "scheduling_metrics.layout": null,
+            "scheduling_metrics.op_start_times": null,
+            "scheduling_metrics.qubit_duration": null,
+            "scheduling_metrics.qubit_start_time": null,
+            "scheduling_metrics.qubit_stop_time": null
+          },
+          "ComplexityMetrics": {
+            "gate_based_metrics.gate_count": 41.0,
+            "gate_based_metrics.circuit_depth": 22.0,
+            "gate_based_metrics.t_count": 0.0,
+            "gate_based_metrics.cnot_count": 8.0,
+            "gate_based_metrics.two_qubit_count": 8.0,
+            "gate_based_metrics.multi_qubit_ratio": 0.146,
+            "entanglement_metrics.entangling_gate_density": 0.195,
+            "entanglement_metrics.entangling_width": 6.0,
+            "standardized_metrics.circuit_volume": 132.0,
+            "standardized_metrics.gate_density": 0.341,
+            "standardized_metrics.clifford_ratio": 0.944,
+            "standardized_metrics.non_clifford_ratio": 0.056,
+            "advanced_metrics.parallelism_factor": 1.864,
+            "advanced_metrics.parallelism_efficiency": 0.311,
+            "advanced_metrics.circuit_efficiency": 0.311,
+            "advanced_metrics.quantum_resource_utilization": 0.612,
+            "derived_metrics.square_ratio": 0.273,
+            "derived_metrics.weighted_complexity": 161.0,
+            "derived_metrics.normalized_weighted_complexity": 26.833
+          },
+          "StructuralMetrics": {
+            "loc_phi1_total_loc": 45.0,
+            "loc_phi2_gate_loc": 36.0,
+            "loc_phi3_measure_loc": 5.0,
+            "loc_phi4_quantum_total_loc": 41.0,
+            "loc_phi5_num_qubits": 6.0,
+            "loc_phi6_num_gate_types": 6.0,
+            "unique_operators": 7.0,
+            "unique_operands": 11.0,
+            "total_operators": 41.0,
+            "total_operands": 56.0,
+            "program_length": 97.0,
+            "vocabulary": 18.0,
+            "estimated_length": 57.70523225941349,
+            "volume": 404.4827251399043,
+            "difficulty": 17.818181818181817,
+            "effort": 7207.146738856476,
+            "width": 6.0,
+            "depth": 22.0,
+            "max_dens": 3.0,
+            "avg_dens": 1.7307692307692308,
+            "size": 45.0
+          },
+          "BehavioralMetrics": {
+            "normalized_depth": 28.0,
+            "program_communication": 1.0,
+            "critical_depth": 1.0,
+            "measurement": 0.11538461538461539,
+            "liveness": 0.3141025641025641,
+            "parallelism": 0.1272727272727273
+          },
+          "ElementMetrics": {
+            "no_p_x": 6.0,
+            "no_p_y": 0.0,
+            "no_p_z": 0.0,
+            "t_no_p": 6.0,
+            "no_h": 14.0,
+            "percent_sppos_q": 0.5,
+            "no_other_sg": 6.0,
+            "t_no_csqg": 0.0,
+            "t_no_sqg": 26.0,
+            "no_c_or": 0.0,
+            "no_c_any_g": 8.0,
+            "no_swap": 0.0,
+            "no_cnot": 8.0,
+            "percent_q_in_cnot": 1.0,
+            "avg_cnot": 1.3333333333333333,
+            "max_cnot": 4.0,
+            "no_toff": 0.0,
+            "percent_q_in_toff": 0.0,
+            "avg_toff": 0.0,
+            "max_toff": 0.0,
+            "no_gates": 36.0,
+            "no_c_gates": 8.0,
+            "percent_single_gates": 0.7222222222222222,
+            "no_or": 0.0,
+            "percent_q_in_or": 0.0,
+            "percent_q_in_c_or": 0.0,
+            "avg_or_d": 0.0,
+            "max_or_d": 0.0,
+            "no_qm": 5.0,
+            "percent_qm": 0.8333333333333334,
+            "percent_anc": 0.0
+          }
+        },
+        "num_qubits": 6,
+        "num_clbits": 5,
+        "depth": 22,
+        "size": 41,
+        "dynamic": true,
+        "quantum_specific": {
+          "available": false,
+          "reason": "dynamic_circuit"
+        }
+      },
+      "isa": {
+        "available": true,
+        "qward_metrics": {
+          "QiskitMetrics": {
+            "basic_metrics.depth": 43,
+            "basic_metrics.width": 11,
+            "basic_metrics.size": 86,
+            "basic_metrics.num_qubits": 6,
+            "basic_metrics.num_clbits": 5,
+            "basic_metrics.num_ancillas": 0,
+            "basic_metrics.num_parameters": 0,
+            "basic_metrics.has_calibrations": false,
+            "basic_metrics.has_layout": false,
+            "basic_metrics.count_ops.sx": 34,
+            "basic_metrics.count_ops.rz": 29,
+            "basic_metrics.count_ops.cz": 15,
+            "basic_metrics.count_ops.measure": 5,
+            "basic_metrics.count_ops.barrier": 4,
+            "basic_metrics.count_ops.if_else": 2,
+            "basic_metrics.count_ops.x": 1,
+            "instruction_metrics.num_connected_components": 1,
+            "instruction_metrics.num_nonlocal_gates": 15,
+            "instruction_metrics.num_tensor_factors": 1,
+            "instruction_metrics.num_unitary_factors": 1,
+            "instruction_metrics.instructions.sx": [
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='sx', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.rz": [
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948963]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948948]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.1415926535897922]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948957]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-4.71238898038469]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[3.141592653589793]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948957]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[1.5707963267948957]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='rz', num_qubits=1, num_clbits=0, params=[-1.5707963267948966]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())"
+            ],
+            "instruction_metrics.instructions.cz": [
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=5>, <Qubit register=(6, \"q\"), index=4>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=5>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>, <Qubit register=(6, \"q\"), index=2>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='cz', num_qubits=2, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>, <Qubit register=(6, \"q\"), index=2>), clbits=())"
+            ],
+            "instruction_metrics.instructions.measure": [
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=0>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(6, \"q\"), index=5>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>,), clbits=(<Clbit register=(3, \"test_result\"), index=0>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(6, \"q\"), index=1>,), clbits=(<Clbit register=(3, \"test_result\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='measure', num_qubits=1, num_clbits=1, params=[]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=(<Clbit register=(3, \"test_result\"), index=2>,))"
+            ],
+            "instruction_metrics.instructions.barrier": [
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>, <Qubit register=(6, \"q\"), index=1>, <Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=2>, <Qubit register=(6, \"q\"), index=5>, <Qubit register=(6, \"q\"), index=4>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=3, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=5>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>, <Qubit register=(6, \"q\"), index=1>, <Qubit register=(6, \"q\"), index=2>, <Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=5>, <Qubit register=(6, \"q\"), index=3>), clbits=())",
+              "CircuitInstruction(operation=Instruction(name='barrier', num_qubits=6, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=0>, <Qubit register=(6, \"q\"), index=1>, <Qubit register=(6, \"q\"), index=3>, <Qubit register=(6, \"q\"), index=4>, <Qubit register=(6, \"q\"), index=5>, <Qubit register=(6, \"q\"), index=2>), clbits=())"
+            ],
+            "instruction_metrics.instructions.if_else": [
+              "CircuitInstruction(operation=Instruction(name='if_else', num_qubits=1, num_clbits=1, params=[<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x119c56b50>, None]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=1>,))",
+              "CircuitInstruction(operation=Instruction(name='if_else', num_qubits=1, num_clbits=1, params=[<qiskit.circuit.quantumcircuit.QuantumCircuit object at 0x119c57010>, None]), qubits=(<Qubit register=(6, \"q\"), index=3>,), clbits=(<Clbit register=(2, \"alice_meas\"), index=0>,))"
+            ],
+            "instruction_metrics.instructions.x": [
+              "CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(6, \"q\"), index=2>,), clbits=())"
+            ],
+            "scheduling_metrics.is_scheduled": false,
+            "scheduling_metrics.layout": null,
+            "scheduling_metrics.op_start_times": null,
+            "scheduling_metrics.qubit_duration": null,
+            "scheduling_metrics.qubit_start_time": null,
+            "scheduling_metrics.qubit_stop_time": null
+          },
+          "ComplexityMetrics": {
+            "gate_based_metrics.gate_count": 86.0,
+            "gate_based_metrics.circuit_depth": 43.0,
+            "gate_based_metrics.t_count": 0.0,
+            "gate_based_metrics.cnot_count": 0.0,
+            "gate_based_metrics.two_qubit_count": 15.0,
+            "gate_based_metrics.multi_qubit_ratio": 0.547,
+            "entanglement_metrics.entangling_gate_density": 0.174,
+            "entanglement_metrics.entangling_width": 6.0,
+            "standardized_metrics.circuit_volume": 258.0,
+            "standardized_metrics.gate_density": 0.349,
+            "standardized_metrics.clifford_ratio": 0.198,
+            "standardized_metrics.non_clifford_ratio": 0.802,
+            "advanced_metrics.parallelism_factor": 2.0,
+            "advanced_metrics.parallelism_efficiency": 0.333,
+            "advanced_metrics.circuit_efficiency": 0.333,
+            "advanced_metrics.quantum_resource_utilization": 1.0,
+            "derived_metrics.square_ratio": 0.14,
+            "derived_metrics.weighted_complexity": 434.0,
+            "derived_metrics.normalized_weighted_complexity": 72.333
+          },
+          "StructuralMetrics": {
+            "loc_phi1_total_loc": 90.0,
+            "loc_phi2_gate_loc": 81.0,
+            "loc_phi3_measure_loc": 5.0,
+            "loc_phi4_quantum_total_loc": 86.0,
+            "loc_phi5_num_qubits": 6.0,
+            "loc_phi6_num_gate_types": 5.0,
+            "unique_operators": 6.0,
+            "unique_operands": 11.0,
+            "total_operators": 86.0,
+            "total_operands": 108.0,
+            "program_length": 194.0,
+            "vocabulary": 17.0,
+            "estimated_length": 53.5635228093372,
+            "volume": 792.9677912025658,
+            "difficulty": 29.454545454545453,
+            "effort": 23356.50584996648,
+            "width": 6.0,
+            "depth": 43.0,
+            "max_dens": 4.0,
+            "avg_dens": 1.9148936170212767,
+            "size": 90.0
+          },
+          "BehavioralMetrics": {
+            "normalized_depth": 89.0,
+            "program_communication": 1.0,
+            "critical_depth": 0.9333333333333333,
+            "measurement": 0.06382978723404255,
+            "liveness": 0.35815602836879434,
+            "parallelism": 0.17674418604651163
+          },
+          "ElementMetrics": {
+            "no_p_x": 1.0,
+            "no_p_y": 0.0,
+            "no_p_z": 0.0,
+            "t_no_p": 1.0,
+            "no_h": 0.0,
+            "percent_sppos_q": 0.0,
+            "no_other_sg": 63.0,
+            "t_no_csqg": 15.0,
+            "t_no_sqg": 79.0,
+            "no_c_or": 0.0,
+            "no_c_any_g": 15.0,
+            "no_swap": 0.0,
+            "no_cnot": 0.0,
+            "percent_q_in_cnot": 0.0,
+            "avg_cnot": 0.0,
+            "max_cnot": 0.0,
+            "no_toff": 0.0,
+            "percent_q_in_toff": 0.0,
+            "avg_toff": 0.0,
+            "max_toff": 0.0,
+            "no_gates": 81.0,
+            "no_c_gates": 15.0,
+            "percent_single_gates": 0.9753086419753086,
+            "no_or": 0.0,
+            "percent_q_in_or": 0.0,
+            "percent_q_in_c_or": 0.0,
+            "avg_or_d": 0.0,
+            "max_or_d": 0.0,
+            "no_qm": 5.0,
+            "percent_qm": 0.8333333333333334,
+            "percent_anc": 0.0
+          }
+        },
+        "physical_layout": [
+          137,
+          146,
+          148,
+          149,
+          150,
+          147
+        ],
+        "active_qubits": 6,
+        "depth": 43,
+        "size": 86,
+        "two_qubit_gates": 15,
+        "two_qubit_depth": 14,
+        "count_ops": {
+          "sx": 34,
+          "rz": 29,
+          "cz": 15,
+          "measure": 5,
+          "barrier": 4,
+          "if_else": 2,
+          "x": 1
+        }
+      },
+      "hardware_at_submission": {
+        "available": true,
+        "calibrated_at": "2026-11-13 12:22:56-05:00",
+        "collected_at": "2026-11-16T20:55:58.655258+00:00",
+        "source": "prepare_snapshot",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 2,
+        "one_qubit_gate_error": {
+          "mean": 0.00013261778982886835,
+          "max": 0.0006813204789951224,
+          "min": 0.0,
+          "median": 0.0001332503557860211
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.0016556760614212574,
+          "max": 0.004014811719979666,
+          "min": 0.0010630555120081098,
+          "median": 0.0012743142670437746
+        },
+        "readout_error": {
+          "mean": 0.01005859375,
+          "max": 0.02392578125,
+          "min": 0.00439453125,
+          "median": 0.00634765625
+        },
+        "readout_p1_given_0": {
+          "mean": 0.009765625,
+          "max": 0.0283203125,
+          "min": 0.0,
+          "median": 0.00439453125
+        },
+        "readout_p0_given_1": {
+          "mean": 0.012369791666666666,
+          "max": 0.01953125,
+          "min": 0.0087890625,
+          "median": 0.01171875
+        },
+        "t1_us": {
+          "mean": 205.2667376342409,
+          "max": 309.30899867831124,
+          "min": 136.06562870634204,
+          "median": 188.74703230609435
+        },
+        "t2_us": {
+          "mean": 80.69747545348228,
+          "max": 105.47538818669241,
+          "min": 29.700547669011293,
+          "median": 92.35522694893194
+        },
+        "idle_over_t1": {
+          "mean": null,
+          "max": null,
+          "min": null,
+          "median": null
+        },
+        "scheduled": false,
+        "duration_s": null,
+        "num_used_qubits": 6
+      },
+      "baselines": {
+        "available": false,
+        "reason": "dynamic_circuit"
+      }
+    }
+  },
+  "planned_executions_per_window": 6,
+  "runtime_options": {
+    "twirling": {
+      "enable_gates": false,
+      "enable_measure": false
+    },
+    "dynamical_decoupling": {
+      "enable": false
+    },
+    "execution": {
+      "init_qubits": true
+    }
+  }
+}

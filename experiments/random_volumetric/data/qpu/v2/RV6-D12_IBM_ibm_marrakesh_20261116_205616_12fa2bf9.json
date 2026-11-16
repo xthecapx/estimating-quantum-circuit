@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV6-D12",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "12fa2bf9968d489bb1292827c5844f2b",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:16.651686+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "RV6-D12",
+    "num_qubits": 6,
+    "depth": 12,
+    "depth_multiplier": 2.0,
+    "seed": 42,
+    "search_space": 64,
+    "classical_random_prob": 0.015625,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000000",
+    "description": "6 qubits, depth 12 (2x n)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/RV6-D12_IBM_ibm_marrakesh_20261116_205616_12fa2bf9",
+  "prepared_hash": "25e7c2abbc90817043e03ae414923027995aa2f3859b098942ef871fde6e9096"
+}

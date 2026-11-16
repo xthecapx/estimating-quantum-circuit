@@ -1,0 +1,85 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:55:19.634696+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-fez-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611165,
+  "job_order": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 6,
+  "items": [
+    {
+      "config": "M3-4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/M3-4_IBM_ibm_fez_20261116_205518_ccd4d464.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        58,
+        132,
+        22
+      ],
+      "isa_depth": 4,
+      "isa_two_qubit_gates": 0,
+      "job_ids": []
+    },
+    {
+      "config": "H3-2",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H3-2_IBM_ibm_fez_20261116_205518_b22a1e72.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        23,
+        22,
+        16
+      ],
+      "isa_depth": 140,
+      "isa_two_qubit_gates": 37,
+      "job_ids": []
+    },
+    {
+      "config": "H5-0",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H5-0_IBM_ibm_fez_20261116_205519_fee3a22c.json",
+      "calibrated_at": "2026-11-13 11:27:59-05:00",
+      "physical_layout": [
+        16,
+        23,
+        3,
+        4,
+        2
+      ],
+      "isa_depth": 1468,
+      "isa_two_qubit_gates": 517,
+      "job_ids": []
+    }
+  ]
+}

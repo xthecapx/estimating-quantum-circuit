@@ -1,0 +1,23 @@
+{
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "runs": 2,
+  "items": [
+    {
+      "config": "M3-4"
+    },
+    {
+      "config": "H3-2"
+    },
+    {
+      "config": "H5-0"
+    }
+  ],
+  "planned_executions": 6,
+  "backend": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611165,
+  "purpose": "validation-v1 v1 on ibm_kingston, collection 2026-11-16"
+}

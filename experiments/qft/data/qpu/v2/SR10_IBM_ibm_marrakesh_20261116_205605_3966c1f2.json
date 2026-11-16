@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "SR10",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "3966c1f2d7b642959c95441ea66ff82a",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:05.049019+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SR10",
+    "num_qubits": 10,
+    "test_mode": "roundtrip",
+    "search_space": 1024,
+    "theoretical_gate_count": 60,
+    "description": "10 qubits, round-trip (HARDWARE ONLY - too slow for simulator)",
+    "input_state": "0110011001"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SR10_IBM_ibm_marrakesh_20261116_205605_3966c1f2",
+  "prepared_hash": "b71b280fffe212ed025ff00f04817c910d69c8cadd017a00c7f1fe194a8bdb4c"
+}

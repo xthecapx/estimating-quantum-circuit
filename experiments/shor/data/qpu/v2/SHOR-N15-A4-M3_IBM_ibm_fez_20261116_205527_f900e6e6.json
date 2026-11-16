@@ -1,0 +1,30 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "SHOR",
+  "config_id": "SHOR-N15-A4-M3",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "f900e6e6e0b04a8293586e326569e386",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:27.150123+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SHOR-N15-A4-M3",
+    "N": 15,
+    "a": 4,
+    "num_control": 3,
+    "num_target": 4,
+    "num_qubits": 7,
+    "strategy": "swap_network",
+    "true_order": 2,
+    "description": "N=15 a=4 m=3 order-finding growth sweep",
+    "for_qpu": true,
+    "classical_random_prob": 0.125
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SHOR-N15-A4-M3_IBM_ibm_fez_20261116_205527_f900e6e6",
+  "prepared_hash": "adad394f6d37d27b863936c86bba8b427c1af4d51ad100cbc4fde7c12b7fb9e0"
+}

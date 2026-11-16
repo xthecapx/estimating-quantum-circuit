@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV7-HALF",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "e65ffef4f75e4cfb9726dc7a09a60cf7",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:03.814419+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV7-HALF",
+    "num_qubits": 7,
+    "secret_string": "1111000",
+    "expected_outcome": "0001111",
+    "search_space": 128,
+    "classical_random_prob": 0.0078125,
+    "theoretical_success": 1.0,
+    "description": "7 qubits, half secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV7-HALF_IBM_ibm_fez_20261116_205503_e65ffef4",
+  "prepared_hash": "c491510e32cb441093e6d58286ddc211e02f161e0b6705f880e9f94da9225017"
+}

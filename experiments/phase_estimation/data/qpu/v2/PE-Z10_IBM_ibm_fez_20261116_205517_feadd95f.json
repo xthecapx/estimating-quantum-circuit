@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-Z10",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "feadd95fe4874638abe97bbef84d2461",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:17.287531+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-Z10",
+    "test_case": "z_gate",
+    "num_counting_qubits": 10,
+    "total_qubits": 11,
+    "expected_phase": 0.5,
+    "expected_outcome": "1000000000",
+    "search_space": 1024,
+    "classical_random_prob": 0.0009765625,
+    "theoretical_success": 1.0,
+    "description": "z_gate with 10 counting qubits (total=11q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-Z10_IBM_ibm_fez_20261116_205517_feadd95f",
+  "prepared_hash": "d328bf17f4c4cac2c0832cd342928baa17d7ee9c91a6afe26a652fde77369d2c"
+}

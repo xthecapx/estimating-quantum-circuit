@@ -1,0 +1,150 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:55:51.112350+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/plans/ghz-marrakesh-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611160,
+  "job_order": [
+    [
+      3,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 8,
+  "items": [
+    {
+      "config": "GHZ3",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ3_IBM_ibm_marrakesh_20261116_205549_6d0e6354.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        53,
+        54,
+        55
+      ],
+      "isa_depth": 13,
+      "isa_two_qubit_gates": 2,
+      "job_ids": []
+    },
+    {
+      "config": "GHZ16",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ16_IBM_ibm_marrakesh_20261116_205549_a3f9255e.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        86,
+        87,
+        97,
+        107,
+        108,
+        109,
+        118,
+        129,
+        128,
+        127,
+        137,
+        147,
+        148,
+        149,
+        150,
+        151
+      ],
+      "isa_depth": 52,
+      "isa_two_qubit_gates": 15,
+      "job_ids": []
+    },
+    {
+      "config": "GHZ18",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ18_IBM_ibm_marrakesh_20261116_205550_c2cc0c10.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        87,
+        97,
+        107,
+        108,
+        109,
+        118,
+        129,
+        128,
+        127,
+        137,
+        147,
+        146,
+        145,
+        144,
+        143,
+        136,
+        123,
+        124
+      ],
+      "isa_depth": 58,
+      "isa_two_qubit_gates": 17,
+      "job_ids": []
+    },
+    {
+      "config": "GHZ20",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ20_IBM_ibm_marrakesh_20261116_205551_715d7be8.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        87,
+        97,
+        107,
+        108,
+        109,
+        118,
+        129,
+        128,
+        127,
+        137,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        139
+      ],
+      "isa_depth": 64,
+      "isa_two_qubit_gates": 19,
+      "job_ids": []
+    }
+  ]
+}

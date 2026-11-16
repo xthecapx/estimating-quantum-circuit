@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "SP12-P8",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "b7c25c7aeb3048e8887da488eaea094d",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:13.575720+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SP12-P8",
+    "num_qubits": 12,
+    "test_mode": "period_detection",
+    "search_space": 4096,
+    "theoretical_gate_count": 84,
+    "description": "12 qubits, period=8 (HARDWARE ONLY - extreme test)",
+    "period": 8,
+    "expected_num_peaks": 8
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SP12-P8_IBM_ibm_fez_20261116_205513_b7c25c7a",
+  "prepared_hash": "8b08770fc7f5ffff729b0671661027c4a316849b845a970a8b7ebce525184b70"
+}

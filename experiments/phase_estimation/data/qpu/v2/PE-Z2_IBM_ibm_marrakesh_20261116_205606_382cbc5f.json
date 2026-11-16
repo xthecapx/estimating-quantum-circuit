@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-Z2",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "382cbc5f23fd4b92839df145fe7c587e",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:56:07.002202+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-Z2",
+    "test_case": "z_gate",
+    "num_counting_qubits": 2,
+    "total_qubits": 3,
+    "expected_phase": 0.5,
+    "expected_outcome": "10",
+    "search_space": 4,
+    "classical_random_prob": 0.25,
+    "theoretical_success": 1.0,
+    "description": "z_gate with 2 counting qubits (total=3q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-Z2_IBM_ibm_marrakesh_20261116_205606_382cbc5f",
+  "prepared_hash": "c4f1242a7d096150fe726654d45874f6562a7d7e07292cd696f1b3f3bcc0a1e0"
+}

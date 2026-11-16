@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV14-ONES",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "5fad2a4bcc964a36b912e01f95f055a3",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:53:49.636738+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV14-ONES",
+    "num_qubits": 14,
+    "secret_string": "11111111111111",
+    "expected_outcome": "11111111111111",
+    "search_space": 16384,
+    "classical_random_prob": 6.103515625e-05,
+    "theoretical_success": 1.0,
+    "description": "14 qubits, all-ones secret"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV14-ONES_IBM_ibm_kingston_20261116_205349_5fad2a4b",
+  "prepared_hash": "ce25cb6c59f77b3b897cf1ba65d258da1f9afe7c631c52b568b8a45789ee5e10"
+}

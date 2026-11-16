@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-S5",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "ceffc36554514a6c88d060202127f114",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:15.191043+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-S5",
+    "test_case": "s_gate",
+    "num_counting_qubits": 5,
+    "total_qubits": 6,
+    "expected_phase": 0.25,
+    "expected_outcome": "01000",
+    "search_space": 32,
+    "classical_random_prob": 0.03125,
+    "theoretical_success": 1.0,
+    "description": "s_gate with 5 counting qubits (total=6q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-S5_IBM_ibm_fez_20261116_205515_ceffc365",
+  "prepared_hash": "eead1ae3f81dfd4122973b8df008f65b63b6f046d876b4ae5853a09911e7c23a"
+}

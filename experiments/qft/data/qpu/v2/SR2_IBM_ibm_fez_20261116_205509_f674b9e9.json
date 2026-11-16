@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "QFT",
+  "config_id": "SR2",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "f674b9e9d58c49c09a7f15003a29a52a",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:09.520555+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "SR2",
+    "num_qubits": 2,
+    "test_mode": "roundtrip",
+    "search_space": 4,
+    "theoretical_gate_count": 4,
+    "description": "2 qubits, round-trip, input |01\u27e9",
+    "input_state": "01"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/SR2_IBM_ibm_fez_20261116_205509_f674b9e9",
+  "prepared_hash": "17fa9e8b63dd4479fcba488e864e0c7ac76e56b08eb56467474e8a8768760b3d"
+}

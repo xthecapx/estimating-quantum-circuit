@@ -1,0 +1,32 @@
+{
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "runs": 2,
+  "items": [
+    {
+      "config": "PE-Z2"
+    },
+    {
+      "config": "PE-S5"
+    },
+    {
+      "config": "PE-T8"
+    },
+    {
+      "config": "PE-T9"
+    },
+    {
+      "config": "PE-S9"
+    },
+    {
+      "config": "PE-Z10"
+    }
+  ],
+  "planned_executions": 12,
+  "backend": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611164,
+  "purpose": "validation-v1 v1 on ibm_fez, collection 2026-11-16"
+}

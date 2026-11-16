@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "PHASE-ESTIMATION",
+  "config_id": "PE-Z2",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "1430de93d06b4c2e8d6b9f3d16926217",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:54:04.652226+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "PE-Z2",
+    "test_case": "z_gate",
+    "num_counting_qubits": 2,
+    "total_qubits": 3,
+    "expected_phase": 0.5,
+    "expected_outcome": "10",
+    "search_space": 4,
+    "classical_random_prob": 0.25,
+    "theoretical_success": 1.0,
+    "description": "z_gate with 2 counting qubits (total=3q)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/PE-Z2_IBM_ibm_kingston_20261116_205404_1430de93",
+  "prepared_hash": "71434cee9c5acd61aac92fa1f6db47e74dfc4fbed86d7cf6699d0c7d5e64b9ff"
+}

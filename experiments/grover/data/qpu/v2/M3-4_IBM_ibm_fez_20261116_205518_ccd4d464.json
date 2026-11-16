@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GROVER",
+  "config_id": "M3-4",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "ccd4d46413f84bd5a3eed32cf323d647",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:18.494854+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "M3-4",
+    "num_qubits": 3,
+    "marked_states": [
+      "000",
+      "001",
+      "110",
+      "111"
+    ],
+    "num_marked": 4,
+    "theoretical_success": 0.5000000000000001,
+    "classical_random_prob": 0.5,
+    "theoretical_iterations": 0,
+    "description": "3 qubits, 4 marked states"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/M3-4_IBM_ibm_fez_20261116_205518_ccd4d464",
+  "prepared_hash": "e8383ed0efa7616c339a6eb2a4294622b97e46253076873c33f9a47a52b286d4"
+}

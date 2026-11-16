@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "RANDOM-VOLUMETRIC",
+  "config_id": "RV6-D12",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_kingston",
+  "campaign_id": "kingston-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "e725687f85514da781a6970a33745bf5",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:54:14.868364+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "RV6-D12",
+    "num_qubits": 6,
+    "depth": 12,
+    "depth_multiplier": 2.0,
+    "seed": 42,
+    "search_space": 64,
+    "classical_random_prob": 0.015625,
+    "theoretical_success": 1.0,
+    "expected_outcome": "000000",
+    "description": "6 qubits, depth 12 (2x n)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/RV6-D12_IBM_ibm_kingston_20261116_205414_e725687f",
+  "prepared_hash": "8f246bd85b501c6e3e73e863ed9e772cbbd98b10c557aef1191ba71ef3bd0e93"
+}

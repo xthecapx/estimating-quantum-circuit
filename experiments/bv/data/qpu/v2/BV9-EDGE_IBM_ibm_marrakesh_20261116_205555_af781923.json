@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV9-EDGE",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "af781923a31f491d931c50f4f5842599",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:55.258542+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV9-EDGE",
+    "num_qubits": 9,
+    "secret_string": "100000001",
+    "expected_outcome": "100000001",
+    "search_space": 512,
+    "classical_random_prob": 0.001953125,
+    "theoretical_success": 1.0,
+    "description": "9 qubits, edge secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV9-EDGE_IBM_ibm_marrakesh_20261116_205555_af781923",
+  "prepared_hash": "93ad8c4a6269b469330cc043dc2f8dc9a2dc07821024ea7ee270f8c10591ebab"
+}

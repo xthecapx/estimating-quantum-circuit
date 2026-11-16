@@ -1,0 +1,78 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "status": "prepared",
+  "prepared_at": "2026-11-16T20:55:55.962803+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-marrakesh-validation-v1-d2026-11-16.json",
+  "backend_name": "ibm_marrakesh",
+  "campaign_id": "marrakesh-validation-v1-2026-11-16",
+  "window": 20261116,
+  "order_seed": 202611161,
+  "job_order": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": null,
+  "jobs_planned": 4,
+  "items": [
+    {
+      "config": "BV9-EDGE",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-EDGE_IBM_ibm_marrakesh_20261116_205555_af781923.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        97,
+        120,
+        54,
+        148,
+        6,
+        14,
+        5,
+        77,
+        86,
+        87
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": []
+    },
+    {
+      "config": "BV11-PAIR",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-PAIR_IBM_ibm_marrakesh_20261116_205555_e0addb56.json",
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "physical_layout": [
+        97,
+        86,
+        5,
+        120,
+        54,
+        148,
+        6,
+        14,
+        77,
+        140,
+        3,
+        87
+      ],
+      "isa_depth": 14,
+      "isa_two_qubit_gates": 2,
+      "job_ids": []
+    }
+  ],
+  "parent_manifest": "bv-marrakesh-validation-v1-d2026-11-16_manifest.json"
+}

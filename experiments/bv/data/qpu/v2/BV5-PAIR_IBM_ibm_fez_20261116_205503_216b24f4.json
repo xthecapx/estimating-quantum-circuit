@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "BERNSTEIN-VAZIRANI",
+  "config_id": "BV5-PAIR",
+  "execution_type": "IBM_QPU",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-validation-v1-2026-11-16",
+  "window": 20261116,
+  "run_id": "216b24f49c584abe8a02c00b6125b345",
+  "status": "prepared",
+  "saved_at": "2026-11-16T20:55:03.354775+00:00",
+  "batch_id": null,
+  "config": {
+    "config_id": "BV5-PAIR",
+    "num_qubits": 5,
+    "secret_string": "11000",
+    "expected_outcome": "00011",
+    "search_space": 32,
+    "classical_random_prob": 0.03125,
+    "theoretical_success": 1.0,
+    "description": "5 qubits, pair secret (validation-v1)"
+  },
+  "submission_journal": [],
+  "individual_results": [],
+  "artifact_directory": "artifacts/BV5-PAIR_IBM_ibm_fez_20261116_205503_216b24f4",
+  "prepared_hash": "41db6bebf7242bb99a2e4f9bd5708b5ba43431644ecd126385922da2c54bc2bf"
+}
