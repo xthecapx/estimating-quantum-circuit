@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GHZ",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:15:56.999084+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/plans/ghz-kingston-validation-v1-d2026-11-17.json",
   "backend_name": "ibm_kingston",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "c9c410a7-a783-41be-9c41-840317072d5c",
   "jobs_planned": 8,
   "items": [
     {
@@ -57,7 +57,10 @@
       ],
       "isa_depth": 13,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmd7brto6s73ft1kig",
+        "dbtmd87iplcc73b9ikm0"
+      ]
     },
     {
       "config": "GHZ16",
@@ -84,7 +87,10 @@
       ],
       "isa_depth": 52,
       "isa_two_qubit_gates": 15,
-      "job_ids": []
+      "job_ids": [
+        "dbtmd6rrto6s73ft1khg",
+        "dbtmd7jrto6s73ft1kk0"
+      ]
     },
     {
       "config": "GHZ18",
@@ -113,7 +119,10 @@
       ],
       "isa_depth": 58,
       "isa_two_qubit_gates": 17,
-      "job_ids": []
+      "job_ids": [
+        "dbtmd732kf8s73c9bghg",
+        "dbtmd7uhrjis73e7ekg0"
+      ]
     },
     {
       "config": "GHZ20",
@@ -144,7 +153,12 @@
       ],
       "isa_depth": 64,
       "isa_two_qubit_gates": 19,
-      "job_ids": []
+      "job_ids": [
+        "dbtmd7mhrjis73e7eke0",
+        "dbtmd8brto6s73ft1kl0"
+      ]
     }
-  ]
+  ],
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T20:25:05.641116+00:00"
 }

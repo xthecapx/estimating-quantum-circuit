@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "QFT",
-  "status": "prepared",
+  "status": "submitting",
   "prepared_at": "2026-11-16T20:16:13.373429+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-kingston-validation-v1-d2026-11-17.json",
   "backend_name": "ibm_kingston",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "e3b2f367-1ce7-4cc9-bf68-4b57b5fde235",
   "jobs_planned": 8,
   "items": [
     {
@@ -60,7 +60,9 @@
       ],
       "isa_depth": 248,
       "isa_two_qubit_gates": 92,
-      "job_ids": []
+      "job_ids": [
+        "dbtmfoj2kf8s73c9bja0"
+      ]
     },
     {
       "config": "IV7-1001011",
@@ -78,7 +80,10 @@
       ],
       "isa_depth": 340,
       "isa_two_qubit_gates": 134,
-      "job_ids": []
+      "job_ids": [
+        "dbtmfofiplcc73b9infg",
+        "dbtmfor2kf8s73c9bjb0"
+      ]
     },
     {
       "config": "SR10",
@@ -99,7 +104,10 @@
       ],
       "isa_depth": 588,
       "isa_two_qubit_gates": 288,
-      "job_ids": []
+      "job_ids": [
+        "dbtmfo32kf8s73c9bj9g",
+        "dbtmforrto6s73ft1ni0"
+      ]
     },
     {
       "config": "SP12-P8",
@@ -123,8 +131,11 @@
       ],
       "isa_depth": 357,
       "isa_two_qubit_gates": 280,
-      "job_ids": []
+      "job_ids": [
+        "dbtmfofiplcc73b9ing0"
+      ]
     }
   ],
-  "parent_manifest": "qft-kingston-validation-v1-d2026-11-17_manifest.json"
+  "parent_manifest": "qft-kingston-validation-v1-d2026-11-17_manifest.json",
+  "requested_batch_max_time_seconds": 3600
 }

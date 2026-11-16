@@ -174,6 +174,10 @@ def _load_bundles(scopes: Sequence[str]) -> Dict[tuple, Dict[str, Any]]:
 # ----------------------------------------------------------------------- predict
 
 
+# Collections abandoned before execution; never scored (see docs/validation-v1-*-abandoned.md).
+ABANDONED_CAMPAIGNS = frozenset({"kingston-validation-v1-2026-11-17"})
+
+
 def predict(
     campaign_id: str,
     out_dir: Path | None = None,
@@ -181,6 +185,8 @@ def predict(
     allow_dirty: bool = False,
 ) -> Path:
     """Write the pre-registered predictions for one prepared collection."""
+    if campaign_id in ABANDONED_CAMPAIGNS:
+        raise ValueError(f"{campaign_id} was abandoned before execution; use a fresh collection")
     out_dir = out_dir or default_out_dir()
     tables = tables or ROOT / "experiments" / "dataset_out"
     records = _collection_records(campaign_id)
@@ -280,6 +286,8 @@ def score(predictions_path: Path, tables: Path, out_dir: Path | None = None) -> 
     """Score committed predictions against the exported observations of the same collection."""
     out_dir = out_dir or default_out_dir()
     reg = json.loads(predictions_path.read_text(encoding="utf-8"))
+    if reg["campaignId"] in ABANDONED_CAMPAIGNS:
+        raise ValueError(f"{reg['campaignId']} was abandoned before execution and is never scored")
     for rel, digest in reg["preparedInputs"].items():
         if _sha256(ROOT / rel) != digest:
             raise ValueError(f"Prepared record changed after pre-registration: {rel}")
