@@ -4,83 +4,83 @@
   "parts": [
     {
       "file": "dataset-001.csv",
-      "rows": 751,
-      "bytes": 19992729
+      "rows": 750,
+      "bytes": 19976091
     },
     {
       "file": "dataset-002.csv",
-      "rows": 158,
-      "bytes": 19939361
+      "rows": 159,
+      "bytes": 19975457
     },
     {
       "file": "dataset-003.csv",
       "rows": 201,
-      "bytes": 19904790
+      "bytes": 19909035
     },
     {
       "file": "dataset-004.csv",
       "rows": 311,
-      "bytes": 19965990
+      "bytes": 19972578
     },
     {
       "file": "dataset-005.csv",
       "rows": 298,
-      "bytes": 19889359
+      "bytes": 19895732
     },
     {
       "file": "dataset-006.csv",
       "rows": 212,
-      "bytes": 19945248
+      "bytes": 19949725
     },
     {
       "file": "dataset-007.csv",
       "rows": 79,
-      "bytes": 19909911
+      "bytes": 19911637
     },
     {
       "file": "dataset-008.csv",
       "rows": 48,
-      "bytes": 19532168
+      "bytes": 19533275
     },
     {
       "file": "dataset-009.csv",
       "rows": 114,
-      "bytes": 19981573
+      "bytes": 19984445
     },
     {
       "file": "dataset-010.csv",
       "rows": 44,
-      "bytes": 18954976
+      "bytes": 18955986
     },
     {
       "file": "dataset-011.csv",
       "rows": 13,
-      "bytes": 19209571
+      "bytes": 19209945
     },
     {
       "file": "dataset-012.csv",
       "rows": 13,
-      "bytes": 19447378
+      "bytes": 19447747
     },
     {
       "file": "dataset-013.csv",
       "rows": 13,
-      "bytes": 19687930
+      "bytes": 19688310
     },
     {
       "file": "dataset-014.csv",
       "rows": 12,
-      "bytes": 18474454
+      "bytes": 18474808
     },
     {
       "file": "dataset-015.csv",
       "rows": 255,
-      "bytes": 19974826
+      "bytes": 19980221
     },
     {
       "file": "dataset-016.csv",
       "rows": 139,
-      "bytes": 5640510
+      "bytes": 5643504
     }
   ]
 }

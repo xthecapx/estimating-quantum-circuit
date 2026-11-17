@@ -20,7 +20,7 @@ Column naming (``<prefix>.<path>``; nested keys joined by dots, lists as JSON):
     a.*     logical circuit    b.*       executed (ISA) circuit
     c.*     hardware @ submit  d.*       hardware @ execution
     e.*     baselines @ submit e_exec.*  baselines re-predicted at execution
-    f.*     targets            g.*       provenance and timing
+    f.*     targets            g.*       provenance, timing and billed cost
 
 Validation is strict by default: simulated backends, duplicate jobs, mixed
 schema versions, unavailable groups and counts that do not match the shot
@@ -203,6 +203,12 @@ def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]
         metrics_t = entry.get("execution_metrics") or {}
         stamps = metrics_t.get("timestamps") or {}
         usage = metrics_t.get("usage") or {}
+        # Billed cost. IBM reports resource units (1 RU = 1 minute of QPU time) for
+        # newer jobs; older jobs report only whole quantum seconds.
+        cost_rus = usage.get("value") if usage.get("unit") == "resource_units" else None
+        circuit_ns = metrics_t.get("circuits_execution_time_ns")
+        if isinstance(circuit_ns, (list, tuple)):
+            circuit_ns = sum(circuit_ns) if circuit_ns else None
         row.update(
             {
                 "g.source_campaign_id": journal["campaign_id"],
@@ -227,6 +233,9 @@ def record_rows(journal_path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]
                 "g.queue_seconds": _seconds(stamps.get("created"), stamps.get("running")),
                 "g.run_seconds": _seconds(stamps.get("running"), stamps.get("finished")),
                 "g.quantum_seconds": usage.get("quantum_seconds"),
+                "g.cost_rus": cost_rus,
+                "g.billed_seconds": usage.get("qpu_charge_time_seconds"),
+                "g.circuit_execution_seconds": (None if circuit_ns is None else circuit_ns / 1e9),
                 "g.calibrated_at_submission": entry.get("calibrated_at_submission"),
                 "g.recalibrated_before_submission": entry.get("recalibrated_before_submission"),
             }

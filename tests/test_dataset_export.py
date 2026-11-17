@@ -276,3 +276,19 @@ def test_dataset_part_cannot_split_a_single_large_row(tmp_path):
     with pytest.raises(ValueError, match="row exceeds"):
         D.write_dataset_parts(pd.DataFrame({"value": ["x" * 100]}), tmp_path, max_bytes=50)
     assert (tmp_path / "dataset-001.csv").read_bytes() == saved
+
+
+def test_billed_cost_columns_are_parsed_from_usage(tmp_path):
+    """Resource units, rounded billed seconds and circuit time come from execution_metrics."""
+    source = next(Path(__file__).resolve().parents[1].glob(
+        "experiments/ghz/data/qpu/v2/GHZ8_IBM_ibm_kingston_20261111*.json"))
+    journal = json.loads(source.read_text(encoding="utf-8"))
+    rows, reason = D.record_rows(source)
+    assert reason is None and rows
+    usage = journal["submission_journal"][0]["execution_metrics"]["usage"]
+    row = next(r for r in rows if r["meta.job_id"] == journal["submission_journal"][0]["job_id"])
+    assert row["g.cost_rus"] == usage["value"] and usage["unit"] == "resource_units"
+    assert row["g.billed_seconds"] == usage["qpu_charge_time_seconds"]
+    assert 0 < row["g.circuit_execution_seconds"] < row["g.billed_seconds"]
+    # 1 RU = 1 minute of QPU time; IBM bills whole seconds rounded up.
+    assert row["g.billed_seconds"] - 1 < row["g.cost_rus"] * 60 <= row["g.billed_seconds"]

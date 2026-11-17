@@ -2781,16 +2781,34 @@
       "non_null": 2661
     },
     {
+      "name": "g.billed_seconds",
+      "group": "g",
+      "dtype": "float64",
+      "non_null": 2257
+    },
+    {
       "name": "g.calibrated_at_submission",
       "group": "g",
       "dtype": "str",
       "non_null": 2661
     },
     {
+      "name": "g.circuit_execution_seconds",
+      "group": "g",
+      "dtype": "float64",
+      "non_null": 2257
+    },
+    {
       "name": "g.collected_at",
       "group": "g",
       "dtype": "str",
       "non_null": 2661
+    },
+    {
+      "name": "g.cost_rus",
+      "group": "g",
+      "dtype": "float64",
+      "non_null": 2257
     },
     {
       "name": "g.dynamic_circuit",
