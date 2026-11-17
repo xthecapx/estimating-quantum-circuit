@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT))
 
 from experiments.ml_dataset import load_ml_dataset  # noqa: E402
 
-SNAPSHOT_DIRS = ("estimation", "decay", "prospective")
+SNAPSHOT_DIRS = ("estimation", "decay", "prospective", "cost")
 
 
 def manifest_inputs(tables: Path):
