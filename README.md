@@ -16,6 +16,8 @@ metrics, schemas, and provider support. No local QWARD checkout is required.
 | `experiments/data/aws_pilot/` | Convention for new local Rigetti run directories; no AWS pilot has been collected by this migration |
 | `experiments/data/quantum_specific_cache/` | Copied deterministic metric cache |
 | `experiments/dataset_out/` | Complete existing IBM export: **2018 rows**, numbered CSV parts, references, calibrations, schema and report |
+| `experiments/qaqs_*.py`, `ml_*.py`, `footprint_analysis.py` | QAQS models: nested K-fold training, prospective validation, execution-cost model |
+| `report/ml_estimation/` | Frozen models, per-target reports, `prospective/` (pre-registered predictions and scores) and `cost/` |
 | `scripts/run.py` | Common collection/export/dashboard entry point |
 | `dashboard/` | Optional local presentation of the IBM dataset |
 | `docs/` | Protocol, schema and provider documentation |
@@ -221,6 +223,33 @@ python3 -m http.server 8790 --directory _site
 
 `_site/` is generated and ignored by Git. Start with a fresh `_site/` directory
 when rebuilding after deleting or renaming pages, to avoid retaining old files.
+
+## Quality and cost models (QAQS)
+
+The thesis predicts a circuit's execution quality (success rate, Hellinger fidelity, TVD, DSR) and
+its billed QPU cost from the circuit alone, before running it.
+
+```sh
+python -m experiments.ml_estimation              # nested repeated grouped K-fold: unseen-circuit validation
+python -m experiments.qaqs_prospective predict --campaign kingston-validation-v1-2026-11-16   # pre-register
+python -m experiments.qaqs_prospective score --predictions report/ml_estimation/prospective/<campaign>_predictions.json
+python -m experiments.qaqs_cost                  # billed-time model (1 RU = 1 minute of QPU time)
+python dashboard/export_prospective.py           # dashboard snapshot of the prospective results
+```
+
+* **Three validation tests**, defined in [`docs/prospective_validation.md`](docs/prospective_validation.md):
+  unseen-circuit validation (grouped K-fold), calibration-cycle validation (forward temporal
+  holdout) and prospective validation (frozen models on a new IBM run: Fez, Kingston and the
+  never-seen Marrakesh, predictions committed before execution).
+* **Execution cost:** [`docs/execution_cost.md`](docs/execution_cost.md).
+* **Dashboard:** *Model validation*, *Execution cost* and *Model training* tabs show these results;
+  the validation tab is the headline and the training tab is kept for reference.
+* **Using the models:** they ship in QWARD as `qward.qaqs` (`predict(circuit, backend)`), as plain
+  JSON that runs on NumPy. `python scripts/export_qaqs_models.py --qward ../qiskit-qward`
+  regenerates those files and the parity fixtures from the frozen models here. The usage guide is
+  in the QWARD repository (`docs/qaqs.md`).
+* Training reads the export without any `-validation-v` campaign, so validation data can never
+  reach training; only the scoring code and the cost model opt in.
 
 ## Reproduce or extend the thesis
 

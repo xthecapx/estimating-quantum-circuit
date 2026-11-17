@@ -36,6 +36,7 @@ import argparse
 import hashlib
 import json
 import math
+import sys
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List, Sequence
@@ -442,6 +443,12 @@ def _write_report(s: Dict[str, Any], report_dir: Path) -> None:
 
 
 def main() -> None:
+    # Run through the importable module, not `__main__`: classes pickled while this file runs as a
+    # script are recorded as `__main__.HybridCostModel` and cannot be loaded anywhere else.
+    from experiments import qaqs_cost as canonical
+
+    if canonical is not sys.modules[__name__]:
+        return canonical.main()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--tables", type=Path, default=DEFAULT_TABLES)
     parser.add_argument("--report-out", type=Path, default=DEFAULT_REPORT)
