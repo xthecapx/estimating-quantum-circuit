@@ -12,17 +12,21 @@
   import Tabs from "./lib/ui/Tabs.svelte";
   import CompareDecay from "./views/decay/CompareDecay.svelte";
   import EstimationView, { type EstimationChoices } from "./views/estimation/EstimationView.svelte";
+  import ProspectiveView, { type ProspectiveChoices } from "./views/prospective/ProspectiveView.svelte";
 
   let section = $state("range");
   let decay = $state({ matrix: "similarity", pair: "QFT/PHASE-ESTIMATION", resource: "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: "success" });
   let estimation = $state<EstimationChoices>({ scope: "pooled", target: "", split: "holdout", view: "h1" });
   let reports = $state<Record<string,string>>({});
   let estimationReports = $state<Record<string,string>>({});
+  let prospectiveReports = $state<Record<string,string>>({});
+  let prospective = $state<ProspectiveChoices>({ target: "success", regime: "circuit_only", chip: "" });
   function readChoices() {
     const url = parseHash(location.hash);
-    section = url.section === "decay" ? "decay" : url.section === "estimation" ? "estimation" : "range";
+    section = ["decay", "estimation", "validation"].includes(url.section ?? "") ? url.section! : "range";
     decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "QFT/PHASE-ESTIMATION", resource: url.resource || "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: url.outcome || "success"};
     estimation = {scope: url.estScope || "pooled", target: url.estTarget || "", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
+    prospective = {target: url.valTarget || "success", regime: url.valRegime === "mixed_submit" ? "mixed_submit" : "circuit_only", chip: url.valChip || ""};
   }
 
   let explorer = $state<Explorer>();
@@ -34,6 +38,7 @@
       .then((data) => {
         reports = data.decayReports ?? {};
         estimationReports = data.estimationReports ?? {};
+        prospectiveReports = data.prospectiveReports ?? {};
         explorer = new Explorer(data, parseHash(location.hash));
       })
       .catch((reason) => {
@@ -65,7 +70,9 @@
               estSplit: estimation.split,
               estView: estimation.view,
             }
-          : {};
+          : section === "validation"
+            ? { section, valTarget: prospective.target, valRegime: prospective.regime, valChip: prospective.chip }
+            : {};
     const hash = formatHash({ ...explorer.toUrl(), ...extra });
     if (hash !== location.hash) history.replaceState(null, "", hash || location.pathname);
   });
@@ -97,18 +104,22 @@
       onclick={(event) => explorer?.calibration.open(null, event.currentTarget)}
       >Chip calibration history <span aria-hidden="true">↗</span></button
     >
+    {:else if section === "validation"}
+      <p class="intro">Frozen QAQS models scored on new runs on three IBM chips, including one the models never saw. Predictions were committed before the jobs ran.</p>
     {:else if section === "estimation"}
-      <p class="intro">Compare classical machine learning regressors, curated circuit footprints, and analytical baselines across chips and calibration windows.</p>
+      <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
     {:else}<p class="intro">Compare how circuit quality changes as two algorithms grow on the same chip.</p>{/if}
   </header>
   {#if error}
     <div id="error" role="alert">{error}</div>
   {/if}
   {#if explorer}
-    <Tabs tabs={[{id:"range",label:"Operating range"},{id:"decay",label:"Compare decay"},{id:"estimation",label:"Quality estimation"}]} label="Experiment sections" selected={section} onselect={(s) => section=s}>
+    <Tabs tabs={[{id:"range",label:"Operating range"},{id:"decay",label:"Compare decay"},{id:"validation",label:"Model validation"},{id:"estimation",label:"Model training"}]} label="Experiment sections" selected={section} onselect={(s) => section=s}>
     {#snippet panel(id)}
     {#if id === "decay" && explorer}
       <CompareDecay {explorer} {reports} choices={decay} onchange={(v) => decay=v} />
+    {:else if id === "validation"}
+      <ProspectiveView reports={prospectiveReports} choices={prospective} onchange={(v) => prospective=v} />
     {:else if id === "estimation" && explorer}
       <EstimationView {explorer} reports={estimationReports} choices={estimation} onchange={(v) => estimation=v} />
     {:else if explorer}

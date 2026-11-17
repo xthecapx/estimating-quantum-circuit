@@ -244,6 +244,7 @@ def build(tables, output):
     output.mkdir(parents=True, exist_ok=True)
     decay_reports = {}
     estimation_reports = {}
+    prospective_reports = {}
     manifest = Path(tables) / "dataset_manifest.json"
     if manifest.is_file():
         digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
@@ -253,6 +254,9 @@ def build(tables, output):
         estimation_reports = _collect_validated_reports(
             "experiments/estimation", "estimation", tables, output, digest
         )
+        prospective_reports = _collect_validated_reports(
+            "experiments/prospective", "prospective", tables, output, digest
+        )
     write_json(
         output / "index.json",
         {
@@ -261,6 +265,7 @@ def build(tables, output):
             "refs": data["refs"],
             "decayReports": decay_reports,
             "estimationReports": estimation_reports,
+            "prospectiveReports": prospective_reports,
         },
     )
     write_json(

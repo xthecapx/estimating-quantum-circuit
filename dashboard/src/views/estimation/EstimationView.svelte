@@ -142,7 +142,12 @@
   }
 </script>
 
-<section class="surface estimation" aria-label="Quality estimation results">
+<section class="surface estimation" aria-label="Model training results">
+  <p class="training-banner" role="note">
+    <strong>Training-data results.</strong> These scores come from cross-validation on the collection used to build
+    the models, and are kept for comparison and model selection. The real performance is the
+    <a href="#section=validation">Model validation</a> tab: frozen models scored on new QPU runs.
+  </p>
   <div class="settings controls">
     {#if availableScopes.length}
       <Select
@@ -229,14 +234,7 @@
             {/if}
           </strong>
           <span>
-            MAE {fmt(topMetrics.mae, 4)} · RMSE {fmt(topMetrics.rmse, 4)} ·
-            {#if topMetrics.h1Verdict === "inconclusive"}
-              H1 inconclusive (95% CI straddles 0.80)
-            {:else if (topMetrics.h1Verdict ?? (topMetrics.meetsH1 ? "pass" : "fail")) === "pass"}
-              Meets H1 (CI &ge; 0.80)
-            {:else}
-              Below H1 (0.80)
-            {/if}
+            MAE {fmt(topMetrics.mae, 4)} · RMSE {fmt(topMetrics.rmse, 4)} · training-data validation
           </span>
         </div>
       {/if}
@@ -579,6 +577,8 @@
 
 <style>
   .estimation { padding: clamp(12px, 2.3vw, 28px); display: grid; gap: 16px; min-width: 0; }
+  .training-banner { border-left: 3px solid #eb6834; background: #fdf3ee; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.86rem; line-height: 1.45; color: var(--ink); }
+  .training-banner a { color: var(--teal); font-weight: 600; }
   .controls { border-bottom: 1px solid var(--line); padding-bottom: 16px; margin: 0; }
   .controls :global(label) { flex: 1 1 165px; min-width: 0; }
   .controls :global(select) { width: 100%; min-width: 0; }

@@ -132,6 +132,14 @@ python -m experiments.qaqs_prospective summarize report/ml_estimation/prospectiv
 
 `summarize` writes `validation-v1_summary.md` with seen and unseen QPU side by side.
 
+Then refresh the dashboard's **Model validation** tab (the prospective results are its
+headline; the **Model training** tab keeps the training-data validation for reference):
+
+```sh
+python dashboard/export_prospective.py     # writes dashboard/experiments/prospective/validation-v1.json
+python scripts/run.py dashboard            # rebuilds public data; snapshots must match the export hash
+```
+
 ## After scoring
 
 - The validation export adds new campaigns to `experiments/dataset_out`. Training
