@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "RANDOM-VOLUMETRIC",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:25.871638+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/plans/rv-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "3450af64-8aec-4a4e-af34-643e506e3f74",
   "jobs_planned": 8,
   "items": [
     {
@@ -59,7 +59,10 @@
       ],
       "isa_depth": 510,
       "isa_two_qubit_gates": 171,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvkr2kf8s73c9c6t0",
+        "dbtmvlmhrjis73e7faeg"
+      ]
     },
     {
       "config": "RV6-D12",
@@ -76,7 +79,10 @@
       ],
       "isa_depth": 729,
       "isa_two_qubit_gates": 306,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvl3rto6s73ft2alg",
+        "dbtmvluhrjis73e7fag0"
+      ]
     },
     {
       "config": "RV7-D14",
@@ -94,7 +100,10 @@
       ],
       "isa_depth": 1026,
       "isa_two_qubit_gates": 438,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvlb2kf8s73c9c6ug",
+        "dbtmvm6hrjis73e7fagg"
+      ]
     },
     {
       "config": "RV9-D9",
@@ -114,8 +123,14 @@
       ],
       "isa_depth": 814,
       "isa_two_qubit_gates": 414,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvlniplcc73b9jb50",
+        "dbtmvmfiplcc73b9jb70"
+      ]
     }
   ],
-  "parent_manifest": "rv-fez-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "rv-fez-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:04:25.550500+00:00"
 }

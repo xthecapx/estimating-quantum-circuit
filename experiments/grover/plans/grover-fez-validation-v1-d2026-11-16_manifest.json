@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GROVER",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:19.634696+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -34,7 +34,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "f5536b36-a86c-4fea-b03e-78e16cb000fa",
   "jobs_planned": 6,
   "items": [
     {
@@ -49,7 +49,10 @@
       ],
       "isa_depth": 4,
       "isa_two_qubit_gates": 0,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvebrto6s73ft2ab0",
+        "dbtmvf3rto6s73ft2ac0"
+      ]
     },
     {
       "config": "H3-2",
@@ -63,7 +66,10 @@
       ],
       "isa_depth": 140,
       "isa_two_qubit_gates": 37,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvej2kf8s73c9c6ig",
+        "dbtmvf6hrjis73e7f9t0"
+      ]
     },
     {
       "config": "H5-0",
@@ -79,7 +85,13 @@
       ],
       "isa_depth": 1468,
       "isa_two_qubit_gates": 517,
-      "job_ids": []
+      "job_ids": [
+        "dbtmveviplcc73b9jah0",
+        "dbtmvfehrjis73e7f9tg"
+      ]
     }
-  ]
+  ],
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:03:57.676796+00:00"
 }

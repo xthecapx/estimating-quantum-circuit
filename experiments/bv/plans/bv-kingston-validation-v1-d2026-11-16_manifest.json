@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "BERNSTEIN-VAZIRANI",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:53:51.520944+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-kingston-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_kingston",
@@ -82,7 +82,10 @@
       ],
       "isa_depth": 15,
       "isa_two_qubit_gates": 3,
-      "job_ids": []
+      "job_ids": [
+        "dbtn10niplcc73b9jct0",
+        "dbtn11ehrjis73e7fc90"
+      ]
     },
     {
       "config": "BV9-SINGLE",
@@ -103,7 +106,10 @@
       ],
       "isa_depth": 13,
       "isa_two_qubit_gates": 1,
-      "job_ids": []
+      "job_ids": [
+        "dbtn1132kf8s73c9c900",
+        "dbtn11viplcc73b9jd00"
+      ]
     },
     {
       "config": "BV14-ONES",
@@ -129,7 +135,10 @@
       ],
       "isa_depth": 89,
       "isa_two_qubit_gates": 32,
-      "job_ids": []
+      "job_ids": [
+        "dbtn10r2kf8s73c9c8vg",
+        "dbtn11rrto6s73ft2cm0"
+      ]
     },
     {
       "config": "BV5-PAIR",
@@ -146,7 +155,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtn11fiplcc73b9jcug",
+        "dbtn123rto6s73ft2cmg"
+      ]
     },
     {
       "config": "BV7-HALF",
@@ -165,7 +177,10 @@
       ],
       "isa_depth": 26,
       "isa_two_qubit_gates": 7,
-      "job_ids": []
+      "job_ids": [
+        "dbtn10r2kf8s73c9c8ug",
+        "dbtn11j2kf8s73c9c92g"
+      ]
     },
     {
       "config": "BV9-EDGE",
@@ -186,7 +201,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtn1632kf8s73c9c9eg",
+        "dbtn16jrto6s73ft2d1g"
+      ]
     },
     {
       "config": "BV11-PAIR",
@@ -209,12 +227,19 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtn167iplcc73b9jdd0",
+        "dbtn16brto6s73ft2d0g"
+      ]
     }
   ],
   "parts": [
     "bv-kingston-validation-v1-d2026-11-16_manifest_part01.json",
     "bv-kingston-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "0c908aa9-4271-44ce-bca0-7201fa39fe1a",
+    "98644508-db60-42f7-92db-ac51e13404ae"
+  ]
 }

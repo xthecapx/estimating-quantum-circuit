@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "QFT",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:13.590148+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "f70a4118-a714-4bd0-b6aa-de35e3485bf6",
   "jobs_planned": 8,
   "items": [
     {
@@ -60,7 +60,10 @@
       ],
       "isa_depth": 246,
       "isa_two_qubit_gates": 92,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvcviplcc73b9jabg",
+        "dbtmvdniplcc73b9jafg"
+      ]
     },
     {
       "config": "IV7-1001011",
@@ -78,7 +81,10 @@
       ],
       "isa_depth": 340,
       "isa_two_qubit_gates": 134,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvdfiplcc73b9jae0",
+        "dbtmvdrrto6s73ft2a9g"
+      ]
     },
     {
       "config": "SR10",
@@ -99,7 +105,10 @@
       ],
       "isa_depth": 586,
       "isa_two_qubit_gates": 288,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvd7iplcc73b9jac0",
+        "dbtmvdr2kf8s73c9c6g0"
+      ]
     },
     {
       "config": "SP12-P8",
@@ -123,8 +132,14 @@
       ],
       "isa_depth": 356,
       "isa_two_qubit_gates": 280,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvcmhrjis73e7f9n0",
+        "dbtmvdfiplcc73b9jaf0"
+      ]
     }
   ],
-  "parent_manifest": "qft-fez-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "qft-fez-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:03:52.178260+00:00"
 }

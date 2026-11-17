@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "QFT",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:05.667742+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "1873f33c-1b9b-47dc-b89d-a1aa59b7febc",
   "jobs_planned": 8,
   "items": [
     {
@@ -60,7 +60,10 @@
       ],
       "isa_depth": 246,
       "isa_two_qubit_gates": 92,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuajrto6s73ft2880",
+        "dbtmubehrjis73e7f81g"
+      ]
     },
     {
       "config": "IV7-1001011",
@@ -78,7 +81,10 @@
       ],
       "isa_depth": 340,
       "isa_two_qubit_gates": 134,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuauhrjis73e7f810",
+        "dbtmubjrto6s73ft28b0"
+      ]
     },
     {
       "config": "SR10",
@@ -99,7 +105,10 @@
       ],
       "isa_depth": 586,
       "isa_two_qubit_gates": 288,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuauhrjis73e7f800",
+        "dbtmubmhrjis73e7f820"
+      ]
     },
     {
       "config": "SP12-P8",
@@ -123,8 +132,14 @@
       ],
       "isa_depth": 356,
       "isa_two_qubit_gates": 280,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuafiplcc73b9j8k0",
+        "dbtmub32kf8s73c9c4eg"
+      ]
     }
   ],
-  "parent_manifest": "qft-marrakesh-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "qft-marrakesh-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:35.155783+00:00"
 }

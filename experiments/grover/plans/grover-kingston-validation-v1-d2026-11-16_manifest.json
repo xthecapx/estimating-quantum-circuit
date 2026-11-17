@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GROVER",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:54:10.074550+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-kingston-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_kingston",
@@ -34,7 +34,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "5f2f94b1-36c8-47a8-bbde-96e71672145e",
   "jobs_planned": 6,
   "items": [
     {
@@ -49,7 +49,10 @@
       ],
       "isa_depth": 4,
       "isa_two_qubit_gates": 0,
-      "job_ids": []
+      "job_ids": [
+        "dbtn147iplcc73b9jd80",
+        "dbtn14j2kf8s73c9c9bg"
+      ]
     },
     {
       "config": "H3-2",
@@ -63,7 +66,10 @@
       ],
       "isa_depth": 140,
       "isa_two_qubit_gates": 37,
-      "job_ids": []
+      "job_ids": [
+        "dbtn14ehrjis73e7fcdg",
+        "dbtn14viplcc73b9jdag"
+      ]
     },
     {
       "config": "H5-0",
@@ -79,7 +85,13 @@
       ],
       "isa_depth": 1461,
       "isa_two_qubit_gates": 517,
-      "job_ids": []
+      "job_ids": [
+        "dbtn14jrto6s73ft2cq0",
+        "dbtn157iplcc73b9jdbg"
+      ]
     }
-  ]
+  ],
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:07:32.272523+00:00"
 }

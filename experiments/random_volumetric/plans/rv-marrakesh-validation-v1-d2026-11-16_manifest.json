@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "RANDOM-VOLUMETRIC",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:56:18.294548+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/plans/rv-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -96,7 +96,10 @@
       ],
       "isa_depth": 77,
       "isa_two_qubit_gates": 16,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu6uhrjis73e7f7lg",
+        "dbtmu7rrto6s73ft281g"
+      ]
     },
     {
       "config": "RV8-D8",
@@ -115,7 +118,10 @@
       ],
       "isa_depth": 693,
       "isa_two_qubit_gates": 330,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu6fiplcc73b9j880",
+        "dbtmu7brto6s73ft280g"
+      ]
     },
     {
       "config": "RV2-D4-S7",
@@ -128,7 +134,10 @@
       ],
       "isa_depth": 153,
       "isa_two_qubit_gates": 32,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu6rrto6s73ft27ug",
+        "dbtmu7uhrjis73e7f7o0"
+      ]
     },
     {
       "config": "RV3-D6-S7",
@@ -142,7 +151,10 @@
       ],
       "isa_depth": 241,
       "isa_two_qubit_gates": 42,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu6ehrjis73e7f7jg",
+        "dbtmu732kf8s73c9c42g"
+      ]
     },
     {
       "config": "RV4-D8-S7",
@@ -157,7 +169,10 @@
       ],
       "isa_depth": 389,
       "isa_two_qubit_gates": 120,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu6niplcc73b9j890",
+        "dbtmu7niplcc73b9j8bg"
+      ]
     },
     {
       "config": "RV5-D10-S7",
@@ -173,7 +188,10 @@
       ],
       "isa_depth": 501,
       "isa_two_qubit_gates": 171,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuibrto6s73ft28t0",
+        "dbtmuj3rto6s73ft28vg"
+      ]
     },
     {
       "config": "RV6-D12",
@@ -190,7 +208,10 @@
       ],
       "isa_depth": 725,
       "isa_two_qubit_gates": 306,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuiehrjis73e7f8j0",
+        "dbtmuj32kf8s73c9c520"
+      ]
     },
     {
       "config": "RV7-D14",
@@ -208,7 +229,10 @@
       ],
       "isa_depth": 1029,
       "isa_two_qubit_gates": 438,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuij2kf8s73c9c510",
+        "dbtmujfiplcc73b9j95g"
+      ]
     },
     {
       "config": "RV9-D9",
@@ -228,12 +252,19 @@
       ],
       "isa_depth": 822,
       "isa_two_qubit_gates": 414,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuirrto6s73ft28v0",
+        "dbtmujniplcc73b9j960"
+      ]
     }
   ],
   "parts": [
     "rv-marrakesh-validation-v1-d2026-11-16_manifest_part01.json",
     "rv-marrakesh-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "3fa5bbc1-4cb2-43f6-aaf0-b79e33dda073",
+    "806c240b-0c56-4a53-b190-d6b1363df894"
+  ]
 }

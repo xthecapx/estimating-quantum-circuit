@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "BERNSTEIN-VAZIRANI",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:55:55.962803+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -82,7 +82,10 @@
       ],
       "isa_depth": 15,
       "isa_two_qubit_gates": 3,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu8brto6s73ft282g",
+        "dbtmu9b2kf8s73c9c490"
+      ]
     },
     {
       "config": "BV9-SINGLE",
@@ -103,7 +106,10 @@
       ],
       "isa_depth": 13,
       "isa_two_qubit_gates": 1,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu8viplcc73b9j8fg",
+        "dbtmu9uhrjis73e7f7tg"
+      ]
     },
     {
       "config": "BV14-ONES",
@@ -129,7 +135,10 @@
       ],
       "isa_depth": 87,
       "isa_two_qubit_gates": 32,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu8rrto6s73ft283g",
+        "dbtmu9jrto6s73ft2850"
+      ]
     },
     {
       "config": "BV5-PAIR",
@@ -146,7 +155,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu932kf8s73c9c480",
+        "dbtmu9uhrjis73e7f7ug"
+      ]
     },
     {
       "config": "BV7-HALF",
@@ -165,7 +177,10 @@
       ],
       "isa_depth": 26,
       "isa_two_qubit_gates": 7,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu8mhrjis73e7f7q0",
+        "dbtmu9b2kf8s73c9c49g"
+      ]
     },
     {
       "config": "BV9-EDGE",
@@ -186,7 +201,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuebrto6s73ft28j0",
+        "dbtmuejrto6s73ft28k0"
+      ]
     },
     {
       "config": "BV11-PAIR",
@@ -209,12 +227,19 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmue6hrjis73e7f890",
+        "dbtmueehrjis73e7f89g"
+      ]
     }
   ],
   "parts": [
     "bv-marrakesh-validation-v1-d2026-11-16_manifest_part01.json",
     "bv-marrakesh-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "a443fc45-621d-471d-8210-bb68b93cc4e2",
+    "31ac0949-e6ad-42db-997b-45b84aa1f7d4"
+  ]
 }

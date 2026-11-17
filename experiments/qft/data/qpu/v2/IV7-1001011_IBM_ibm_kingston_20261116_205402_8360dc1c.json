@@ -7,9 +7,9 @@
   "campaign_id": "kingston-validation-v1-2026-11-16",
   "window": 20261116,
   "run_id": "8360dc1c182e4e788432164004a0f102",
-  "status": "prepared",
+  "status": "submitted",
   "saved_at": "2026-11-16T20:54:02.043309+00:00",
-  "batch_id": null,
+  "batch_id": "b0a7db6c-bfa3-43dd-a738-bf2b88f898b3",
   "config": {
     "config_id": "IV7-1001011",
     "num_qubits": 7,
@@ -19,7 +19,42 @@
     "description": "7 qubits, input |1001011\u27e9 (validation-v1)",
     "input_state": "1001011"
   },
-  "submission_journal": [],
+  "submission_journal": [
+    {
+      "run_index": 0,
+      "status": "submitted",
+      "submitted_at": "2026-11-16T21:07:23.893874+00:00",
+      "job_id": "dbtn1332kf8s73c9c97g",
+      "batch_id": "b0a7db6c-bfa3-43dd-a738-bf2b88f898b3",
+      "sampler_implementation": "qiskit_ibm_runtime.executor_sampler.sampler.Sampler",
+      "versions": {
+        "qiskit": "2.6.2",
+        "qiskit-aer": "0.18.2",
+        "qiskit-ibm-runtime": "0.52.0",
+        "qiskit-qward": "0.30.0",
+        "numpy": "2.4.6"
+      },
+      "calibrated_at_submission": "2026-11-13 09:57:10-05:00",
+      "recalibrated_before_submission": false
+    },
+    {
+      "run_index": 1,
+      "status": "submitted",
+      "submitted_at": "2026-11-16T21:07:26.486757+00:00",
+      "job_id": "dbtn13niplcc73b9jd6g",
+      "batch_id": "b0a7db6c-bfa3-43dd-a738-bf2b88f898b3",
+      "sampler_implementation": "qiskit_ibm_runtime.executor_sampler.sampler.Sampler",
+      "versions": {
+        "qiskit": "2.6.2",
+        "qiskit-aer": "0.18.2",
+        "qiskit-ibm-runtime": "0.52.0",
+        "qiskit-qward": "0.30.0",
+        "numpy": "2.4.6"
+      },
+      "calibrated_at_submission": "2026-11-13 09:57:10-05:00",
+      "recalibrated_before_submission": false
+    }
+  ],
   "individual_results": [],
   "artifact_directory": "artifacts/IV7-1001011_IBM_ibm_kingston_20261116_205402_8360dc1c",
   "prepared_hash": "4bd24da995ddd82b566cfca149cd64525449cec133188744d4cc174eeb43944e"

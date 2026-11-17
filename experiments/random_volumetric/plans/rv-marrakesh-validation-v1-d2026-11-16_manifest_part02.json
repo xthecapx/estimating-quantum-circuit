@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "RANDOM-VOLUMETRIC",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:18.294548+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/plans/rv-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "806c240b-0c56-4a53-b190-d6b1363df894",
   "jobs_planned": 8,
   "items": [
     {
@@ -59,7 +59,10 @@
       ],
       "isa_depth": 501,
       "isa_two_qubit_gates": 171,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuibrto6s73ft28t0",
+        "dbtmuj3rto6s73ft28vg"
+      ]
     },
     {
       "config": "RV6-D12",
@@ -76,7 +79,10 @@
       ],
       "isa_depth": 725,
       "isa_two_qubit_gates": 306,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuiehrjis73e7f8j0",
+        "dbtmuj32kf8s73c9c520"
+      ]
     },
     {
       "config": "RV7-D14",
@@ -94,7 +100,10 @@
       ],
       "isa_depth": 1029,
       "isa_two_qubit_gates": 438,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuij2kf8s73c9c510",
+        "dbtmujfiplcc73b9j95g"
+      ]
     },
     {
       "config": "RV9-D9",
@@ -114,8 +123,14 @@
       ],
       "isa_depth": 822,
       "isa_two_qubit_gates": 414,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuirrto6s73ft28v0",
+        "dbtmujniplcc73b9j960"
+      ]
     }
   ],
-  "parent_manifest": "rv-marrakesh-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "rv-marrakesh-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:02:06.627950+00:00"
 }

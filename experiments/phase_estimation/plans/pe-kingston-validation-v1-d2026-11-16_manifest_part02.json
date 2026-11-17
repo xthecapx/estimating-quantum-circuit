@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "PHASE-ESTIMATION",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:54:07.256937+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-kingston-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_kingston",
@@ -18,7 +18,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "c8ec45bf-87f9-4422-9349-699aa2ffe2dc",
   "jobs_planned": 2,
   "items": [
     {
@@ -41,8 +41,14 @@
       ],
       "isa_depth": 277,
       "isa_two_qubit_gates": 160,
-      "job_ids": []
+      "job_ids": [
+        "dbtn0u7iplcc73b9jcn0",
+        "dbtn0ubrto6s73ft2cbg"
+      ]
     }
   ],
-  "parent_manifest": "pe-kingston-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "pe-kingston-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:07:05.421723+00:00"
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "BERNSTEIN-VAZIRANI",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:04.725450+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -26,7 +26,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "9df59cf0-3ac5-4662-bff2-b9118ce32efd",
   "jobs_planned": 4,
   "items": [
     {
@@ -48,7 +48,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvgniplcc73b9jan0",
+        "dbtmvh7iplcc73b9jaog"
+      ]
     },
     {
       "config": "BV11-PAIR",
@@ -71,8 +74,14 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvgniplcc73b9jamg",
+        "dbtmvgrrto6s73ft2afg"
+      ]
     }
   ],
-  "parent_manifest": "bv-fez-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "bv-fez-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:04:04.584729+00:00"
 }

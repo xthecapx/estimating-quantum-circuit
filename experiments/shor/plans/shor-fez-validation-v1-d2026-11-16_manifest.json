@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "SHOR",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:27.155108+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/plans/shor-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -18,7 +18,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "2e0fa0b9-1a06-49ce-99ea-390c1512f49b",
   "jobs_planned": 2,
   "items": [
     {
@@ -37,7 +37,13 @@
       ],
       "isa_depth": 205,
       "isa_two_qubit_gates": 59,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvfrrto6s73ft2ad0",
+        "dbtmvfuhrjis73e7fa0g"
+      ]
     }
-  ]
+  ],
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:04:00.077197+00:00"
 }

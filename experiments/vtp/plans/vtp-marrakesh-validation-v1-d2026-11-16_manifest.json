@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "VTP",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:00.246741+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/plans/vtp-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -34,7 +34,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "e87740d4-50ff-4d66-9642-a5ea0b66168a",
   "jobs_planned": 6,
   "items": [
     {
@@ -50,7 +50,10 @@
       ],
       "isa_depth": 31,
       "isa_two_qubit_gates": 7,
-      "job_ids": []
+      "job_ids": [
+        "dbtmufb2kf8s73c9c4og",
+        "dbtmufviplcc73b9j8v0"
+      ]
     },
     {
       "config": "VTP-S3-TRIPLE",
@@ -67,7 +70,10 @@
       ],
       "isa_depth": 43,
       "isa_two_qubit_gates": 15,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuf6hrjis73e7f8bg",
+        "dbtmufj2kf8s73c9c4p0"
+      ]
     },
     {
       "config": "VTP-V5-TRIPLE",
@@ -86,7 +92,13 @@
       ],
       "isa_depth": 97,
       "isa_two_qubit_gates": 39,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuf32kf8s73c9c4ng",
+        "dbtmufmhrjis73e7f8d0"
+      ]
     }
-  ]
+  ],
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:51.899752+00:00"
 }

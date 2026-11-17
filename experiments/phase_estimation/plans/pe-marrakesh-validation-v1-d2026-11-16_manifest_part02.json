@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "PHASE-ESTIMATION",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:09.535895+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -18,7 +18,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "189321bf-74a8-4d11-aa72-680959a31a38",
   "jobs_planned": 2,
   "items": [
     {
@@ -41,8 +41,14 @@
       ],
       "isa_depth": 277,
       "isa_two_qubit_gates": 160,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu5mhrjis73e7f7gg",
+        "dbtmu5rrto6s73ft27t0"
+      ]
     }
   ],
-  "parent_manifest": "pe-marrakesh-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "pe-marrakesh-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:11.641311+00:00"
 }

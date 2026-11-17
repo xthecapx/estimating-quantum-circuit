@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "QFT",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:55:13.590148+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -96,7 +96,10 @@
       ],
       "isa_depth": 23,
       "isa_two_qubit_gates": 8,
-      "job_ids": []
+      "job_ids": [
+        "dbtmv6jrto6s73ft29ng",
+        "dbtmv7fiplcc73b9ja10"
+      ]
     },
     {
       "config": "IV4-0001",
@@ -111,7 +114,10 @@
       ],
       "isa_depth": 124,
       "isa_two_qubit_gates": 38,
-      "job_ids": []
+      "job_ids": [
+        "dbtmv6niplcc73b9j9vg",
+        "dbtmv7j2kf8s73c9c5qg"
+      ]
     },
     {
       "config": "SR8",
@@ -130,7 +136,10 @@
       ],
       "isa_depth": 423,
       "isa_two_qubit_gates": 174,
-      "job_ids": []
+      "job_ids": [
+        "dbtmv6rrto6s73ft29p0",
+        "dbtmv7j2kf8s73c9c5r0"
+      ]
     },
     {
       "config": "IV3-011",
@@ -144,7 +153,10 @@
       ],
       "isa_depth": 64,
       "isa_two_qubit_gates": 18,
-      "job_ids": []
+      "job_ids": [
+        "dbtmv6b2kf8s73c9c5o0",
+        "dbtmv77iplcc73b9ja0g"
+      ]
     },
     {
       "config": "IV5-10011",
@@ -160,7 +172,10 @@
       ],
       "isa_depth": 173,
       "isa_two_qubit_gates": 59,
-      "job_ids": []
+      "job_ids": [
+        "dbtmv732kf8s73c9c5pg",
+        "dbtmv7rrto6s73ft29rg"
+      ]
     },
     {
       "config": "IV6-110100",
@@ -177,7 +192,10 @@
       ],
       "isa_depth": 246,
       "isa_two_qubit_gates": 92,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvcviplcc73b9jabg",
+        "dbtmvdniplcc73b9jafg"
+      ]
     },
     {
       "config": "IV7-1001011",
@@ -195,7 +213,10 @@
       ],
       "isa_depth": 340,
       "isa_two_qubit_gates": 134,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvdfiplcc73b9jae0",
+        "dbtmvdrrto6s73ft2a9g"
+      ]
     },
     {
       "config": "SR10",
@@ -216,7 +237,10 @@
       ],
       "isa_depth": 586,
       "isa_two_qubit_gates": 288,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvd7iplcc73b9jac0",
+        "dbtmvdr2kf8s73c9c6g0"
+      ]
     },
     {
       "config": "SP12-P8",
@@ -240,12 +264,19 @@
       ],
       "isa_depth": 356,
       "isa_two_qubit_gates": 280,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvcmhrjis73e7f9n0",
+        "dbtmvdfiplcc73b9jaf0"
+      ]
     }
   ],
   "parts": [
     "qft-fez-validation-v1-d2026-11-16_manifest_part01.json",
     "qft-fez-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "66b130dd-e142-46a8-9bb7-5709a4054b3c",
+    "f70a4118-a714-4bd0-b6aa-de35e3485bf6"
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "BERNSTEIN-VAZIRANI",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:55:04.725450+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -82,7 +82,10 @@
       ],
       "isa_depth": 15,
       "isa_two_qubit_gates": 3,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvarrto6s73ft2a30",
+        "dbtmvbjrto6s73ft2a60"
+      ]
     },
     {
       "config": "BV9-SINGLE",
@@ -103,7 +106,10 @@
       ],
       "isa_depth": 13,
       "isa_two_qubit_gates": 1,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvbb2kf8s73c9c66g",
+        "dbtmvc32kf8s73c9c6a0"
+      ]
     },
     {
       "config": "BV14-ONES",
@@ -129,7 +135,10 @@
       ],
       "isa_depth": 87,
       "isa_two_qubit_gates": 32,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvb3rto6s73ft2a4g",
+        "dbtmvbrrto6s73ft2a70"
+      ]
     },
     {
       "config": "BV5-PAIR",
@@ -146,7 +155,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvbj2kf8s73c9c67g",
+        "dbtmvcehrjis73e7f9m0"
+      ]
     },
     {
       "config": "BV7-HALF",
@@ -165,7 +177,10 @@
       ],
       "isa_depth": 26,
       "isa_two_qubit_gates": 7,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvb3rto6s73ft2a3g",
+        "dbtmvbuhrjis73e7f9kg"
+      ]
     },
     {
       "config": "BV9-EDGE",
@@ -186,7 +201,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvgniplcc73b9jan0",
+        "dbtmvh7iplcc73b9jaog"
+      ]
     },
     {
       "config": "BV11-PAIR",
@@ -209,12 +227,19 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvgniplcc73b9jamg",
+        "dbtmvgrrto6s73ft2afg"
+      ]
     }
   ],
   "parts": [
     "bv-fez-validation-v1-d2026-11-16_manifest_part01.json",
     "bv-fez-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "a804e58c-3835-4516-8dc4-d0eebb4d1eee",
+    "9df59cf0-3ac5-4662-bff2-b9118ce32efd"
+  ]
 }

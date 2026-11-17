@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GHZ",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:51.112350+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/plans/ghz-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -42,7 +42,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "ba14dbbc-9c03-451f-87c4-f7bacb77ca14",
   "jobs_planned": 8,
   "items": [
     {
@@ -57,7 +57,10 @@
       ],
       "isa_depth": 13,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu1viplcc73b9j7vg",
+        "dbtmu2jrto6s73ft27j0"
+      ]
     },
     {
       "config": "GHZ16",
@@ -84,7 +87,10 @@
       ],
       "isa_depth": 52,
       "isa_two_qubit_gates": 15,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu26hrjis73e7f7a0",
+        "dbtmu2rrto6s73ft27k0"
+      ]
     },
     {
       "config": "GHZ18",
@@ -113,7 +119,10 @@
       ],
       "isa_depth": 58,
       "isa_two_qubit_gates": 17,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu27iplcc73b9j80g",
+        "dbtmu2viplcc73b9j82g"
+      ]
     },
     {
       "config": "GHZ20",
@@ -144,7 +153,13 @@
       ],
       "isa_depth": 64,
       "isa_two_qubit_gates": 19,
-      "job_ids": []
+      "job_ids": [
+        "dbtmu1niplcc73b9j7ug",
+        "dbtmu2brto6s73ft27ig"
+      ]
     }
-  ]
+  ],
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:00.415097+00:00"
 }

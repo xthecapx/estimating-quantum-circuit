@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "PHASE-ESTIMATION",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:09.535895+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -50,7 +50,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "c7ab281c-bcba-41b0-8943-900f33437b4c",
   "jobs_planned": 10,
   "items": [
     {
@@ -65,7 +65,10 @@
       ],
       "isa_depth": 15,
       "isa_two_qubit_gates": 3,
-      "job_ids": []
+      "job_ids": [
+        "dbtmugrrto6s73ft28pg",
+        "dbtmuhniplcc73b9j930"
+      ]
     },
     {
       "config": "PE-S5",
@@ -82,7 +85,10 @@
       ],
       "isa_depth": 122,
       "isa_two_qubit_gates": 37,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuh6hrjis73e7f8g0",
+        "dbtmuhr2kf8s73c9c4v0"
+      ]
     },
     {
       "config": "PE-T8",
@@ -102,7 +108,10 @@
       ],
       "isa_depth": 216,
       "isa_two_qubit_gates": 114,
-      "job_ids": []
+      "job_ids": [
+        "dbtmugj2kf8s73c9c4r0",
+        "dbtmuhj2kf8s73c9c4u0"
+      ]
     },
     {
       "config": "PE-T9",
@@ -123,7 +132,10 @@
       ],
       "isa_depth": 264,
       "isa_two_qubit_gates": 133,
-      "job_ids": []
+      "job_ids": [
+        "dbtmugehrjis73e7f8eg",
+        "dbtmuhb2kf8s73c9c4sg"
+      ]
     },
     {
       "config": "PE-S9",
@@ -144,8 +156,14 @@
       ],
       "isa_depth": 239,
       "isa_two_qubit_gates": 121,
-      "job_ids": []
+      "job_ids": [
+        "dbtmugmhrjis73e7f8f0",
+        "dbtmuhb2kf8s73c9c4t0"
+      ]
     }
   ],
-  "parent_manifest": "pe-marrakesh-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "pe-marrakesh-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:59.626643+00:00"
 }

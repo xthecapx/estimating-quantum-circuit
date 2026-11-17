@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "VTP",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:08.148561+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/plans/vtp-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
@@ -34,7 +34,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "cb36b27a-ef35-4d45-ac04-1d140e7b96ac",
   "jobs_planned": 6,
   "items": [
     {
@@ -50,7 +50,10 @@
       ],
       "isa_depth": 31,
       "isa_two_qubit_gates": 7,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvhviplcc73b9jaq0",
+        "dbtmvib2kf8s73c9c6p0"
+      ]
     },
     {
       "config": "VTP-S3-TRIPLE",
@@ -67,7 +70,10 @@
       ],
       "isa_depth": 43,
       "isa_two_qubit_gates": 15,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvhjrto6s73ft2agg",
+        "dbtmvi6hrjis73e7fa5g"
+      ]
     },
     {
       "config": "VTP-V5-TRIPLE",
@@ -86,7 +92,13 @@
       ],
       "isa_depth": 97,
       "isa_two_qubit_gates": 39,
-      "job_ids": []
+      "job_ids": [
+        "dbtmvhniplcc73b9jap0",
+        "dbtmvi32kf8s73c9c6o0"
+      ]
     }
-  ]
+  ],
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:04:10.002793+00:00"
 }

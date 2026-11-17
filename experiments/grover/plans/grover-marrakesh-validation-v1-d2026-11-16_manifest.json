@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GROVER",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:11.923753+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -34,7 +34,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "846240da-eb00-4ed7-9678-620eb524a898",
   "jobs_planned": 6,
   "items": [
     {
@@ -49,7 +49,10 @@
       ],
       "isa_depth": 4,
       "isa_two_qubit_gates": 0,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuc7iplcc73b9j8og",
+        "dbtmucj2kf8s73c9c4h0"
+      ]
     },
     {
       "config": "H3-2",
@@ -63,7 +66,10 @@
       ],
       "isa_depth": 140,
       "isa_two_qubit_gates": 37,
-      "job_ids": []
+      "job_ids": [
+        "dbtmucfiplcc73b9j8p0",
+        "dbtmucrrto6s73ft28f0"
+      ]
     },
     {
       "config": "H5-0",
@@ -79,7 +85,13 @@
       ],
       "isa_depth": 1460,
       "isa_two_qubit_gates": 517,
-      "job_ids": []
+      "job_ids": [
+        "dbtmucjrto6s73ft28cg",
+        "dbtmucuhrjis73e7f86g"
+      ]
     }
-  ]
+  ],
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:40.236638+00:00"
 }

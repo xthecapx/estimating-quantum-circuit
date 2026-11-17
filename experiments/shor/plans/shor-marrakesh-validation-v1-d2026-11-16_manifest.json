@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "SHOR",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:56:19.586835+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/plans/shor-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -18,7 +18,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "33d7bbd1-45ce-4f6d-8215-9ef566c0c58e",
   "jobs_planned": 2,
   "items": [
     {
@@ -37,7 +37,13 @@
       ],
       "isa_depth": 205,
       "isa_two_qubit_gates": 59,
-      "job_ids": []
+      "job_ids": [
+        "dbtmudb2kf8s73c9c4j0",
+        "dbtmudmhrjis73e7f87g"
+      ]
     }
-  ]
+  ],
+  "submission_group": 2,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:42.876694+00:00"
 }

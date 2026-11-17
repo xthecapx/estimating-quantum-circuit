@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "BERNSTEIN-VAZIRANI",
-  "status": "prepared",
+  "status": "submitted",
   "prepared_at": "2026-11-16T20:55:55.962803+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/plans/bv-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",
@@ -26,7 +26,7 @@
       1
     ]
   ],
-  "batch_id": null,
+  "batch_id": "31ac0949-e6ad-42db-997b-45b84aa1f7d4",
   "jobs_planned": 4,
   "items": [
     {
@@ -48,7 +48,10 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmuebrto6s73ft28j0",
+        "dbtmuejrto6s73ft28k0"
+      ]
     },
     {
       "config": "BV11-PAIR",
@@ -71,8 +74,14 @@
       ],
       "isa_depth": 14,
       "isa_two_qubit_gates": 2,
-      "job_ids": []
+      "job_ids": [
+        "dbtmue6hrjis73e7f890",
+        "dbtmueehrjis73e7f89g"
+      ]
     }
   ],
-  "parent_manifest": "bv-marrakesh-validation-v1-d2026-11-16_manifest.json"
+  "parent_manifest": "bv-marrakesh-validation-v1-d2026-11-16_manifest.json",
+  "submission_group": 3,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-16T21:01:46.892451+00:00"
 }

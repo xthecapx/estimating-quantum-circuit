@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "PHASE-ESTIMATION",
-  "status": "partitioned",
+  "status": "incomplete",
   "prepared_at": "2026-11-16T20:54:07.256937+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/plans/pe-kingston-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_kingston",
@@ -73,7 +73,10 @@
       ],
       "isa_depth": 15,
       "isa_two_qubit_gates": 3,
-      "job_ids": []
+      "job_ids": [
+        "dbtn18r2kf8s73c9c9lg",
+        "dbtn19jrto6s73ft2db0"
+      ]
     },
     {
       "config": "PE-S5",
@@ -90,7 +93,10 @@
       ],
       "isa_depth": 122,
       "isa_two_qubit_gates": 37,
-      "job_ids": []
+      "job_ids": [
+        "dbtn18uhrjis73e7fcog",
+        "dbtn19viplcc73b9jdl0"
+      ]
     },
     {
       "config": "PE-T8",
@@ -110,7 +116,10 @@
       ],
       "isa_depth": 216,
       "isa_two_qubit_gates": 114,
-      "job_ids": []
+      "job_ids": [
+        "dbtn18jrto6s73ft2d7g",
+        "dbtn19b2kf8s73c9c9o0"
+      ]
     },
     {
       "config": "PE-T9",
@@ -131,7 +140,10 @@
       ],
       "isa_depth": 264,
       "isa_two_qubit_gates": 133,
-      "job_ids": []
+      "job_ids": [
+        "dbtn18fiplcc73b9jdhg",
+        "dbtn1932kf8s73c9c9ng"
+      ]
     },
     {
       "config": "PE-S9",
@@ -152,7 +164,10 @@
       ],
       "isa_depth": 239,
       "isa_two_qubit_gates": 121,
-      "job_ids": []
+      "job_ids": [
+        "dbtn18b2kf8s73c9c9jg",
+        "dbtn193rto6s73ft2d9g"
+      ]
     },
     {
       "config": "PE-Z10",
@@ -174,12 +189,19 @@
       ],
       "isa_depth": 277,
       "isa_two_qubit_gates": 160,
-      "job_ids": []
+      "job_ids": [
+        "dbtn0u7iplcc73b9jcn0",
+        "dbtn0ubrto6s73ft2cbg"
+      ]
     }
   ],
   "parts": [
     "pe-kingston-validation-v1-d2026-11-16_manifest_part01.json",
     "pe-kingston-validation-v1-d2026-11-16_manifest_part02.json"
   ],
-  "batch_job_limit": 10
+  "batch_job_limit": 10,
+  "batch_ids": [
+    "845582a2-63ff-401a-ab64-79094b1dd483",
+    "c8ec45bf-87f9-4422-9349-699aa2ffe2dc"
+  ]
 }
