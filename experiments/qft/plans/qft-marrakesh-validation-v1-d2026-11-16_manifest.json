@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "QFT",
-  "status": "incomplete",
+  "status": "completed",
   "prepared_at": "2026-11-16T20:56:05.667742+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/plans/qft-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",

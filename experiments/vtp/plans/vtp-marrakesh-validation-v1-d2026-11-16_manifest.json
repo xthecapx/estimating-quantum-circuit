@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "VTP",
-  "status": "submitted",
+  "status": "completed",
   "prepared_at": "2026-11-16T20:56:00.246741+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/plans/vtp-marrakesh-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_marrakesh",

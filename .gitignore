@@ -16,3 +16,6 @@ dashboard/public/data/
 
 # Assembled GitHub Pages website
 _site/
+
+# local run logs
+logs/

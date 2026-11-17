@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "algorithm": "GROVER",
-  "status": "submitted",
+  "status": "completed",
   "prepared_at": "2026-11-16T20:55:19.634696+00:00",
   "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/plans/grover-fez-validation-v1-d2026-11-16.json",
   "backend_name": "ibm_fez",
