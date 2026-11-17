@@ -328,7 +328,7 @@ def score(predictions_path: Path, tables: Path, out_dir: Path | None = None) -> 
         if _sha256(ROOT / info["path"]) != info["sha256"]:
             raise ValueError(f"Frozen model changed after pre-registration: {key}")
 
-    obs = load_ml_dataset(tables).frame
+    obs = load_ml_dataset(tables, include_validation=True).frame
     obs = obs[obs["meta.campaign_id"] == reg["campaignId"]]
     if obs.empty:
         raise ValueError(f"No exported observations for {reg['campaignId']}; run recover and export-ibm")

@@ -156,6 +156,11 @@ def load_data(tables: Path, metrics=METRICS, backend="ibm_fez", campaigns=None):
     selected = data["backend"].eq(backend) & data["algorithm"].isin(algorithms)
     if campaigns:
         selected &= data["campaign"].isin(campaigns)
+    else:
+        # Prospective-validation collections are held out of every training-period analysis.
+        from experiments.ml_dataset import is_validation_campaign
+
+        selected &= ~data["campaign"].map(is_validation_campaign)
     selected_data = data.loc[selected].copy()
     if selected_data.empty:
         raise ValueError("No analysis jobs match the selected backend/campaigns")

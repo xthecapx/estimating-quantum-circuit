@@ -1,15 +1,67 @@
 {
-  "exported_at": "2026-11-11T21:17:25.386407",
-  "records_found": 1194,
-  "rows": 2409,
+  "exported_at": "2026-11-17T07:58:42.064709",
+  "records_found": 1362,
+  "rows": 2661,
   "skipped_records": [
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV11-PAIR_IBM_ibm_kingston_20261116_201601_90e39d7c.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV14-ONES_IBM_ibm_kingston_20261116_201559_b355f98f.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV3-ONES_IBM_ibm_kingston_20261116_201558_2cd7385d.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV5-PAIR_IBM_ibm_kingston_20261116_201559_1abdc9c5.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV7-HALF_IBM_ibm_kingston_20261116_201600_22457ec0.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-EDGE_IBM_ibm_kingston_20261116_201600_73268d3a.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/bv/data/qpu/v2/BV9-SINGLE_IBM_ibm_kingston_20261116_201558_d564d267.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ16_IBM_ibm_kingston_20261116_201555_b2a7ac65.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ18_IBM_ibm_kingston_20261116_201556_5632af6f.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ20_IBM_ibm_kingston_20261116_201556_ac7f6569.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ3_IBM_ibm_kingston_20261116_201555_cbf4618d.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
     {
       "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/ASYM-1_IBM_ibm_fez_20261107_112326_85d29640.json",
       "reason": "no completed jobs (status=incomplete)"
     },
     {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H3-2_IBM_ibm_kingston_20261116_201618_5dbcc3c4.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
       "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H5-0_IBM_ibm_fez_20261107_112336_a64d474d.json",
       "reason": "no completed jobs (status=incomplete)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H5-0_IBM_ibm_kingston_20261116_201619_35dad9bb.json",
+      "reason": "no completed jobs (status=prepared)"
     },
     {
       "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/H5-1_IBM_ibm_fez_20261107_112344_9b01a2a8.json",
@@ -40,8 +92,124 @@
       "reason": "no completed jobs (status=prepared)"
     },
     {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/M3-4_IBM_ibm_kingston_20261116_201618_bc3731ab.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
       "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/grover/data/qpu/v2/SYM-1_IBM_ibm_fez_20261107_112323_3b1639d6.json",
       "reason": "no completed jobs (status=incomplete)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-S5_IBM_ibm_kingston_20261116_201615_899cbf79.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-S9_IBM_ibm_kingston_20261116_201616_fd4d238a.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-T8_IBM_ibm_kingston_20261116_201615_411fd0d7.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-T9_IBM_ibm_kingston_20261116_201616_e74f96a5.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-Z10_IBM_ibm_kingston_20261116_201617_d212d88d.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/phase_estimation/data/qpu/v2/PE-Z2_IBM_ibm_kingston_20261116_201614_456d5991.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV3-011_IBM_ibm_kingston_20261116_201610_5f5b7a86.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV4-0001_IBM_ibm_kingston_20261116_201609_a97e99bf.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV5-10011_IBM_ibm_kingston_20261116_201611_aa2268ba.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV6-110100_IBM_ibm_kingston_20261116_201611_0c8d5d45.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/IV7-1001011_IBM_ibm_kingston_20261116_201612_34e3331a.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SP12-P8_IBM_ibm_kingston_20261116_201613_5cea7e19.json",
+      "reason": "no completed jobs (status=submitting)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR10_IBM_ibm_kingston_20261116_201612_2f5fbd3e.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR2_IBM_ibm_kingston_20261116_201609_3f378f15.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/qft/data/qpu/v2/SR8_IBM_ibm_kingston_20261116_201610_4377bd53.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV2-D2_IBM_ibm_kingston_20261116_201620_316dd97a.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV2-D4-S7_IBM_ibm_kingston_20261116_201621_b40287ec.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV3-D6-S7_IBM_ibm_kingston_20261116_201622_acbd7083.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV4-D8-S7_IBM_ibm_kingston_20261116_201622_0dfc2a21.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV5-D10-S7_IBM_ibm_kingston_20261116_201623_30db1bab.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV6-D12_IBM_ibm_kingston_20261116_201624_85bd2fe8.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV7-D14_IBM_ibm_kingston_20261116_201624_1e5d2f84.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV8-D8_IBM_ibm_kingston_20261116_201621_2967a6a4.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/random_volumetric/data/qpu/v2/RV9-D9_IBM_ibm_kingston_20261116_201625_73044369.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/shor/data/qpu/v2/SHOR-N15-A4-M3_IBM_ibm_kingston_20261116_201626_f44f2e2d.json",
+      "reason": "no completed jobs (status=prepared)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-S1-FIVE_IBM_ibm_kingston_20261116_201604_93f534a5.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-S3-TRIPLE_IBM_ibm_kingston_20261116_201607_d5a0fd5a.json",
+      "reason": "no completed jobs (status=submitted)"
+    },
+    {
+      "record": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/vtp/data/qpu/v2/VTP-V5-TRIPLE_IBM_ibm_kingston_20261116_201607_9bc8da4f.json",
+      "reason": "no completed jobs (status=submitted)"
     }
   ],
   "excluded_rows": 0,
@@ -667,6 +835,8 @@
     "VTP-S1-FIVE job dbme9it8mdtc73d7qne0: sampled (not exact) reference",
     "VTP-S1-FIVE job dbn51jlt7fqc73aiul60: sampled (not exact) reference",
     "VTP-S1-FIVE job dbn51k8qtr0c73accg9g: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtmvhviplcc73b9jaq0: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtmvib2kf8s73c9c6p0: sampled (not exact) reference",
     "VTP-S1-FIVE job dbp6qbgou4as73ct3o70: calibration values of the qubits used changed before execution",
     "VTP-S1-FIVE job dbp6qbgou4as73ct3o70: sampled (not exact) reference",
     "VTP-S1-FIVE job dbp6qc44148s739u1n50: calibration values of the qubits used changed before execution",
@@ -675,6 +845,10 @@
     "VTP-S1-FIVE job dbphuq5t7fqc7389f650: sampled (not exact) reference",
     "VTP-S1-FIVE job dbqe0o1abdes73fo432g: sampled (not exact) reference",
     "VTP-S1-FIVE job dbqe0opabdes73fo436g: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtn17b2kf8s73c9c9fg: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtn17r2kf8s73c9c9h0: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtmufb2kf8s73c9c4og: sampled (not exact) reference",
+    "VTP-S1-FIVE job dbtmufviplcc73b9j8v0: sampled (not exact) reference",
     "VTP-S1-SINGLE job dbliun674qds73dqi32g: sampled (not exact) reference",
     "VTP-S1-SINGLE job dbliutd8ft8s738t4s30: sampled (not exact) reference",
     "VTP-S1-SINGLE job dbme9bu74qds73ds59mg: calibration values of the qubits used changed before execution",
@@ -799,6 +973,8 @@
     "VTP-S3-TRIPLE job dbme9i58mdtc73d7qnc0: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbn51v8qtr0c73accgog: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbn520dt7fqc73aiulo0: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtmvhjrto6s73ft2agg: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtmvi6hrjis73e7fa5g: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbp6sfs4148s739u1s30: calibration values of the qubits used changed before execution",
     "VTP-S3-TRIPLE job dbp6sfs4148s739u1s30: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbp6sg8qtr0c738drs30: calibration values of the qubits used changed before execution",
@@ -807,6 +983,10 @@
     "VTP-S3-TRIPLE job dbpi0u0qtr0c738eevcg: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbqdvvgk09pc73at3peg: sampled (not exact) reference",
     "VTP-S3-TRIPLE job dbqe00ejjaos73ah4u2g: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtn173rto6s73ft2d30: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtn17niplcc73b9jdh0: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtmuf6hrjis73e7f8bg: sampled (not exact) reference",
+    "VTP-S3-TRIPLE job dbtmufj2kf8s73c9c4p0: sampled (not exact) reference",
     "VTP-S4-FIVE job dbliune74qds73dqi330: sampled (not exact) reference",
     "VTP-S4-FIVE job dbliutm74qds73dqi3fg: sampled (not exact) reference",
     "VTP-S4-FIVE job dbme9g58ft8s738une80: calibration values of the qubits used changed before execution",

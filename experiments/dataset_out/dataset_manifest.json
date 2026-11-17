@@ -1,76 +1,86 @@
 {
   "schema_version": "1.0",
-  "rows": 2409,
+  "rows": 2661,
   "parts": [
     {
       "file": "dataset-001.csv",
-      "rows": 738,
-      "bytes": 19983971
+      "rows": 751,
+      "bytes": 19992729
     },
     {
       "file": "dataset-002.csv",
-      "rows": 104,
-      "bytes": 19765775
+      "rows": 158,
+      "bytes": 19939361
     },
     {
       "file": "dataset-003.csv",
-      "rows": 271,
-      "bytes": 19966818
+      "rows": 201,
+      "bytes": 19904790
     },
     {
       "file": "dataset-004.csv",
-      "rows": 341,
-      "bytes": 19998788
+      "rows": 311,
+      "bytes": 19965990
     },
     {
       "file": "dataset-005.csv",
-      "rows": 274,
-      "bytes": 19907144
+      "rows": 298,
+      "bytes": 19889359
     },
     {
       "file": "dataset-006.csv",
-      "rows": 80,
-      "bytes": 19784086
+      "rows": 212,
+      "bytes": 19945248
     },
     {
       "file": "dataset-007.csv",
-      "rows": 76,
-      "bytes": 19787408
+      "rows": 79,
+      "bytes": 19909911
     },
     {
       "file": "dataset-008.csv",
-      "rows": 94,
-      "bytes": 19305540
+      "rows": 48,
+      "bytes": 19532168
     },
     {
       "file": "dataset-009.csv",
-      "rows": 13,
-      "bytes": 19436529
+      "rows": 114,
+      "bytes": 19981573
     },
     {
       "file": "dataset-010.csv",
-      "rows": 13,
-      "bytes": 19367319
+      "rows": 44,
+      "bytes": 18954976
     },
     {
       "file": "dataset-011.csv",
       "rows": 13,
-      "bytes": 19601104
+      "bytes": 19209571
     },
     {
       "file": "dataset-012.csv",
       "rows": 13,
-      "bytes": 19896944
+      "bytes": 19447378
     },
     {
       "file": "dataset-013.csv",
-      "rows": 125,
-      "bytes": 19981355
+      "rows": 13,
+      "bytes": 19687930
     },
     {
       "file": "dataset-014.csv",
-      "rows": 254,
-      "bytes": 9686716
+      "rows": 12,
+      "bytes": 18474454
+    },
+    {
+      "file": "dataset-015.csv",
+      "rows": 255,
+      "bytes": 19974826
+    },
+    {
+      "file": "dataset-016.csv",
+      "rows": 139,
+      "bytes": 5640510
     }
   ]
 }

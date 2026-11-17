@@ -422,3 +422,27 @@ def test_unseen_qpu_uses_every_training_chip_and_is_labelled(tmp_path: Path) -> 
     trained = qp.trained_chips()
     assert trained == {"ibm_fez", "ibm_kingston"}
     assert "ibm_marrakesh" not in trained  # the unseen QPU must never enter training before scoring
+
+
+def test_validation_campaigns_never_reach_training(tmp_path: Path) -> None:
+    """A prospective-validation campaign in the export is invisible to training loaders."""
+    from experiments.ml_dataset import is_validation_campaign
+
+    assert is_validation_campaign("marrakesh-validation-v1-2026-11-16")
+    assert not is_validation_campaign("kingston-full-oracle-growth-v1-2026-11-11")
+    tables = _synthetic_multichip_tables(tmp_path)
+    csv = tables / "dataset-000.csv"
+    frame = pd.read_csv(csv)
+    extra = frame.head(5).copy()
+    extra["meta.campaign_id"] = "ibm_fez-validation-v1-2026-11-16"
+    extra["meta.job_id"] = [f"val-{i}" for i in range(len(extra))]
+    pd.concat([frame, extra]).to_csv(csv, index=False)
+    manifest = json.loads((tables / "dataset_manifest.json").read_text())
+    for part in manifest["parts"]:
+        part.pop("bytes", None)
+        part.pop("rows", None)
+    (tables / "dataset_manifest.json").write_text(json.dumps(manifest))
+    training = load_ml_dataset(tables).frame
+    everything = load_ml_dataset(tables, include_validation=True).frame
+    assert not training["meta.campaign_id"].map(is_validation_campaign).any()
+    assert len(everything) == len(training) + 5

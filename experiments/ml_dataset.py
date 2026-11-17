@@ -117,6 +117,15 @@ DEFAULT_HOLDOUT_CAMPAIGNS: dict[str, tuple[str, ...]] = {
 }
 
 
+# Prospective-validation collections. They are scored against frozen models and must
+# never enter training, feature selection or tuning: excluded unless explicitly asked.
+VALIDATION_CAMPAIGN_MARKERS: tuple[str, ...] = ("-validation-v",)
+
+
+def is_validation_campaign(campaign_id: str) -> bool:
+    return any(marker in str(campaign_id) for marker in VALIDATION_CAMPAIGN_MARKERS)
+
+
 @dataclass(frozen=True)
 class DatasetBundle:
     """Loaded dataset together with manifest provenance and feature registries."""
@@ -188,11 +197,16 @@ def load_ml_dataset(
     tables: Path,
     backends: Sequence[str] | None = None,
     providers: Sequence[str] | None = None,
+    include_validation: bool = False,
 ) -> DatasetBundle:
     """Load and validate CSV dataset parts against `dataset_manifest.json`.
 
     Compatible with current IBM exports and future Rigetti / IonQ CSV exports using
     the same schema convention (`meta.*`, `a.*`, `b.*`, `c.*`, `d.*`, `e.*`, `f.*`, `g.*`).
+
+    Prospective-validation campaigns are dropped unless ``include_validation`` is set,
+    so the training pipeline can never see them. ``manifest_hash``/``inputs`` still
+    describe the full export.
     """
     manifest_path = tables / "dataset_manifest.json"
     if manifest_path.exists():
@@ -236,6 +250,8 @@ def load_ml_dataset(
     frame["meta.provider"] = [pair[0] for pair in inferred]
     frame["meta.modality"] = [pair[1] for pair in inferred]
 
+    if not include_validation:
+        frame = frame[~frame["meta.campaign_id"].map(is_validation_campaign)].copy()
     if backends:
         allowed_backends = set(backends)
         frame = frame[frame["meta.backend_name"].isin(allowed_backends)].copy()
