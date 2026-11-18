@@ -283,6 +283,30 @@ def test_offline_device_submits_nothing(run, monkeypatch):
     assert not aws.requests
 
 
+def test_template_bucket_rejected_before_creating_record(tmp_path):
+    path = tmp_path / "pilot"
+    with pytest.raises(ValueError, match="actual S3 bucket"):
+        campaign.prepare(path, bucket="YOUR_US_EAST_1_BUCKET")
+    assert not path.exists()
+
+
+def test_missing_bucket_does_not_freeze_paid_sr8_request(tmp_path, monkeypatch):
+    from botocore.exceptions import ClientError
+    from types import SimpleNamespace
+    from experiments import braket_study as study
+
+    def missing_bucket(**kwargs):
+        raise ClientError({"Error": {"Code": "404", "Message": "Not Found"}}, "HeadBucket")
+
+    client = object.__new__(campaign.AWSClient)
+    client.region = "us-east-1"
+    client.s3 = SimpleNamespace(head_bucket=missing_bucket)
+    monkeypatch.setattr(campaign, "AWSClient", lambda profile, region: client)
+    with pytest.raises(ValueError, match="S3 404.*us-east-1"):
+        study.ionq_chip_pilot(tmp_path, "typo-results", submit=True)
+    assert not (tmp_path / study.IONQ_CHIP_PILOT["key"]).exists()
+
+
 @pytest.mark.parametrize("change_source", [False, True])
 def test_result_action_allows_omitted_empty_inputs_but_rejects_changed_program(
     run, monkeypatch, change_source
@@ -484,7 +508,7 @@ def test_rigetti_uppercase_seconds_are_normalized():
     assert summary["coherence_us"]["7"]["T1"]["value_us"] == pytest.approx(30)
 
 
-def test_dual_device_git_checkpoint_and_budget(tmp_path, monkeypatch):
+def test_dual_device_git_checkpoint_and_budget(tmp_path, monkeypatch, capsys):
     import subprocess
     from experiments import braket_study as study
     from experiments import dataset_features
@@ -542,7 +566,40 @@ def test_dual_device_git_checkpoint_and_budget(tmp_path, monkeypatch):
             return json.dumps(result)
 
     connections = {v: RegionalFake(v) for v in study.DEVICES}
-    study.submit_stage(root, connections, "development-1", 200, first_per_device=True)
+    ionq_device = connections["ionq"].device
+    statuses = iter(["OFFLINE", "ONLINE", "PAUSED"])
+
+    def device(arn):
+        return {
+            **ionq_device(arn),
+            "deviceName": "Forte-1",
+            "deviceStatus": next(statuses, "ONLINE"),
+        }
+
+    def wait(seconds):
+        assert seconds == 60
+        assert len(connections["rigetti"].requests) == 1
+        assert not connections["ionq"].requests
+
+    monkeypatch.setattr(connections["ionq"], "device", device)
+    monkeypatch.setattr(study, "clients", lambda profile: connections)
+    monkeypatch.setattr(study.time, "sleep", wait)
+    args = ["--run-dir", str(root)]
+    stage = ["--stage", "development-1"]
+    study.main([*args, "preflight", *stage])
+    study.main(
+        [
+            *args,
+            "submit",
+            *stage,
+            "--available-usd",
+            "200",
+            "--first-per-device",
+            "--wait-for-devices",
+        ]
+    )
+    alerts = capsys.readouterr().out
+    assert "Forte-1 is OFFLINE" in alerts and "Forte-1 is PAUSED" in alerts
     study.submit_stage(root, connections, "development-1", 200, first_per_device=True)
     for vendor, client in connections.items():
         assert len(client.requests) == 1
@@ -699,10 +756,27 @@ def test_standalone_sr8_chip_inventory(tmp_path, monkeypatch):
             }
         )
 
+    get_device = client.device
+    waits = []
+
+    def device(arn):
+        snapshot = get_device(arn)
+        if len(waits) < 2:
+            snapshot["deviceStatus"] = ("PAUSED", "OFFLINE")[len(waits)]
+        return snapshot
+
+    def wait(seconds):
+        assert not client.requests
+        assert campaign.load(record)[1]["status"] == "prepared"
+        waits.append(seconds)
+
+    monkeypatch.setattr(client, "device", device)
+    monkeypatch.setattr(study.time, "sleep", wait)
     monkeypatch.setattr(client, "result", result)
     for _ in range(2):
         exported = study.ionq_chip_pilot(tmp_path, "test-results", submit=True)
         assert exported["meta.campaign_id"] == "ionq-sr8-chip-pilot"
+    assert waits == [60, 60]
     assert len(client.requests) == 1
     assert (
         client.requests[0]["shots"] == 100 and client.requests[0]["deviceArn"] == campaign.IONQ_ARN

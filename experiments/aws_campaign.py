@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import tempfile
 from uuid import uuid4
 
@@ -105,6 +106,12 @@ def load(record):
     return prepared, journal
 
 
+def validate_bucket(bucket):
+    """Reject template values and paths before freezing an immutable request."""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]", bucket or ""):
+        raise ValueError("Enter the actual S3 bucket name in lowercase, without s3:// or a path")
+
+
 def prepare(
     record,
     *,
@@ -128,8 +135,7 @@ def prepare(
     ionq = device_arn == IONQ_ARN
     if ionq and shots < 100:
         raise ValueError("IonQ on-demand requires at least 100 shots")
-    if not bucket or bucket.startswith("s3://") or "/" in bucket:
-        raise ValueError("Supply the existing S3 bucket name, without s3:// or a path")
+    validate_bucket(bucket)
     prefix = prefix.strip("/")
     if not prefix or any(part in {".", ".."} for part in prefix.split("/")):
         raise ValueError("Supply a nonempty S3 prefix without path traversal")
@@ -247,7 +253,19 @@ class AWSClient:
 
     def check_bucket(self, bucket):
         """Verify access and same-region location; never create a bucket."""
-        response = self.s3.head_bucket(Bucket=bucket)
+        from botocore.exceptions import ClientError
+
+        validate_bucket(bucket)
+        try:
+            response = self.s3.head_bucket(Bucket=bucket)
+        except ClientError as exc:
+            code = str(exc.response["Error"]["Code"])
+            if code in {"404", "NoSuchBucket", "403", "AccessDenied"}:
+                raise ValueError(
+                    f"AWS could not verify bucket {bucket!r} (S3 {code}). "
+                    f"Check its name, your AWS profile and bucket access in {self.region}."
+                ) from exc
+            raise
         headers = response.get("ResponseMetadata", {}).get("HTTPHeaders", {})
         location = response.get("BucketRegion") or headers.get("x-amz-bucket-region")
         if not location:
@@ -274,6 +292,10 @@ class AWSClient:
         return response["Body"].read().decode("utf-8")
 
 
+class DeviceUnavailable(ValueError):
+    """The selected QPU is currently PAUSED or OFFLINE before task creation."""
+
+
 def preflight(record, client):
     """Read-only AWS checks and a full property snapshot; never submit."""
     prepared, _ = load(record)
@@ -290,8 +312,16 @@ def preflight(record, client):
     write_json(Path(record) / "preflight.json", snapshot)
     if device["deviceArn"] != prepared["device_arn"] or device.get("deviceType") != "QPU":
         raise ValueError("Device identity/type does not match the frozen Braket plan")
-    if device["deviceStatus"] != "ONLINE":
-        raise ValueError("Device is not ONLINE; snapshot saved, nothing submitted")
+    status = device["deviceStatus"]
+    if status in {"PAUSED", "OFFLINE"}:
+        raise DeviceUnavailable(
+            f"{device['deviceName']} is {status}. Submission requires ONLINE. "
+            "See the device availability notice in the Braket console"
+        )
+    if status != "ONLINE":
+        raise ValueError(
+            f"Expected ONLINE device, received {status}; snapshot saved, nothing submitted"
+        )
     props = json.loads(device["deviceCapabilities"])
     action = (props.get("action") or {}).get("braket.ir.openqasm.program")
     if not action:

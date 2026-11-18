@@ -78,6 +78,9 @@ Clone the repository and open the [Rigetti and IonQ notebook](notebooks/braket_c
 Section 1 installs the pinned experiment stack and checks the active kernel. The
 notebook and `python scripts/run.py braket` use the same Python campaign code.
 The 108 Rigetti tasks and 14 IonQ tasks cost an estimated $195.60 in QPU charges.
+If a device reports `PAUSED` or `OFFLINE`, the notebook displays its status and
+submits the selected tasks on the available device. Leave the submission cell
+running to recheck every minute, or interrupt and resume from the same checkout.
 
 From the repository root, these offline commands inspect the schedule and
 rebuild the AWS dataset after pulling the professor’s recovered records:
@@ -98,7 +101,9 @@ python scripts/run.py braket export
 Run this command from the repository root with the name of an existing Braket
 results bucket in **us-east-1**. It submits one eight-qubit QFT round trip to
 IonQ Forte-1 at 100 shots ($8.30 on demand), prints its ARN, waits, and recovers
-the data. Omitting `--submit` prepares and simulates the circuit offline.
+the data. While Forte-1 is `PAUSED` or `OFFLINE`, keep the terminal open. The command checks
+again every minute and submits once preflight sees `ONLINE` and passes the other
+device checks. Omitting `--submit` prepares and simulates the circuit offline.
 
 ```sh
 .venv/bin/python scripts/run.py braket ionq-chip-pilot --bucket YOUR_US_EAST_1_BUCKET --submit

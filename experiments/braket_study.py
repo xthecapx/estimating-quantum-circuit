@@ -172,6 +172,8 @@ def prepare_task(root, row, bucket):
 
 def prepare(root, buckets):
     """Freeze all requests, retaining the IonQ hardware check's original task and result."""
+    for vendor in DEVICES:
+        aws.validate_bucket(buckets[vendor])
     root = open_campaign(root)
     rows = plan()
     with aws.locked(root):
@@ -230,6 +232,9 @@ def ionq_chip_pilot(root, bucket, profile=None, *, submit=False, task_arn=None):
     root.mkdir(parents=True, exist_ok=True)
     row = IONQ_CHIP_PILOT
     with aws.locked(root):
+        if submit and not task_directory(root, row).exists():
+            aws.validate_bucket(bucket)
+            aws.AWSClient(profile, aws.IONQ_ARN.split(":")[3]).check_bucket(bucket)
         journal = prepare_task(root, row, bucket)
     path = task_directory(root, row)
     exported = run_ionq_record(path, row, journal, profile, submit, task_arn)
@@ -256,7 +261,14 @@ def run_ionq_record(path, row, journal, profile, submit, task_arn):
                     f"Find the task tagged qward-run-id={aws.read_json(path / 'prepared.json')['run_id']} "
                     "in Braket and rerun with --task-arn ARN"
                 )
-            print(aws.submit(path, client), flush=True)
+            while True:
+                try:
+                    submission = aws.submit(path, client)
+                    break
+                except aws.DeviceUnavailable as exc:
+                    print(f"{exc}. Waiting 60 seconds to recheck before submitting.", flush=True)
+                    time.sleep(60)
+            print(submission, flush=True)
         while True:
             result = aws.recover(path, client, task_arn)
             print(result, flush=True)
@@ -283,11 +295,22 @@ def clients(profile):
 
 
 def preflight(root, connections, stage):
-    """Check every selected action before allowing the first paid call in the stage."""
-    entries = list(records(root))
+    selected = (entry for entry in records(root) if entry[0]["stage"] == stage)
+    return _preflight_entries(selected, connections)
+
+
+def _preflight_entries(entries, connections):
+    """Check prepared actions, reporting a temporary outage once per device."""
+    deferred = set()
     for row, path, _, journal in entries:
-        if row["stage"] == stage and journal["status"] == "prepared":
-            aws.preflight(path, connections[row["vendor"]])
+        vendor = row["vendor"]
+        if journal["status"] == "prepared" and vendor not in deferred:
+            try:
+                aws.preflight(path, connections[vendor])
+            except aws.DeviceUnavailable as exc:
+                print(f"{exc}. Pending {vendor} tasks remain prepared.", flush=True)
+                deferred.add(vendor)
+    return deferred
 
 
 def submit_stage(root, connections, stage, available, *, first_per_device=False):
@@ -305,14 +328,27 @@ def submit_stage(root, connections, stage, available, *, first_per_device=False)
                 raise ValueError(f"Recover the earlier stage first: {row['key']}")
         if stage == "validation":
             verify_predictions(root, entries)
-        preflight(root, connections, stage)
-        selected = set()
-        for row, path, _, _ in entries:
+        stage_entries = [entry for entry in entries if entry[0]["stage"] == stage]
+        if first_per_device:
+            first = {}
+            for entry in stage_entries:
+                first.setdefault(entry[0]["vendor"], entry)
+            stage_entries = list(first.values())
+        deferred = _preflight_entries(stage_entries, connections)
+        for row, path, _, _ in stage_entries:
             vendor = row["vendor"]
-            if row["stage"] != stage or (first_per_device and vendor in selected):
+            if vendor in deferred:
                 continue
-            aws.submit(path, connections[vendor])
-            selected.add(vendor)
+            try:
+                result = aws.submit(path, connections[vendor])
+            except aws.DeviceUnavailable as exc:
+                # Availability can change after the stage preflight.
+                print(f"{exc}. Remaining {vendor} tasks stay prepared.", flush=True)
+                deferred.add(vendor)
+            else:
+                if result["tasks_submitted"]:
+                    print(f"{row['key']} submitted as {result['task_arn']}", flush=True)
+        return deferred
 
 
 def recover_stage(root, connections, stage, reconciled=None):
@@ -577,6 +613,11 @@ def main(argv=None):
         if name == "submit":
             command.add_argument("--available-usd", required=True)
             command.add_argument("--first-per-device", action="store_true")
+            command.add_argument(
+                "--wait-for-devices",
+                action="store_true",
+                help="recheck PAUSED or OFFLINE devices every minute",
+            )
         if name == "recover":
             command.add_argument("--wait", action="store_true")
             command.add_argument(
@@ -630,16 +671,24 @@ def main(argv=None):
         connections = clients(args.profile)
         if args.command == "preflight":
             print({vendor: client.identity()["Account"] for vendor, client in connections.items()})
-            preflight(root, connections, args.stage)
-            print(f"Preflight passed for {args.stage}")
+            deferred = preflight(root, connections, args.stage)
+            if not deferred:
+                print(f"Preflight passed for pending tasks in {args.stage}")
         elif args.command == "submit":
-            submit_stage(
+            while submit_stage(
                 root,
                 connections,
                 args.stage,
                 args.available_usd,
                 first_per_device=args.first_per_device,
-            )
+            ):
+                if not args.wait_for_devices:
+                    print("Rerun this submit stage to resume deferred tasks.")
+                    break
+                print(
+                    "Waiting 60 seconds before rechecking. Interrupt to resume later.", flush=True
+                )
+                time.sleep(60)
         else:
             while True:
                 states = recover_stage(root, connections, args.stage, dict(args.task or []))
