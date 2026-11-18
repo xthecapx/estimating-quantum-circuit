@@ -1,11 +1,12 @@
 # Adapted from QWARD for the thesis experiment namespace and paths.
-"""Offline circuit preparation and result decoding for the Rigetti pilot.
+"""Offline circuit preparation and result decoding for the Braket campaigns.
 
 Use the IBM campaign's circuit factories and target metrics so comparisons have
 the same definitions. Nothing in this module accesses an AWS account.
 """
 
 from collections import Counter
+from decimal import Decimal
 import json
 import math
 
@@ -31,7 +32,7 @@ def measurement_map(circuit):
         if name == "barrier":
             continue
         if name in {"reset", "if_else", "while_loop", "for_loop", "switch_case"}:
-            raise ValueError("The Rigetti pilot supports static circuits only")
+            raise ValueError("The Braket campaign supports static circuits only")
         if name == "measure":
             seen_measure = True
             q = circuit.find_bit(item.qubits[0]).index
@@ -66,9 +67,23 @@ def normalize_counts(raw_counts, measured_qubits, clbit_to_qubit, shots):
 
 
 def decode_result(raw, prepared):
-    """Decode the original Rigetti result.json, retaining raw data separately."""
+    """Recover measured counts, including unmitigated IonQ shot frequencies."""
     rows = raw.get("measurements")
     measured = raw.get("measuredQubits")
+    if rows is None and "/ionq/" in prepared.get("device_arn", ""):
+        probabilities = raw.get("measurementProbabilities")
+        if not isinstance(probabilities, dict) or not isinstance(measured, list):
+            raise ValueError("IonQ result is missing measurementProbabilities/measuredQubits")
+        counts = {}
+        for label, probability in probabilities.items():
+            frequency = Decimal(str(probability)) * prepared["shots"]
+            if not frequency.is_finite() or not 0 <= frequency <= prepared["shots"]:
+                raise ValueError("Invalid IonQ measurement probability")
+            count = round(frequency)
+            if abs(frequency - count) > Decimal("0.000001"):
+                raise ValueError("IonQ probabilities do not resolve to integer shot counts")
+            counts[label] = count
+        return normalize_counts(counts, measured, prepared["clbit_to_qubit"], prepared["shots"])
     if not isinstance(rows, list) or not isinstance(measured, list):
         raise ValueError("Rigetti result is missing measurements/measuredQubits")
     raw_counts = Counter()
@@ -140,6 +155,13 @@ def build_pilot(algorithm, config_id, shots):
     """Reuse window-0 configs and freeze all evaluation inputs for recovery."""
     if algorithm not in ALGORITHMS or config_id not in campaign_matrix.PILOT[algorithm]:
         raise ValueError("Select a supported window-0 pilot configuration")
+    return build_circuit(algorithm, config_id, shots)
+
+
+def build_circuit(algorithm, config_id, shots, *, include_quantum_specific=False):
+    """Prepare a static registry circuit and verify its submitted probability distribution."""
+    if algorithm not in ALGORITHMS:
+        raise ValueError("Unsupported static circuit family")
     runner = campaign_matrix.load_runner(algorithm)  # Factory only; no IBM service.
     config = runner.get_config(config_id)
     logical = runner.create_circuit(config)
@@ -165,7 +187,7 @@ def build_pilot(algorithm, config_id, shots):
         "native_isa_available": False,
         "physical_mapping": None,
         "logical_features": dataset_features.logical_features(
-            logical, include_quantum_specific=False
+            logical, include_quantum_specific=include_quantum_specific
         ),
         "submitted_qiskit_features": dataset_features.isa_features(compiled),
         "braket_operations": sorted(

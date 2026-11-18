@@ -12,6 +12,7 @@ import argparse
 from contextlib import contextmanager
 import csv
 from datetime import datetime, timezone
+from decimal import Decimal
 import fcntl
 import hashlib
 import json
@@ -29,6 +30,14 @@ from qward.metrics.circuit_error_prediction import record_hash
 
 DEVICE_ARN = "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q"
 REGION = "us-west-1"
+IONQ_ARN = "arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1"
+SHOT_PRICES = {DEVICE_ARN: Decimal("0.000425"), IONQ_ARN: Decimal("0.08")}
+
+
+def task_price(device_arn, shots):
+    return Decimal("0.30") + shots * SHOT_PRICES[device_arn]
+
+
 SCHEMA = "aws-pilot-1.0"
 PACKAGES = ("qiskit", "qiskit-braket-provider", "amazon-braket-sdk", "qiskit-qward", "boto3")
 
@@ -97,14 +106,28 @@ def load(record):
 
 
 def prepare(
-    record, *, bucket, prefix="qward/pilot", algorithm="bv", config_id="BV3-ALT", shots=1024
+    record,
+    *,
+    bucket,
+    prefix="qward/pilot",
+    algorithm="bv",
+    config_id="BV3-ALT",
+    shots=1024,
+    device_arn=DEVICE_ARN,
+    collection=None,
 ):
     """Prepare one execution entirely offline, including local Braket verification."""
     from braket.device_schema import GateModelParameters
     from braket.device_schema.rigetti import RigettiDeviceParameters
+    from braket.device_schema.ionq import IonqDeviceParameters
 
     if not 1 <= shots <= 1024:
         raise ValueError("The initial pilot is bounded to 1..1024 shots per task")
+    if device_arn not in SHOT_PRICES:
+        raise ValueError("Unsupported Braket device")
+    ionq = device_arn == IONQ_ARN
+    if ionq and shots < 100:
+        raise ValueError("IonQ on-demand requires at least 100 shots")
     if not bucket or bucket.startswith("s3://") or "/" in bucket:
         raise ValueError("Supply the existing S3 bucket name, without s3:// or a path")
     prefix = prefix.strip("/")
@@ -113,7 +136,19 @@ def prepare(
     record = Path(record)
     if record.exists():
         raise ValueError("Run directory already exists; use a new directory for a new execution")
-    logical, compiled, action, payload = data.build_pilot(algorithm, config_id, shots)
+    if collection is None:
+        logical, compiled, action, payload = data.build_pilot(algorithm, config_id, shots)
+    else:
+        logical, compiled, action, payload = data.build_circuit(
+            algorithm, config_id, shots, include_quantum_specific=True
+        )
+        payload["collection"] = collection
+    if ionq:
+        payload["compiler_policy"] = "Qiskit portable basis opt=3; adapter opt=0; IonQ compilation"
+        gate_count = sum(i.operation.name != "measure" for i in compiled.data)
+        if gate_count > 2000:
+            raise ValueError("IonQ on-demand circuit exceeds the 2,000 gate limit")
+    parameters = IonqDeviceParameters if ionq else RigettiDeviceParameters
     record.mkdir(parents=True, exist_ok=False)
     run_id = str(uuid4())
     for name, circuit in (("logical.qpy", logical), ("submitted.qpy", compiled)):
@@ -123,13 +158,13 @@ def prepare(
             os.fsync(stream.fileno())
     write_json(record / "action.json", action)
     request = {
-        "deviceArn": DEVICE_ARN,
+        "deviceArn": device_arn,
         "action": json.dumps(action, sort_keys=True),
-        "deviceParameters": RigettiDeviceParameters(
+        "deviceParameters": parameters(
             paradigmParameters=GateModelParameters(
                 qubitCount=compiled.num_qubits, disableQubitRewiring=False
             )
-        ).json(),
+        ).json(exclude_none=True),
         "shots": shots,
         "outputS3Bucket": bucket,
         "outputS3KeyPrefix": f"{prefix}/{run_id}",
@@ -142,14 +177,14 @@ def prepare(
         "schema_version": SCHEMA,
         "run_id": run_id,
         "prepared_at": now(),
-        "device_arn": DEVICE_ARN,
-        "region": REGION,
+        "device_arn": device_arn,
+        "region": device_arn.split(":")[3],
         "shots": shots,
         "task_budget": 1,
         "package_versions": package_versions(PACKAGES),
-        "cost_estimate_usd": 0.30 + shots * 0.000425,
+        "cost_estimate_usd": float(task_price(device_arn, shots)),
         "price_reference": "https://aws.amazon.com/braket/pricing/",
-        "price_checked_on": "2026-11-10",
+        "price_checked_on": "2026-11-18",
         "artifact_hashes": {
             name: file_hash(record / name)
             for name in ("logical.qpy", "submitted.qpy", "action.json", "request.json")
@@ -178,7 +213,9 @@ def prepare(
 class AWSClient:
     """Small boto3 boundary: explicit credentials chain, no managed compute or bucket creation."""
 
-    def __init__(self, profile=None):
+    region = REGION
+
+    def __init__(self, profile=None, region=REGION):
         import boto3
         from botocore.config import Config
         from dotenv import load_dotenv
@@ -187,7 +224,8 @@ class AWSClient:
         # load the thesis-root .env without replacing existing shell variables.
         if profile is None:
             load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
-        self.session = boto3.Session(profile_name=profile, region_name=REGION)
+        self.region = region
+        self.session = boto3.Session(profile_name=profile, region_name=region)
         # Persist ambiguous attempts rather than repeatedly submitting on HTTP errors.
         self.braket = self.session.client(
             "braket",
@@ -216,8 +254,8 @@ class AWSClient:
             location = (
                 self.s3.get_bucket_location(Bucket=bucket)["LocationConstraint"] or "us-east-1"
             )
-        if location != REGION:
-            raise ValueError(f"Use an S3 bucket in {REGION}")
+        if location != self.region:
+            raise ValueError(f"Use an S3 bucket in {self.region}")
 
     def create(self, request):
         """The only method that creates a paid task."""
@@ -251,13 +289,17 @@ def preflight(record, client):
     }
     write_json(Path(record) / "preflight.json", snapshot)
     if device["deviceArn"] != prepared["device_arn"] or device.get("deviceType") != "QPU":
-        raise ValueError("Device identity/type does not match the Rigetti plan")
+        raise ValueError("Device identity/type does not match the frozen Braket plan")
     if device["deviceStatus"] != "ONLINE":
         raise ValueError("Device is not ONLINE; snapshot saved, nothing submitted")
     props = json.loads(device["deviceCapabilities"])
     action = (props.get("action") or {}).get("braket.ir.openqasm.program")
     if not action:
         raise ValueError("Device does not advertise OpenQASM support")
+    if action.get("requiresAllQubitsMeasurement") and (
+        len(prepared["clbit_to_qubit"]) != prepared["logical_features"]["num_qubits"]
+    ):
+        raise ValueError("This device requires measurement of all circuit qubits")
     unsupported = set(prepared["braket_operations"]) - {
         op.lower() for op in action.get("supportedOperations", [])
     }

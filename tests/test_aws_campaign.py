@@ -482,3 +482,147 @@ def test_rigetti_uppercase_seconds_are_normalized():
     aws.properties["standardized"]["oneQubitProperties"]["7"]["T1"] = {"value": 3e-5, "unit": "S"}
     summary = data.profile_summary(aws.device(campaign.DEVICE_ARN))
     assert summary["coherence_us"]["7"]["T1"]["value_us"] == pytest.approx(30)
+
+
+def test_dual_device_git_checkpoint_and_budget(tmp_path, monkeypatch):
+    import subprocess
+    from experiments import braket_study as study
+    from experiments import dataset_features
+    from experiments.ml_dataset import load_ml_dataset, TARGETS
+    import pandas as pd
+
+    assert study.estimate(study.plan()) == study.Decimal("195.6016")
+    with pytest.raises(ValueError, match="costs"):
+        study.check_budget(study.plan(), "179")
+    with pytest.raises(ValueError, match="costs"):
+        study.check_budget(study.plan(), "201")
+    rows = [
+        r
+        for r in study.plan()
+        if (r["config"], r["stage"]) in (("GHZ3", "development-1"), ("IV3-011", "validation"))
+    ]
+    monkeypatch.setattr(study, "plan", lambda: rows)
+    monkeypatch.setattr(dataset_features, "quantum_specific", lambda c: {"available": False})
+    checkout = tmp_path / "professor"
+    root = checkout / "experiments" / "data" / study.CAMPAIGN
+    buckets = dict.fromkeys(study.DEVICES, "test-results")
+    study.prepare(root, buckets)
+    study.prepare(root, buckets)
+
+    class RegionalFake(FakeAWS):
+        def __init__(self, vendor):
+            super().__init__()
+            self.vendor = vendor
+            self.by_arn = {}
+
+        def create(self, request):
+            super().create(request)
+            region = study.DEVICES[self.vendor].split(":")[3]
+            self.arn = f"arn:aws:braket:{region}:123456789012:quantum-task/{request['clientToken']}"
+            self.by_arn[self.arn] = request
+            return self.arn
+
+        def task(self, arn):
+            metadata = super().task(arn)
+            request = self.by_arn[arn]
+            metadata.update(
+                tags=request["tags"], outputS3Directory=request["outputS3KeyPrefix"] + "/task"
+            )
+            return metadata
+
+        def result(self, metadata):
+            arn = metadata["quantumTaskArn"]
+            request = self.by_arn[arn]
+            result = json.loads(super().result(metadata))
+            result["taskMetadata"]["id"] = arn
+            result["additionalMetadata"]["action"] = json.loads(request["action"])
+            if self.vendor == "ionq":
+                del result["measurements"]
+                result["measurementProbabilities"] = {"011": 0.63, "101": 0.37}
+            return json.dumps(result)
+
+    connections = {v: RegionalFake(v) for v in study.DEVICES}
+    study.submit_stage(root, connections, "development-1", 200, first_per_device=True)
+    study.submit_stage(root, connections, "development-1", 200, first_per_device=True)
+    for vendor, client in connections.items():
+        assert len(client.requests) == 1
+        params = json.loads(client.requests[0]["deviceParameters"])
+        assert vendor in params["braketSchemaHeader"]["name"]
+        assert "errorMitigation" not in params
+    assert study.recover_stage(root, connections, "development-1") == {
+        "completed": 2,
+        "prepared": 1,
+    }
+    study.submit_stage(root, connections, "development-1", 200)
+    assert study.recover_stage(root, connections, "development-1") == {"completed": 3}
+    with pytest.raises(ValueError, match="Freeze"):
+        study.submit_stage(root, connections, "validation", 200)
+    predictions = pd.DataFrame(
+        [{"vendor": v, "config": "IV3-011", **dict.fromkeys(TARGETS, 0.5)} for v in study.DEVICES]
+    )
+    study.freeze_predictions(root, predictions, "fixture-model")
+    study.submit_stage(root, connections, "validation", 200)
+    assert study.recover_stage(root, connections, "validation") == {"completed": 3}
+    # Commit exactly the paths the notebook names, then rebuild from a clean clone.
+    for filename in (".gitignore", ".gitattributes"):
+        shutil.copy(study.PAPERS.parent / filename, checkout / filename)
+    subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+    subprocess.run(
+        [
+            "git",
+            "add",
+            "--",
+            ".gitignore",
+            ".gitattributes",
+            f"experiments/data/{study.CAMPAIGN}",
+            f":(glob)experiments/*/data/qpu/aws/{study.CAMPAIGN}/**",
+        ],
+        cwd=checkout,
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "commit",
+            "-qm",
+            "checkpoint",
+        ],
+        cwd=checkout,
+        check=True,
+    )
+    clone = tmp_path / "analyst"
+    subprocess.run(
+        ["git", "clone", "-c", "core.autocrlf=true", "-q", str(checkout), str(clone)], check=True
+    )
+    offline = clone / root.relative_to(checkout)
+    df = study.export_csv(offline)
+    csv = study.dataset_path(offline)
+    assert (
+        csv.relative_to(clone).as_posix() == f"experiments/dataset_out/{study.CAMPAIGN}/dataset.csv"
+    )
+    assert all(
+        path.is_relative_to(clone / "experiments" / r["algorithm"] / "data/qpu/aws")
+        for r, path, _, _ in study.records(offline)
+    )
+    study.export_csv(root)
+    assert csv.read_bytes() == study.dataset_path(root).read_bytes()
+    assert df["meta.job_id"].nunique() == 6
+    assert df.loc[df["meta.provider"] == "ionq", "meta.shots"].tolist() == [100, 100]
+    study.export_csv(offline)
+    assert len(load_ml_dataset(csv.parent).frame) == 3
+    assert len(load_ml_dataset(csv.parent, include_validation=True).frame) == 6
+
+
+def test_ionq_raw_frequency_mapping_and_fractional_rejection():
+    prepared = {"device_arn": campaign.IONQ_ARN, "shots": 100, "clbit_to_qubit": [2, 1, 0]}
+    raw = {"measurementProbabilities": {"001": 0.07, "010": 0.93}, "measuredQubits": [2, 0, 1]}
+    assert data.decode_result(raw, prepared) == {"010": 7, "100": 93}
+    raw["measurementProbabilities"] = {"001": 0.071, "010": 0.929}
+    with pytest.raises(ValueError, match="integer shot counts"):
+        data.decode_result(raw, prepared)

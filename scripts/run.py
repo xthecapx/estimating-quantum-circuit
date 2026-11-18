@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROUTES = {
     "ibm": [sys.executable, str(ROOT / "scripts/ibm_campaign_ci.py")],
     "ibm-windows": ["bash", str(ROOT / "experiments/run_campaign.sh")],
+    "braket": [sys.executable, "-m", "experiments.braket_study"],
     "rigetti": [sys.executable, "-m", "experiments.aws_campaign"],
     "decay": [sys.executable, "-m", "experiments.scalability_regression"],
     "export-ibm": [sys.executable, "-m", "experiments.dataset_export"],

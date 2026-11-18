@@ -72,6 +72,33 @@ checkout no longer contains those files:
 python scripts/verify_migration.py --source /absolute/path/to/qiskit-qward
 ```
 
+## Plan and collect on Amazon Braket
+
+Clone the repository and open the [Rigetti and IonQ notebook](notebooks/braket_campaign.ipynb).
+Section 1 installs the pinned experiment stack and checks the active kernel. The
+notebook and `python scripts/run.py braket` use the same Python campaign code.
+The 108 Rigetti tasks and 14 IonQ tasks cost an estimated $195.60 in QPU charges.
+
+From the repository root, these offline commands inspect the schedule and
+rebuild the AWS dataset after pulling the professor’s recovered records:
+
+```sh
+python scripts/run.py braket plan
+python scripts/run.py braket export
+```
+
+| Files to commit | Repository location |
+|---|---|
+| Manifest, prediction template and frozen predictions | `experiments/data/braket-repetitions-v1/` |
+| Prepared circuits, task journals, raw results and device snapshots | `experiments/<algorithm>/data/qpu/aws/braket-repetitions-v1/<task>/` |
+| Derived table, one row per recovered task | `experiments/dataset_out/braket-repetitions-v1/dataset.csv` |
+
+Section 8 gives the Git commands for checkpointing. Commit and push the frozen
+predictions before submitting prospective validation. Pull the latest checkpoint
+before continuing in another checkout. Only one checkout should submit paid tasks
+for a campaign. Rebuilding the CSV requires the tracked records and local Python
+environment.
+
 ## Collect on IBM
 
 Choose a backend/date/profile explicitly; first inspect the bounded workload.

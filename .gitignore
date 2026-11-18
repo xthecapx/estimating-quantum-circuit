@@ -19,3 +19,8 @@ _site/
 
 # local run logs
 logs/
+
+# Local notebook checkpoints and Braket process locks
+.ipynb_checkpoints/
+experiments/data/braket-repetitions-v1/.lock
+experiments/*/data/qpu/aws/braket-repetitions-v1/*/.lock
