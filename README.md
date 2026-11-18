@@ -93,6 +93,34 @@ python scripts/run.py braket export
 | Prepared circuits, task journals, raw results and device snapshots | `experiments/<algorithm>/data/qpu/aws/braket-repetitions-v1/<task>/` |
 | Derived table, one row per recovered task | `experiments/dataset_out/braket-repetitions-v1/dataset.csv` |
 
+### One SR8 chip-metadata test
+
+Run this command from the repository root with the name of an existing Braket
+results bucket in **us-east-1**. It submits one eight-qubit QFT round trip to
+IonQ Forte-1 at 100 shots ($8.30 on demand), prints its ARN, waits, and recovers
+the data. Omitting `--submit` prepares and simulates the circuit offline.
+
+```sh
+.venv/bin/python scripts/run.py braket ionq-chip-pilot --bucket YOUR_US_EAST_1_BUCKET --submit
+```
+
+The record is `experiments/data/aws_pilot/ionq-sr8-r1/`. Repeating the command
+in that checkout resumes the same task. Commit the directory to share the result.
+The two `profile_at_*.json` files contain the full Braket device responses.
+`task_metadata.json`, `raw_result.json` and `result.json` contain the job metadata,
+provider output, decoded histogram and quality targets. `chip_inventory.json`
+identifies which device and calibration fields the service actually exposed,
+alongside the earlier Rigetti BV3-ALT pilot and archived IBM SR8 examples.
+Compare logical SR8 outcomes against IBM with the shot counts shown; the Rigetti
+pilot supplies a device-metadata reference from a different circuit.
+
+This independent pilot uses $8.30 of the shared $200 QPU budget. Before a later
+full collection, reduce its $195.60 schedule by at least $3.91 (or by $4.64
+including the earlier $0.7352 Rigetti pilot). Omitting one $8.30 IonQ task would
+cover the pilot.
+
+### Scheduled IonQ training check
+
 To check live IonQ submission and recovery first, run the scheduled six-qubit
 QFT round trip (`SR6`) on Forte-1 with 100 shots. Supply an existing Braket
 result bucket in **us-east-1**. The ideal output is `011001`. The command

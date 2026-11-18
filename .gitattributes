@@ -2,3 +2,4 @@
 experiments/*/data/qpu/aws/braket-repetitions-v1/** -text
 experiments/data/braket-repetitions-v1/** -text
 experiments/dataset_out/braket-repetitions-v1/*.csv text eol=lf
+experiments/data/aws_pilot/ionq-sr8-r1/** -text

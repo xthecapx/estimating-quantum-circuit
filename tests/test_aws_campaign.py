@@ -670,3 +670,48 @@ def test_ionq_check_counts_once_toward_full_campaign(tmp_path, monkeypatch):
     assert study.ionq_check(root, bucket, submit=True) == first
     assert len(client.requests) == 1
     assert study.export_csv(root)["meta.job_id"].tolist() == [client.arn]
+
+
+def test_standalone_sr8_chip_inventory(tmp_path, monkeypatch):
+    from experiments import braket_study as study, dataset_features
+
+    client = FakeAWS()
+    client.arn = client.arn.replace("us-west-1", "us-east-1")
+    client.properties["provider"] = {"fidelity": {"2Q": {"mean": 0.98}}, "timing": {"T2": 1.0}}
+    client.properties["standardized"] = {}
+    monkeypatch.setattr(campaign, "AWSClient", lambda profile, region: client)
+    monkeypatch.setattr(dataset_features, "quantum_specific", lambda c: {"available": False})
+    row = study.IONQ_CHIP_PILOT
+    record = tmp_path / row["key"]
+    study.main(["--run-dir", str(tmp_path), "ionq-chip-pilot", "--bucket", "test-results"])
+    prepared, _ = campaign.load(record)
+    assert prepared["reference"] == {"01100110": pytest.approx(1.0)}
+    assert prepared["local_check"]["counts"] == {"01100110": 100}
+
+    def result(meta):
+        request = client.requests[0]
+        return json.dumps(
+            {
+                "taskMetadata": {"id": client.arn, "deviceId": campaign.IONQ_ARN, "shots": 100},
+                "additionalMetadata": {"action": json.loads(request["action"]), "ionqMetadata": {}},
+                "measuredQubits": prepared["clbit_to_qubit"],
+                "measurementProbabilities": {"01100110": 0.7, "00000000": 0.3},
+            }
+        )
+
+    monkeypatch.setattr(client, "result", result)
+    for _ in range(2):
+        exported = study.ionq_chip_pilot(tmp_path, "test-results", submit=True)
+        assert exported["meta.campaign_id"] == "ionq-sr8-chip-pilot"
+    assert len(client.requests) == 1
+    assert (
+        client.requests[0]["shots"] == 100 and client.requests[0]["deviceArn"] == campaign.IONQ_ARN
+    )
+    report = campaign.read_json(record / "chip_inventory.json")
+    profile = report["ionq"]["snapshots"]["profile_at_submission.json"]
+    assert profile["qubits_with_standardized_properties"] == 0
+    assert profile["provider_fidelity"] == client.properties["provider"]["fidelity"]
+    assert report["archived_rigetti"]["config"] == "BV3-ALT"
+    assert report["archived_ibm_sr8_examples"]["ibm_fez"]["config"] == "SR8"
+    assert not (tmp_path / "manifest.json").exists()
+    assert row["key"] not in {r["key"] for r in study.plan()}

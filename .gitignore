@@ -24,3 +24,5 @@ logs/
 .ipynb_checkpoints/
 experiments/data/braket-repetitions-v1/.lock
 experiments/*/data/qpu/aws/braket-repetitions-v1/*/.lock
+experiments/data/aws_pilot/.lock
+experiments/data/aws_pilot/ionq-sr8-r1/.lock

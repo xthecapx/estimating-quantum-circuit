@@ -43,6 +43,18 @@ CAP = Decimal("200")
 CAMPAIGN = "braket-repetitions-v1"
 CAMPAIGN_DIR = PAPERS / "data" / CAMPAIGN
 IONQ_CHECK_KEY = "ionq-1-SR6-r1"
+IONQ_CHIP_PILOT = {
+    "key": "ionq-sr8-r1",
+    "vendor": "ionq",
+    "stage": "chip-pilot",
+    "window": 0,
+    "repetition": 1,
+    "algorithm": "qft",
+    "config": "SR8",
+    "split": "pilot",
+    "group": "chip-pilot",
+    "shots": 100,
+}
 
 
 def task_directory(root, row):
@@ -209,6 +221,26 @@ def ionq_check(root, bucket, profile=None, *, submit=False, task_arn=None):
             # A missing or replaced task in a frozen campaign must never be re-created.
             list(records(root))
         journal = prepare_task(root, row, bucket)
+    return run_ionq_record(path, row, journal, profile, submit, task_arn)
+
+
+def ionq_chip_pilot(root, bucket, profile=None, *, submit=False, task_arn=None):
+    """Collect one SR8 task outside the training and validation campaign."""
+    root = Path(root)
+    root.mkdir(parents=True, exist_ok=True)
+    row = IONQ_CHIP_PILOT
+    with aws.locked(root):
+        journal = prepare_task(root, row, bucket)
+    path = task_directory(root, row)
+    exported = run_ionq_record(path, row, journal, profile, submit, task_arn)
+    if exported is not None:
+        from experiments.chip_inventory import write_inventory
+
+        print("Chip metadata inventory:", write_inventory(path))
+    return exported
+
+
+def run_ionq_record(path, row, journal, profile, submit, task_arn):
     print(
         f"{row['key']} | {aws.IONQ_ARN} | {row['shots']} shots | "
         f"USD {estimate([row]):.2f} | {path}",
@@ -234,10 +266,13 @@ def ionq_check(root, bucket, profile=None, *, submit=False, task_arn=None):
                 raise RuntimeError(f"IonQ task ended {result['status']}: {result.get('error')}")
             time.sleep(60)
     prepared, journal = aws.load(path)
+    if task_arn and task_arn != journal["task_arn"]:
+        raise ValueError("Task ARN differs from the saved task")
     exported = dataset_row(row, path, prepared, journal)
     counts = json.loads(exported["f.counts_json"])
+    (expected,) = prepared["success_set"]
     print(
-        f"Recovered {sum(counts.values())} shots; measured 011001 {counts.get('011001', 0)} times. "
+        f"Recovered {sum(counts.values())} shots; measured {expected} {counts.get(expected, 0)} times. "
         f"Result: {path / 'result.json'}"
     )
     return exported
@@ -318,9 +353,13 @@ def dataset_row(row, path, prepared, journal):
         "meta.run_index": row["repetition"],
         "meta.window": row["window"],
         "meta.campaign_id": (
-            f"{vendor}-validation-v1"
-            if row["split"] == "validation"
-            else f"{vendor}-development-v1"
+            "ionq-sr8-chip-pilot"
+            if row["split"] == "pilot"
+            else (
+                f"{vendor}-validation-v1"
+                if row["split"] == "validation"
+                else f"{vendor}-development-v1"
+            )
         ),
         "meta.shots": result["shots"],
         "meta.optimization_level": prepared["optimization_level"],
@@ -512,17 +551,21 @@ def main(argv=None):
     parser.add_argument(
         "--run-dir",
         type=Path,
-        default=CAMPAIGN_DIR,
+        default=None,
         help="campaign manifest directory (defaults to this checkout)",
     )
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("plan", help="list scheduled tasks and total QPU price")
-    check = commands.add_parser("ionq-check", help="verify the scheduled SR6 task on Forte-1")
-    check.add_argument("--bucket", required=True, help="existing result bucket in us-east-1")
-    check.add_argument("--profile")
-    action = check.add_mutually_exclusive_group()
-    action.add_argument("--submit", action="store_true", help="submit once (USD 8.30) and wait")
-    action.add_argument("--task-arn", help="recover the original ARN after an ambiguous submit")
+    for name, help_text in (
+        ("ionq-check", "verify the scheduled SR6 task on Forte-1"),
+        ("ionq-chip-pilot", "collect one independent SR8 task and inventory the chip metadata"),
+    ):
+        check = commands.add_parser(name, help=help_text)
+        check.add_argument("--bucket", required=True, help="existing result bucket in us-east-1")
+        check.add_argument("--profile")
+        action = check.add_mutually_exclusive_group()
+        action.add_argument("--submit", action="store_true", help="submit once (USD 8.30) and wait")
+        action.add_argument("--task-arn", help="recover the original ARN after an ambiguous submit")
     prep = commands.add_parser("prepare", help="freeze the requests offline")
     prep.add_argument("--rigetti-bucket", required=True)
     prep.add_argument("--ionq-bucket", required=True)
@@ -553,11 +596,16 @@ def main(argv=None):
     )
     commands.add_parser("score", help="report prospective errors by device and configuration")
     args = parser.parse_args(argv)
-    root = args.run_dir.resolve()
+    default_root = (
+        PAPERS / "data" / "aws_pilot" if args.command == "ionq-chip-pilot" else CAMPAIGN_DIR
+    )
+    root = (args.run_dir or default_root).resolve()
     if args.command == "plan":
         rows = plan()
         print(pd.DataFrame(rows).to_string(index=False))
         print(f"{len(rows)} tasks, USD {estimate(rows):.4f}")
+    elif args.command == "ionq-chip-pilot":
+        ionq_chip_pilot(root, args.bucket, args.profile, submit=args.submit, task_arn=args.task_arn)
     elif args.command == "ionq-check":
         ionq_check(root, args.bucket, args.profile, submit=args.submit, task_arn=args.task_arn)
     elif args.command == "prepare":
