@@ -93,6 +93,21 @@ python scripts/run.py braket export
 | Prepared circuits, task journals, raw results and device snapshots | `experiments/<algorithm>/data/qpu/aws/braket-repetitions-v1/<task>/` |
 | Derived table, one row per recovered task | `experiments/dataset_out/braket-repetitions-v1/dataset.csv` |
 
+To check live IonQ submission and recovery first, run the scheduled six-qubit
+QFT round trip (`SR6`) on Forte-1 with 100 shots. Supply an existing Braket
+result bucket in **us-east-1**. The ideal output is `011001`. The command
+submits one $8.30 task and waits for the result. Omit `--submit` for offline
+preparation. Rerun the same command in the same checkout after an interruption.
+
+```sh
+python scripts/run.py braket ionq-check --bucket YOUR_US_EAST_1_BUCKET --submit
+```
+
+Commit and push the recovered
+`experiments/qft/data/qpu/aws/braket-repetitions-v1/ionq-1-SR6-r1/`
+directory before the professor prepares the full campaign. With that record in
+the clone, the workflow uses its measurements as one of the 14 IonQ tasks.
+
 Section 8 gives the Git commands for checkpointing. Commit and push the frozen
 predictions before submitting prospective validation. Pull the latest checkpoint
 before continuing in another checkout. Only one checkout should submit paid tasks

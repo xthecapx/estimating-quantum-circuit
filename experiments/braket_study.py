@@ -42,6 +42,7 @@ STAGES = ("development-1", "development-2", "validation")
 CAP = Decimal("200")
 CAMPAIGN = "braket-repetitions-v1"
 CAMPAIGN_DIR = PAPERS / "data" / CAMPAIGN
+IONQ_CHECK_KEY = "ionq-1-SR6-r1"
 
 
 def task_directory(root, row):
@@ -115,14 +116,51 @@ def check_budget(rows, available):
         )
 
 
-def prepare(root, buckets):
-    """Freeze the full task list and each request before the first paid call."""
+def open_campaign(root):
     root = Path(root)
     if root == CAMPAIGN_DIR and (PAPERS.parent / "braket-study-run" / "manifest.json").exists():
         raise ValueError(
             "Found an earlier braket-study-run campaign. Resume it with --run-dir braket-study-run."
         )
     root.mkdir(parents=True, exist_ok=True)
+    return root
+
+
+def prepare_task(root, row, bucket):
+    """Freeze once under the campaign lock; preserve its client token across restarts."""
+    directory = task_directory(root, row)
+    if not directory.exists():
+        directory.parent.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(dir=directory.parent) as scratch:
+            temp = Path(scratch) / "task"
+            aws.prepare(
+                temp,
+                bucket=bucket,
+                prefix="qward/braket-study-v1",
+                algorithm=row["algorithm"],
+                config_id=row["config"],
+                shots=row["shots"],
+                device_arn=DEVICES[row["vendor"]],
+                collection=row,
+            )
+            temp.rename(directory)
+    prepared, journal = aws.load(directory)
+    request = aws.read_json(directory / "request.json")
+    completed_check = row["key"] == IONQ_CHECK_KEY and journal["status"] == "completed"
+    if (
+        prepared["collection"] != row
+        or request["deviceArn"] != DEVICES[row["vendor"]]
+        or request["shots"] != row["shots"]
+        or prepared["config_id"] != row["config"]
+        or (request["outputS3Bucket"] != bucket and not completed_check)
+    ):
+        raise ValueError(f"Existing task conflicts with this preparation: {row['key']}")
+    return journal
+
+
+def prepare(root, buckets):
+    """Freeze all requests, retaining the IonQ hardware check's original task and result."""
+    root = open_campaign(root)
     rows = plan()
     with aws.locked(root):
         manifest = root / "manifest.json"
@@ -136,32 +174,10 @@ def prepare(root, buckets):
         hashes = {}
         for row in rows:
             key = row["key"]
-            directory = task_directory(root, row)
-            if not directory.exists():
-                # A crash during offline preparation leaves no partially frozen request at key.
-                directory.parent.mkdir(parents=True, exist_ok=True)
-                with TemporaryDirectory(dir=directory.parent) as scratch:
-                    temp = Path(scratch) / "task"
-                    aws.prepare(
-                        temp,
-                        bucket=buckets[row["vendor"]],
-                        prefix="qward/braket-study-v1",
-                        algorithm=row["algorithm"],
-                        config_id=row["config"],
-                        shots=row["shots"],
-                        device_arn=DEVICES[row["vendor"]],
-                        collection=row,
-                    )
-                    temp.rename(directory)
-            p, j = aws.load(directory)
-            request = aws.read_json(directory / "request.json")
-            if (
-                p["collection"] != row
-                or j["status"] != "prepared"
-                or request["outputS3Bucket"] != buckets[row["vendor"]]
-            ):
-                raise ValueError(f"Existing task conflicts with this preparation: {key}")
-            hashes[key] = j["prepared_hash"]
+            journal = prepare_task(root, row, buckets[row["vendor"]])
+            if key != IONQ_CHECK_KEY and journal["status"] != "prepared":
+                raise ValueError(f"Unexpected submitted record before campaign freeze: {key}")
+            hashes[key] = journal["prepared_hash"]
         aws.write_json(manifest, {**spec, "hashes": hashes})
 
 
@@ -181,6 +197,50 @@ def records(root):
         ):
             raise ValueError(f"Frozen task differs from manifest: {path}")
         yield row, path, p, j
+
+
+def ionq_check(root, bucket, profile=None, *, submit=False, task_arn=None):
+    """Run only the scheduled one-hundred-shot SR6 task and verify its exported result."""
+    root = open_campaign(root)
+    row = next(r for r in plan() if r["key"] == IONQ_CHECK_KEY)
+    path = task_directory(root, row)
+    with aws.locked(root):
+        if (root / "manifest.json").exists():
+            # A missing or replaced task in a frozen campaign must never be re-created.
+            list(records(root))
+        journal = prepare_task(root, row, bucket)
+    print(
+        f"{row['key']} | {aws.IONQ_ARN} | {row['shots']} shots | "
+        f"USD {estimate([row]):.2f} | {path}",
+        flush=True,
+    )
+    if not submit and not task_arn:
+        return
+    if journal["status"] != "completed":
+        client = aws.AWSClient(profile, aws.IONQ_ARN.split(":")[3])
+        if task_arn is None:
+            if journal["status"] in {"submitting", "submission_unknown"}:
+                raise ValueError(
+                    f"Find the task tagged qward-run-id={aws.read_json(path / 'prepared.json')['run_id']} "
+                    "in Braket and rerun with --task-arn ARN"
+                )
+            print(aws.submit(path, client), flush=True)
+        while True:
+            result = aws.recover(path, client, task_arn)
+            print(result, flush=True)
+            if result["status"] == "completed":
+                break
+            if result["status"] in {"failed", "cancelled"}:
+                raise RuntimeError(f"IonQ task ended {result['status']}: {result.get('error')}")
+            time.sleep(60)
+    prepared, journal = aws.load(path)
+    exported = dataset_row(row, path, prepared, journal)
+    counts = json.loads(exported["f.counts_json"])
+    print(
+        f"Recovered {sum(counts.values())} shots; measured 011001 {counts.get('011001', 0)} times. "
+        f"Result: {path / 'result.json'}"
+    )
+    return exported
 
 
 def clients(profile):
@@ -457,6 +517,12 @@ def main(argv=None):
     )
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("plan", help="list scheduled tasks and total QPU price")
+    check = commands.add_parser("ionq-check", help="verify the scheduled SR6 task on Forte-1")
+    check.add_argument("--bucket", required=True, help="existing result bucket in us-east-1")
+    check.add_argument("--profile")
+    action = check.add_mutually_exclusive_group()
+    action.add_argument("--submit", action="store_true", help="submit once (USD 8.30) and wait")
+    action.add_argument("--task-arn", help="recover the original ARN after an ambiguous submit")
     prep = commands.add_parser("prepare", help="freeze the requests offline")
     prep.add_argument("--rigetti-bucket", required=True)
     prep.add_argument("--ionq-bucket", required=True)
@@ -492,6 +558,8 @@ def main(argv=None):
         rows = plan()
         print(pd.DataFrame(rows).to_string(index=False))
         print(f"{len(rows)} tasks, USD {estimate(rows):.4f}")
+    elif args.command == "ionq-check":
+        ionq_check(root, args.bucket, args.profile, submit=args.submit, task_arn=args.task_arn)
     elif args.command == "prepare":
         check_budget(plan(), args.available_usd)
         prepare(root, {"rigetti": args.rigetti_bucket, "ionq": args.ionq_bucket})

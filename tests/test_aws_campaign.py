@@ -626,3 +626,47 @@ def test_ionq_raw_frequency_mapping_and_fractional_rejection():
     raw["measurementProbabilities"] = {"001": 0.071, "010": 0.929}
     with pytest.raises(ValueError, match="integer shot counts"):
         data.decode_result(raw, prepared)
+
+
+def test_ionq_check_counts_once_toward_full_campaign(tmp_path, monkeypatch):
+    from experiments import braket_study as study, dataset_features
+
+    row = next(r for r in study.plan() if r["key"] == study.IONQ_CHECK_KEY)
+    monkeypatch.setattr(study, "plan", lambda: [row])
+    monkeypatch.setattr(dataset_features, "quantum_specific", lambda c: {"available": False})
+    client = FakeAWS()
+    client.arn = client.arn.replace("us-west-1", "us-east-1")
+
+    def connect(profile, region):
+        assert region == "us-east-1"
+        return client
+
+    monkeypatch.setattr(campaign, "AWSClient", connect)
+    root = tmp_path / "experiments/data" / study.CAMPAIGN
+    bucket = "test-results"
+    study.ionq_check(root, bucket)
+    assert client.requests == []
+    path = study.task_directory(root, row)
+    prepared, _ = campaign.load(path)
+    assert prepared["local_check"]["counts"] == {"011001": 100}
+
+    def raw_result(meta):
+        request = client.requests[0]
+        return json.dumps(
+            {
+                "taskMetadata": {"id": client.arn, "deviceId": campaign.IONQ_ARN, "shots": 100},
+                "additionalMetadata": {"action": json.loads(request["action"])},
+                "measuredQubits": prepared["clbit_to_qubit"],
+                "measurementProbabilities": {"100110": 1.0},
+            }
+        )
+
+    monkeypatch.setattr(client, "result", raw_result)
+    first = study.ionq_check(root, bucket, submit=True)
+    assert json.loads(first["f.counts_json"]) == {"011001": 100}
+    assert len(client.requests) == 1
+    study.prepare(root, {"rigetti": "professor-west", "ionq": "professor-east"})
+    study.submit_stage(root, {"ionq": client}, row["stage"], 200)
+    assert study.ionq_check(root, bucket, submit=True) == first
+    assert len(client.requests) == 1
+    assert study.export_csv(root)["meta.job_id"].tolist() == [client.arn]
