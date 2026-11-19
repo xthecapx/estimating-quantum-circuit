@@ -1,0 +1,437 @@
+{
+  "ionq": {
+    "device": "arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1",
+    "config": "SR8",
+    "shots": 100,
+    "snapshots": {
+      "profile_at_submission.json": {
+        "standardized_fields": {
+          "oneQubitProperties": [],
+          "twoQubitProperties": []
+        },
+        "captured_at": "2026-11-18T20:08:29.326180+00:00",
+        "device_service_updated_at": "2026-11-17T00:00:00+00:00",
+        "qubit_count": 36,
+        "fully_connected": true,
+        "native_gate_set": [
+          "GPI",
+          "GPI2",
+          "ZZ"
+        ],
+        "provider_fields": [
+          "braketSchemaHeader",
+          "errorMitigation",
+          "fidelity",
+          "timing"
+        ],
+        "provider_fidelity": {
+          "1Q": {
+            "mean": 0.9998
+          },
+          "2Q": {
+            "mean": 0.9925
+          },
+          "spam": {
+            "mean": 0.9964
+          }
+        },
+        "provider_timing": {
+          "T1": 100.0,
+          "T2": 1.0,
+          "1Q": 0.00013,
+          "2Q": 0.00097,
+          "readout": 0.00015,
+          "reset": 5e-05
+        },
+        "qubits_with_standardized_properties": 0,
+        "edges_with_standardized_properties": 0
+      },
+      "profile_at_retrieval.json": {
+        "standardized_fields": {
+          "oneQubitProperties": [],
+          "twoQubitProperties": []
+        },
+        "captured_at": "2026-11-18T23:05:04.438955+00:00",
+        "device_service_updated_at": "2026-11-17T00:00:00+00:00",
+        "qubit_count": 36,
+        "fully_connected": true,
+        "native_gate_set": [
+          "GPI",
+          "GPI2",
+          "ZZ"
+        ],
+        "provider_fields": [
+          "braketSchemaHeader",
+          "errorMitigation",
+          "fidelity",
+          "timing"
+        ],
+        "provider_fidelity": {
+          "1Q": {
+            "mean": 0.9998
+          },
+          "2Q": {
+            "mean": 0.9925
+          },
+          "spam": {
+            "mean": 0.9964
+          }
+        },
+        "provider_timing": {
+          "T1": 100.0,
+          "T2": 1.0,
+          "1Q": 0.00013,
+          "2Q": 0.00097,
+          "readout": 0.00015,
+          "reset": 5e-05
+        },
+        "qubits_with_standardized_properties": 0,
+        "edges_with_standardized_properties": 0
+      }
+    },
+    "result_metadata_fields": {
+      "ionqMetadata": [
+        "braketSchemaHeader",
+        "compiledProgram"
+      ]
+    },
+    "raw_measurement_fields": [
+      "measuredQubits",
+      "measurementProbabilities"
+    ]
+  },
+  "archived_rigetti": {
+    "device": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+    "config": "BV3-ALT",
+    "shots": 1024,
+    "snapshots": {
+      "profile_at_submission.json": {
+        "standardized_fields": {
+          "oneQubitProperties": [
+            "T1",
+            "T2",
+            "oneQubitFidelity"
+          ],
+          "twoQubitProperties": [
+            "twoQubitGateFidelity"
+          ]
+        },
+        "captured_at": "2026-11-12T13:50:28.963149+00:00",
+        "device_service_updated_at": "2026-11-12T13:32:03+00:00",
+        "qubit_count": 107,
+        "fully_connected": false,
+        "native_gate_set": [
+          "rx",
+          "rz",
+          "cz",
+          "barrier"
+        ],
+        "provider_fields": [
+          "braketSchemaHeader",
+          "specs"
+        ],
+        "provider_fidelity": null,
+        "provider_timing": null,
+        "qubits_with_standardized_properties": 107,
+        "edges_with_standardized_properties": 193
+      },
+      "profile_at_retrieval.json": {
+        "standardized_fields": {
+          "oneQubitProperties": [
+            "T1",
+            "T2",
+            "oneQubitFidelity"
+          ],
+          "twoQubitProperties": [
+            "twoQubitGateFidelity"
+          ]
+        },
+        "captured_at": "2026-11-12T13:52:14.076703+00:00",
+        "device_service_updated_at": "2026-11-12T13:32:03+00:00",
+        "qubit_count": 107,
+        "fully_connected": false,
+        "native_gate_set": [
+          "rx",
+          "rz",
+          "cz",
+          "barrier"
+        ],
+        "provider_fields": [
+          "braketSchemaHeader",
+          "specs"
+        ],
+        "provider_fidelity": null,
+        "provider_timing": null,
+        "qubits_with_standardized_properties": 107,
+        "edges_with_standardized_properties": 193
+      }
+    },
+    "result_metadata_fields": {
+      "rigettiMetadata": [
+        "braketSchemaHeader",
+        "compiledProgram"
+      ]
+    },
+    "raw_measurement_fields": [
+      "measuredQubits",
+      "measurements"
+    ]
+  },
+  "archived_ibm_sr8_examples": {
+    "ibm_fez": {
+      "source_relative_to_experiments": "qft/data/qpu/v2/artifacts/SR8_IBM_ibm_fez_20261104_130202_0e5bcad3/prepared.json",
+      "config": "SR8",
+      "shots": 1024,
+      "calibrated_at": "2026-11-04 07:56:18-05:00",
+      "collected_at": "2026-11-04T13:02:02.423402+00:00",
+      "physical_layout": [
+        107,
+        118,
+        108,
+        109,
+        112,
+        98,
+        110,
+        111
+      ],
+      "qubit_fields": [
+        "idle_s",
+        "prob_meas0_prep1",
+        "prob_meas1_prep0",
+        "t1_s",
+        "t2_s"
+      ],
+      "hardware_at_submission": {
+        "available": true,
+        "calibrated_at": "2026-11-04 07:56:18-05:00",
+        "collected_at": "2026-11-04T13:02:02.423402+00:00",
+        "source": "prepare_snapshot",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 0,
+        "one_qubit_gate_error": {
+          "mean": 0.00016272327564145127,
+          "max": 0.000525164866239721,
+          "min": 0.0,
+          "median": 0.00017571089073060888
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.0021212664408218336,
+          "max": 0.0034045737822972766,
+          "min": 0.0016155865377766032,
+          "median": 0.001955498708134773
+        },
+        "readout_error": {
+          "mean": 0.009033203125,
+          "max": 0.01416015625,
+          "min": 0.0029296875,
+          "median": 0.010009765625
+        },
+        "readout_p1_given_0": {
+          "mean": 0.0048828125,
+          "max": 0.0107421875,
+          "min": 0.0,
+          "median": 0.0048828125
+        },
+        "readout_p0_given_1": {
+          "mean": 0.01318359375,
+          "max": 0.0205078125,
+          "min": 0.0048828125,
+          "median": 0.0107421875
+        },
+        "t1_us": {
+          "mean": 140.9439324959532,
+          "max": 211.8578144528334,
+          "min": 56.238359502850415,
+          "median": 139.25505084931942
+        },
+        "t2_us": {
+          "mean": 77.91304069290405,
+          "max": 147.05531811778576,
+          "min": 17.188570105058776,
+          "median": 74.23122724886875
+        },
+        "idle_over_t1": {
+          "mean": 0.08991594143587894,
+          "max": 0.21330636430445646,
+          "min": 0.02125457077747524,
+          "median": 0.09371330772082581
+        },
+        "scheduled": true,
+        "duration_s": 1.6576000000000002e-05,
+        "num_used_qubits": 8
+      }
+    },
+    "ibm_kingston": {
+      "source_relative_to_experiments": "qft/data/qpu/v2/artifacts/SR8_IBM_ibm_kingston_20261110_005017_7838d37e/prepared.json",
+      "config": "SR8",
+      "shots": 1024,
+      "calibrated_at": "2026-11-09 19:21:16-05:00",
+      "collected_at": "2026-11-10T00:50:17.536859+00:00",
+      "physical_layout": [
+        57,
+        67,
+        68,
+        69,
+        72,
+        58,
+        71,
+        70
+      ],
+      "qubit_fields": [
+        "idle_s",
+        "prob_meas0_prep1",
+        "prob_meas1_prep0",
+        "t1_s",
+        "t2_s"
+      ],
+      "hardware_at_submission": {
+        "available": true,
+        "calibrated_at": "2026-11-09 19:21:16-05:00",
+        "collected_at": "2026-11-10T00:50:17.536859+00:00",
+        "source": "prepare_snapshot",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 0,
+        "one_qubit_gate_error": {
+          "mean": 0.00013071104470943395,
+          "max": 0.0003001108493896871,
+          "min": 0.0,
+          "median": 0.00017107175232738305
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.0013090597424437285,
+          "max": 0.00285026871363811,
+          "min": 0.0011428779414631995,
+          "median": 0.0012714421775873452
+        },
+        "readout_error": {
+          "mean": 0.01153564453125,
+          "max": 0.037109375,
+          "min": 0.00341796875,
+          "median": 0.00830078125
+        },
+        "readout_p1_given_0": {
+          "mean": 0.0086669921875,
+          "max": 0.029296875,
+          "min": 0.0,
+          "median": 0.0068359375
+        },
+        "readout_p0_given_1": {
+          "mean": 0.014404296875,
+          "max": 0.044921875,
+          "min": 0.0068359375,
+          "median": 0.01171875
+        },
+        "t1_us": {
+          "mean": 262.01125591190527,
+          "max": 450.6034547513088,
+          "min": 125.93290633558226,
+          "median": 252.0430791338049
+        },
+        "t2_us": {
+          "mean": 230.26552540147358,
+          "max": 408.0809921569111,
+          "min": 75.06903598030297,
+          "median": 239.6351464263123
+        },
+        "idle_over_t1": {
+          "mean": 0.041021327932299526,
+          "max": 0.0808049325319572,
+          "min": 0.00048632006570949367,
+          "median": 0.03538697888961002
+        },
+        "scheduled": true,
+        "duration_s": 1.582e-05,
+        "num_used_qubits": 8
+      }
+    },
+    "ibm_marrakesh": {
+      "source_relative_to_experiments": "qft/data/qpu/v2/artifacts/SR8_IBM_ibm_marrakesh_20261116_205602_4622ce5a/prepared.json",
+      "config": "SR8",
+      "shots": 1024,
+      "calibrated_at": "2026-11-13 12:22:56-05:00",
+      "collected_at": "2026-11-16T20:56:02.380852+00:00",
+      "physical_layout": [
+        16,
+        3,
+        4,
+        5,
+        8,
+        17,
+        7,
+        6
+      ],
+      "qubit_fields": [
+        "idle_s",
+        "prob_meas0_prep1",
+        "prob_meas1_prep0",
+        "t1_s",
+        "t2_s"
+      ],
+      "hardware_at_submission": {
+        "available": true,
+        "calibrated_at": "2026-11-13 12:22:56-05:00",
+        "collected_at": "2026-11-16T20:56:02.380852+00:00",
+        "source": "prepare_snapshot",
+        "calibration_coverage": 1.0,
+        "uncalibrated_control_flow_ops": 0,
+        "one_qubit_gate_error": {
+          "mean": 0.00013718983430166914,
+          "max": 0.0005275598431159105,
+          "min": 0.0,
+          "median": 0.00015841273195397906
+        },
+        "two_qubit_gate_error": {
+          "mean": 0.002098982666611312,
+          "max": 0.005372289071752356,
+          "min": 0.001656009297794192,
+          "median": 0.0019112949247356292
+        },
+        "readout_error": {
+          "mean": 0.01287841796875,
+          "max": 0.03076171875,
+          "min": 0.00341796875,
+          "median": 0.009033203125
+        },
+        "readout_p1_given_0": {
+          "mean": 0.005859375,
+          "max": 0.021484375,
+          "min": 0.0,
+          "median": 0.0029296875
+        },
+        "readout_p0_given_1": {
+          "mean": 0.0198974609375,
+          "max": 0.052734375,
+          "min": 0.0068359375,
+          "median": 0.015625
+        },
+        "t1_us": {
+          "mean": 252.1568015208231,
+          "max": 355.31947779534084,
+          "min": 138.32404137394806,
+          "median": 252.52766638534237
+        },
+        "t2_us": {
+          "mean": 163.93120389180146,
+          "max": 305.9913702908968,
+          "min": 10.233298925827714,
+          "median": 165.99563787844224
+        },
+        "idle_over_t1": {
+          "mean": 0.04510079872560221,
+          "max": 0.10167429942260793,
+          "min": 0.0003651951175805393,
+          "median": 0.04558490049094353
+        },
+        "scheduled": true,
+        "duration_s": 1.7444e-05,
+        "num_used_qubits": 8
+      }
+    }
+  },
+  "interpretation": [
+    "The Rigetti BV3-ALT record supports a field-coverage comparison. IBM SR8 records also support a same-circuit outcome comparison.",
+    "Device-wide fidelity and timing, per-qubit/per-edge benchmarks, and IBM instruction errors have different scopes. Preserve provider definitions and units.",
+    "Braket snapshots describe the times of observation. Service updatedAt describes the device record. Execution-time calibration and physical layout require explicit provider evidence.",
+    "Missing provider fields are null. See raw_result.json and both full device snapshots for unmodified provider details."
+  ]
+}
