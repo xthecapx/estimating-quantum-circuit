@@ -1,31 +1,47 @@
 import type { AxisKey, QuestionKey } from "../../lib/data/types";
-import { comparator, format } from "../../lib/domain/format";
+import { format } from "../../lib/domain/format";
 
-export const resource: Record<AxisKey, { unit: string; change: string; largest: string }> = {
-  width: { unit: "logical qubits", change: "With more qubits", largest: "maximum number of qubits" },
-  depth: { unit: "ISA layers", change: "With deeper circuits", largest: "deepest circuit" },
-  bits: { unit: "measured bits", change: "With more measured bits", largest: "highest measured bit count" },
-  gates: { unit: "two-qubit gates", change: "With more two-qubit gates", largest: "highest two-qubit gate count" },
+export const resource: Record<AxisKey, { unit: string; change: string; extent: string }> = {
+  width: { unit: "logical qubits", change: "With more qubits", extent: "How many qubits can the circuit use" },
+  depth: { unit: "ISA layers", change: "With deeper circuits", extent: "How deep can the circuit be" },
+  bits: { unit: "measured bits", change: "With more measured bits", extent: "How many bits can the circuit measure" },
+  gates: { unit: "two-qubit gates", change: "With more two-qubit gates", extent: "How many two-qubit gates can the circuit use" },
 };
 
-const prompts: Record<QuestionKey, { trend: string; metric: string }> = {
-  success: { trend: "how often is the answer accepted", metric: "success" },
-  hellinger: { trend: "how closely does the output match the ideal", metric: "Hellinger fidelity" },
-  tvd: { trend: "how far is the output from the ideal", metric: "full TVD" },
-  coarse: { trend: "how far are answer groups from their target shares", metric: "coarse TVD" },
-  chance: { trend: "how much better do we do than guessing", metric: "chance-corrected success" },
-  dsr: { trend: "do accepted peaks stand out", metric: "DSR" },
-  contrast: { trend: "how far ahead is the leading answer", metric: "top-two contrast" },
-};
-
-export function fitQuestion(axis: AxisKey, key: QuestionKey, target: number | null) {
-  const { change, largest } = resource[axis];
-  const { trend, metric } = prompts[key];
-  if (target === null) return `${change}, ${trend}?`;
-  const value = key === "success"
-    ? target.toLocaleString("en", { style: "percent", maximumFractionDigits: 15 })
-    : String(target);
-  return `What’s the ${largest} with ${metric} ${comparator(key)} ${value}?`;
+export function fitQuestion(axis: AxisKey, key: QuestionKey, target: number | null, algorithm: string) {
+  const { change, extent } = resource[axis];
+  const percent = target?.toLocaleString("en", { style: "percent", maximumFractionDigits: 12 });
+  const answer = algorithm === "GROVER" ? "a marked bitstring" : "an accepted answer";
+  switch (key) {
+    case "success":
+      return target === null
+        ? `${change}, how often does a measurement return ${answer}?`
+        : `${extent} while still returning ${answer} in at least ${percent} of shots?`;
+    case "tvd":
+      return target === null
+        ? `${change}, how much probability must shift between bitstrings to match the ideal distribution?`
+        : `${extent} before matching the ideal bitstring distribution requires moving more than ${percent} of the probability?`;
+    case "coarse":
+      return target === null
+        ? `${change}, how much probability must shift between answer groups to match their target shares?`
+        : `${extent} while at most ${percent} of the probability needs to move between answer groups?`;
+    case "chance":
+      return target === null
+        ? `${change}, how much of the gap between random guessing and perfect success does the circuit close?`
+        : `${extent} while closing at least ${percent} of the gap between random guessing and perfect success?`;
+    case "hellinger":
+      return target === null
+        ? `${change}, how closely do the measured bitstring frequencies follow the ideal probabilities?`
+        : `${extent} while the overlap score between measured and ideal bitstring distributions stays at or above ${target}?`;
+    case "dsr":
+      return target === null
+        ? `${change}, how clearly does the average accepted answer stand out against the most frequent wrong answer?`
+        : `${extent} while the average accepted answer maintains a contrast score of at least ${target} against the most frequent wrong answer?`;
+    case "contrast":
+      return target === null
+        ? `${change}, how clearly does the most frequent bitstring stand out from the runner-up?`
+        : `${extent} while the two most frequent bitstrings still have a contrast score of at least ${target}?`;
+  }
 }
 
 export function fitAnswer(key: QuestionKey, y: number): string {

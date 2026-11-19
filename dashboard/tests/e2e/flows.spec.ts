@@ -188,12 +188,22 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
   const errors = await openApp(page);
   await page.getByRole("tab", { name: "Regression explorer" }).click();
   const panel = page.getByRole("region", { name: "Regression explorer" });
+  const filters = panel.getByRole("group", { name: "Experiment filters" });
+  for (const name of ["Chip", "Periods (UTC)", "Experiment group"]) {
+    const field = filters.getByRole("combobox", { name, exact: true });
+    await field.selectOption({ index: 1 });
+    await expect(field).toHaveValue("1");
+    await field.selectOption({ index: 0 });
+  }
+  await panel.getByLabel("Minimum target").fill("0.8");
   await panel.getByLabel("Algorithm").selectOption({ label: "Grover" });
-  await expect(panel.getByRole("heading")).toHaveText("What’s the maximum number of qubits with success ≥ 50%?");
+  await expect(panel.getByRole("heading")).toHaveText("How many qubits can the circuit use while still returning a marked bitstring in at least 50% of shots?");
+  await expect(panel.getByLabel("Minimum target")).toHaveValue("0.5");
+  await panel.getByLabel("Minimum target").fill("");
   await panel.getByLabel("Y-axis").selectOption({ label: "Full TVD" });
-  await expect(panel.getByRole("heading")).toHaveText("With more qubits, how far is the output from the ideal?");
+  await expect(panel.getByRole("heading")).toHaveText("How many qubits can the circuit use before matching the ideal bitstring distribution requires moving more than 50% of the probability?");
   await panel.getByLabel("X-axis").selectOption({ label: "Executed ISA depth" });
-  await expect(panel.getByRole("heading")).toHaveText("With deeper circuits, how far is the output from the ideal?");
+  await expect(panel.getByRole("heading")).toHaveText("How deep can the circuit be before matching the ideal bitstring distribution requires moving more than 50% of the probability?");
   const svg = panel.locator("#regression-plot svg");
   const line = svg.locator('path[stroke="#087363"]').first();
   const point = await line.evaluate((path: SVGPathElement) => {
@@ -202,6 +212,7 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
     const rect = path.ownerSVGElement!.getBoundingClientRect();
     return { x: screen.x - rect.left, y: screen.y - rect.top };
   });
+  await expect(svg.locator("text").filter({ hasText: /Full TVD\s+0\./ })).toHaveCount(1);
   const reading = panel.locator("#fit-reading");
   const before = await reading.innerText();
   await svg.click({ position: point });
@@ -212,9 +223,25 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
   await page.reload();
   await expect(reading).toHaveText(clicked);
   await panel.getByLabel("Maximum target").fill("0.3");
-  await expect(panel.getByRole("heading")).toHaveText("What’s the deepest circuit with full TVD ≤ 0.3?");
+  await expect(panel.getByRole("heading")).toHaveText("How deep can the circuit be before matching the ideal bitstring distribution requires moving more than 30% of the probability?");
   await expect(panel.locator(".target-answer")).toBeVisible();
-  const slider = panel.getByRole("slider");
+  await expect(panel.locator(".legend")).toContainText("0 is better");
+  const targetLine = panel.getByRole("slider", { name: "Plot target" });
+  await targetLine.scrollIntoViewIfNeeded();
+  const box = (await targetLine.boundingBox())!;
+  const gripX = box.x + box.width - 30;
+  const gripY = box.y + box.height / 2;
+  await page.mouse.move(gripX, gripY);
+  await page.mouse.down();
+  await page.mouse.move(gripX, gripY - 35, { steps: 5 });
+  await page.mouse.up();
+  const dragged = Number(await panel.getByLabel("Maximum target").inputValue());
+  expect(dragged).toBeGreaterThan(0.3);
+  await expect(targetLine).toHaveAttribute("aria-valuenow", String(dragged));
+  await targetLine.press("ArrowDown");
+  await expect(targetLine).toHaveAttribute("aria-valuenow", String(Math.round(dragged * 100 - 1) / 100));
+  const slider = panel.getByRole("slider", { name: "Selected point on fitted curve" });
+  await expect(panel.locator('input[type="range"]')).toHaveCount(0);
   await slider.focus();
   await slider.press("Home");
   await expect(reading).not.toHaveText(clicked);

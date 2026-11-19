@@ -1,15 +1,18 @@
 <script lang="ts" generics="T extends string | number">
   import type { HTMLSelectAttributes } from "svelte/elements";
 
+  import Icon, { type IconName } from "./Icon.svelte";
+
   interface Props extends Omit<HTMLSelectAttributes, "value" | "onchange"> {
     label: string;
+    icon?: IconName;
     value: T;
     options: readonly T[];
     format?: (value: T) => string;
     onchange: (value: T) => void;
   }
 
-  let { label, value, options, format = String, onchange, ...rest }: Props = $props();
+  let { label, icon, value, options, format = String, onchange, ...rest }: Props = $props();
 
   function change(event: Event) {
     const index = (event.currentTarget as HTMLSelectElement).selectedIndex;
@@ -17,10 +20,19 @@
   }
 </script>
 
-<label
-  >{label}<select aria-label={label} {...rest} onchange={change}>
+<label>
+  {#if icon}
+    <span class="field-name"><Icon name={icon} size={15} />{label}</span>
+  {:else}
+    {label}
+  {/if}
+  <select aria-label={label} {...rest} onchange={change}>
     {#each options as option, index (option)}
       <option value={index} selected={option === value}>{format(option)}</option>
     {/each}
-  </select></label
->
+  </select>
+</label>
+
+<style>
+  .field-name { display: inline-flex; align-items: center; gap: 6px; }
+</style>
