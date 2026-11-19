@@ -18,7 +18,7 @@
 
   let readAt = $state<number | null>(null);
   let section = $state("range");
-  let decay = $state({ matrix: "similarity", pair: "QFT/PHASE-ESTIMATION", resource: "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: "success" });
+  let decay = $state({ matrix: "similarity", pair: "", resource: "", outcome: "" });
   let estimation = $state<EstimationChoices>({ scope: "pooled", target: "", split: "holdout", view: "h1" });
   let reports = $state<Record<string,string>>({});
   let estimationReports = $state<Record<string,string>>({});
@@ -30,7 +30,7 @@
     const url = parseHash(location.hash);
     readAt = /^\d+$/.test(url.readAt ?? "") && Number.isSafeInteger(Number(url.readAt)) ? Number(url.readAt) : null;
     section = ["regression", "decay", "estimation", "validation", "cost"].includes(url.section ?? "") ? url.section! : "range";
-    decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "QFT/PHASE-ESTIMATION", resource: url.resource || "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: url.outcome || "success"};
+    decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "", resource: url.resource || "", outcome: url.outcome || ""};
     estimation = {scope: url.estScope || "pooled", target: url.estTarget || "", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
     prospective = {target: url.valTarget || "success", regime: url.valRegime === "mixed_submit" ? "mixed_submit" : "circuit_only", chip: url.valChip || ""};
     cost = {split: url.costSplit === "unseen_circuit" ? "unseen_circuit" : "new_run", circuit: url.costCircuit || "", shots: url.costShots || "1024", price: url.costPrice || ""};
@@ -122,7 +122,7 @@
       <p class="intro">Frozen QAQS models scored on new runs on three IBM chips, including one the models never saw. Predictions were committed before the jobs ran.</p>
     {:else if section === "estimation"}
       <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
-    {:else}<p class="intro">Compare how circuit quality changes as two algorithms grow on the same chip.</p>{/if}
+    {:else}<p class="intro">Which circuits lose quality at a similar rate as they grow? Compare their gate constructions and the declines measured on the same chip.</p>{/if}
   </header>
   {#if error}
     <div id="error" role="alert">{error}</div>

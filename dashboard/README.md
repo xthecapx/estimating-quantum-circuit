@@ -215,8 +215,11 @@ python dashboard/export_decay.py report/kingston/decay
 python scripts/run.py dashboard
 ```
 
-The heatmap and table use the same complete-linkage assignments and period fits as the offline
-analysis. URLs preserve the selected pair, resource and outcome, for example `#section=decay`.
+The pair selector includes any two workloads whose fitted outcomes repeatedly decline by similar
+amounts. It uses the offline fits, tolerance and minimum window count. The full matrix lets you
+inspect other pairs, including those with too few shared levels. Each pair has an explanation of
+its circuit construction, window coverage and rank correlations where available.
+URLs preserve the selected pair, resource and outcome, for example `#section=decay`.
 
 The [decay runbook](../docs/DECAY_ANALYSIS.md) describes the migrated runner,
 source hashes, input provenance, and treatment of replacement campaigns.
