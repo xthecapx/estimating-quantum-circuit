@@ -20,7 +20,7 @@ test("1 · algorithm, question and period update the plot and open a histogram",
   const errors = await openApp(page);
   await expect(page.locator("#plot-title")).toHaveText("Success rate by logical qubits");
   await page.getByLabel("Algorithm").selectOption({ label: "Grover" });
-  await page.getByLabel("Question").selectOption({ label: "Did expected peaks dominate competitors?" });
+  await page.getByLabel("Question").selectOption({ label: "Did accepted peaks stand out?" });
   await expect(page.locator("#plot-title")).toHaveText("Differential Success Rate by logical qubits");
   await expect(page.locator("#coverage")).toContainText("jobs");
 
@@ -182,4 +182,61 @@ test("direction compares column loss to row loss and preserves the question on r
   await panel.getByLabel("Matrix view").selectOption({label:"Similarity"});
   await expect(panel.locator(".stat span")).toHaveText("Median gap in fitted change");
   expect(errors).toEqual([]);
+});
+
+test("regression explorer answers curve clicks and updates both axes @narrow", async ({ page }) => {
+  const errors = await openApp(page);
+  await page.getByRole("tab", { name: "Regression explorer" }).click();
+  const panel = page.getByRole("region", { name: "Regression explorer" });
+  await panel.getByLabel("Algorithm").selectOption({ label: "Grover" });
+  await expect(panel.getByRole("heading")).toHaveText("What’s the maximum number of qubits with success ≥ 50%?");
+  await panel.getByLabel("Y-axis").selectOption({ label: "Full TVD" });
+  await expect(panel.getByRole("heading")).toHaveText("With more qubits, how far is the output from the ideal?");
+  await panel.getByLabel("X-axis").selectOption({ label: "Executed ISA depth" });
+  await expect(panel.getByRole("heading")).toHaveText("With deeper circuits, how far is the output from the ideal?");
+  const svg = panel.locator("#regression-plot svg");
+  const line = svg.locator('path[stroke="#087363"]').first();
+  const point = await line.evaluate((path: SVGPathElement) => {
+    const local = path.getPointAtLength(path.getTotalLength() * 0.55);
+    const screen = local.matrixTransform(path.getScreenCTM()!);
+    const rect = path.ownerSVGElement!.getBoundingClientRect();
+    return { x: screen.x - rect.left, y: screen.y - rect.top };
+  });
+  const reading = panel.locator("#fit-reading");
+  const before = await reading.innerText();
+  await svg.click({ position: point });
+  await expect(reading).not.toHaveText(before);
+  await expect(reading).toContainText("ISA layers");
+  await expect(reading).toContainText("probability mass");
+  const clicked = await reading.innerText();
+  await page.reload();
+  await expect(reading).toHaveText(clicked);
+  await panel.getByLabel("Maximum target").fill("0.3");
+  await expect(panel.getByRole("heading")).toHaveText("What’s the deepest circuit with full TVD ≤ 0.3?");
+  await expect(panel.locator(".target-answer")).toBeVisible();
+  const slider = panel.getByRole("slider");
+  await slider.focus();
+  await slider.press("Home");
+  await expect(reading).not.toHaveText(clicked);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+  expect(errors).toEqual([]);
+});
+
+test("Operating range accepts decimal typing and steps targets in tenths @narrow", async ({ page }) => {
+  await openApp(page);
+  await page.getByRole("button", { name: "Adjust plot" }).click();
+  const target = page.getByRole("spinbutton", { name: "Minimum success rate" });
+  await target.fill("");
+  await target.pressSequentially("0.5");
+  await expect(target).toHaveValue("0.5");
+  await target.press("ArrowUp");
+  await expect(target).toHaveValue("0.6");
+  await target.press("ArrowDown");
+  await expect(target).toHaveValue("0.5");
+  await target.press("End");
+  await target.press("5");
+  await expect(target).toHaveValue("0.55");
+  await page.getByRole("button", { name: "Done" }).click();
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(page.locator(".plot-caption")).toContainText("Target ≥ 55.0%");
 });

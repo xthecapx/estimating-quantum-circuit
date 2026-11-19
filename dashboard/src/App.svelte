@@ -7,6 +7,7 @@
   import { formatHash, parseHash } from "./lib/state/url";
   import CalibrationView from "./views/calibration/CalibrationView.svelte";
   import JobView from "./views/job/JobView.svelte";
+  import RegressionView from "./views/regression/RegressionView.svelte";
   import RangeView from "./views/range/RangeView.svelte";
 
   import Tabs from "./lib/ui/Tabs.svelte";
@@ -15,6 +16,7 @@
   import ProspectiveView, { type ProspectiveChoices } from "./views/prospective/ProspectiveView.svelte";
   import CostView, { type CostChoices } from "./views/cost/CostView.svelte";
 
+  let readAt = $state<number | null>(null);
   let section = $state("range");
   let decay = $state({ matrix: "similarity", pair: "QFT/PHASE-ESTIMATION", resource: "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: "success" });
   let estimation = $state<EstimationChoices>({ scope: "pooled", target: "", split: "holdout", view: "h1" });
@@ -26,7 +28,8 @@
   let prospective = $state<ProspectiveChoices>({ target: "success", regime: "circuit_only", chip: "" });
   function readChoices() {
     const url = parseHash(location.hash);
-    section = ["decay", "estimation", "validation", "cost"].includes(url.section ?? "") ? url.section! : "range";
+    readAt = /^\d+$/.test(url.readAt ?? "") && Number.isSafeInteger(Number(url.readAt)) ? Number(url.readAt) : null;
+    section = ["regression", "decay", "estimation", "validation", "cost"].includes(url.section ?? "") ? url.section! : "range";
     decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "QFT/PHASE-ESTIMATION", resource: url.resource || "a.ComplexityMetrics.gate_based_metrics.two_qubit_count", outcome: url.outcome || "success"};
     estimation = {scope: url.estScope || "pooled", target: url.estTarget || "", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
     prospective = {target: url.valTarget || "success", regime: url.valRegime === "mixed_submit" ? "mixed_submit" : "circuit_only", chip: url.valChip || ""};
@@ -65,7 +68,7 @@
   $effect(() => {
     if (!explorer) return;
     const extra =
-      section === "decay"
+      section === "regression" ? { section, readAt: readAt?.toString() } : section === "decay"
         ? { section, ...decay }
         : section === "estimation"
           ? {
@@ -111,6 +114,8 @@
       onclick={(event) => explorer?.calibration.open(null, event.currentTarget)}
       >Chip calibration history <span aria-hidden="true">↗</span></button
     >
+    {:else if section === "regression"}
+      <p class="intro">Explore how the average outcome changes with circuit resources. Select a point on the fitted trend to read the estimate for that setting.</p>
     {:else if section === "cost"}
       <p class="intro">Predict the billed QPU time, in IBM resource units, of a job before submitting it. One model for every chip.</p>
     {:else if section === "validation"}
@@ -123,9 +128,11 @@
     <div id="error" role="alert">{error}</div>
   {/if}
   {#if explorer}
-    <Tabs tabs={[{id:"range",label:"Operating range"},{id:"decay",label:"Compare decay"},{id:"validation",label:"Model validation"},{id:"cost",label:"Execution cost"},{id:"estimation",label:"Model training"}]} label="Experiment sections" selected={section} onselect={(s) => section=s}>
+    <Tabs tabs={[{id:"range",label:"Operating range"},{id:"regression",label:"Regression explorer"},{id:"decay",label:"Compare decay"},{id:"validation",label:"Model validation"},{id:"cost",label:"Execution cost"},{id:"estimation",label:"Model training"}]} label="Experiment sections" selected={section} onselect={(s) => section=s}>
     {#snippet panel(id)}
-    {#if id === "decay" && explorer}
+    {#if id === "regression" && explorer}
+      <RegressionView {explorer} bind:readAt />
+    {:else if id === "decay" && explorer}
       <CompareDecay {explorer} {reports} choices={decay} onchange={(v) => decay=v} />
     {:else if id === "cost"}
       <CostView reports={costReports} choices={cost} onchange={(v) => cost=v} />

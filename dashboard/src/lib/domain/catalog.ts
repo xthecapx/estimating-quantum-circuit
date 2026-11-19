@@ -25,42 +25,42 @@ export interface Question {
 
 export const questions: Record<QuestionKey, Question> = {
   success: {
-    prompt: "How often did I get an accepted answer?",
+    prompt: "How often was the answer accepted?",
     label: "Success rate",
     meaning: "Fraction of all shots that landed in the task’s accepted answer set.",
   },
   dsr: {
-    prompt: "Did expected peaks dominate competitors?",
+    prompt: "Did accepted peaks stand out?",
     label: "Differential Success Rate",
     meaning:
       "Contrast of the average accepted peak against the strongest individual competitor. Compare within the same answer set, measured width and shot budget.",
   },
   contrast: {
-    prompt: "Did any observed candidate stand out?",
+    prompt: "How far ahead was the leading answer?",
     label: "Top-two contrast",
     meaning:
       "Uses the leading counts alone. The rank test gives separate evidence about their ordering.",
   },
   coarse: {
-    prompt: "Did accepted answers have the desired balance?",
+    prompt: "Did the answer groups match their target shares?",
     label: "Coarse TVD",
     meaning:
       "Distance to equal target weights across accepted answers, with one remaining bin for all other outcomes. Lower is closer.",
   },
   tvd: {
-    prompt: "How far was the full output from the ideal?",
+    prompt: "How far was the output from the ideal?",
     label: "Full TVD",
     meaning:
       "Probability mass that would need to move to match the frozen reference. Lower is closer.",
   },
   hellinger: {
-    prompt: "How well did the whole distribution agree?",
+    prompt: "How closely did the output match the ideal?",
     label: "Hellinger fidelity",
     meaning:
       "Squared sum of the geometric means of corresponding observed and reference probabilities. Higher values indicate closer agreement of the classical distributions.",
   },
   chance: {
-    prompt: "How much did success improve over guessing?",
+    prompt: "How much better did we do than guessing?",
     label: "Chance-corrected success",
     meaning:
       "Success above the uniform-guess baseline, rescaled to the remaining attainable gain and clipped at zero.",

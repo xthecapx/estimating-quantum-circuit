@@ -64,14 +64,12 @@
             type="number"
             min="0"
             max="1"
-            step="any"
+            step="0.1"
+            inputmode="decimal"
             placeholder="No target"
             aria-describedby="target-help"
             aria-invalid={explorer.targetInvalid}
-            bind:value={
-              () => explorer.targetText,
-              (v) => (explorer.targetText = v == null ? "" : String(v))
-            }
+            bind:value={explorer.targetValue}
           />
         </label>
         <p class="note" id="target-help">
@@ -86,7 +84,8 @@
         >{plural(explorer.configs.length, "experiment")} · {explorer.jobs.length} jobs · {explorer.collections}
         collection(s)</span
       >
-      <button class="view-button" type="submit">Done</button>
+      <!-- The spinner steps in tenths; any in-range typed precision is a valid target. -->
+      <button class="view-button" type="submit" formnovalidate={explorer.threshold !== null}>Done</button>
     </div>
   </form>
 </Dialog>

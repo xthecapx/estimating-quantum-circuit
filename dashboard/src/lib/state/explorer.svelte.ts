@@ -81,6 +81,15 @@ export class Explorer {
   collections = $derived(unique(this.jobs.map(windowKey)).length);
 
   // ---- assessment --------------------------------------------------------------------------
+  // Svelte number inputs emit numbers or null. Returning that same type preserves
+  // intermediate edits such as "0." while the browser waits for the next digit.
+  get targetValue(): number | null {
+    return this.targetText.trim() === "" ? null : Number(this.targetText);
+  }
+  set targetValue(value: number | null) {
+    this.targetText = value == null ? "" : String(value);
+  }
+
   threshold = $derived.by(() => {
     if (this.targetText.trim() === "") return null;
     const value = Number(this.targetText);
@@ -166,7 +175,7 @@ export class Explorer {
     if (state.question && (questionKeys as string[]).includes(state.question)) {
       this.question = state.question as QuestionKey;
     }
-    this.targetText = state.target ?? DEFAULT_TARGET(this.question);
+    this.targetText = state.target === "none" ? "" : state.target ?? DEFAULT_TARGET(this.question);
     if (state.axis && state.axis in axes) this.axis = state.axis as AxisKey;
     this.configChoice = state.config ?? null;
     this.runChoice = state.run ?? null;
