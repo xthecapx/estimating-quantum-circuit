@@ -147,6 +147,7 @@ export class CalibrationState {
     this.savedScroll = window.scrollY;
     this.origin = this.explorer.view;
     this.job = job;
+    if (!job) this.chipChoice = this.explorer.backend;
     this.expanded = false;
     this.componentChoice = null;
     this.query = "";

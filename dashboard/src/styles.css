@@ -74,7 +74,7 @@ h1 {
   max-width: 740px;
   color: var(--muted);
   line-height: 1.55;
-  margin-top: 9px;
+  margin: 0 0 14px;
 }
 .settings {
   display: flex;
@@ -103,9 +103,7 @@ label {
 .calibration-detail input,
 .settings input,
 .settings select,
-.axis-picker select, .plot-toolbar select,
-#plot-settings select,
-#plot-settings input,
+.axis-picker select,
 #experiment-search,
 .picker-trigger {
   font: inherit;
@@ -316,23 +314,12 @@ a:focus-visible {
   cursor: pointer;
 }
 .job-value { margin-right: 12px; white-space: nowrap; }
-.plot-toolbar {
-  display: grid;
-  grid-template-columns: minmax(9rem, 1fr) minmax(12rem, 2fr) auto;
-  align-items: end;
-  gap: 12px;
-  padding: 10px 0 14px;
-  background: white;
-  border-bottom: 1px solid var(--line);
-}
-.plot-toolbar label { min-width: 0; }
 .view-button:hover { background: #deeae2; border-color: #7b9889; }
 button:focus-visible { outline: 3px solid #c17a23; outline-offset: 2px; }
 .plot-caption { padding: 18px 0 0; }
 .plot-caption h2 { font-size: clamp(1.25rem, 3vw, 1.65rem); }
 .plot-caption .note { margin-top: 3px; }
-#experiment-picker,
-#plot-settings {
+#experiment-picker {
   color: var(--ink);
   width: min(410px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
@@ -342,65 +329,9 @@ button:focus-visible { outline: 3px solid #c17a23; outline-offset: 2px; }
   padding: clamp(16px, 3vw, 24px);
   box-shadow: 0 12px 48px #132e3729;
 }
-#experiment-picker::backdrop, #plot-settings::backdrop { background: #152e2966; }
-#experiment-picker h2, #plot-settings h2 { font-size: 1.4rem; }
-#plot-settings { width: min(760px, calc(100% - 24px)); }
-.plot-setting-sections {
-  display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-  gap: 16px;
-  margin-block: 18px;
-}
-#plot-settings fieldset {
-  min-width: 0;
-  margin: 0;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #f6f9f6;
-}
-#plot-settings legend {
-  padding-inline: 4px;
-  font-size: .95rem;
-  font-weight: 700;
-}
-#plot-settings legend svg {
-  vertical-align: middle;
-  width: 24px;
-  height: 24px;
-  margin-right: 3px;
-  padding: 3px;
-  border-radius: 5px;
-  background: #deeee5;
-  color: var(--teal);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-#plot-settings label + label { margin-top: 12px; }
-#plot-settings select { text-overflow: ellipsis; }
-#target-help { margin-top: 6px; }
-.settings-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-}
-@media (max-width: 680px) {
-  .plot-setting-sections { grid-template-columns: 1fr; }
-}
-@media (max-width: 640px) {
-  .plot-toolbar { position: static; grid-template-columns: minmax(0, 1fr) auto; }
-  .plot-toolbar label:nth-child(2) { grid-area: 2 / 1 / 3 / 3; }
-  #adjust-plot { grid-area: 1 / 2; }
-  .plot-toolbar select { text-overflow: ellipsis; }
-}
-
-.histogram-chart-heading select, .calibration-controls select, .calibration-detail select, .settings select, .axis-picker select, .plot-toolbar select, #plot-settings select, .picker-trigger {
+#experiment-picker::backdrop { background: #152e2966; }
+#experiment-picker h2 { font-size: 1.4rem; }
+.histogram-chart-heading select, .calibration-controls select, .calibration-detail select, .settings select, .axis-picker select, .picker-trigger {
   appearance: none;
   padding-inline: 10px 38px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23506a64' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -409,7 +340,7 @@ button:focus-visible { outline: 3px solid #c17a23; outline-offset: 2px; }
   cursor: pointer;
 }
 @media (forced-colors: active) {
-  .histogram-chart-heading select, .calibration-controls select, .calibration-detail select, .settings select, .axis-picker select, .plot-toolbar select, #plot-settings select { appearance: auto; background-image: none; }
+  .histogram-chart-heading select, .calibration-controls select, .calibration-detail select, .settings select, .axis-picker select { appearance: auto; background-image: none; }
   .picker-trigger::after { content: " ▾"; }
 }
 .experiment-field { display: grid; gap: 5px; min-width: 0; font-size: .78rem; font-weight: 650; }
@@ -447,7 +378,6 @@ button:focus-visible { outline: 3px solid #c17a23; outline-offset: 2px; }
   #experiment-results button { padding: 12px; }
 }
 
-.plot-stage { position: relative; }
 #interval-lens {
   position: absolute;
   z-index: 1;
@@ -496,7 +426,6 @@ button:focus-visible { outline: 3px solid #c17a23; outline-offset: 2px; }
 }
 
 /* Calibration reuses the same surface and preserves the histogram context. */
-.calibration-entry { margin-top: 18px; }
 .hardware-context { display: flex; justify-content: space-between; align-items: center; gap: 24px; border-top: 1px solid var(--line); padding: 18px 0 0; margin: 18px 0 0; }
 .hardware-context .note { margin-top: 4px; }
 #calibration-view > .note { margin: 10px 0 20px; max-width: 920px; }
@@ -564,15 +493,53 @@ button:focus-visible { outline: 3px solid #c17a23; outline-offset: 3px; }
 @media (max-width: 600px) {
   .context-metadata { gap: 14px 20px; }
   #run-context > div { flex: 1 1 90px; }
-  #scope-caption > div:nth-child(2) { order: 3; flex-basis: 100%; }
 }
 
-/* Main experiment tabs sit on the light page background. */
-main > .finding-tabs { gap: 8px; margin: 0 0 12px; }
-main > .finding-tabs button {
-  background: white; color: var(--ink); border: 1px solid var(--line);
-  padding: 9px 16px; font-size: .9rem;
+/* Keep the two dashboard sections visible while moving between their plots and reports. */
+.section-tabs {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr);
+  gap: 12px;
+  margin-bottom: 16px;
 }
-main > .finding-tabs button[aria-selected="true"] {
-  background: var(--ink); border-color: var(--ink); color: white;
+.section-group {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.group-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 6px 7px;
+  color: var(--muted);
+  font-size: .77rem;
+  font-weight: 650;
+}
+.group-name svg { color: var(--teal); }
+.group-tabs { display: flex; flex-wrap: wrap; gap: 3px; }
+.group-tabs button {
+  flex: 1 0 auto;
+  white-space: nowrap;
+  padding: 7px 5px;
+  min-height: 38px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ink);
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 550;
+  cursor: pointer;
+}
+.group-tabs button:hover { background: #edf4ef; }
+.group-tabs button[aria-selected="true"] { background: var(--ink); color: white; }
+@media (max-width: 900px) {
+  .section-tabs { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+@media (max-width: 520px) {
+  .section-group { padding: 8px; }
+  .group-tabs:has(> :nth-child(4)) button { flex-basis: calc(50% - 3px); }
+  .group-tabs button { min-height: 44px; }
 }

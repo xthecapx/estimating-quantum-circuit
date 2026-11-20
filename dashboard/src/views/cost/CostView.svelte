@@ -1,13 +1,6 @@
-<script lang="ts" module>
-  export interface CostChoices {
-    split: string;
-    circuit: string;
-    shots: string;
-    price: string;
-  }
-</script>
-
 <script lang="ts">
+  import type { CostChoices } from "../../lib/state/dashboard";
+  import { costData } from "../../lib/data/load";
   import EChart from "../../lib/charts/EChart.svelte";
   import { algorithmName } from "../../lib/domain/catalog";
   import Select from "../../lib/ui/Select.svelte";
@@ -20,7 +13,6 @@
     ibmRuleSeconds,
     physicalSeconds,
     shotsChart,
-    type CostSnapshot,
   } from "./model";
 
   let {
@@ -33,27 +25,8 @@
     onchange: (v: CostChoices) => void;
   } = $props();
 
-  let data = $state<CostSnapshot>();
-  let error = $state("");
-
-  $effect(() => {
-    const filename = reports["cost-v1"];
-    const controller = new AbortController();
-    data = undefined;
-    error = "";
-    if (!filename) return;
-    fetch(new URL("data/" + filename, document.baseURI), { signal: controller.signal })
-      .then(async (r) => {
-        if (!r.ok) throw Error("fetch");
-        const s: CostSnapshot = await r.json();
-        if (s.schemaVersion !== 1 || !s.points || !s.physicalTerms) throw Error("schema");
-        if (!controller.signal.aborted) data = s;
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) error = "The cost results could not be loaded. Reload to try again.";
-      });
-    return () => controller.abort();
-  });
+  const resource = $derived(costData.watch(reports["cost-v1"]));
+  const data = $derived($resource.data);
 
   const split = $derived(choices.split === "unseen_circuit" ? "unseen_circuit" : "new_run");
   const points = $derived((data?.points ?? []).filter((p) => p.split === split));
@@ -98,8 +71,8 @@
 </script>
 
 <section class="surface cost" aria-label="Execution cost model">
-  {#if error}
-    <p role="alert">{error}</p>
+  {#if $resource.error}
+    <p role="alert">The cost results could not be loaded. Reload to try again.</p>
   {:else if !reports["cost-v1"]}
     <p class="note">No cost snapshot matches the current export. Run <code>python -m experiments.qaqs_cost</code>, then rebuild.</p>
   {:else if !data}

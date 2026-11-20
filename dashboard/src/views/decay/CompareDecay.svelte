@@ -1,27 +1,17 @@
 <script lang="ts">
+  import type { DecayChoices } from "../../lib/state/dashboard";
+  import { decayData } from "../../lib/data/load";
   import { tick } from "svelte";
   import Icon from "../../lib/ui/Icon.svelte";
   import EChart from "../../lib/charts/EChart.svelte";
   import Select from "../../lib/ui/Select.svelte";
   import { algorithmName } from "../../lib/domain/catalog";
   import type { Explorer } from "../../lib/state/explorer.svelte";
-  import { bounds, chart, construction, declineLabels, declineStatus, extraLoss, fixed, key, matchingWindows, medianLoss, rankResources, signed, resources, short, targets, type Cell, type Snapshot } from "./model";
-  type Choices={matrix:string;pair:string;resource:string;outcome:string};
-  let {explorer,reports,choices,onchange}:{explorer:Explorer;reports:Record<string,string>;choices:Choices;onchange:(v:Choices)=>void}=$props();
-  let data=$state<Snapshot>();
-  let error=$state("");
-  $effect(()=>{
-    const backend=explorer.backend, filename=reports[backend], controller=new AbortController();
-    data=undefined; error="";
-    if(filename) {
-      fetch(new URL("data/"+filename,document.baseURI),{signal:controller.signal}).then(async r=>{
-        if(!r.ok) throw Error("fetch"); const s:Snapshot=await r.json();
-        if(s.schemaVersion!==1 || s.backend!==backend || !s.panels) throw Error("schema");
-        if(!controller.signal.aborted)data=s;
-      }).catch(()=>{if(!controller.signal.aborted)error="The decay measurements could not be loaded. Reload to try again.";});
-    }
-    return ()=>controller.abort();
-  });
+  import { bounds, chart, construction, declineLabels, declineStatus, extraLoss, fixed, key, matchingWindows, medianLoss, rankResources, signed, resources, short, targets, type Cell } from "./model";
+  let {explorer,reports,choices,onchange}:{explorer:Explorer;reports:Record<string,string>;choices:DecayChoices;onchange:(v:DecayChoices)=>void}=$props();
+  const resource = $derived(decayData.watch(reports[explorer.backend], explorer.backend));
+  const data = $derived($resource.data);
+
   const ranked = $derived(data ? rankResources(data) : []);
   const resourceOption = $derived(ranked.find(r => r.id === choices.resource) ?? ranked[0]);
   const outcomeOptions = $derived(resourceOption?.outcomes ?? []);
@@ -59,6 +49,11 @@
     detailHeading?.focus();
   }
   const periods=$derived(Object.entries(cell?.periods??{}));
+  const matchedCount = $derived(cell && data ? matchingWindows(cell, data.tolerance) : 0);
+  const gapScale = $derived(Math.max(1, 2 * (data?.tolerance ?? 0), ...periods.map(([,p]) => p.gap)));
+  const minPeriods = $derived(data?.minPeriods ?? Infinity);
+  const supportedPairs = $derived(cells.filter(c => Object.keys(c.periods).length >= minPeriods).length);
+  let showFits = $state(false);
   const reversed = $derived(!!cell && choices.pair === cell.b+"/"+cell.a);
   const row = $derived(cell && reversed ? cell.b : cell?.a ?? "");
   const column = $derived(cell && reversed ? cell.a : cell?.b ?? "");
@@ -70,7 +65,7 @@
   const ids=$derived(data?.algorithms??[]);
   const unit=$derived(outcome==="success"?"pp":"points");
   const ylabel=$derived(outcome==="success"?"Success rate (%)":(targets[outcome]+" × 100"));
-  function change(v:Partial<Choices>){onchange({...choices,...v});}
+  function change(v:Partial<DecayChoices>){onchange({...choices,...v});}
   function pairLabel(k:string){return k.split("/").map(algorithmName).join(" / ");}
   function lookup(a:string,b:string){return cells.find(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));}
   const dates = $derived(new Map(explorer.periods.map(period => {
@@ -107,38 +102,46 @@
       </label></li>
     {/if}
   </ol>
-  {#if error}<p role="alert">{error}</p>
+  {#if $resource.error}<p role="alert">The decay measurements could not be loaded. Reload to try again.</p>
   {:else if !reports[explorer.backend]}<p role="status">No decay analysis matches the current export for {explorer.backend}.</p>
   {:else if !data}<p role="status">Loading decay measurements…</p>
   {:else if !resourceOption || !outcomeOption}<p role="status">No decay comparisons are available for this selection.</p>
   {:else}
-    <p id="match-rule"><strong>{matches.length} of {cells.length} pairs show repeated similar decay.</strong>
-      Both fitted outcomes must decline and their losses must differ by at most {data.tolerance} {outcome === "success" ? "percentage points" : "points on the outcome × 100 scale"} in at least {data.minPeriods} windows.
-      Each fit needs {data.minLevels} or more exact shared resource levels.</p>
     {#if cell && structure}
-      <div class="heading">
-        <div><h2 bind:this={detailHeading} tabindex="-1">{algorithmName(cell.a)} and {algorithmName(cell.b)}</h2>
-          <p class="note">{targets[outcome]} across shared values of {(resources[metric]??metric).toLowerCase()} on {explorer.backend}.</p></div>
-        {#if periods.length}<div class="stat"><strong>{directional ? signed(directionValue(cell,row)) : fixed(cell.gap)} {unit}</strong>
-          <span>{directional ? `Median extra loss of ${short(column)} relative to ${short(row)}` : "Median gap in fitted change"}</span></div>{/if}
-      </div>
-      <div class="evidence">
-        <section><p class="eyebrow">Circuit construction</p><h3>{structure.title}</h3><p>{structure.detail}</p></section>
-        <section><p class="eyebrow">Measured decay</p>
-          {#if periods.length < data.minPeriods}
-            <h3>Too few comparable windows</h3>
-            <p>{periods.length} of {data.minPeriods} required windows have at least {data.minLevels} shared levels. The largest overlap in one window is {Math.max(0,...Object.values(cell.overlap))}.</p>
-          {:else}
-            <h3>Similar decline in {selectedMatch?.count ?? matchingWindows(cell,data.tolerance)} of {periods.length} eligible windows</h3>
-            <p>{selectedMatch ? "This pair meets the repeatability rule for this resource and outcome." : "This pair falls outside the selector’s repeatability rule for this resource and outcome."}
-              {#if directional}{short(column)} lost more or gained less than {short(row)} in {periods.filter(([,v])=>extraLoss(v,reversed)>0).length} windows.{/if}</p>
-          {/if}
-          <details class="coverage"><summary>Shared levels by window</summary>
-            <ul>{#each Object.entries(cell.overlap) as [name, levels]}<li>{name} <strong>{levels}</strong></li>{/each}</ul>
-          </details>
-        </section>
+      <div class="pair-result" class:matched={!!selectedMatch}>
+        <div class="heading">
+          <div><p class="eyebrow">{explorer.backend} · {resources[metric] ?? metric}</p>
+            <h2 bind:this={detailHeading} tabindex="-1">{algorithmName(cell.a)} and {algorithmName(cell.b)}</h2>
+            <p class="note">{targets[outcome]} across matched resource levels</p></div>
+          {#if periods.length}<div class="stat"><strong>{directional ? signed(directionValue(cell,row)) : fixed(cell.gap)} {unit}</strong>
+            <span>{directional ? `Median extra loss of ${short(column)} relative to ${short(row)}` : "Median gap in fitted change"}</span></div>{/if}
+        </div>
+        {#if periods.length < data.minPeriods}
+          <h3>Too few comparable windows</h3>
+          <p>{periods.length} of {data.minPeriods} required windows have at least {data.minLevels} shared levels.
+            The largest overlap in one window is {Math.max(0,...Object.values(cell.overlap))}.</p>
+        {:else}
+          <h3>Similar decline in {matchedCount} of {periods.length} eligible windows</h3>
+          <p>A window matches when both fitted outcomes fall and their losses differ by at most {data.tolerance} {outcome === "success" ? "percentage points" : "points on the outcome × 100 scale"} over the shared range.</p>
+        {/if}
+        <details class="construction"><summary>{structure.title}</summary><p>{structure.detail}</p></details>
       </div>
       {#if periods.length}
+        <figure class="gap-chart">
+          <figcaption><h3>How far apart were the fitted changes?</h3>
+            <span class="threshold-key">Tolerance · {data.tolerance} {unit}</span></figcaption>
+          <ul>{#each periods as [name,p] (name)}
+            {@const status = declineStatus(p, data.tolerance)}
+            <li class:similar={status === "similar"}>
+              <span class="window" title={name}>{dateLabel(name)}</span>
+              <div class="track" aria-hidden="true"><i style:width={(100*p.gap/gapScale)+"%"}></i><b style:left={(100*data.tolerance/gapScale)+"%"}></b></div>
+              <strong>{fixed(p.gap)} {unit}</strong><span class="status">{declineLabels[status]}</span>
+            </li>
+          {/each}</ul>
+        </figure>
+        <details class="disclosure" bind:open={showFits}>
+          <summary>Observed outcomes and fitted trends</summary>
+          {#if showFits}
         <div class="plot-heading"><h3>Fitted trends by collection window</h3>
           <div class="legend"><span>● {algorithmName(cell.a)} · solid</span><span>◆ {algorithmName(cell.b)} · dashed</span></div>
         </div>
@@ -147,7 +150,9 @@
           <article><h4 title={p}>{dateLabel(p)}</h4><p class="window-label">{declineLabels[declineStatus(values, data.tolerance)]} · {fixed(values.gap)} {unit} apart</p>
           <EChart option={chart(values,cell,axes,resources[metric]??metric,ylabel)} replace label={pairLabel(key(cell))+" on "+dateLabel(p)} style="height:195px;width:100%"/>
           </article>{/each}</div>
-        <details class="fit-details"><summary>Slopes and rank correlations by window</summary>
+          {/if}
+        </details>
+        <details class="fit-details disclosure"><summary>Slopes and rank correlations by window</summary>
           <p class="note">Slopes use {unit} per resource unit. The gap measures the difference in fitted changes from the first shared level to the last.
             Spearman ρ ranks the observed means. A value near +1 means the two algorithms rank the levels similarly, even when one loses much more.
             A dash marks a constant profile where ρ is undefined.</p>
@@ -155,11 +160,21 @@
           {#each periods as [p,v]}<tr><td title={p}>{dateLabel(p)}</td><td>{v.points.length}</td><td>{fixed(100*v.slopeA)}</td><td>{fixed(100*v.slopeB)}</td><td>{directional ? signed(extraLoss(v,reversed)) : fixed(v.gap)}</td><td>{fixed(v.rho)}</td></tr>{/each}</tbody></table></div>
         </details>
       {/if}
+      <details class="coverage disclosure"><summary>Shared levels by window</summary>
+        <ul>{#each Object.entries(cell.overlap) as [name, levels]}<li>{name} <strong>{levels}</strong></li>{/each}</ul>
+      </details>
     {:else}
-      <p class="empty" role="status">Choose another resource or outcome to look for repeated decay, or select a pair in the matrix to inspect its evidence.</p>
+      <div class="empty" role="status"><h3>No pairs show repeated similar decay</h3>
+        <p>{supportedPairs} of {cells.length} pairs have enough overlap to compare at least {data.minPeriods} windows.
+          Choose another resource or outcome, or open the matrix to inspect a pair.</p></div>
     {/if}
+    <details class="disclosure"><summary>How pairs qualify for the selector</summary>
+      <p id="match-rule">{matches.length} of {cells.length} pairs qualify. Both fitted outcomes must decline within {data.tolerance} {unit} of each other in at least {data.minPeriods} windows.
+        Each window needs at least {data.minLevels} identical resource levels for both algorithms.</p>
+    </details>
+    <details class="disclosure matrix-section"><summary>Explore all algorithm pairs <span>({cells.length})</span></summary>
     <div class="matrix-heading">
-      <h3>All algorithm pairs</h3>
+
       <div class="settings matrix-settings">
         <Select label="Matrix view" value={choices.matrix} options={["similarity","direction"]} format={v=>v==="direction"?"Direction":"Similarity"} onchange={matrix=>change({matrix})}/>
       </div>
@@ -209,6 +224,7 @@
       {/if}
       A dot marks the same algorithm. Select any pair to inspect its circuit construction and window coverage.
     </p>
+    </details>
   {/if}
 </section>
 <style>
@@ -226,6 +242,7 @@
   .controls li::before { content: counter(list-item); position: absolute; top: 0; left: 0; display: grid; place-items: center;
     width: 1.4rem; height: 1.4rem; background: #e5f1ec; color: var(--teal); border-radius: 50%; font-size: .76rem; font-weight: 700; pointer-events: none; }
   .controls :global(.field-name), .pair-picker > span { min-height: 1.4rem; padding-inline-start: 1.8rem; }
+  .controls :global(select) { text-overflow:ellipsis; }
   .controls small { display: block; margin-top: 5px; font-size: .76rem; color: var(--muted); line-height: 1.4; }
   @media (max-width: 960px) { .controls { grid-template-columns: repeat(2,minmax(0,1fr)); } }
   @media (max-width: 560px) { .controls { grid-template-columns: minmax(0,1fr); } }
@@ -234,16 +251,36 @@
   .plot-heading + .note { margin-top: -8px; }
   #match-rule, .empty { line-height: 1.5; color: var(--muted); }
   #match-rule { padding-bottom: 14px; border-bottom: 1px solid var(--line); font-size: .85rem; }
-  #match-rule strong { color: var(--ink); }
-  .evidence { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,270px),1fr)); gap: 12px; }
-  .evidence section { padding: 15px 18px; border: 1px solid var(--line); border-radius: 9px; }
-  .evidence section:last-child { background: #f2f7f4; }
-  .evidence section > p:last-of-type, .window-label { margin-top: 5px; font-size: .85rem; color: var(--muted); line-height: 1.5; }
-  .coverage, .fit-details { font-size: .86rem; }
-  .coverage { margin-top: 10px; }
+
   .coverage ul { list-style: none; padding: 0; }
   .coverage li { display: flex; justify-content: space-between; gap: 7px; padding: 3px 0; overflow-wrap: anywhere; }
   summary { cursor: pointer; font-weight: 650; }
-  .fit-details > p { margin: 8px 0; }
-  .matrix-heading { border-top: 1px solid var(--line); padding-top: 16px; }
+
+  .pair-result { border:1px solid var(--line); border-inline-start:4px solid #929e99; background:#f7f8f6; padding:clamp(14px,2vw,22px); border-radius:10px; }
+  .pair-result.matched { background:#eff7f3; border-inline-start-color:var(--teal); }
+  .pair-result > h3 { margin-top:16px; font-size:1.12rem; }
+  .pair-result > p,.construction p,.empty p { margin-top:4px; font-size:.89rem; line-height:1.5; }
+  .construction { border-top:1px solid var(--line); margin-top:12px; padding-top:6px; }
+  .gap-chart { margin:0; padding:clamp(12px,1.8vw,20px); border:1px solid var(--line); border-radius:10px; }
+  .gap-chart figcaption { display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .threshold-key { font-size:.78rem; color:var(--muted); display:inline-flex; gap:6px; align-items:center; }
+  .threshold-key::before { content:""; height:1em; border-inline-start:2px dashed #586962; }
+  .gap-chart ul { list-style:none; margin:10px 0 0; padding:0; }
+  .gap-chart li { display:grid; grid-template-columns:minmax(7rem,1fr) minmax(70px,3fr) 6.5rem 8rem; align-items:center; gap:10px; padding:7px 0; font-size:.86rem; font-variant-numeric:tabular-nums; }
+  .gap-chart strong { text-align:end; }
+  .track { position:relative; height:10px; border-radius:3px; background:#e6ebe8; }
+  .track i { height:100%; display:block; background:#8a7769; border-radius:3px; }
+  .similar .track i { background:var(--teal); }
+  .track b { position:absolute; top:-4px; bottom:-4px; border-inline-start:2px dashed #586962; }
+  .status { color:#695448; } .similar .status { color:var(--teal); }
+  .disclosure { margin:0; border-top:1px solid var(--line); padding-top:6px; min-width:0; }
+  .disclosure[open] > :not(summary) { margin-top:10px; }
+  .matrix-section summary span { color:var(--muted); font-weight:400; }
+  .empty { padding:16px; background:#f5f7f5; border-radius:8px; }
+  @media (max-width:640px) {
+    .gap-chart li { grid-template-columns:minmax(0,1fr) 8rem; gap:4px 12px; }
+    .track { grid-column:1; grid-row:2; } .gap-chart strong { grid-column:2; grid-row:2; }
+    .gap-chart .status { grid-column:2; grid-row:1; font-size:.78rem; }
+    .controls { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  }
 </style>

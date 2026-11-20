@@ -48,6 +48,7 @@ export interface FootprintItem {
   vif: number | null;
   permutationImportance: number;
   shapMeanAbs: number;
+  selectionFrequency?: number;
   compositeScore?: number;
   selected?: boolean;
   rank?: number;
@@ -416,7 +417,7 @@ export function scatterChart(
 }
 
 export function footprintChart(items: FootprintItem[]): EChartsCoreOption {
-  const ordered = [...items].slice(0, 14).reverse();
+  const ordered = [...items].reverse();
   return {
     grid: { top: 20, left: 215, right: 24, bottom: 38 },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, confine: true },

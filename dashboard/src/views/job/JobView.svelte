@@ -103,6 +103,10 @@
       onclick={(event) => explorer.calibration.open(job, event.currentTarget)}
       >Inspect run calibration <span aria-hidden="true">→</span></button
     >
+    <button type="button" id="job-chip-history" class="text-action"
+      onclick={event => explorer.calibration.open(null, event.currentTarget)}>
+      Chip calibration history <span aria-hidden="true">→</span>
+    </button>
   </div>
   <details>
     <summary>View all outcome counts and reference values</summary>

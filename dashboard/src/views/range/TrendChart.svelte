@@ -1,4 +1,6 @@
 <script lang="ts">
+  import PlotTarget from "../PlotTarget.svelte";
+  import { targetSeries } from "../../lib/charts/target";
   import EChart from "../../lib/charts/EChart.svelte";
   import { palette, type EChartsType } from "../../lib/charts/echarts";
   import type { Job } from "../../lib/data/types";
@@ -15,6 +17,7 @@
 
   const showIntervals = $derived(explorer.question === "success");
 
+  const grid = { left: 58, right: 18, top: 16, bottom: 28, outerBoundsMode: "none" };
   const option = $derived.by(() => {
     const { jobs, configs, axis, question: key, threshold, summary } = explorer;
     const dots = jobs
@@ -26,24 +29,19 @@
         ? [[{ xAxis: configs[boundary - 1][0][axis] }, { xAxis: configs[boundary][0][axis] }]]
         : [];
     const axisValues = unique(jobs.map((j) => j[axis]));
+    const min = axisValues.length ? Math.max(0, Math.min(...axisValues) - 1) : 0;
+    const max = axisValues.length ? Math.max(...axisValues) + 1 : 1;
     return {
-      animationDurationUpdate: 350,
-      grid: { left: 58, right: 18, top: 36, bottom: 52 },
+      animation: false,
+      grid,
       tooltip: { show: false },
       xAxis: {
         type: "value",
-        min: axisValues.length ? Math.max(0, Math.min(...axisValues) - 1) : 0,
-        max: axisValues.length ? Math.max(...axisValues) + 1 : 1,
+        min, max,
         minInterval: 1,
-        name: axes[axis],
-        nameLocation: "middle",
-        nameGap: 29,
       },
       yAxis: {
         type: "value",
-        name: questions[key].label,
-        nameLocation: "end",
-        nameTextStyle: { align: "left" },
         min: 0,
         max: 1,
         interval: showIntervals ? 0.1 : 0.25,
@@ -52,6 +50,7 @@
         },
       },
       series: [
+        targetSeries(key, threshold, min, max),
         {
           name: questions[key].label,
           type: "scatter",
@@ -61,13 +60,6 @@
           emphasis: { scale: false, itemStyle: { color: palette.accent, opacity: 1 } },
           data: dots,
           markArea: { silent: true, itemStyle: { color: palette.band }, data: shade },
-          markLine: {
-            silent: true,
-            symbol: "none",
-            label: { show: false },
-            lineStyle: { color: palette.threshold, type: "dashed" },
-            data: threshold == null ? [] : [{ yAxis: threshold }],
-          },
         },
       ],
     };
@@ -97,11 +89,11 @@
   }
 </script>
 
-<div class="plot-stage">
+<PlotTarget {explorer} {grid}>
   <EChart
     id="trend"
     class="plot"
-    label="Selected metric by circuit setting"
+    label={questions[explorer.question].label + " by " + axes[explorer.axis].toLowerCase()}
     {option}
     replace
     onready={ready}
@@ -109,4 +101,4 @@
   {#if hovered && chart}
     <IntervalLens {explorer} {chart} point={hovered} {showIntervals} />
   {/if}
-</div>
+</PlotTarget>

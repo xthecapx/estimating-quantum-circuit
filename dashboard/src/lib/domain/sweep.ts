@@ -48,7 +48,7 @@ export function summarize(
     detail = "Choose another chip, period or experiment group.";
   } else if (threshold == null) {
     title = "Explore the measured values";
-    detail = "Set a target between 0 and 1 to classify the tested settings.";
+    detail = "Enter a target above the plot to classify the tested settings.";
   } else if (combined) {
     const passed = states.filter((state) => state === "Meets").length;
     title = `${passed} of ${configs.length} experiments met the target`;

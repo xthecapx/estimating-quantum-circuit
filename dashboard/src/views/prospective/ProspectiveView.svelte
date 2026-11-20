@@ -1,12 +1,6 @@
-<script lang="ts" module>
-  export interface ProspectiveChoices {
-    target: string;
-    regime: string;
-    chip: string;
-  }
-</script>
-
 <script lang="ts">
+  import type { ProspectiveChoices } from "../../lib/state/dashboard";
+  import { validationData } from "../../lib/data/load";
   import EChart from "../../lib/charts/EChart.svelte";
   import Select from "../../lib/ui/Select.svelte";
   import {
@@ -25,7 +19,6 @@
     transferLabel,
     type ChipRun,
     type Group,
-    type ProspectiveSnapshot,
     type ScoreRow,
   } from "./model";
 
@@ -39,27 +32,8 @@
     onchange: (v: ProspectiveChoices) => void;
   } = $props();
 
-  let data = $state<ProspectiveSnapshot>();
-  let error = $state("");
-
-  $effect(() => {
-    const filename = reports["validation-v1"];
-    const controller = new AbortController();
-    data = undefined;
-    error = "";
-    if (!filename) return;
-    fetch(new URL("data/" + filename, document.baseURI), { signal: controller.signal })
-      .then(async (r) => {
-        if (!r.ok) throw Error("fetch");
-        const s: ProspectiveSnapshot = await r.json();
-        if (s.schemaVersion !== 1 || !s.scores || !s.chips) throw Error("schema");
-        if (!controller.signal.aborted) data = s;
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) error = "The validation results could not be loaded. Reload to try again.";
-      });
-    return () => controller.abort();
-  });
+  const resource = $derived(validationData.watch(reports["validation-v1"]));
+  const data = $derived($resource.data);
 
   const targets = ["success", "hellinger", "tvd", "dsr"] as const;
   const groups: Group[] = ["new", "anchor", "extrapolation"];
@@ -109,8 +83,8 @@
 </script>
 
 <section class="surface prospective" aria-label="Prospective validation">
-  {#if error}
-    <p role="alert">{error}</p>
+  {#if $resource.error}
+    <p role="alert">The validation results could not be loaded. Reload to try again.</p>
   {:else if !reports["validation-v1"]}
     <p class="note">No prospective validation snapshot matches the current export. Run <code>python dashboard/export_prospective.py</code>, then rebuild.</p>
   {:else if !data}

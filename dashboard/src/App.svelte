@@ -1,10 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { ECHARTS_VERSION } from "./lib/charts/echarts";
-  import { loadIndex } from "./lib/data/load";
   import { unique } from "./lib/domain/format";
-  import { Explorer } from "./lib/state/explorer.svelte";
-  import { formatHash, parseHash } from "./lib/state/url";
+  import { createDashboard, sectionGroups } from "./lib/state/dashboard";
   import CalibrationView from "./views/calibration/CalibrationView.svelte";
   import JobView from "./views/job/JobView.svelte";
   import RegressionView from "./views/regression/RegressionView.svelte";
@@ -12,81 +10,17 @@
 
   import Tabs from "./lib/ui/Tabs.svelte";
   import CompareDecay from "./views/decay/CompareDecay.svelte";
-  import EstimationView, { type EstimationChoices } from "./views/estimation/EstimationView.svelte";
-  import ProspectiveView, { type ProspectiveChoices } from "./views/prospective/ProspectiveView.svelte";
-  import CostView, { type CostChoices } from "./views/cost/CostView.svelte";
+  import EstimationView from "./views/estimation/EstimationView.svelte";
+  import ProspectiveView from "./views/prospective/ProspectiveView.svelte";
+  import CostView from "./views/cost/CostView.svelte";
 
-  let readAt = $state<number | null>(null);
-  let section = $state("range");
-  let decay = $state({ matrix: "similarity", pair: "", resource: "", outcome: "" });
-  let estimation = $state<EstimationChoices>({ scope: "pooled", target: "", split: "holdout", view: "h1" });
-  let reports = $state<Record<string,string>>({});
-  let estimationReports = $state<Record<string,string>>({});
-  let prospectiveReports = $state<Record<string,string>>({});
-  let costReports = $state<Record<string,string>>({});
-  let cost = $state<CostChoices>({ split: "new_run", circuit: "", shots: "1024", price: "" });
-  let prospective = $state<ProspectiveChoices>({ target: "success", regime: "circuit_only", chip: "" });
-  function readChoices() {
-    const url = parseHash(location.hash);
-    readAt = /^\d+$/.test(url.readAt ?? "") && Number.isSafeInteger(Number(url.readAt)) ? Number(url.readAt) : null;
-    section = ["regression", "decay", "estimation", "validation", "cost"].includes(url.section ?? "") ? url.section! : "range";
-    decay = {matrix: url.matrix === "direction" ? "direction" : "similarity", pair: url.pair || "", resource: url.resource || "", outcome: url.outcome || ""};
-    estimation = {scope: url.estScope || "pooled", target: url.estTarget || "", split: url.estSplit === "cv" ? "cv" : "holdout", view: url.estView || "h1"};
-    prospective = {target: url.valTarget || "success", regime: url.valRegime === "mixed_submit" ? "mixed_submit" : "circuit_only", chip: url.valChip || ""};
-    cost = {split: url.costSplit === "unseen_circuit" ? "unseen_circuit" : "new_run", circuit: url.costCircuit || "", shots: url.costShots || "1024", price: url.costPrice || ""};
-  }
+  const dashboard = createDashboard();
+  onMount(dashboard.mount);
+  $effect(() => dashboard.saveRoute($dashboard));
 
-  let explorer = $state<Explorer>();
-  let error = $state("");
-
-  onMount(() => {
-    readChoices();
-    loadIndex()
-      .then((data) => {
-        reports = data.decayReports ?? {};
-        estimationReports = data.estimationReports ?? {};
-        prospectiveReports = data.prospectiveReports ?? {};
-        costReports = data.costReports ?? {};
-        explorer = new Explorer(data, parseHash(location.hash));
-      })
-      .catch((reason) => {
-        console.error(reason);
-        error =
-          "The experiment data could not be loaded. Build the dashboard (npm run build) and serve its dist/ directory over HTTP.";
-      });
-    const onHash = () => {
-      readChoices();
-      if (explorer) {
-        explorer.apply(parseHash(location.hash));
-      }
-    };
-    addEventListener("hashchange", onHash);
-    return () => removeEventListener("hashchange", onHash);
-  });
-
-  // Mirror state into the URL without adding history entries for every control change.
-  $effect(() => {
-    if (!explorer) return;
-    const extra =
-      section === "regression" ? { section, readAt: readAt?.toString() } : section === "decay"
-        ? { section, ...decay }
-        : section === "estimation"
-          ? {
-              section,
-              estScope: estimation.scope,
-              estTarget: estimation.target,
-              estSplit: estimation.split,
-              estView: estimation.view,
-            }
-          : section === "validation"
-            ? { section, valTarget: prospective.target, valRegime: prospective.regime, valChip: prospective.chip }
-            : section === "cost"
-              ? { section, costSplit: cost.split, costCircuit: cost.circuit, costShots: cost.shots, costPrice: cost.price }
-              : {};
-    const hash = formatHash({ ...explorer.toUrl(), ...extra });
-    if (hash !== location.hash) history.replaceState(null, "", hash || location.pathname);
-  });
-
+  const section = $derived($dashboard.section);
+  const explorer = $derived($dashboard.explorer);
+  const index = $derived($dashboard.index);
   const view = $derived(explorer?.view ?? "range");
 </script>
 
@@ -101,51 +35,43 @@
   <header>
     <p class="eyebrow">Experiment explorer</p>
     <h1>QPU Benchmark</h1>
-    {#if section === "range"}
+  </header>
+  {#if $dashboard.error}
+    <div id="error" role="alert">{$dashboard.error}</div>
+  {/if}
+  {#if explorer}
+    <Tabs groups={sectionGroups} label="Experiment sections" selected={section} onselect={dashboard.selectSection}>
+    {#snippet panel(id)}
+    {#if id === "range"}
     <p class="intro">
       Choose an algorithm and a question to see which circuit sizes met your target on this chip.
       Select a point to explore that job’s measurement outcomes.
     </p>
-    <button
-      type="button"
-      id="open-calibration"
-      class="view-button calibration-entry"
-      disabled={!explorer}
-      onclick={(event) => explorer?.calibration.open(null, event.currentTarget)}
-      >Chip calibration history <span aria-hidden="true">↗</span></button
-    >
-    {:else if section === "regression"}
+    {:else if id === "regression"}
       <p class="intro">Explore how the average outcome changes with circuit resources. Select a point on the fitted trend to read the estimate for that setting.</p>
-    {:else if section === "cost"}
+    {:else if id === "cost"}
       <p class="intro">Predict the billed QPU time, in IBM resource units, of a job before submitting it. One model for every chip.</p>
-    {:else if section === "validation"}
+    {:else if id === "validation"}
       <p class="intro">Frozen QAQS models scored on new runs on three IBM chips, including one the models never saw. Predictions were committed before the jobs ran.</p>
-    {:else if section === "estimation"}
+    {:else if id === "footprint"}
+      <p class="intro">Which circuit metrics earned a place in the footprint? Explore the selection experiment for each chip and prediction target.</p>
+    {:else if id === "estimation"}
       <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
     {:else}<p class="intro">Which circuits lose quality at a similar rate as they grow? Compare their gate constructions and the declines measured on the same chip.</p>{/if}
-  </header>
-  {#if error}
-    <div id="error" role="alert">{error}</div>
-  {/if}
-  {#if explorer}
-    <Tabs tabs={[{id:"range",label:"Operating range"},{id:"regression",label:"Regression explorer"},{id:"decay",label:"Compare decay"},{id:"validation",label:"Model validation"},{id:"cost",label:"Execution cost"},{id:"estimation",label:"Model training"}]} label="Experiment sections" selected={section} onselect={(s) => section=s}>
-    {#snippet panel(id)}
     {#if id === "regression" && explorer}
-      <RegressionView {explorer} bind:readAt />
+      <RegressionView {explorer} bind:readAt={() => $dashboard.readAt, readAt => dashboard.setChoices({ readAt })} />
     {:else if id === "decay" && explorer}
-      <CompareDecay {explorer} {reports} choices={decay} onchange={(v) => decay=v} />
+      <CompareDecay {explorer} reports={index?.decayReports ?? {}} choices={$dashboard.decay} onchange={decay => dashboard.setChoices({ decay })} />
     {:else if id === "cost"}
-      <CostView reports={costReports} choices={cost} onchange={(v) => cost=v} />
+      <CostView reports={index?.costReports ?? {}} choices={$dashboard.cost} onchange={cost => dashboard.setChoices({ cost })} />
     {:else if id === "validation"}
-      <ProspectiveView reports={prospectiveReports} choices={prospective} onchange={(v) => prospective=v} />
-    {:else if id === "estimation" && explorer}
-      <EstimationView {explorer} reports={estimationReports} choices={estimation} onchange={(v) => estimation=v} />
+      <ProspectiveView reports={index?.prospectiveReports ?? {}} choices={$dashboard.prospective} onchange={prospective => dashboard.setChoices({ prospective })} />
+    {:else if (id === "estimation" || id === "footprint") && explorer}
+      <EstimationView footprintOnly={id === "footprint"} {explorer} reports={index?.estimationReports ?? {}} choices={$dashboard.estimation} onchange={estimation => dashboard.setChoices({ estimation })} />
     {:else if explorer}
     <section class="surface" aria-label="Experiment explorer">
-      <div class="explorer-path" id="explorer-path" aria-label="Explorer location">
-        {#if view === "range"}
-          <span aria-current="page">Operating range</span>
-        {:else}
+      {#if view !== "range"}
+        <div class="explorer-path" id="explorer-path" aria-label="Explorer location">
           <button
             type="button"
             id="range-return"
@@ -166,8 +92,8 @@
             {/if}
             <span aria-current="page">{" / Calibration"}</span>
           {/if}
-        {/if}
-      </div>
+        </div>
+      {/if}
       <!-- Range and job views stay mounted while hidden so returning restores focus targets,
            open disclosures and scroll position exactly. -->
       <div hidden={view !== "range"}><RangeView {explorer} /></div>
@@ -181,7 +107,7 @@
     {/if}
     {/snippet}
     </Tabs>
-  {:else if !error}
+  {:else if !$dashboard.error}
     <p role="status" class="note">Reading the exported observations…</p>
   {/if}
   <footer>

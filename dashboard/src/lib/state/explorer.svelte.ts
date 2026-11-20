@@ -21,7 +21,7 @@ import { CalibrationState } from "./calibration.svelte";
 import type { UrlState, ViewName } from "./url";
 
 export const BIN_OPTIONS = [8, 16, 32] as const;
-const DEFAULT_TARGET = (question: QuestionKey) => (question === "success" ? "0.5" : "");
+const DEFAULT_TARGET = "0.5";
 
 /**
  * Single source of truth for the explorer. User choices are stored as-is; the effective
@@ -41,7 +41,7 @@ export class Explorer {
   algorithmChoice = $state("QFT");
   familyChoice = $state(ALL_GROUPS);
   question = $state<QuestionKey>("success");
-  targetText = $state("0.5");
+  targetText = $state(DEFAULT_TARGET);
   axis = $state<AxisKey>("width");
   view = $state<ViewName>("range");
   configChoice = $state<string | null>(null);
@@ -90,6 +90,18 @@ export class Explorer {
     this.targetText = value == null ? "" : String(value);
   }
 
+  // Only the editable/display scale changes. Analysis and shared URLs use fractions.
+  get targetScale() {
+    return this.question === "success" ? 100 : 1;
+  }
+  get displayTarget(): number | null {
+    const value = this.targetValue;
+    return value == null ? null : Number((value * this.targetScale).toPrecision(15));
+  }
+  set displayTarget(value: number | null) {
+    this.targetValue = value == null ? null : value / this.targetScale;
+  }
+
   threshold = $derived.by(() => {
     if (this.targetText.trim() === "") return null;
     const value = Number(this.targetText);
@@ -131,7 +143,7 @@ export class Explorer {
   }
   setQuestion(value: QuestionKey) {
     this.question = value;
-    this.targetText = DEFAULT_TARGET(value);
+    this.targetText = DEFAULT_TARGET;
   }
   selectConfig(config: string) {
     this.configChoice = config;
@@ -175,7 +187,7 @@ export class Explorer {
     if (state.question && (questionKeys as string[]).includes(state.question)) {
       this.question = state.question as QuestionKey;
     }
-    this.targetText = state.target === "none" ? "" : state.target ?? DEFAULT_TARGET(this.question);
+    this.targetText = state.target === "none" ? "" : state.target ?? DEFAULT_TARGET;
     if (state.axis && state.axis in axes) this.axis = state.axis as AxisKey;
     this.configChoice = state.config ?? null;
     this.runChoice = state.run ?? null;
@@ -193,7 +205,7 @@ export class Explorer {
       algorithm: this.algorithm,
       family: this.family || undefined,
       question: this.question,
-      target: this.targetText === DEFAULT_TARGET(this.question) ? undefined : this.targetText || "none",
+      target: this.targetText === DEFAULT_TARGET ? undefined : this.targetText || "none",
       axis: this.axis === "width" ? undefined : this.axis,
       view: this.view === "range" ? undefined : this.view,
       config: job?.config,

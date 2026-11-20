@@ -1,4 +1,7 @@
 <script lang="ts">
+  import type { EstimationChoices } from "../../lib/state/dashboard";
+  import { estimationData } from "../../lib/data/load";
+  import FootprintEvidence from "./FootprintEvidence.svelte";
   import EChart from "../../lib/charts/EChart.svelte";
   import Select from "../../lib/ui/Select.svelte";
   import { palette } from "../../lib/charts/echarts";
@@ -14,35 +17,25 @@
     TARGET_LABELS,
     VIEW_LABELS,
     fmt,
-    footprintChart,
     leaderboardChart,
     pickSplit,
     regimeBarChart,
     scatterChart,
-    type EstimationSnapshot,
   } from "./model";
-
-  export interface EstimationChoices {
-    scope: string;
-    target: string;
-    split: string;
-    view: string;
-  }
 
   let {
     explorer,
+    footprintOnly = false,
     reports,
     choices,
     onchange,
   }: {
     explorer: Explorer;
+    footprintOnly?: boolean;
     reports: Record<string, string>;
     choices: EstimationChoices;
     onchange: (v: EstimationChoices) => void;
   } = $props();
-
-  let data = $state<EstimationSnapshot>();
-  let error = $state("");
 
   const availableScopes = $derived.by(() => {
     const keys = Object.keys(reports);
@@ -55,28 +48,8 @@
     availableScopes.includes(choices.scope) ? choices.scope : (availableScopes[0] ?? explorer.backend),
   );
 
-  $effect(() => {
-    const scope = activeScope;
-    const filename = reports[scope];
-    const controller = new AbortController();
-    data = undefined;
-    error = "";
-    if (filename) {
-      fetch(new URL("data/" + filename, document.baseURI), { signal: controller.signal })
-        .then(async (r) => {
-          if (!r.ok) throw Error("fetch");
-          const s: EstimationSnapshot = await r.json();
-          if (s.schemaVersion !== 1 || s.backend !== scope || !s.targets) throw Error("schema");
-          if (!controller.signal.aborted) data = s;
-        })
-        .catch(() => {
-          if (!controller.signal.aborted) {
-            error = "The estimation results could not be loaded. Reload to try again.";
-          }
-        });
-    }
-    return () => controller.abort();
-  });
+  const resource = $derived(estimationData.watch(reports[activeScope], activeScope));
+  const data = $derived($resource.data);
 
   const hasHoldout = $derived(Boolean(data && data.holdoutJobs > 0));
   const targetKeys = $derived(
@@ -90,7 +63,7 @@
     choices.split === "cv" || (data && data.holdoutJobs === 0) ? "cv" : "holdout",
   );
   const viewMode = $derived(
-    choices.view in VIEW_LABELS ? choices.view : "h1",
+    footprintOnly ? "footprint" : choices.view in VIEW_LABELS ? choices.view : "h1",
   );
 
   const combinedLeaderboard = $derived(
@@ -142,12 +115,12 @@
   }
 </script>
 
-<section class="surface estimation" aria-label="Model training results">
-  <p class="training-banner" role="note">
+<section class="surface estimation" aria-label={footprintOnly ? "Footprint selection experiment" : "Model training results"}>
+  {#if !footprintOnly}<p class="training-banner" role="note">
     <strong>Training-data results.</strong> These scores come from cross-validation on the collection used to build
     the models, and are kept for comparison and model selection. The real performance is the
     <a href="#section=validation">Model validation</a> tab: frozen models scored on new QPU runs.
-  </p>
+  </p>{/if}
   <div class="settings controls">
     {#if availableScopes.length}
       <Select
@@ -164,13 +137,14 @@
         value={targetKey}
         options={targetKeys}
         format={(k) => {
+          if (footprintOnly) return TARGET_LABELS[k] ?? k;
           const r2 = data ? targetScore(data.targets[k], split) : null;
           return `${TARGET_LABELS[k] ?? k}${r2 === null ? "" : ` · R² ${r2.toFixed(2)}`}`;
         }}
         onchange={(target) => change({ target })}
       />
     {/if}
-    {#if hasHoldout}
+    {#if hasHoldout && viewMode !== "footprint"}
       <Select
         label="Evaluation split"
         value={split}
@@ -179,17 +153,17 @@
         onchange={(s) => change({ split: s })}
       />
     {/if}
-    <Select
+    {#if !footprintOnly}<Select
       label="Thesis view"
       value={viewMode}
       options={Object.keys(VIEW_LABELS)}
       format={(v) => VIEW_LABELS[v] ?? v}
       onchange={(view) => change({ view })}
-    />
+    />{/if}
   </div>
 
-  {#if error}
-    <p class="error" role="alert">{error}</p>
+  {#if $resource.error}
+    <p class="error" role="alert">The estimation results could not be loaded. Reload to try again.</p>
   {:else if !reports[activeScope]}
     <p role="status">
       No quality estimation snapshot is bundled yet for {activeScope}. Run
@@ -198,7 +172,7 @@
   {:else if !data || !report}
     <p role="status">Loading estimation results…</p>
   {:else}
-    <div class="heading">
+    {#if viewMode !== "footprint"}<div class="heading">
       <div>
         <p class="eyebrow">
           {SCOPE_LABELS[data.backend] ?? data.backend} · {data.jobs} jobs ·
@@ -238,7 +212,7 @@
           </span>
         </div>
       {/if}
-    </div>
+    </div>{/if}
 
     {#if viewMode === "h1"}
       <div class="two-col">
@@ -313,48 +287,7 @@
       {/if}
 
     {:else if viewMode === "footprint"}
-      <article class="card">
-        <h3>Curated Quantum Circuit Footprint (O2 · post-VIF SHAP ranking)</h3>
-        <EChart
-          option={footprintChart(report.footprint)}
-          replace
-          label="Curated circuit footprint SHAP importance"
-          style="height:360px;width:100%"
-        />
-      </article>
-      <div class="scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Metric</th>
-              <th>Category</th>
-              <th>Spearman ρ</th>
-              <th>VIF</th>
-              <th>Permutation ΔR²</th>
-              <th>Mean |SHAP|</th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each report.footprint as f}
-              {@const isSelected = f.selected !== false}
-              <tr>
-                <td>
-                  <span class="badge" class:ok={isSelected}>
-                    {isSelected ? "Selected" : "Pruned (Noise)"}
-                  </span>
-                </td>
-                <td><strong>{f.label}</strong><br /><small class="muted">{f.feature}</small></td>
-                <td>{f.category}</td>
-                <td>{fmt(f.spearmanRho, 3)}</td>
-                <td>{f.vif == null ? "—" : fmt(f.vif, 2)}</td>
-                <td>{fmt(f.permutationImportance, 4)}</td>
-                <td>{fmt(f.shapMeanAbs, 4)}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
+      <FootprintEvidence {report} scope={SCOPE_LABELS[data.backend] ?? data.backend}/>
 
     {:else if viewMode === "h3"}
       <article class="card">
