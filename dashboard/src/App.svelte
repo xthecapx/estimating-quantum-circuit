@@ -57,7 +57,7 @@
       <p class="intro">Which circuit metrics earned a place in the footprint? Explore the selection experiment for each chip and prediction target.</p>
     {:else if id === "estimation"}
       <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
-    {:else}<p class="intro">Choose an algorithm and a comparison partner to see how their outcomes change as circuits grow on each chip.</p>{/if}
+    {/if}
     {#if id === "regression" && explorer}
       <RegressionView {explorer} bind:readAt={() => $dashboard.readAt, readAt => dashboard.setChoices({ readAt })} />
     {:else if id === "decay" && explorer}

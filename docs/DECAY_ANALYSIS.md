@@ -18,13 +18,13 @@ QWARD source checkout or new release is not required. No QPU is contacted.
   and `provenance.json` with input hashes, package versions, cohort counts and
   analysis-source hashes. These generated analyses are separate from the final
   thesis manuscript, which remains in QWARD for a later migration.
-- `dashboard/experiments/decay/ibm_{fez,kingston}.json`: compact snapshots consumed
+- `dashboard/experiments/decay/ibm_{fez,kingston,marrakesh}.json`: compact snapshots consumed
   by the dashboard. Include these with the matching exported tables in commits.
 
 The source copies in QWARD remain available; this migration does not remove or
 rewrite them. Future thesis analysis updates belong in this repository.
 
-## Refresh both backends
+## Refresh the decay snapshots
 
 Activate this repository's `.venv`. Existing NumPy, pandas, statsmodels and
 Matplotlib dependencies are supplied by the installed published QWARD package.
@@ -36,6 +36,8 @@ python scripts/run.py decay --decay-only --backend ibm_fez --out report/fez
 python scripts/run.py decay --decay-only --backend ibm_kingston --out report/kingston
 python dashboard/export_decay.py report/fez/decay
 python dashboard/export_decay.py report/kingston/decay
+python scripts/run.py decay --decay-only --no-plots --backend ibm_marrakesh --campaign marrakesh-validation-v1-2026-11-16 --out report/marrakesh-validation
+python dashboard/export_decay.py report/marrakesh-validation/decay
 python scripts/run.py dashboard
 ```
 
@@ -52,9 +54,11 @@ backend and supported algorithms. The refreshed snapshot contains 2,409 jobs:
 provenance counts instead of assuming these values remain constant.
 
 The dashboard validates the dataset manifest, every CSV part, and the references
-table against each snapshot's hashes. A new export invalidates both snapshots,
-even when only one chip gained jobs. Regenerate both before rebuilding. The
+table against each snapshot's hashes. A new export invalidates all three snapshots,
+even when only one chip gained jobs. Regenerate all three before rebuilding. The
 Pages workflow packages the committed snapshots; it does not fit decay models.
+
+Marrakesh contributes its validation window to the descriptive All data counts wherever a pair shares enough levels. Chip columns and relationship rankings use the development reports. QAQS training continues to exclude validation campaigns.
 
 ## Interpretation and replacement jobs
 

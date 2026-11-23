@@ -213,14 +213,12 @@ python scripts/run.py decay --decay-only --backend ibm_fez --out report/fez
 python scripts/run.py decay --decay-only --backend ibm_kingston --out report/kingston
 python dashboard/export_decay.py report/fez/decay
 python dashboard/export_decay.py report/kingston/decay
+python scripts/run.py decay --decay-only --no-plots --backend ibm_marrakesh --campaign marrakesh-validation-v1-2026-11-16 --out report/marrakesh-validation
+python dashboard/export_decay.py report/marrakesh-validation/decay
 python scripts/run.py dashboard
 ```
 
-Choose an algorithm, a partner, and an outcome. Partners with a documented circuit
-relationship appear first, followed by the other measured comparisons. The opening
-view compares phase estimation and QFT on success rate. The table shows each resource
-across chips and distinguishes repeated matches, measured disagreements, and limited
-coverage. Select a cell to inspect the chip’s window counts, fits, rank correlations,
+Choose an algorithm, a partner, and an outcome. Algorithms rank by the number of distinct partners with a repeated decay match for the selected outcome. Partners rank by the number of distinct resources with a repeated match on at least one chip. All data sums matching and eligible windows across available chip reports for each resource. Each fit uses shared levels within one chip and window. Select a cell to inspect the chip’s window counts, fits, rank correlations,
 and full pair matrix. Shared URLs restore the pair, outcome, resource, chip and matrix view.
 
 The [decay runbook](../docs/DECAY_ANALYSIS.md) describes the migrated runner,

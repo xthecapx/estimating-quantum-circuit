@@ -72,40 +72,58 @@ export function matchingWindows(c: Cell, tolerance: number): number {
 export const short = (a:string) => ({"BERNSTEIN-VAZIRANI":"BV", "PHASE-ESTIMATION":"PE", "RANDOM-VOLUMETRIC":"RV"}[a] ?? algorithmName(a));
 export const key = (c:Cell) => c.a + "/" + c.b;
 
-const structuralRoles = new Set(["fourier", "composition", "oracle", "entanglement", "mirror_protocol"]);
+type PartnerEvidence = { id: string; cell: Cell; resources: Set<string>; comparable: boolean };
 
-export function partnerOptions(reports: Snapshot[], algorithm: string) {
-  const partners = new Map<string, Cell>();
+export function relationshipRanking(reports: Snapshot[], outcome: string) {
+  const network = new Map<string, Map<string, PartnerEvidence>>();
   for (const report of reports) {
-    for (const panel of Object.values(report.panels)) {
-      for (const cells of Object.values(panel)) {
-        for (const cell of cells) {
-          if (cell.a !== algorithm && cell.b !== algorithm) continue;
-          const id = cell.a === algorithm ? cell.b : cell.a;
-          if (!partners.has(id)) partners.set(id, cell);
+    for (const id of report.algorithms) {
+      if (!network.has(id)) network.set(id, new Map());
+    }
+    for (const [metric, panel] of Object.entries(report.panels)) {
+      for (const cell of panel[outcome] ?? []) {
+        const eligible = Object.keys(cell.periods).length >= report.minPeriods;
+        const repeated = eligible && matchingWindows(cell, report.tolerance) >= report.minPeriods;
+        for (const [id, other] of [[cell.a, cell.b], [cell.b, cell.a]]) {
+          const partners = network.get(id)!;
+          const partner = partners.get(other) ?? { id: other, cell, resources: new Set<string>(), comparable: false };
+          if (repeated) partner.resources.add(metric);
+          if (eligible) partner.comparable = true;
+          partners.set(other, partner);
         }
       }
     }
   }
-  return Array.from(partners, ([id, cell]) => ({ id, cell, related: structuralRoles.has(cell.role) }))
-    .sort((a, b) => Number(b.related) - Number(a.related) || algorithmName(a.id).localeCompare(algorithmName(b.id)));
+  return Array.from(network, ([id, entries]) => {
+    const partners = [...entries.values()].sort((a, b) =>
+      b.resources.size - a.resources.size || Number(b.comparable) - Number(a.comparable)
+      || algorithmName(a.id).localeCompare(algorithmName(b.id)));
+    return { id, partners, count: partners.filter(p => p.resources.size > 0).length };
+  }).sort((a, b) => b.count - a.count || algorithmName(a.id).localeCompare(algorithmName(b.id)));
 }
 
 export function resourceEvidence(reports: Snapshot[], algorithm: string, partner: string, outcome: string) {
   const metrics = new Set(reports.flatMap(report => Object.keys(report.panels)));
   return Array.from(metrics, metric => {
-    const chips = new Map<string, { cell: Cell; matched: number; eligible: number; minimum: number }>();
+    const chips = new Map<string, { cell: Cell; matched: number; eligible: number; minimum: number; coverage: string }>();
     for (const report of reports) {
       const cell = report.panels[metric]?.[outcome]?.find(c =>
         (c.a === algorithm && c.b === partner) || (c.a === partner && c.b === algorithm));
-      if (cell) chips.set(report.backend, {
+      if (!cell) continue;
+      const shared = Object.values(cell.overlap);
+      const best = Math.max(0, ...shared);
+      chips.set(report.backend, {
+        coverage: shared.length ? `${best} of ${report.minLevels} shared levels` : "No window data",
         cell, matched: matchingWindows(cell, report.tolerance),
         eligible: Object.keys(cell.periods).length, minimum: report.minPeriods,
       });
     }
     const evidence = [...chips.values()];
     return {
-      metric, chips, repeats: evidence.filter(e => e.matched >= e.minimum).length,
+      metric, chips,
+      matched: evidence.reduce((sum, e) => sum + e.matched, 0),
+      eligible: evidence.reduce((sum, e) => sum + e.eligible, 0),
+      repeats: evidence.filter(e => e.matched >= e.minimum).length,
       comparable: evidence.filter(e => e.eligible >= e.minimum).length,
     };
   }).filter(row => row.chips.size).sort((a, b) =>

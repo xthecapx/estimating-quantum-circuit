@@ -209,6 +209,8 @@ python scripts/run.py decay --decay-only --backend ibm_fez --out report/fez
 python scripts/run.py decay --decay-only --backend ibm_kingston --out report/kingston
 python dashboard/export_decay.py report/fez/decay
 python dashboard/export_decay.py report/kingston/decay
+python scripts/run.py decay --decay-only --no-plots --backend ibm_marrakesh --campaign marrakesh-validation-v1-2026-11-16 --out report/marrakesh-validation
+python dashboard/export_decay.py report/marrakesh-validation/decay
 python scripts/run.py dashboard
 npm ci --prefix dashboard
 npm run dev --prefix dashboard

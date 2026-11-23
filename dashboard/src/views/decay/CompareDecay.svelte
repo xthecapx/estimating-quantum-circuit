@@ -7,26 +7,59 @@
   import Select from "../../lib/ui/Select.svelte";
   import { algorithmName } from "../../lib/domain/catalog";
   import type { Explorer } from "../../lib/state/explorer.svelte";
-  import { bounds, chart, construction, declineLabels, declineStatus, extraLoss, fixed, key, matchingWindows, medianLoss, partnerOptions, resourceEvidence, signed, resources, short, targets } from "./model";
+  import { bounds, chart, construction, declineLabels, declineStatus, extraLoss, fixed, key, matchingWindows, medianLoss, relationshipRanking, resourceEvidence, signed, resources, short, targets } from "./model";
   let {explorer,reports,choices,onchange}:{explorer:Explorer;reports:Record<string,string>;choices:DecayChoices;onchange:(v:DecayChoices)=>void}=$props();
-  const chips = $derived([...new Set([...explorer.backends, ...Object.keys(reports)])].sort());
-  const reportStore = $derived(derived(chips.map(chip => decayData.watch(reports[chip], chip)), results => results));
+  const validationChip = "ibm_marrakesh";
+  const reportChips = $derived(Object.keys(reports).sort());
+  const chips = $derived(reportChips.filter(chip => chip !== validationChip));
+  const reportStore = $derived(derived(reportChips.map(chip => decayData.watch(reports[chip], chip)), results => results));
   const snapshots = $derived($reportStore.flatMap(result => result.data ? [result.data] : []));
-  const loading = $derived(chips.some((chip, i) => reports[chip] && !$reportStore[i]?.data && !$reportStore[i]?.error));
-  const algorithms = $derived([...new Set(snapshots.flatMap(report => report.algorithms))].sort());
+  const chipSnapshots = $derived(snapshots.filter(report => report.backend !== validationChip));
+  const hasValidation = $derived(snapshots.some(report => report.backend === validationChip));
+  const loading = $derived($reportStore.some(result => !result.data && !result.error));
+  const outcomeOptions = $derived.by(() => {
+    const ids = new Set(chipSnapshots.flatMap(report =>
+      Object.values(report.panels).flatMap(panel => Object.keys(panel))));
+    return [...ids].map(id => {
+      const ranking = relationshipRanking(chipSnapshots, id);
+      // Each matched pair appears once in each algorithm's partner list.
+      const pairs = ranking.reduce((sum, algorithm) => sum + algorithm.count, 0) / 2;
+      return { id, pairs, ranking };
+    }).sort((a, b) => b.pairs - a.pairs || (targets[a.id] ?? a.id).localeCompare(targets[b.id] ?? b.id));
+  });
+  const selectedOutcome = $derived(outcomeOptions.find(item => item.id === choices.outcome)
+    ?? outcomeOptions.find(item => item.id === "success") ?? outcomeOptions[0]);
+  const outcome = $derived(selectedOutcome?.id ?? "");
+  const ranking = $derived(selectedOutcome?.ranking ?? []);
   const requested = $derived(choices.pair.split("/"));
-  const algorithm = $derived(algorithms.includes(requested[0]) ? requested[0]
-    : algorithms.includes("PHASE-ESTIMATION") ? "PHASE-ESTIMATION" : algorithms[0] ?? "");
-  const partners = $derived(partnerOptions(snapshots, algorithm));
+  const selected = $derived(ranking.find(a => a.id === requested[0]) ?? ranking[0]);
+  const algorithm = $derived(selected?.id ?? "");
+  const partners = $derived(selected?.partners ?? []);
   const partner = $derived(partners.find(p => p.id === requested[1]) ?? partners[0]);
   const structure = $derived(partner && construction(partner.cell));
-  const outcomes = $derived([...new Set(snapshots.flatMap(report =>
-    Object.values(report.panels).flatMap(panel => Object.keys(panel))))]);
-  const outcome = $derived(outcomes.includes(choices.outcome) ? choices.outcome
-    : outcomes.includes("success") ? "success" : outcomes[0] ?? "");
   const rows = $derived(resourceEvidence(snapshots, algorithm, partner?.id ?? "", outcome));
+  let showUnavailable = $state(false);
+  const visibleRows = $derived(showUnavailable ? rows : rows.filter(row => row.eligible > 0));
+  const hasUnavailable = $derived(rows.some(row => !row.eligible || chips.some(chip => !row.chips.get(chip)?.eligible)));
+  const example = $derived.by(() => {
+    for (const row of rows) {
+      for (const report of chipSnapshots) {
+        const result = row.chips.get(report.backend);
+        if (!result?.eligible) continue;
+        const periods = Object.values(result.cell.periods);
+        const period = periods.find(p => declineStatus(p, report.tolerance) === "similar") ?? periods[0];
+        return { report, result, period, metric: row.metric };
+      }
+    }
+  });
+  const scoreUnits = $derived(outcome === "success" ? "percentage points" : "points on the 0–100 scale");
+  function fittedChange(slope: number, span: number) {
+    const change = 100 * slope * span;
+    if (Math.abs(change) < 0.005) return "changed by less than 0.01";
+    return (change < 0 ? "fell by " : "rose by ") + fixed(Math.abs(change));
+  }
   const metric = $derived(choices.resource);
-  const data = $derived(snapshots.find(report => report.backend === explorer.backend));
+  const data = $derived(chipSnapshots.find(report => report.backend === explorer.backend));
   const evidence = $derived(rows.find(row => row.metric === metric)?.chips.get(explorer.backend));
   const cell = $derived(evidence?.cell);
   const cells = $derived(data?.panels[metric]?.[outcome] ?? []);
@@ -85,59 +118,83 @@
     {/if}
   {:else}
     <div class="settings controls">
-      <Select label="Algorithm" icon="qubits" value={algorithm} options={algorithms} format={algorithmName} onchange={chooseAlgorithm}/>
+      <Select label="Algorithm" icon="qubits" value={algorithm} options={ranking.map(a => a.id)}
+        format={id => algorithmName(id) + " · " + ranking.find(a => a.id === id)!.count + " matching partners"} onchange={chooseAlgorithm}/>
       <label><span class="field-name">Compare with</span>
         <select aria-label="Compare with" value={partner?.id} onchange={event => change({pair: algorithm + "/" + event.currentTarget.value, resource: ""})}>
-          {#each [true, false] as related}
-            {@const group = partners.filter(p => p.related === related)}
-            {#if group.length}
-              <optgroup label={related ? "Related circuit constructions" : "Other measured algorithms"}>
-                {#each group as p (p.id)}<option value={p.id}>{algorithmName(p.id)}</option>{/each}
-              </optgroup>
-            {/if}
+          {#each partners as p (p.id)}
+            <option value={p.id}>{algorithmName(p.id)} · {p.resources.size ? p.resources.size + " matched " + (p.resources.size === 1 ? "resource" : "resources") : p.comparable ? "No repeated match" : "Insufficient coverage"}</option>
           {/each}
         </select>
       </label>
-      <Select label="Outcome" icon="shots" value={outcome} options={outcomes} format={id => targets[id] ?? id}
-        onchange={outcome => change({outcome, resource: ""})}/>
+      <Select label="Outcome" icon="shots" value={outcome} options={outcomeOptions.map(item => item.id)}
+        format={id => (targets[id] ?? id) + " · " + outcomeOptions.find(item => item.id === id)!.pairs + " matching pairs"}
+        onchange={outcome => change({outcome, pair: partner ? algorithm + "/" + partner.id : algorithm, resource: ""})}/>
     </div>
     {#if structure && partner}
       <header class="relationship">
         <h2>{algorithmName(algorithm)} and {algorithmName(partner.id)}</h2>
-        <h3>{structure.title}</h3><p>{structure.detail}</p>
       </header>
       <section class="overview" aria-labelledby="overview-title">
-        <h3 id="overview-title">Does the decline in {targets[outcome]?.toLowerCase() ?? outcome} repeat across chips?</h3>
-        <p class="note">A window matches when both algorithms decline by similar amounts over the same resource range. Select a count to see the fitted changes on that chip.</p>
-        <div class="scroll"><table class="evidence" aria-labelledby="overview-title"><thead><tr><th scope="col">Circuit resource</th>
+        <h3 id="overview-title">How often did {targets[outcome]?.toLowerCase() ?? outcome} fall by similar amounts?</h3>
+        <div id="count-guide" class="count-key">
+          <span><b class="sample match">1 of 3</b> Similar drop in one of three collections</span>
+          <span><b class="sample match">✓</b> Repeated on this chip</span>
+          {#if hasUnavailable}<span><b class="sample">—</b> Unavailable for comparison</span>{/if}
+        </div>
+        {#if showUnavailable && hasUnavailable}
+          <p class="note" id="coverage-guide">“0 of 3 shared levels” means the two algorithms needed three resource values in common, but shared none in a single collection on that chip.</p>
+        {/if}
+        <div class="scroll"><table class="evidence" aria-labelledby="overview-title" aria-describedby="count-guide"><thead><tr><th scope="col">Circuit resource</th><th scope="col">All data</th>
           {#each chips as chip}<th scope="col">{chip}</th>{/each}
         </tr></thead><tbody>
-          {#each rows as row (row.metric)}
+          {#each visibleRows as row (row.metric)}
             <tr><th scope="row">{resources[row.metric] ?? row.metric}</th>
-              {#each chips as chip, i}
+              <td>{#if row.eligible}<strong class="total" class:match={row.matched > 0}>{row.matched} of {row.eligible}</strong>{:else}<small>No comparable windows</small>{/if}</td>
+              {#each chips as chip}
                 {@const result = row.chips.get(chip)}
-                <td>{#if result}
-                  <button class:repeat={result.matched >= result.minimum}
-                    aria-label={`${resources[row.metric] ?? row.metric}, ${chip}, ${result.matched} of ${result.eligible} windows match${result.eligible < result.minimum ? ", insufficient coverage" : ""}`}
+                <td>{#if result && (result.eligible || showUnavailable)}
+                  <button class:match={result.matched > 0}
+                    aria-label={!result.eligible ? `${resources[row.metric] ?? row.metric}, ${chip}, ${result.coverage}` : `${resources[row.metric] ?? row.metric}, ${chip}, ${result.matched} of ${result.eligible} comparable windows had similar declines${result.matched >= result.minimum ? ", repeated on this chip" : ""}`}
                     aria-pressed={metric === row.metric && explorer.backend === chip}
                     onclick={() => inspectResource(row.metric, chip)}>
-                    {#if result.eligible < result.minimum}
-                      <strong>{result.eligible} eligible</strong><small>Insufficient coverage</small>
-                    {:else}
+                    {#if result.eligible}
                       <strong>{result.matched} of {result.eligible}</strong>
-                      <small>{result.matched >= result.minimum ? "Repeated match" : "No repeated match"}</small>
+                      {#if result.matched >= result.minimum}<span aria-hidden="true"> ✓</span>{/if}
+                    {:else}
+                      <small>Unavailable<br/>{result.coverage}</small>
                     {/if}
                   </button>
-                {:else}<span class="note">{$reportStore[i]?.error ? "Load failed" : reports[chip] ? "No comparison" : "No report"}</span>{/if}</td>
+                {:else if $reportStore[reportChips.indexOf(chip)]?.error}<span class="note">Load failed</span>
+                {:else if showUnavailable}<small>Pair absent from report</small>
+                {:else}<span aria-label="No comparable windows" class="note">—</span>{/if}</td>
               {/each}
             </tr>
+          {:else}
+            <tr><td colspan={chips.length + 2}>No resources have comparable windows for this selection.</td></tr>
           {/each}
         </tbody></table></div>
-        <details><summary>How to read the comparison</summary>
-          {#each snapshots as report}
+        {#if hasUnavailable}
+          <label class="unavailable-toggle"><input type="checkbox" bind:checked={showUnavailable}/> Show unavailable comparisons</label>
+        {/if}
+        <details class="comparison-help"><summary>How to read this comparison</summary>
+          <h4>{structure.title}</h4><p>{structure.detail}</p>
+          <p>Each collection window covers one chip. We compare fitted changes over the resource levels both algorithms tested in that window.</p>
+        {#if example}
+          {@const { report, result, period } = example}
+          {@const span = period.points[period.points.length - 1][0] - period.points[0][0]}
+          {@const status = declineStatus(period, report.tolerance)}
+          <p class="worked-example"><strong>For example,</strong> on {report.backend}, as {(resources[example.metric] ?? example.metric).toLowerCase()} increased,
+            {algorithmName(result.cell.a)} {fittedChange(period.slopeA, span)} and {algorithmName(result.cell.b)} {fittedChange(period.slopeB, span)} {scoreUnits} in one window.
+            {#if status === "similar"}Both fell within {report.tolerance} points of each other, so this window counts toward the first number.
+            {:else if status === "different"}Their losses were {fixed(period.gap)} points apart, above the {report.tolerance}-point cutoff, so this window counts only toward the second number.
+            {:else}A similar decline requires both fitted outcomes to fall, so this window counts only toward the second number.{/if}</p>
+        {/if}
+          <p class="note">All data counts each comparable chip window once.{#if hasValidation} It includes eligible Marrakesh validation windows.{:else if explorer.backends.includes(validationChip)} Marrakesh validation data is unavailable for this export.{/if}</p>
+          {#each chipSnapshots as report}
             <p>{report.backend} requires at least {report.minLevels} shared resource levels in a window. Both fitted outcomes must fall and their losses must be within {report.tolerance} {outcome === "success" ? "percentage points" : "points on the outcome × 100 scale"} of each other. A repeated match requires {report.minPeriods} matching windows.</p>
           {/each}
-          <p>Each chip uses its own collection windows and shared levels. Rows with repeated matches on more chips appear first.</p>
+          <p>Algorithms rank by matching partners, partners by matched resources, and resource rows by the number of chips showing a repeated match.</p>
         </details>
       </section>
     {/if}
@@ -267,14 +324,22 @@
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap:12px; margin:0; }
   .relationship { padding:8px 0; }
   .relationship h2 { font:500 clamp(1.6rem,3vw,2.5rem) Georgia,serif; margin:0 0 10px; }
-  .relationship h3, .overview h3 { margin:0; }
-  .relationship p, .overview p { line-height:1.5; margin:6px 0; }
+  .overview h3 { margin:0; }
+  .overview p { line-height:1.5; margin:6px 0; }
+  .comparison-help h4 { margin:10px 0 0; }
+  .worked-example { background:var(--paper); border-inline-start:3px solid var(--teal); padding:8px 12px; }
   .overview { display:grid; gap:6px; min-width:0; }
+  .unavailable-toggle { flex-direction:row; align-items:center; width:fit-content; cursor:pointer; }
   .evidence { width:100%; border-collapse:collapse; }
   .evidence tbody th { position:static; background:white; }
   .evidence td,.evidence th { padding:6px; vertical-align:middle; }
   .evidence button { width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#f6f7f5; text-align:left; color:var(--ink); cursor:pointer; }
-  .evidence button.repeat { background:#e5f1ec; color:#16594b; }
+  .count-key { display:flex; flex-wrap:wrap; gap:6px 16px; align-items:center; font-size:.83rem; color:var(--muted); }
+  .count-key span { display:inline-flex; gap:6px; align-items:center; }
+  .sample, .total { display:inline-block; border-radius:5px; padding:3px 7px; }
+  .sample { background:#f2f4f2; }
+  .count-key .match, .evidence .match { background:#dbefe3; color:#14543a; }
+  .evidence button.match { border-color:#8ebca2; }
   .evidence button[aria-pressed="true"] { outline:2px solid var(--ink); outline-offset:-2px; }
   .evidence small { display:block; line-height:1.25; }
   .plot-heading { display:flex; }
