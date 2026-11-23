@@ -12,7 +12,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 ROOT = Path(__file__).resolve().parents[1]
 PAPERS = ROOT / "experiments"
-PUBLIC_PROFILES = ("full", "oracle-growth", "shor-growth", "validation-v1")
+PUBLIC_PROFILES = ("full", "oracle-growth", "shor-growth", "validation-v1", "ghz-bv-transfer-v1")
 HISTORICAL_PROFILES = ("legacy-full", "full-shor-growth", "full-oracle-growth")
 PROFILES = PUBLIC_PROFILES + HISTORICAL_PROFILES
 MODES = (
@@ -102,6 +102,20 @@ def templates(profile="legacy-full"):
         plans_by_key[key] = plan
     if sum(p["planned_executions"] for p in plans_by_key.values()) != 344:
         raise ValueError("Expected 344 jobs; review the campaign before running")
+    if profile == "ghz-bv-transfer-v1":
+        workloads = {
+            "ghz": ["GHZ4", "GHZ6", "GHZ7", "GHZ8", "GHZ10"],
+            "bv": ["BV12-PREFIX3", "BV12-PREFIX5", "BV12-ALT", "BV12-PREFIX7", "BV12-PREFIX9"],
+        }
+        return {
+            key: {
+                **plans_by_key[key],
+                "items": [{"config": config} for config in configs],
+                "runs": 2,
+                "planned_executions": 2 * len(configs),
+            }
+            for key, configs in workloads.items()
+        }
     if profile in ("shor-growth", "full-shor-growth", "full-oracle-growth"):
         growth = json.loads(
             (PAPERS / "shor/plans/shor-growth-profile.json").read_text(encoding="utf-8")

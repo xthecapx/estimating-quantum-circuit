@@ -8,6 +8,7 @@ Review generated plans whenever the workload changes.
 | Experiment family | Entry point and configuration | Identity and outputs | Use |
 | --- | --- | --- | --- |
 | Current IBM collection | `ibm`; `scripts/ibm_campaign_ci.py`; `--profile full` | Backend + date + resolved profile; algorithm `plans/*-dDATE*.json`, `data/qpu/v2/` | Current full protocol; `full` resolves to `full-oracle-growth`, 391 planned jobs |
+| [H2 GHZ to BV transfer](fez_ghz_bv_transfer.md) | `ibm --profile ghz-bv-transfer-v1` | Fez, one dated window | 20 jobs testing GHZ-based predictions on four unseen fixed-width BV secrets |
 | Oracle growth | `ibm --profile oracle-growth` | Same dated identity, Grover/BV subset | 68 jobs; investigate oracle/width growth |
 | Shor growth | `ibm --profile shor-growth` | Same dated identity, Shor subset | 39 jobs; growth/degradation study |
 | Original Fez pilot/main windows | `ibm-windows`; `campaign_matrix.py`, per-algorithm `plans/*-w*.json` | `fez-dataset-v2`, windows 0 and 1–3; separate `0-rN` pilot repeats | Original pilot: 15 configs × 2 executions = 30 tasks; do not confuse with dated full profiles |

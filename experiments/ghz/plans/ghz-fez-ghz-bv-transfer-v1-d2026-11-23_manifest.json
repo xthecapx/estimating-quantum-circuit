@@ -1,0 +1,165 @@
+{
+  "schema_version": "2.0",
+  "algorithm": "GHZ",
+  "status": "completed",
+  "prepared_at": "2026-11-23T19:32:17.013371+00:00",
+  "plan": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/plans/ghz-fez-ghz-bv-transfer-v1-d2026-11-23.json",
+  "backend_name": "ibm_fez",
+  "campaign_id": "fez-ghz-bv-transfer-v1-2026-11-23",
+  "window": 20261123,
+  "order_seed": 202611230,
+  "job_order": [
+    [
+      3,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "batch_id": "c0bf18e9-1141-46df-8219-bccb285ba00d",
+  "jobs_planned": 10,
+  "items": [
+    {
+      "config": "GHZ4",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ4_IBM_ibm_fez_20261123_193211_ed8ebb28.json",
+      "calibrated_at": "2026-11-23 14:12:30-05:00",
+      "physical_layout": [
+        144,
+        143,
+        142,
+        141
+      ],
+      "isa_depth": 16,
+      "isa_two_qubit_gates": 3,
+      "job_ids": [
+        "dc299sls2omc738bk4i0",
+        "dc299tds2omc738bk4mg"
+      ]
+    },
+    {
+      "config": "GHZ6",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ6_IBM_ibm_fez_20261123_193213_8c2f53a1.json",
+      "calibrated_at": "2026-11-23 14:12:30-05:00",
+      "physical_layout": [
+        147,
+        146,
+        145,
+        144,
+        143,
+        142
+      ],
+      "isa_depth": 22,
+      "isa_two_qubit_gates": 5,
+      "job_ids": [
+        "dc299s5hdvas73blrd9g",
+        "dc299t6q4uuc73a4ufr0"
+      ]
+    },
+    {
+      "config": "GHZ7",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ7_IBM_ibm_fez_20261123_193214_5443f1d7.json",
+      "calibrated_at": "2026-11-23 14:12:30-05:00",
+      "physical_layout": [
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        137
+      ],
+      "isa_depth": 25,
+      "isa_two_qubit_gates": 6,
+      "job_ids": [
+        "dc299ruq4uuc73a4ufn0",
+        "dc299t5hdvas73blrdd0"
+      ]
+    },
+    {
+      "config": "GHZ8",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ8_IBM_ibm_fez_20261123_193215_1e2cc0fd.json",
+      "calibrated_at": "2026-11-23 14:12:30-05:00",
+      "physical_layout": [
+        127,
+        137,
+        147,
+        146,
+        145,
+        144,
+        143,
+        142
+      ],
+      "isa_depth": 28,
+      "isa_two_qubit_gates": 7,
+      "job_ids": [
+        "dc299rds2omc738bk4e0",
+        "dc299slhdvas73blrdb0"
+      ]
+    },
+    {
+      "config": "GHZ10",
+      "runs": 2,
+      "record_path": "/Users/cristianmarquezbarrios/Documents/code/estimating-quantum-circuit/experiments/ghz/data/qpu/v2/GHZ10_IBM_ibm_fez_20261123_193217_9f98f9d9.json",
+      "calibrated_at": "2026-11-23 14:12:30-05:00",
+      "physical_layout": [
+        127,
+        137,
+        147,
+        146,
+        145,
+        144,
+        143,
+        142,
+        141,
+        140
+      ],
+      "isa_depth": 34,
+      "isa_two_qubit_gates": 9,
+      "job_ids": [
+        "dc299rinj2vs73dgbsm0",
+        "dc299sts2omc738bk4l0"
+      ]
+    }
+  ],
+  "submission_group": 1,
+  "requested_batch_max_time_seconds": 3600,
+  "submitted_at": "2026-11-23T19:33:09.751463+00:00"
+}

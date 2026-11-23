@@ -1,0 +1,29 @@
+{
+  "backend": "ibm_fez",
+  "campaign_id": "fez-ghz-bv-transfer-v1-2026-11-23",
+  "window": 20261123,
+  "shots": 1024,
+  "optimization_level": 3,
+  "seed_transpiler": 11,
+  "order_seed": 202611230,
+  "runs": 2,
+  "planned_executions": 10,
+  "purpose": "ghz-bv-transfer-v1 v1 on ibm_fez, collection 2026-11-23",
+  "items": [
+    {
+      "config": "GHZ4"
+    },
+    {
+      "config": "GHZ6"
+    },
+    {
+      "config": "GHZ7"
+    },
+    {
+      "config": "GHZ8"
+    },
+    {
+      "config": "GHZ10"
+    }
+  ]
+}

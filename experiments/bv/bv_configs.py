@@ -107,6 +107,16 @@ def _generate_configs() -> List[BVExperimentConfig]:
                 description=f"{n} qubits, {label.lower()} secret (validation-v1)",
             )
         )
+    # H2 transfer window: vary oracle weight while holding the data register at 12.
+    for weight in (3, 5, 7, 9):
+        configs.append(
+            BVExperimentConfig(
+                config_id=f"BV12-PREFIX{weight}",
+                num_qubits=12,
+                secret_string="1" * weight + "0" * (12 - weight),
+                description=f"12 data qubits, prefix of {weight} ones (GHZ transfer study)",
+            )
+        )
     return configs
 
 

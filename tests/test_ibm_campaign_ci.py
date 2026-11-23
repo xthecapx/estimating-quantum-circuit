@@ -525,7 +525,9 @@ def test_oracle_growth_window(ci, cloud_runtime, backend, profile, configs, jobs
 @pytest.mark.parametrize("backend", ["ibm_fez", "ibm_kingston", "ibm_marrakesh"])
 def test_public_full_has_every_extension_and_keeps_expanded_identity(ci, cloud_runtime, backend):
     day = "2026-11-08"
-    assert ci.PUBLIC_PROFILES == ("full", "oracle-growth", "shor-growth", "validation-v1")
+    assert ci.PUBLIC_PROFILES == (
+        "full", "oracle-growth", "shor-growth", "validation-v1", "ghz-bv-transfer-v1"
+    )
     assert ci.templates("full") == ci.templates("full-oracle-growth")
     assert ci.identity(day, backend, "full") == ci.identity(day, backend, "full-oracle-growth")
     paths = ci.plans(day, create=True, backend=backend, profile="full")
@@ -579,3 +581,20 @@ def test_validation_profile_groups_match_training_data():
     seen = set(load_ml_dataset(tables).frame["meta.config_id"].astype(str))
     for _, config, group in vp.ITEMS:
         assert (config in seen) == (group == "anchor"), config
+
+def test_transfer_window_has_paired_logical_gate_levels(ci):
+    from experiments.bv.bv_configs import get_config
+
+    paths = ci.plans("2026-11-23", create=True, profile="ghz-bv-transfer-v1")
+    assert set(paths) == {"bv", "ghz"}
+    plans = {key: json.loads(path.read_text()) for key, path in paths.items()}
+    for plan in plans.values():
+        assert plan["campaign_id"] == "fez-ghz-bv-transfer-v1-2026-11-23"
+        assert plan["window"] == 20261123
+        assert (plan["planned_executions"], plan["shots"], plan["runs"]) == (10, 1024, 2)
+    secrets = [get_config(item["config"]).secret_string for item in plans["bv"]["items"]]
+    assert all(len(secret) == 12 for secret in secrets)
+    assert [secret.count("1") for secret in secrets] == [3, 5, 6, 7, 9]
+    assert [item["config"] for item in plans["ghz"]["items"]] == [
+        "GHZ4", "GHZ6", "GHZ7", "GHZ8", "GHZ10"
+    ]
