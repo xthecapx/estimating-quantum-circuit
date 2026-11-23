@@ -6,11 +6,11 @@ Profile ρ ranks the observed level means. Local ρ ranks the changes per unit b
 
 | Target | Measurement | Available jobs |
 | --- | --- | ---: |
-| Success rate | Fraction of accepted shots | 1236 / 1236 |
-| Adjusted success | Fraction of the chance-to-ideal success gap recovered | 1222 / 1236 |
-| Hellinger fidelity | Squared overlap of measured and ideal outcome distributions | 1236 / 1236 |
-| TVD similarity | One minus total variation distance from the ideal distribution | 1236 / 1236 |
-| Differential success rate | Clipped Michelson contrast of mean expected probability against the strongest unexpected outcome | 1236 / 1236 |
+| Success rate | Fraction of accepted shots | 1256 / 1256 |
+| Adjusted success | Fraction of the chance-to-ideal success gap recovered | 1242 / 1256 |
+| Hellinger fidelity | Squared overlap of measured and ideal outcome distributions | 1256 / 1256 |
+| TVD similarity | One minus total variation distance from the ideal distribution | 1256 / 1256 |
+| Differential success rate | Clipped Michelson contrast of mean expected probability against the strongest unexpected outcome | 1256 / 1256 |
 
 For an ideal distribution concentrated on a single accepted bitstring, Hellinger fidelity and TVD similarity both equal success. Agreement across these scores can therefore reflect the same observation.
 
@@ -21,10 +21,11 @@ The Fez vTP configurations use specified one-qubit payload gates with inverse va
 - P3 = fez-dataset-v2-2026-11-05 / window 20261105
 - P4 = fez-dataset-v2-pilot-r2 / window 0
 - P5 = fez-full-shor-growth-v1-2026-11-06 / window 20261106
-- P6 = fez-oracle-growth-v1-2026-11-07 / window 20261107
-- P7 = fez-oracle-growth-v1-2026-11-07-makeup / window 20261107
-- P8 = fez-oracle-growth-v1-2026-11-07-standalone / window 20261108
-- P9 = fez-shor-growth-v1-2026-11-05 / window 20261105
+- P6 = fez-ghz-bv-transfer-v1-2026-11-23 / window 20261123
+- P7 = fez-oracle-growth-v1-2026-11-07 / window 20261107
+- P8 = fez-oracle-growth-v1-2026-11-07-makeup / window 20261107
+- P9 = fez-oracle-growth-v1-2026-11-07-standalone / window 20261108
+- P10 = fez-shor-growth-v1-2026-11-05 / window 20261105
 
 ## QFT and Phase estimation
 

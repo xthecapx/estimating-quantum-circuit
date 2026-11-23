@@ -1,0 +1,41 @@
+family,metric,model,protocol,reason,source,target
+fourier,a.BehavioralMetrics.program_communication,ols,slope_comparison,Fewer than three distinct predictor values,,
+fourier,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,QFT,PHASE-ESTIMATION
+fourier,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,QFT,QFT
+fourier,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,PHASE-ESTIMATION,QFT
+fourier,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,PHASE-ESTIMATION,PHASE-ESTIMATION
+fourier,a.BehavioralMetrics.program_communication,binomial_logit,slope_comparison,Fewer than three distinct predictor values,,
+fourier,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,QFT,PHASE-ESTIMATION
+fourier,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,QFT,QFT
+fourier,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,PHASE-ESTIMATION,QFT
+fourier,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,PHASE-ESTIMATION,PHASE-ESTIMATION
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,slope_comparison,"Rank-deficient design: metric, campaign, or algorithm effects are confounded",,
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,unseen_algorithm,Fewer than three distinct predictor values,GROVER,BERNSTEIN-VAZIRANI
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GROVER,GROVER
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,slope_comparison,"Rank-deficient design: metric, campaign, or algorithm effects are confounded",,
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,GROVER,BERNSTEIN-VAZIRANI
+oracle,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GROVER,GROVER
+oracle,a.BehavioralMetrics.program_communication,ols,slope_comparison,Fewer than three distinct predictor values,,
+oracle,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,GROVER,BERNSTEIN-VAZIRANI
+oracle,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GROVER,GROVER
+oracle,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,BERNSTEIN-VAZIRANI,GROVER
+oracle,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI
+oracle,a.BehavioralMetrics.program_communication,binomial_logit,slope_comparison,Fewer than three distinct predictor values,,
+oracle,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,GROVER,BERNSTEIN-VAZIRANI
+oracle,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GROVER,GROVER
+oracle,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,BERNSTEIN-VAZIRANI,GROVER
+oracle,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI
+entanglement,a.BehavioralMetrics.program_communication,ols,slope_comparison,Fewer than three distinct predictor values,,
+entanglement,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,VTP,GHZ
+entanglement,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,VTP,VTP
+entanglement,a.BehavioralMetrics.program_communication,ols,unseen_algorithm,Fewer than three distinct predictor values,GHZ,VTP
+entanglement,a.BehavioralMetrics.program_communication,ols,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GHZ,GHZ
+entanglement,a.BehavioralMetrics.program_communication,binomial_logit,slope_comparison,Fewer than three distinct predictor values,,
+entanglement,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,VTP,GHZ
+entanglement,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,VTP,VTP
+entanglement,a.BehavioralMetrics.program_communication,binomial_logit,unseen_algorithm,Fewer than three distinct predictor values,GHZ,VTP
+entanglement,a.BehavioralMetrics.program_communication,binomial_logit,larger_configurations,Tied/constant sizes cannot form a larger-configuration holdout,GHZ,GHZ
+entanglement,a.quantum_specific.entanglement_ratio,ols,unseen_algorithm,Too few independent configuration clusters for this design,GHZ,VTP
+entanglement,a.quantum_specific.entanglement_ratio,ols,larger_configurations,Too few independent configuration clusters for this design,GHZ,GHZ
+entanglement,a.quantum_specific.entanglement_ratio,binomial_logit,unseen_algorithm,Too few independent configuration clusters for this design,GHZ,VTP
+entanglement,a.quantum_specific.entanglement_ratio,binomial_logit,larger_configurations,Too few independent configuration clusters for this design,GHZ,GHZ

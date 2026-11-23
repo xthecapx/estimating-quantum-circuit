@@ -1,0 +1,31 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                success   R-squared:                       0.694
+Model:                            OLS   Adj. R-squared:                  0.686
+Method:                 Least Squares   F-statistic:                     31.35
+Date:                Mon, 23 Nov 2026   Prob (F-statistic):           1.03e-14
+Time:                        14:51:17   Log-Likelihood:                 221.99
+No. Observations:                 270   AIC:                            -428.0
+Df Residuals:                     262   BIC:                            -399.2
+Df Model:                           7                                         
+Covariance Type:              cluster                                         
+========================================================================================
+                           coef    std err          t      P>|t|      [0.025      0.975]
+----------------------------------------------------------------------------------------
+intercept                0.8342      0.024     35.481      0.000       0.787       0.882
+x                       -0.1640      0.027     -5.996      0.000      -0.219      -0.109
+period_1                -0.0136      0.018     -0.773      0.444      -0.049       0.022
+period_2                -0.0214      0.017     -1.260      0.215      -0.056       0.013
+period_3                 0.0132      0.020      0.673      0.505      -0.026       0.053
+period_4                 0.0572      0.025      2.287      0.027       0.007       0.108
+algorithm_difference    -0.1914      0.026     -7.342      0.000      -0.244      -0.139
+slope_difference        -0.0851      0.036     -2.394      0.021      -0.157      -0.013
+==============================================================================
+Omnibus:                       53.939   Durbin-Watson:                   0.704
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              129.951
+Skew:                          -0.938   Prob(JB):                     6.05e-29
+Kurtosis:                       5.835   Cond. No.                         10.7
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)

@@ -1,0 +1,106 @@
+protocol,source,target,outcome,source_missing_metric_jobs,target_missing_metric_jobs,metric,model,reason,source_undefined_normalization_jobs,target_undefined_normalization_jobs
+composition_transfer,QFT,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+composition_transfer,QFT,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+composition_transfer,QFT,SHOR,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,6.0,0.0
+composition_transfer,PHASE-ESTIMATION,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+composition_transfer,PHASE-ESTIMATION,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+composition_transfer,PHASE-ESTIMATION,SHOR,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,12,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,raw_success,0,12,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,QFT,ideal_chance_normalized,0,12,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,18,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,raw_success,0,18,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,PHASE-ESTIMATION,ideal_chance_normalized,0,18,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,raw_success,0,0,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GROVER,ideal_chance_normalized,0,0,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,6.0
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,126,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,raw_success,0,126,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI,ideal_chance_normalized,0,126,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,90,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,raw_success,0,90,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,VTP,ideal_chance_normalized,0,90,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,48,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,raw_success,0,48,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,GHZ,ideal_chance_normalized,0,48,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,54,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,raw_success,0,54,a.quantum_specific.entanglement_ratio,binomial_logit,Fewer than three distinct predictor values,,
+hardware_control,RANDOM-VOLUMETRIC,SHOR,ideal_chance_normalized,0,54,a.quantum_specific.entanglement_ratio,ols,Fewer than three distinct predictor values,0.0,0.0
+family_transfer,QFT,PHASE-ESTIMATION,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,QFT,PHASE-ESTIMATION,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,QFT,PHASE-ESTIMATION,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,6.0,0.0
+family_transfer,PHASE-ESTIMATION,QFT,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,PHASE-ESTIMATION,QFT,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,PHASE-ESTIMATION,QFT,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,6.0
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,,
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Fewer than three distinct predictor values,6.0,0.0
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,GROVER,BERNSTEIN-VAZIRANI,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,6.0,0.0
+family_transfer,BERNSTEIN-VAZIRANI,GROVER,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,BERNSTEIN-VAZIRANI,GROVER,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,BERNSTEIN-VAZIRANI,GROVER,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,6.0
+family_transfer,VTP,GHZ,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,VTP,GHZ,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,VTP,GHZ,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+family_transfer,GHZ,VTP,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,,
+family_transfer,GHZ,VTP,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Fewer than three distinct predictor values,,
+family_transfer,GHZ,VTP,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Fewer than three distinct predictor values,0.0,0.0
+larger_configurations,SHOR,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,SHOR,SHOR,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,SHOR,SHOR,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,SHOR,SHOR,raw_success,54,54,a.quantum_specific.entanglement_ratio,ols,Too few independent configuration clusters for this design,,
+larger_configurations,SHOR,SHOR,raw_success,54,54,a.quantum_specific.entanglement_ratio,binomial_logit,Too few independent configuration clusters for this design,,
+larger_configurations,SHOR,SHOR,ideal_chance_normalized,54,54,a.quantum_specific.entanglement_ratio,ols,Too few independent configuration clusters for this design,0.0,0.0
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,binomial_logit,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,ideal_chance_normalized,0,0,a.ComplexityMetrics.gate_based_metrics.two_qubit_count,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.BehavioralMetrics.program_communication,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.BehavioralMetrics.program_communication,binomial_logit,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,ideal_chance_normalized,0,0,a.BehavioralMetrics.program_communication,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.quantum_specific.entanglement_ratio,ols,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,raw_success,0,0,a.quantum_specific.entanglement_ratio,binomial_logit,Tied/constant sizes cannot form a larger-configuration holdout,,
+larger_configurations,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,ideal_chance_normalized,0,0,a.quantum_specific.entanglement_ratio,ols,Tied/constant sizes cannot form a larger-configuration holdout,,

@@ -1,0 +1,77 @@
+scope,target,evaluation,regime,label,r2,r2_sd,mae,r2_ci_low,r2_ci_high,train_cv_r2
+ibm_fez,dsr,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.6300493283146827,0.009855771515604373,0.10918302901644623,,,
+ibm_fez,dsr,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6180964328041472,0.013143067552350132,0.1202733296715729,,,
+ibm_fez,dsr,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.781769756878063,0.005993503141693938,0.08372838023121926,,,
+ibm_fez,dsr,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.5298337951301647,,0.12826755734559656,0.36111872592936123,0.6642428137863776,0.6435886666880288
+ibm_fez,dsr,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.32962484659080105,,0.2098464819204599,0.21142307516166536,0.4279597868110853,0.589689315360026
+ibm_fez,dsr,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.43629239102933304,,0.1702627442295276,0.27696140335216907,0.5653408548554247,0.7707250152430607
+ibm_fez,dsr,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.4358589899402403,,0.1703667592793263,,,0.7707250152430607
+ibm_fez,dsr,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.46637963645085667,,0.1532296282142227,,,0.7499102536329423
+ibm_fez,hellinger,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.7843715882358205,0.005423617577548735,0.07018903078242755,,,
+ibm_fez,hellinger,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.726084568954492,0.006191336596797944,0.08831988550114062,,,
+ibm_fez,hellinger,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8815257431341686,0.006265309310276514,0.05519676576438795,,,
+ibm_fez,hellinger,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.6572522765684241,,0.08650850487284964,0.5019603636766645,0.7651452929228969,0.8113194519116573
+ibm_fez,hellinger,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.4606064790243405,,0.15190083439002483,0.33876659054861225,0.565486720660496,0.6736494608929342
+ibm_fez,hellinger,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.712639867034575,,0.08095285523753364,0.5861180283997931,0.7950318905048931,0.8791805010779719
+ibm_fez,hellinger,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.7152070679629132,,0.07992189106896053,,,0.8791805010779719
+ibm_fez,hellinger,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.7310852014541713,,0.07571538436249255,,,0.8738581268807746
+ibm_fez,tvd,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.7941870610245064,0.007750507777850757,0.0683330424307414,,,
+ibm_fez,tvd,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.7329787145744437,0.004576000604789526,0.08737433588733423,,,
+ibm_fez,tvd,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8948388514194296,0.008239341198888566,0.051586479051523665,,,
+ibm_fez,tvd,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.6734751394157337,,0.08683454614892333,0.5134010708115478,0.7727404745267881,0.8141397182706559
+ibm_fez,tvd,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.45838419352517246,,0.1538506927601928,0.34358753697350936,0.5683286845634012,0.6613645232707739
+ibm_fez,tvd,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.7045753078630708,,0.08551923459804621,0.5804604184542029,0.7913275620637211,0.8739223438160255
+ibm_fez,tvd,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.7042104755167353,,0.08562866484813995,,,0.8739223438160255
+ibm_fez,tvd,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.7090693776475565,,0.08069841908823117,,,0.8788715050001696
+ibm_fez,success,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.7809133556268112,0.00980206015716885,0.07256573402505058,,,
+ibm_fez,success,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6189846904747217,0.008998706856543573,0.10821939173768928,,,
+ibm_fez,success,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8496909674081675,0.008067140419989835,0.05989784459039802,,,
+ibm_fez,success,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.7582001779624812,,0.07772156833530346,0.64187927497263,0.8390338601117454,0.8042960783132624
+ibm_fez,success,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.37061494941353523,,0.1805635257400171,0.24201665921994098,0.4665007499632133,0.6145810792217012
+ibm_fez,success,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.7725757546411713,,0.08334141883102164,0.6776583907516651,0.847905576311007,0.8726625844133269
+ibm_fez,success,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.7738181414571783,,0.08255670069731687,,,0.8726625844133269
+ibm_fez,success,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.7807511196125827,,0.08098583478279477,,,0.8739723872930222
+ibm_kingston,dsr,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.7614006799691072,0.00660510528079598,0.0857897632384274,,,
+ibm_kingston,dsr,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.4966844620497308,0.034109157730257376,0.13860087079535183,,,
+ibm_kingston,dsr,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.7696218740882794,0.01620700163877304,0.08343871186936046,,,
+ibm_kingston,dsr,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.8936244510638216,,0.0660343450935391,0.8381604382038367,0.9261490345928215,0.7554953822618293
+ibm_kingston,dsr,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.1590500282662375,,0.1860051728502002,-0.034075235086096424,0.33094416172588476,0.5920763622804228
+ibm_kingston,dsr,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8628941597456846,,0.07660111612102981,0.7933145523789381,0.9026713355696058,0.7561857808359593
+ibm_kingston,dsr,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.8628941597456846,,0.07660111612102981,,,0.7561857808359593
+ibm_kingston,dsr,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.8648364361216814,,0.07551259352647019,,,0.7523222510867972
+ibm_kingston,hellinger,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.901426609315824,0.0028268323054846047,0.04907405429143356,,,
+ibm_kingston,hellinger,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6777466066191553,0.001391518951754512,0.08989095412416293,,,
+ibm_kingston,hellinger,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.89541900144546,0.007246219507529065,0.04850840662514988,,,
+ibm_kingston,hellinger,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.9227208436667109,,0.04400838012880196,0.881098074828149,0.9558400872795185,0.8938919739281087
+ibm_kingston,hellinger,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.20038646094555657,,0.17410009687179484,-0.020550316662868502,0.33277047566162,0.7463456818057094
+ibm_kingston,hellinger,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8962984631505843,,0.05381695455009061,0.847794778044718,0.9304208218287949,0.9047868452076308
+ibm_kingston,hellinger,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.8962984631505843,,0.05381695455009061,,,0.9047868452076308
+ibm_kingston,hellinger,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.9179566240861681,,0.045204199590720605,,,0.8978234912080487
+ibm_kingston,tvd,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.8790008601391502,0.023725620454063803,0.0509722264111517,,,
+ibm_kingston,tvd,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6749199504665934,0.01213203174824239,0.08790972422054788,,,
+ibm_kingston,tvd,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.890384033748569,0.010042771824590858,0.048617964391019265,,,
+ibm_kingston,tvd,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.9246446082760867,,0.043962191124102525,0.8852893585490549,0.9555927249536641,0.8822851046902358
+ibm_kingston,tvd,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.2945386400817651,,0.15906030466495016,0.09408513816441591,0.4140215464008447,0.7337609338115063
+ibm_kingston,tvd,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.9013077309849811,,0.0523178200307519,0.8561197233551817,0.9329220457534507,0.9022489952857098
+ibm_kingston,tvd,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.9013077309849811,,0.0523178200307519,,,0.9022489952857098
+ibm_kingston,tvd,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.9103614121601783,,0.047547000137074816,,,0.8936604685575393
+ibm_kingston,success,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.9135109046169894,0.005738941653498091,0.05159951007790431,,,
+ibm_kingston,success,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6826937053890183,0.016597565308971055,0.0967042805618144,,,
+ibm_kingston,success,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.87676016964549,0.005527295469077397,0.055892776589190174,,,
+ibm_kingston,success,calibration_cycle,circuit_only,Circuit Footprint Only (a.* + b.*),0.9492872854593125,,0.042256612192809115,0.9223528860185977,0.9666951275011257,0.8792042400665159
+ibm_kingston,success,calibration_cycle,hardware_only,Hardware Calibration Only (c.*),0.31982325355428287,,0.16063393163387002,0.1769699723277375,0.42744515759063517,0.7162478055618118
+ibm_kingston,success,calibration_cycle,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.9308693917438959,,0.04810880935317932,0.8970008444559419,0.9551628318138753,0.876169954983478
+ibm_kingston,success,calibration_cycle,mixed_exec_eval,Mixed · Submit Model Evaluated on Exec Calib (d.*),0.9308693917438959,,0.04810880935317932,,,0.876169954983478
+ibm_kingston,success,calibration_cycle,mixed_exec,Mixed · Footprint + Exec Calib (d.*),0.9441921661324877,,0.04499071897870224,,,0.875466914484051
+pooled,dsr,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.6506384934942956,0.0034403973652327234,0.1047482365560062,,,
+pooled,dsr,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.5557165843934891,0.012423125501638025,0.13389465226111594,,,
+pooled,dsr,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.7777735436402392,0.007306589573461545,0.08306568397318542,,,
+pooled,hellinger,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.7958575111808371,0.004469337256502473,0.06898148410888903,,,
+pooled,hellinger,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6960509615807454,0.007846015183408522,0.09209937797598299,,,
+pooled,hellinger,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8832818093988172,0.004169051705914078,0.05361607283216324,,,
+pooled,tvd,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.797782999891948,0.006164713533990407,0.06810083788063935,,,
+pooled,tvd,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6981578167442706,0.008940194485244541,0.09106504744486792,,,
+pooled,tvd,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.8893427140499363,0.005778746962769278,0.05135466963057816,,,
+pooled,success,unseen_circuit,circuit_only,Circuit Footprint Only (a.* + b.*),0.8095214412355577,0.012666557922641144,0.0703165936936621,,,
+pooled,success,unseen_circuit,hardware_only,"Hardware Calibration Only (c.*, device-level)",0.6436195849395849,0.00856363601031315,0.10623047965971338,,,
+pooled,success,unseen_circuit,mixed_submit,Mixed · Footprint + Submit Calib (c.*),0.860871132078433,0.008454225841413358,0.059645934632922525,,,

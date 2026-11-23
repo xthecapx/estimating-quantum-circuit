@@ -1,9 +1,9 @@
 {
   "backend": "ibm_kingston",
-  "input_jobs": 2661,
+  "input_jobs": 2681,
   "selected_jobs": 1173,
   "configuration_count": 189,
-  "excluded_jobs": 1488,
+  "excluded_jobs": 1508,
   "campaign_jobs": {
     "kingston-full-oracle-growth-v1-2026-11-09": 391,
     "kingston-full-oracle-growth-v1-2026-11-10": 391,
@@ -96,103 +96,103 @@
   "inputs": [
     {
       "file": "dataset-001.csv",
-      "rows": 751,
-      "bytes": 19992729,
-      "sha256": "919e46f9c644729b3edf4d0b1d4381ac7c7d7684e812a6bcdd7c6d9148c7039a"
+      "rows": 743,
+      "bytes": 19987463,
+      "sha256": "5d9aeae8177af91fa1ce53438535887e21b7d789a3e110befd552af2571c2ad1"
     },
     {
       "file": "dataset-002.csv",
-      "rows": 158,
-      "bytes": 19939361,
-      "sha256": "26426b40f56247512b723322501b3b0b5bb34ee811f84b9af5266e068a0d1a60"
+      "rows": 184,
+      "bytes": 19720905,
+      "sha256": "4b525a4d8f6937e46d2c61f14e86a4890afbab6a1653c8e09d1af22c1f85560b"
     },
     {
       "file": "dataset-003.csv",
       "rows": 201,
-      "bytes": 19904790,
-      "sha256": "c4f305744048bee14b32e0b5bc6f65b4cde6f1af1e45978b1be9215124f21e52"
+      "bytes": 19908966,
+      "sha256": "6e2ee4dc893e00378da5a0d14b1f9ceafaa4b8c136d5266cef60843148570189"
     },
     {
       "file": "dataset-004.csv",
-      "rows": 311,
-      "bytes": 19965990,
-      "sha256": "67af78f44cb221b09707cef0d8a1f649c1717e6bc569b042b6b3cbb2d46b15ee"
+      "rows": 303,
+      "bytes": 19971782,
+      "sha256": "85feb478d6f1e9158f1fa8749c3126c8e903a238497af385e1e8039c4cd1e54d"
     },
     {
       "file": "dataset-005.csv",
-      "rows": 298,
-      "bytes": 19889359,
-      "sha256": "ce9f3f66e8bf0f3504577c3937666d77d975d1a7986013b2b63014658bd0c93f"
+      "rows": 303,
+      "bytes": 19955221,
+      "sha256": "3ab75dbfecee9b4f721acf7b5a9031f9b6ec696c867f0d74c6892f178eccc334"
     },
     {
       "file": "dataset-006.csv",
-      "rows": 212,
-      "bytes": 19945248,
-      "sha256": "081f730d60fcf789a1ec3dffb748bc9f7aad21075a30511e41ead3c77d8f26a0"
+      "rows": 214,
+      "bytes": 19925238,
+      "sha256": "fd1e50f227834874e20c303aa99d13d7757f33fc1d07d9efe8d2995a30522e6f"
     },
     {
       "file": "dataset-007.csv",
-      "rows": 79,
-      "bytes": 19909911,
-      "sha256": "0f0255481007fb5738e7e57065b3a3e05bd3e35e283e2724b15ca2c72942832c"
+      "rows": 80,
+      "bytes": 19667056,
+      "sha256": "1207734bb93adca38e56a990b5e23a6b7484c773a85d859519078874affd2119"
     },
     {
       "file": "dataset-008.csv",
       "rows": 48,
-      "bytes": 19532168,
-      "sha256": "6c37a53e7d104fc817e40e44e6f562c6d1bbae6646f711b7475f18f7df2deaee"
+      "bytes": 19585265,
+      "sha256": "8a0717890c7574245d73b8175141d852ac1a9012cd3130e40a10d1e0870414cc"
     },
     {
       "file": "dataset-009.csv",
-      "rows": 114,
-      "bytes": 19981573,
-      "sha256": "bdf98c2f19ea5b9eddbc32886bc6b6832728fab3722ca9fced6640d1b73177db"
+      "rows": 105,
+      "bytes": 19961737,
+      "sha256": "a41d57ce1d931d24c415bba963161c47383ee3bd0ef2507b3e35f6625e22b2e2"
     },
     {
       "file": "dataset-010.csv",
-      "rows": 44,
-      "bytes": 18954976,
-      "sha256": "c73319934c3bfc2e20333071e02a7454d1ca62e309886ad218aba027760d9070"
+      "rows": 55,
+      "bytes": 19955753,
+      "sha256": "2e8f8340300b727c644d76e70d21b6fffd609ada94765e9de2297b067b2df7fc"
     },
     {
       "file": "dataset-011.csv",
       "rows": 13,
-      "bytes": 19209571,
-      "sha256": "8ea46b7554ff5bb1b436c28371f37ebd37c19185903ecff62e7bafa45ff8f9ad"
+      "bytes": 19209945,
+      "sha256": "9993402f4c17f24709bdd2fb9ee2b2a5c22662dad66765d710ec55a0bdfae3f7"
     },
     {
       "file": "dataset-012.csv",
       "rows": 13,
-      "bytes": 19447378,
-      "sha256": "95e2f655cd9112aa0194a0b1db59a23ad804bb359f3d4e0a49fde734c2490df5"
+      "bytes": 19447747,
+      "sha256": "618e63eb2f233c9a425e2969dee7147de1e4c6d2b9dd8e110c797f813d497350"
     },
     {
       "file": "dataset-013.csv",
       "rows": 13,
-      "bytes": 19687930,
-      "sha256": "b142fc4efe7aa2f938eb5605d23ac95767da15be73b0729b8ec1870c749a9e05"
+      "bytes": 19688310,
+      "sha256": "2c6578befc2aad4ec9a95bdb52b78022dcbda0f086dda300873553565b8351fe"
     },
     {
       "file": "dataset-014.csv",
       "rows": 12,
-      "bytes": 18474454,
-      "sha256": "3978d90f55c15b1dae1db63b891dc90016845fbfcef4a1cee87138da7a940089"
+      "bytes": 18474808,
+      "sha256": "158cebceea70b49f39ec0a8fc4db1e143df48dc303f12e5bd864af7591a9dcfe"
     },
     {
       "file": "dataset-015.csv",
       "rows": 255,
-      "bytes": 19974826,
-      "sha256": "0dca7dad9924df502cc6a46c75c5d34a00b0920ee2ac016b2610ca27257ad522"
+      "bytes": 19980221,
+      "sha256": "b43fc97c7a3b95077512f4195b46e33a7d3a7e8ac78a5f49fd978c3ab704b608"
     },
     {
       "file": "dataset-016.csv",
       "rows": 139,
-      "bytes": 5640510,
-      "sha256": "4750ff8b957d807fe89898036c12c2db3f0d8482fa6ab3200aef2358f96292e1"
+      "bytes": 5643504,
+      "sha256": "e4d1472e2d2fa13805572eff82103f602b511328a9f0fd8dbaf51c9be8af81c7"
     }
   ],
-  "manifest_sha256": "ee33a1df5a3cd81f6e8a0c1160c4023424711012d66ba3930035b786ac185eec",
-  "references_sha256": "926481c0aacb1c4444fcce35c6c05aeae9bfba2a24e2c86e553c82ba0768abc1",
+  "manifest_sha256": "2fdcc81e9ec2d85e8c1b5ada3e3d80f1a896aee0749f1fba1453ed63c54ea4b0",
+  "references_sha256": "b97ad765b871f6bcf06f5e45722af6ef6ef6249d0d2b18131f062e69b5e92d8b",
   "analysis_source_sha256": "a64460add322fbf98b832c23573ebb4d3d42ab8a805f41443782fb2ec4c657aa",
   "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
   "versions": {

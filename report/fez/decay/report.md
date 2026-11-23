@@ -1,6 +1,6 @@
 # Do related circuits lose success in the same way?
 
-Backend ibm_fez. The cohort contains 1,236 jobs and 189 configurations in 9 collection periods.
+Backend ibm_fez. The cohort contains 1,256 jobs and 193 configurations in 10 collection periods.
 
 [Linear fits, target definitions, and comparison table](trend_review.md)
 

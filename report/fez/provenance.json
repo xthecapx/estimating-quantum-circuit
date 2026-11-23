@@ -1,0 +1,219 @@
+{
+  "backend": "ibm_fez",
+  "input_jobs": 2681,
+  "selected_jobs": 1256,
+  "configuration_count": 193,
+  "excluded_jobs": 1425,
+  "campaign_jobs": {
+    "fez-dataset-v2": 374,
+    "fez-dataset-v2-2026-11-05": 344,
+    "fez-dataset-v2-pilot-r2": 30,
+    "fez-full-shor-growth-v1-2026-11-06": 381,
+    "fez-ghz-bv-transfer-v1-2026-11-23": 20,
+    "fez-oracle-growth-v1-2026-11-07": 51,
+    "fez-oracle-growth-v1-2026-11-07-makeup": 10,
+    "fez-oracle-growth-v1-2026-11-07-standalone": 7,
+    "fez-shor-growth-v1-2026-11-05": 39
+  },
+  "period_jobs": {
+    "fez-dataset-v2 / window 0": 30,
+    "fez-dataset-v2 / window 1": 344,
+    "fez-dataset-v2-2026-11-05 / window 20261105": 344,
+    "fez-dataset-v2-pilot-r2 / window 0": 30,
+    "fez-full-shor-growth-v1-2026-11-06 / window 20261106": 381,
+    "fez-ghz-bv-transfer-v1-2026-11-23 / window 20261123": 20,
+    "fez-oracle-growth-v1-2026-11-07 / window 20261107": 51,
+    "fez-oracle-growth-v1-2026-11-07-makeup / window 20261107": 10,
+    "fez-oracle-growth-v1-2026-11-07-standalone / window 20261108": 7,
+    "fez-shor-growth-v1-2026-11-05 / window 20261105": 39
+  },
+  "algorithm_jobs": {
+    "BERNSTEIN-VAZIRANI": 270,
+    "GHZ": 108,
+    "GROVER": 202,
+    "PHASE-ESTIMATION": 134,
+    "QFT": 170,
+    "RANDOM-VOLUMETRIC": 98,
+    "SHOR": 86,
+    "VTP": 188
+  },
+  "exported_target_jobs": {
+    "hellinger_fidelity": 1256,
+    "tvd_similarity": 1256,
+    "dsr": 1256
+  },
+  "algorithm_configs": {
+    "BERNSTEIN-VAZIRANI": 43,
+    "GHZ": 15,
+    "GROVER": 29,
+    "PHASE-ESTIMATION": 21,
+    "QFT": 27,
+    "RANDOM-VOLUMETRIC": 15,
+    "SHOR": 13,
+    "VTP": 30
+  },
+  "metrics": [
+    "a.num_qubits",
+    "a.depth",
+    "a.size",
+    "a.ComplexityMetrics.gate_based_metrics.two_qubit_count",
+    "a.StructuralMetrics.volume",
+    "a.BehavioralMetrics.program_communication",
+    "a.quantum_specific.entanglement_ratio",
+    "b.depth",
+    "b.two_qubit_depth",
+    "b.two_qubit_gates"
+  ],
+  "metric_coverage": {
+    "a.num_qubits": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.depth": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.size": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.ComplexityMetrics.gate_based_metrics.two_qubit_count": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.StructuralMetrics.volume": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.BehavioralMetrics.program_communication": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "a.quantum_specific.entanglement_ratio": {
+      "available_jobs": 898,
+      "missing_jobs": 358
+    },
+    "b.depth": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "b.two_qubit_depth": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    },
+    "b.two_qubit_gates": {
+      "available_jobs": 1256,
+      "missing_jobs": 0
+    }
+  },
+  "inputs": [
+    {
+      "file": "dataset-001.csv",
+      "rows": 743,
+      "bytes": 19987463,
+      "sha256": "5d9aeae8177af91fa1ce53438535887e21b7d789a3e110befd552af2571c2ad1"
+    },
+    {
+      "file": "dataset-002.csv",
+      "rows": 184,
+      "bytes": 19720905,
+      "sha256": "4b525a4d8f6937e46d2c61f14e86a4890afbab6a1653c8e09d1af22c1f85560b"
+    },
+    {
+      "file": "dataset-003.csv",
+      "rows": 201,
+      "bytes": 19908966,
+      "sha256": "6e2ee4dc893e00378da5a0d14b1f9ceafaa4b8c136d5266cef60843148570189"
+    },
+    {
+      "file": "dataset-004.csv",
+      "rows": 303,
+      "bytes": 19971782,
+      "sha256": "85feb478d6f1e9158f1fa8749c3126c8e903a238497af385e1e8039c4cd1e54d"
+    },
+    {
+      "file": "dataset-005.csv",
+      "rows": 303,
+      "bytes": 19955221,
+      "sha256": "3ab75dbfecee9b4f721acf7b5a9031f9b6ec696c867f0d74c6892f178eccc334"
+    },
+    {
+      "file": "dataset-006.csv",
+      "rows": 214,
+      "bytes": 19925238,
+      "sha256": "fd1e50f227834874e20c303aa99d13d7757f33fc1d07d9efe8d2995a30522e6f"
+    },
+    {
+      "file": "dataset-007.csv",
+      "rows": 80,
+      "bytes": 19667056,
+      "sha256": "1207734bb93adca38e56a990b5e23a6b7484c773a85d859519078874affd2119"
+    },
+    {
+      "file": "dataset-008.csv",
+      "rows": 48,
+      "bytes": 19585265,
+      "sha256": "8a0717890c7574245d73b8175141d852ac1a9012cd3130e40a10d1e0870414cc"
+    },
+    {
+      "file": "dataset-009.csv",
+      "rows": 105,
+      "bytes": 19961737,
+      "sha256": "a41d57ce1d931d24c415bba963161c47383ee3bd0ef2507b3e35f6625e22b2e2"
+    },
+    {
+      "file": "dataset-010.csv",
+      "rows": 55,
+      "bytes": 19955753,
+      "sha256": "2e8f8340300b727c644d76e70d21b6fffd609ada94765e9de2297b067b2df7fc"
+    },
+    {
+      "file": "dataset-011.csv",
+      "rows": 13,
+      "bytes": 19209945,
+      "sha256": "9993402f4c17f24709bdd2fb9ee2b2a5c22662dad66765d710ec55a0bdfae3f7"
+    },
+    {
+      "file": "dataset-012.csv",
+      "rows": 13,
+      "bytes": 19447747,
+      "sha256": "618e63eb2f233c9a425e2969dee7147de1e4c6d2b9dd8e110c797f813d497350"
+    },
+    {
+      "file": "dataset-013.csv",
+      "rows": 13,
+      "bytes": 19688310,
+      "sha256": "2c6578befc2aad4ec9a95bdb52b78022dcbda0f086dda300873553565b8351fe"
+    },
+    {
+      "file": "dataset-014.csv",
+      "rows": 12,
+      "bytes": 18474808,
+      "sha256": "158cebceea70b49f39ec0a8fc4db1e143df48dc303f12e5bd864af7591a9dcfe"
+    },
+    {
+      "file": "dataset-015.csv",
+      "rows": 255,
+      "bytes": 19980221,
+      "sha256": "b43fc97c7a3b95077512f4195b46e33a7d3a7e8ac78a5f49fd978c3ab704b608"
+    },
+    {
+      "file": "dataset-016.csv",
+      "rows": 139,
+      "bytes": 5643504,
+      "sha256": "e4d1472e2d2fa13805572eff82103f602b511328a9f0fd8dbaf51c9be8af81c7"
+    }
+  ],
+  "manifest_sha256": "2fdcc81e9ec2d85e8c1b5ada3e3d80f1a896aee0749f1fba1453ed63c54ea4b0",
+  "references_sha256": "b97ad765b871f6bcf06f5e45722af6ef6ef6249d0d2b18131f062e69b5e92d8b",
+  "analysis_source_sha256": "a64460add322fbf98b832c23573ebb4d3d42ab8a805f41443782fb2ec4c657aa",
+  "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
+  "versions": {
+    "python": "3.11.14",
+    "statsmodels": "0.15.0",
+    "pandas": "3.1.1",
+    "numpy": "2.4.6"
+  },
+  "holdout_fraction": 0.2,
+  "r2_threshold": 0.8
+}

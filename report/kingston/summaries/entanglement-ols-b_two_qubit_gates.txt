@@ -1,0 +1,29 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                success   R-squared:                       0.596
+Model:                            OLS   Adj. R-squared:                  0.589
+Method:                 Least Squares   F-statistic:                     79.86
+Date:                Mon, 23 Nov 2026   Prob (F-statistic):           6.16e-21
+Time:                        14:39:08   Log-Likelihood:                 388.84
+No. Observations:                 270   AIC:                            -765.7
+Df Residuals:                     264   BIC:                            -744.1
+Df Model:                           5                                         
+Covariance Type:              cluster                                         
+========================================================================================
+                           coef    std err          t      P>|t|      [0.025      0.975]
+----------------------------------------------------------------------------------------
+intercept                0.8405      0.012     72.279      0.000       0.817       0.864
+x                       -0.0636      0.011     -5.624      0.000      -0.086      -0.041
+period_1                 0.0222      0.011      2.011      0.050    -4.5e-05       0.045
+period_2                 0.0251      0.009      2.713      0.009       0.006       0.044
+algorithm_difference    -0.1898      0.012    -15.288      0.000      -0.215      -0.165
+slope_difference        -0.1565      0.017     -9.435      0.000      -0.190      -0.123
+==============================================================================
+Omnibus:                       59.716   Durbin-Watson:                   0.863
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              105.196
+Skew:                          -1.193   Prob(JB):                     1.44e-23
+Kurtosis:                       4.911   Cond. No.                         7.87
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)

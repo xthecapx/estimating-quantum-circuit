@@ -1,0 +1,21 @@
+                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:           ['y1', 'y2']   No. Observations:                  408
+Model:                            GLM   Df Residuals:                      402
+Model Family:                Binomial   Df Model:                            5
+Link Function:                  Logit   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -16826.
+Date:                Mon, 23 Nov 2026   Deviance:                       30933.
+Time:                        14:39:06   Pearson chi2:                 3.13e+04
+No. Iterations:                     5   Pseudo R-squ. (CS):              1.000
+Covariance Type:              cluster                                         
+========================================================================================
+                           coef    std err          t      P>|t|      [0.025      0.975]
+----------------------------------------------------------------------------------------
+intercept                1.3672      0.160      8.561      0.000       1.048       1.686
+x                       -0.9229      0.068    -13.625      0.000      -1.058      -0.788
+period_1                -0.1851      0.077     -2.398      0.019      -0.339      -0.031
+period_2                 0.0005      0.051      0.010      0.992      -0.101       0.102
+algorithm_difference    -4.6761      0.505     -9.255      0.000      -5.685      -3.668
+slope_difference       -10.0641      1.100     -9.147      0.000     -12.260      -7.868
+========================================================================================

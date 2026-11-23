@@ -139,7 +139,7 @@ a.num_qubits,dsr,QFT,VTP,other,3,44.71084476190474,4.518009999999983,75.68592619
 a.num_qubits,dsr,SHOR,RANDOM-VOLUMETRIC,control,1,72.59962777777778,72.59962777777778,72.59962777777778,3.0,-0.8660254037844387,False,,
 a.num_qubits,dsr,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,19.34979000000001,5.5351699999999715,43.91890666666664,5.0,0.3,True,False,False
 a.num_qubits,dsr,SHOR,VTP,other,1,43.033561111111084,43.033561111111084,43.033561111111084,3.0,-0.8660254037844387,False,,
-a.depth,success,BERNSTEIN-VAZIRANI,GHZ,other,3,33.71670182496078,23.473527031004732,37.36953615580843,13.0,0.9725274725274724,True,False,False
+a.depth,success,BERNSTEIN-VAZIRANI,GHZ,other,4,28.595114427982757,10.644531250000016,37.36953615580843,3.0,0.9725274725274724,True,False,False
 a.depth,success,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.depth,success,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.depth,success,BERNSTEIN-VAZIRANI,QFT,other,3,12.411962365591425,8.128696236559158,26.73202284946239,4.0,0.7999999999999998,True,False,False
@@ -167,7 +167,7 @@ a.depth,success,QFT,VTP,other,3,12.13574083679117,9.886509583086339,31.144691019
 a.depth,success,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.depth,success,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,37.22167968749995,5.581054687499963,44.0164620535714,6.0,-0.028571428571428602,True,False,False
 a.depth,success,SHOR,VTP,other,0,,,,,,False,,
-a.depth,normalized,BERNSTEIN-VAZIRANI,GHZ,other,3,33.318464117031056,23.416388171754594,37.41512610174035,13.0,0.9615384615384616,True,False,False
+a.depth,normalized,BERNSTEIN-VAZIRANI,GHZ,other,4,28.367426144392823,10.809010699756714,37.41512610174035,3.0,0.9670329670329669,True,False,False
 a.depth,normalized,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.depth,normalized,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.depth,normalized,BERNSTEIN-VAZIRANI,QFT,other,3,12.961871697635685,7.526036326525593,26.92003141885162,4.0,0.5999999999999999,True,False,False
@@ -195,7 +195,7 @@ a.depth,normalized,QFT,VTP,other,3,26.578603550613565,3.7816942725364564,41.6587
 a.depth,normalized,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.depth,normalized,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,31.693632807305626,0.579967608175092,40.937806846979804,6.0,-0.08571428571428577,True,False,False
 a.depth,normalized,SHOR,VTP,other,0,,,,,,False,,
-a.depth,hellinger_fidelity,BERNSTEIN-VAZIRANI,GHZ,other,3,33.357928885400284,22.99943940345368,36.8968934065934,13.0,0.9560439560439559,True,False,False
+a.depth,hellinger_fidelity,BERNSTEIN-VAZIRANI,GHZ,other,4,28.17868414442698,10.376349999999979,36.8968934065934,3.0,0.9560439560439559,True,False,False
 a.depth,hellinger_fidelity,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.depth,hellinger_fidelity,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.depth,hellinger_fidelity,BERNSTEIN-VAZIRANI,QFT,other,3,12.411958193548427,8.128653935483854,26.732006881720448,4.0,0.7999999999999998,True,False,False
@@ -223,7 +223,7 @@ a.depth,hellinger_fidelity,QFT,VTP,other,3,23.20551595336888,6.608204465520667,3
 a.depth,hellinger_fidelity,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.depth,hellinger_fidelity,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,37.22165214285711,5.581064999999997,44.016415,6.0,-0.028571428571428602,True,False,False
 a.depth,hellinger_fidelity,SHOR,VTP,other,0,,,,,,False,,
-a.depth,tvd_similarity,BERNSTEIN-VAZIRANI,GHZ,other,3,34.03220361067502,23.473530298273147,37.504727158555745,13.0,0.9725274725274724,True,False,False
+a.depth,tvd_similarity,BERNSTEIN-VAZIRANI,GHZ,other,4,28.752866954474083,10.644549999999988,37.504727158555745,3.0,0.9725274725274724,True,False,False
 a.depth,tvd_similarity,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.depth,tvd_similarity,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.depth,tvd_similarity,BERNSTEIN-VAZIRANI,QFT,other,3,12.411958193548427,8.128653935483854,26.731990537634438,4.0,0.7999999999999998,True,False,False
@@ -251,7 +251,7 @@ a.depth,tvd_similarity,QFT,VTP,other,3,23.65696989527764,6.599856945267746,35.30
 a.depth,tvd_similarity,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.depth,tvd_similarity,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,37.22167357142853,5.581071428571405,44.016420714285715,6.0,-0.028571428571428602,True,False,False
 a.depth,tvd_similarity,SHOR,VTP,other,0,,,,,,False,,
-a.depth,dsr,BERNSTEIN-VAZIRANI,GHZ,other,3,12.277794034536878,2.8516640502354176,19.002756357927815,13.0,0.6153846153846154,True,False,False
+a.depth,dsr,BERNSTEIN-VAZIRANI,GHZ,other,4,7.564729042386148,1.5727999999999853,19.002756357927815,3.0,0.6923076923076923,True,False,False
 a.depth,dsr,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.depth,dsr,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.depth,dsr,BERNSTEIN-VAZIRANI,QFT,other,3,19.52176808602152,8.88605333333336,33.75191105376347,4.0,0.19999999999999998,True,False,False
@@ -419,7 +419,7 @@ a.size,dsr,QFT,VTP,other,3,81.24451141290727,11.322600778508773,87.0123163894110
 a.size,dsr,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.size,dsr,VTP,RANDOM-VOLUMETRIC,mirror_protocol,3,4.222047932085353,1.8642668262951378,8.500295352633868,5.0,0.6,True,True,False
 a.size,dsr,SHOR,VTP,other,0,,,,,,False,,
-a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,BERNSTEIN-VAZIRANI,GHZ,other,3,37.327042144983,22.354711415816336,40.00694223001699,14.0,0.9472527472527471,True,False,False
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,BERNSTEIN-VAZIRANI,GHZ,other,4,31.634712478741502,22.354711415816336,40.00694223001699,5.0,0.9626373626373627,True,False,False
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,BERNSTEIN-VAZIRANI,QFT,other,3,33.84486607142855,21.836635044642843,35.086495535714285,3.0,-0.5,True,False,False
@@ -447,7 +447,7 @@ a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,QFT,VTP,other,3,1
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,VTP,RANDOM-VOLUMETRIC,mirror_protocol,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,success,SHOR,VTP,other,0,,,,,,False,,
-a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,BERNSTEIN-VAZIRANI,GHZ,other,3,37.571711025489726,23.15736657619625,40.81720782573981,14.0,0.9428571428571426,True,False,False
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,BERNSTEIN-VAZIRANI,GHZ,other,4,32.09719275486801,23.15736657619625,40.81720782573981,5.0,0.9604395604395604,True,False,False
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,BERNSTEIN-VAZIRANI,QFT,other,3,30.764786897268806,16.293044787630052,31.959116561403693,3.0,0.5,True,False,False
@@ -475,7 +475,7 @@ a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,QFT,VTP,other,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,VTP,RANDOM-VOLUMETRIC,mirror_protocol,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,normalized,SHOR,VTP,other,0,,,,,,False,,
-a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,BERNSTEIN-VAZIRANI,GHZ,other,3,36.96219323129253,21.883129931972807,39.56554071428572,14.0,0.9296703296703296,True,False,False
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,BERNSTEIN-VAZIRANI,GHZ,other,4,31.39407161564626,21.883129931972807,39.56554071428572,5.0,0.9538461538461539,True,False,False
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,BERNSTEIN-VAZIRANI,QFT,other,3,28.65514999999998,13.88467142857143,30.817453571428608,3.0,0.5,True,False,False
@@ -503,7 +503,7 @@ a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,QFT,VT
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,VTP,RANDOM-VOLUMETRIC,mirror_protocol,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,hellinger_fidelity,SHOR,VTP,other,0,,,,,,False,,
-a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,BERNSTEIN-VAZIRANI,GHZ,other,3,38.371966088435386,22.989472891156456,40.897003673469385,14.0,0.9428571428571426,True,False,False
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,BERNSTEIN-VAZIRANI,GHZ,other,4,32.706503044217676,22.989472891156456,40.897003673469385,5.0,0.9214285714285713,True,False,False
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,BERNSTEIN-VAZIRANI,QFT,other,3,28.65514999999998,13.88467142857143,30.817453571428608,3.0,0.5,True,False,False
@@ -531,7 +531,7 @@ a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,QFT,VTP,ot
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,SHOR,RANDOM-VOLUMETRIC,control,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,VTP,RANDOM-VOLUMETRIC,mirror_protocol,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,SHOR,VTP,other,0,,,,,,False,,
-a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,BERNSTEIN-VAZIRANI,GHZ,other,3,12.30596717687073,2.32156867346943,23.69437989795919,14.0,0.6703296703296704,True,False,False
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,BERNSTEIN-VAZIRANI,GHZ,other,4,11.968573588435369,2.32156867346943,23.69437989795919,5.0,0.5851648351648352,True,False,False
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,GROVER,BERNSTEIN-VAZIRANI,oracle,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,BERNSTEIN-VAZIRANI,PHASE-ESTIMATION,other,0,,,,,,False,,
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,BERNSTEIN-VAZIRANI,QFT,other,3,5.360014285714311,2.09942142857145,11.77520000000003,3.0,0.5,True,False,False
