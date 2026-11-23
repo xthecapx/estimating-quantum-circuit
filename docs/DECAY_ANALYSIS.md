@@ -75,12 +75,11 @@ to the whole circuit. For success rate, a five-percentage-point fall means
 five more shots per hundred missed that algorithm’s acceptance criterion.
 These fits cannot isolate the contribution of a gate or subcircuit.
 
-The dashboard’s pair selector counts windows where **both** slopes are
+Each resource-by-chip cell counts windows where **both** slopes are
 negative and the losses differ by at most the report tolerance. The loss
 gap in a window is `100 × |slope A − slope B| × (largest − smallest shared level)`.
-With the published settings, two such windows qualify a pair, each with at
-least three shared levels. The denominator beside the pair is the number of
-eligible windows. Unrelated algorithms qualify by the same rule. The full
+With the published settings, two such windows establish a repeated match, each with at
+least three shared levels. The denominator counts eligible windows on that chip. Unrelated algorithms qualify by the same rule. The full
 matrix also exposes pairs with larger gaps, rising trends and missing overlap.
 The report’s complete-linkage clustering uses the *median* absolute gap
 across eligible windows and also depends on the other algorithms in a group.

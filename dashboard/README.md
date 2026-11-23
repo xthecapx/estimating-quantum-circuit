@@ -203,7 +203,7 @@ Detailed values come from **preparation snapshots**, not execution-time per-elem
 
 ### Compare decay
 
-The Compare decay tab loads the selected chip’s fitted lines and grouping results on demand.
+The Compare decay tab loads the available chip reports when opened.
 The dashboard build includes an experiment snapshot when its manifest, reference table and CSV
 parts match the analysis input hashes. A chip without a matching report shows an availability message.
 To refresh the snapshot after exporting new jobs, run from the repository root:
@@ -216,11 +216,12 @@ python dashboard/export_decay.py report/kingston/decay
 python scripts/run.py dashboard
 ```
 
-The pair selector includes any two workloads whose fitted outcomes repeatedly decline by similar
-amounts. It uses the offline fits, tolerance and minimum window count. The full matrix lets you
-inspect other pairs, including those with too few shared levels. Each pair has an explanation of
-its circuit construction, window coverage and rank correlations where available.
-URLs preserve the selected pair, resource and outcome, for example `#section=decay`.
+Choose an algorithm, a partner, and an outcome. Partners with a documented circuit
+relationship appear first, followed by the other measured comparisons. The opening
+view compares phase estimation and QFT on success rate. The table shows each resource
+across chips and distinguishes repeated matches, measured disagreements, and limited
+coverage. Select a cell to inspect the chip’s window counts, fits, rank correlations,
+and full pair matrix. Shared URLs restore the pair, outcome, resource, chip and matrix view.
 
 The [decay runbook](../docs/DECAY_ANALYSIS.md) describes the migrated runner,
 source hashes, input provenance, and treatment of replacement campaigns.

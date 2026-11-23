@@ -72,21 +72,45 @@ export function matchingWindows(c: Cell, tolerance: number): number {
 export const short = (a:string) => ({"BERNSTEIN-VAZIRANI":"BV", "PHASE-ESTIMATION":"PE", "RANDOM-VOLUMETRIC":"RV"}[a] ?? algorithmName(a));
 export const key = (c:Cell) => c.a + "/" + c.b;
 
-export function rankResources(data: Snapshot) {
-  return Object.entries(data.panels).map(([id, panel]) => {
-    const pairs = new Set<string>();
-    const outcomes = Object.entries(panel).map(([id, cells]) => {
-      const matches = cells.map(cell => ({cell, count: matchingWindows(cell, data.tolerance)}))
-        .filter(match => match.count >= data.minPeriods)
-        .sort((a, b) => b.count - a.count || (a.cell.gap ?? Infinity) - (b.cell.gap ?? Infinity)
-          || key(a.cell).localeCompare(key(b.cell)));
-      for (const {cell} of matches) pairs.add([cell.a, cell.b].sort().join("/"));
-      return {id, matches};
-    }).sort((a, b) => b.matches.length - a.matches.length
-      || (targets[a.id] ?? a.id).localeCompare(targets[b.id] ?? b.id, "en"));
-    return {id, count: pairs.size, outcomes};
-  }).sort((a, b) => b.count - a.count
-    || (resources[a.id] ?? a.id).localeCompare(resources[b.id] ?? b.id, "en"));
+const structuralRoles = new Set(["fourier", "composition", "oracle", "entanglement", "mirror_protocol"]);
+
+export function partnerOptions(reports: Snapshot[], algorithm: string) {
+  const partners = new Map<string, Cell>();
+  for (const report of reports) {
+    for (const panel of Object.values(report.panels)) {
+      for (const cells of Object.values(panel)) {
+        for (const cell of cells) {
+          if (cell.a !== algorithm && cell.b !== algorithm) continue;
+          const id = cell.a === algorithm ? cell.b : cell.a;
+          if (!partners.has(id)) partners.set(id, cell);
+        }
+      }
+    }
+  }
+  return Array.from(partners, ([id, cell]) => ({ id, cell, related: structuralRoles.has(cell.role) }))
+    .sort((a, b) => Number(b.related) - Number(a.related) || algorithmName(a.id).localeCompare(algorithmName(b.id)));
+}
+
+export function resourceEvidence(reports: Snapshot[], algorithm: string, partner: string, outcome: string) {
+  const metrics = new Set(reports.flatMap(report => Object.keys(report.panels)));
+  return Array.from(metrics, metric => {
+    const chips = new Map<string, { cell: Cell; matched: number; eligible: number; minimum: number }>();
+    for (const report of reports) {
+      const cell = report.panels[metric]?.[outcome]?.find(c =>
+        (c.a === algorithm && c.b === partner) || (c.a === partner && c.b === algorithm));
+      if (cell) chips.set(report.backend, {
+        cell, matched: matchingWindows(cell, report.tolerance),
+        eligible: Object.keys(cell.periods).length, minimum: report.minPeriods,
+      });
+    }
+    const evidence = [...chips.values()];
+    return {
+      metric, chips, repeats: evidence.filter(e => e.matched >= e.minimum).length,
+      comparable: evidence.filter(e => e.eligible >= e.minimum).length,
+    };
+  }).filter(row => row.chips.size).sort((a, b) =>
+    b.repeats - a.repeats || b.comparable - a.comparable ||
+    (resources[a.metric] ?? a.metric).localeCompare(resources[b.metric] ?? b.metric));
 }
 
 export const fixed = (v:number|null) => v == null ? "—" : v.toFixed(2);

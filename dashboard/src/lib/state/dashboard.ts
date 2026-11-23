@@ -73,7 +73,7 @@ function activeRoute(state: DashboardState, current: Explorer): UrlState {
     case "regression":
       return { ...current.toUrl(), section, readAt: readAt?.toString() };
     case "decay":
-      return { section, backend: current.backend, ...decay };
+      return { section, backend: decay.resource ? current.backend : undefined, ...decay };
     case "estimation":
     case "footprint":
       return { section, estScope: estimation.scope, estTarget: estimation.target, estSplit: estimation.split, estView: estimation.view };
