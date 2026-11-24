@@ -18,14 +18,14 @@ async function openFirstJob(page: Page) {
 
 test("1 · inline axes and scope filters update the plot and open a histogram @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=range");
-  await expect(page.locator("#plot-title")).toHaveText("Success rate by logical qubits");
+  await expect(page.locator("#plot-title")).toContainText("At which qubit counts");
   await page.getByLabel("Algorithm").selectOption({ label: "Grover" });
   const plot = page.getByRole("region", {name:"Operating range plot"});
   const y = plot.getByLabel("Y-axis");
   await expect(y.locator("option:checked")).toHaveText("Success rate: How often was the answer accepted?");
-  expect(await y.locator("option").allTextContents()).toEqual(Array(7).fill(expect.stringMatching(/^.+: .+\?$/)));
-  await y.selectOption({ label: "Differential Success Rate: Did accepted peaks stand out?" });
-  await expect(page.locator("#plot-title")).toHaveText("Differential Success Rate by logical qubits");
+  await expect(y.locator("option")).toHaveCount(7);
+  await y.selectOption("dsr");
+  await expect(page.locator("#plot-title")).toContainText("strongest wrong answer");
   await expect(page.locator("#coverage")).toContainText("jobs");
 
   const periods = page.getByLabel("Periods (UTC)");
@@ -34,9 +34,9 @@ test("1 · inline axes and scope filters update the plot and open a histogram @n
   await periods.selectOption({ index: 1 });
   await expect(page.locator("#coverage")).not.toHaveText(before!);
   await plot.getByLabel("X-axis").selectOption({label:"Executed ISA depth"});
-  await expect(page.locator("#plot-title")).toHaveText("Differential Success Rate by executed isa depth");
+  await expect(page.locator("#plot-title")).toContainText("At which depths");
   await page.reload();
-  await expect(y.locator("option:checked")).toContainText("Differential Success Rate:");
+  await expect(y.locator("option:checked")).toHaveText("Differential Success Rate: Did accepted peaks stand out?");
   await expect(plot.getByLabel("X-axis").locator("option:checked")).toHaveText("Executed ISA depth");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
   await openFirstJob(page);
@@ -44,6 +44,35 @@ test("1 · inline axes and scope filters update the plot and open a histogram @n
   await page.getByRole("button", { name: "Operating range" }).click();
   await expect(page.locator("#plot-title")).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("overview legend sits directly below the Y-axis selector on desktop", async ({ page }) => {
+  await openApp(page, "#section=range&mode=overview&a=PHASE-ESTIMATION&q=hellinger");
+  const plot = page.getByRole("region", { name: "Operating range plot" });
+  const box = (await plot.getByLabel("Y-axis").boundingBox())!;
+  const legend = (await plot.locator(".legend").boundingBox())!;
+  const gap = legend.y - box.y - box.height;
+  expect(gap).toBeGreaterThanOrEqual(0);
+  expect(gap).toBeLessThanOrEqual(12);
+});
+
+test("run dots show measurement details and open the run histogram @narrow", async ({ page, isMobile }) => {
+  await openApp(page, "#section=range&t=none");
+  await expect(page.getByText("One dot per run")).toBeVisible();
+  await expect(page.getByText(isMobile ? "Tap for histogram" : "Hover for details · Click for histogram")).toBeVisible();
+  const dot = page.locator('#trend svg path[fill="#087363"]').last();
+  if (isMobile) {
+    await dot.tap();
+  } else {
+    await dot.scrollIntoViewIfNeeded();
+    const box = (await dot.boundingBox())!;
+    const x = box.x + box.width / 2, y = box.y + box.height / 2;
+    await page.mouse.move(x, y);
+    await expect(page.locator("#interval-lens")).toContainText("Repetition");
+    await page.mouse.click(x, y);
+  }
+  await expect(page.locator("#histogram-title")).toBeVisible();
+  await expect(page.locator("#hist svg")).toBeVisible();
 });
 
 test("2 · experiment picker searches, selects by keyboard, and Escape keeps the selection", async ({ page }) => {
@@ -117,8 +146,17 @@ test("4 · run calibration round-trip preserves the histogram run and settings",
 });
 
 test("5 · chip calibration history opens independently and searches components @narrow", async ({ page }) => {
-  const errors = await openApp(page, "#section=range");
-  await page.getByRole("group", { name: "Experiment filters" }).getByRole("button", { name: "Chip calibration history" }).click();
+  const errors = await openApp(page);
+  const history = page.getByRole("button", { name: "Chip calibration history" });
+  const toggle = page.getByRole("switch", { name: "Show run details" });
+  await expect(history).toBeVisible();
+  await history.click();
+  await page.reload();
+  await page.getByRole("button", { name: "← Back to operating range" }).click();
+  await expect(toggle).not.toBeChecked();
+  await toggle.click();
+  await expect(history).toBeVisible();
+  await history.click();
   await expect(page.locator("#calibration-title")).toHaveText("Chip calibration history");
   await expect(page.locator("#cal-map svg")).toBeVisible();
   await page.getByLabel("Find a qubit or connection").fill("Q99999");
@@ -301,10 +339,9 @@ test("direction compares column loss to row loss and preserves the question on r
   expect(errors).toEqual([]);
 });
 
-test("regression explorer answers curve clicks and updates both axes @narrow", async ({ page }) => {
+test("average explorer selects measured settings and updates both axes @narrow", async ({ page }) => {
   const errors = await openApp(page);
-  await page.getByRole("tab", { name: "Regression explorer" }).click();
-  const panel = page.getByRole("region", { name: "Regression explorer" });
+  const panel = page.getByRole("region", { name: "Experiment explorer", exact: true });
   const filters = panel.getByRole("group", { name: "Experiment filters" });
   for (const name of ["Chip", "Periods (UTC)", "Experiment group"]) {
     const field = filters.getByRole("combobox", { name, exact: true });
@@ -314,23 +351,25 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
   }
   await panel.getByLabel("Minimum success rate").fill("80");
   await panel.getByLabel("Algorithm").selectOption({ label: "Grover" });
-  await expect(panel.getByRole("heading")).toHaveText("How many qubits can the circuit use while still returning a marked bitstring in at least 50% of shots?");
+  await expect(panel.getByRole("heading")).toHaveText("At which qubit counts do at least 50% of shots return an accepted answer on average?");
   await expect(panel.getByLabel("Minimum success rate")).toHaveValue("50");
   await panel.getByLabel("Minimum success rate").fill("");
-  await panel.getByLabel("Y-axis").selectOption({ label: "Full TVD" });
-  await expect(panel.getByRole("heading")).toHaveText("How many qubits can the circuit use before matching the ideal bitstring distribution requires moving more than 50% of the probability?");
+  await panel.getByLabel("Y-axis").selectOption("tvd");
+  await expect(panel.getByRole("heading")).toHaveText("At which qubit counts must at most 50% of probability shift to match the ideal output on average?");
   await panel.getByLabel("X-axis").selectOption({ label: "Executed ISA depth" });
-  await expect(panel.getByRole("heading")).toHaveText("How deep can the circuit be before matching the ideal bitstring distribution requires moving more than 50% of the probability?");
-  const svg = panel.locator("#regression-plot svg");
+  await expect(panel.getByRole("heading")).toHaveText("At which depths must at most 50% of probability shift to match the ideal output on average?");
+  const svg = panel.locator("#average-plot svg");
+  await expect(svg.locator('path[stroke="#387b9a"]').first()).toBeVisible();
   const line = svg.locator('path[stroke="#087363"]').first();
+  await panel.getByRole("slider", { name: "Selected tested setting" }).press("Home");
   const point = await line.evaluate((path: SVGPathElement) => {
-    const local = path.getPointAtLength(path.getTotalLength() * 0.55);
+    const local = path.getPointAtLength(path.getTotalLength() * 0.9);
     const screen = local.matrixTransform(path.getScreenCTM()!);
     const rect = path.ownerSVGElement!.getBoundingClientRect();
     return { x: screen.x - rect.left, y: screen.y - rect.top };
   });
   await expect(svg.locator("text").filter({ hasText: /Full TVD\s+0\./ })).toHaveCount(1);
-  const reading = panel.locator("#fit-reading");
+  const reading = panel.locator("#average-reading");
   const before = await reading.innerText();
   await svg.click({ position: point });
   await expect(reading).not.toHaveText(before);
@@ -340,7 +379,7 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
   await page.reload();
   await expect(reading).toHaveText(clicked);
   await panel.getByLabel("Maximum full tvd").fill("0.3");
-  await expect(panel.getByRole("heading")).toHaveText("How deep can the circuit be before matching the ideal bitstring distribution requires moving more than 30% of the probability?");
+  await expect(panel.getByRole("heading")).toHaveText("At which depths must at most 30% of probability shift to match the ideal output on average?");
   await expect(panel.locator(".target-answer")).toBeVisible();
   await expect(panel.locator(".legend")).toContainText("0 is better");
   const targetLine = panel.getByRole("slider", { name: "Plot target" });
@@ -357,10 +396,11 @@ test("regression explorer answers curve clicks and updates both axes @narrow", a
   await expect(targetLine).toHaveAttribute("aria-valuenow", String(dragged));
   await targetLine.press("ArrowDown");
   await expect(targetLine).toHaveAttribute("aria-valuenow", String(Math.round(dragged * 100 - 1) / 100));
-  const slider = panel.getByRole("slider", { name: "Selected point on fitted curve" });
+  const slider = panel.getByRole("slider", { name: "Selected tested setting" });
   await expect(panel.locator('input[type="range"]')).toHaveCount(0);
   await slider.focus();
   await slider.press("Home");
+  await expect(reading).toContainText(/Observed best .* · worst /);
   await expect(reading).not.toHaveText(clicked);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
   expect(errors).toEqual([]);
@@ -376,53 +416,60 @@ test("Operating range accepts decimal percentages and steps in tenths @narrow", 
   await expect(target).toHaveValue("55.6");
   await target.press("ArrowDown");
   await expect(target).toHaveValue("55.5");
-  await expect(page.locator(".plot-caption")).toContainText("Target ≥ 55.5%");
+  await expect(page.locator("#coverage")).toBeHidden();
+  await page.getByText("Experiment details", { exact: true }).click();
+  await expect(page.locator("#coverage")).toBeVisible();
+  await expect(page.locator("#coverage")).toContainText("Target ≥ 55.5%");
 });
 
-test("each tab restores its own target and axes through navigation and reload", async ({ page, context }) => {
-  const errors = await openApp(page, "#section=range");
-  const range = page.getByRole("tab", { name: "Operating range" });
-  const regression = page.getByRole("tab", { name: "Regression explorer" });
-  const minimum = page.getByRole("spinbutton", { name: "Minimum success rate" });
-  const fitted = page.getByRole("spinbutton", { name: "Minimum success rate (%)", exact: true });
-  const x = page.getByLabel("X-axis");
-
-  await minimum.fill("73");
-  await regression.click();
-  await expect(fitted).toHaveValue("50");
-  await fitted.fill("31");
-  await x.selectOption({ label: "Executed ISA depth" });
-  await expect(page).toHaveURL(/section=regression.*t=0\.31/);
-  const sharedUrl = page.url();
-
-  await page.goBack();
-  await expect(range).toHaveAttribute("aria-selected", "true");
-  await expect(minimum).toHaveValue("73");
-  await expect(x.locator("option:checked")).toHaveText("Logical qubits");
-  await page.goForward();
-  await expect(fitted).toHaveValue("31");
-  await expect(x.locator("option:checked")).toHaveText("Executed ISA depth");
-
-  await range.click();
-  await minimum.fill("0");
-  await regression.click();
-  await expect(fitted).toHaveValue("31");
-  await fitted.fill("");
-  await expect(page).toHaveURL(/t=none/);
-  await page.goBack();
-  await expect(minimum).toHaveValue("0");
+test("Run details shows all tested settings and preserves the overview question and point @narrow", async ({ page }) => {
+  await openApp(page, "#section=regression&a=GROVER&t=0.73");
+  const point = page.getByRole("slider", { name: "Selected tested setting" });
+  await point.press("End");
+  const setting = await point.getAttribute("aria-valuenow");
+  const coverage = (await page.locator("#coverage").textContent())!;
+  const axes = page.getByLabel(/^[XY]-axis$/);
+  const axisState = () => axes.evaluateAll(elements => elements.map(element => {
+    const select = element as HTMLSelectElement;
+    return { value: select.value, options: Array.from(select.options, option => option.text) };
+  }));
+  async function checkAxisPositions(chartId: string) {
+    const chart = (await page.locator(chartId).boundingBox())!;
+    const y = (await page.getByLabel("Y-axis").boundingBox())!;
+    const x = (await page.getByLabel("X-axis").boundingBox())!;
+    expect(y.y + y.height).toBeLessThanOrEqual(chart.y + 1);
+    expect(x.y).toBeGreaterThanOrEqual(chart.y + chart.height - 1);
+  }
+  await checkAxisPositions("#average-plot");
+  const overviewAxes = await axisState();
+  const question = await page.locator("#plot-title").innerText();
+  const answer = await page.locator(".target-answer").innerText();
+  const toggle = page.getByRole("switch", { name: "Show run details" });
+  const target = page.getByRole("spinbutton", { name: "Minimum success rate" });
+  await toggle.scrollIntoViewIfNeeded();
+  const targetBox = (await target.boundingBox())!;
+  const switchBox = (await toggle.boundingBox())!;
+  expect(switchBox.y).toBeGreaterThanOrEqual(targetBox.y + targetBox.height);
+  await toggle.click();
+  await expect(toggle).toBeChecked();
+  expect(await toggle.boundingBox()).toEqual(switchBox);
+  expect(await target.boundingBox()).toEqual(targetBox);
+  expect(await axisState()).toEqual(overviewAxes);
+  await checkAxisPositions("#trend");
+  await expect(page.locator("#plot-title")).toHaveText(question);
+  await expect(page.locator(".target-answer")).toHaveText(answer);
+  const widths = await page.locator("#settings-table tr td:nth-child(3)").allTextContents();
+  expect(new Set(widths).size).toBeGreaterThan(1);
+  await expect(page.locator("#coverage")).toHaveText(coverage);
+  await expect(page.getByLabel("Minimum success rate")).toHaveValue("73");
+  await expect(page.getByLabel("Algorithm", { exact: true }).locator("option:checked")).toHaveText("Grover");
   await page.reload();
-  await expect(minimum).toHaveValue("0");
-  await regression.click();
-  await expect(fitted).toHaveValue("");
-  await expect(x.locator("option:checked")).toHaveText("Executed ISA depth");
-
-  const shared = await context.newPage();
-  await shared.goto(sharedUrl);
-  await expect(shared.getByRole("spinbutton", { name: "Minimum success rate (%)", exact: true })).toHaveValue("31");
-  await shared.getByRole("tab", { name: "Operating range" }).click();
-  await expect(shared.getByRole("spinbutton", { name: "Minimum success rate" })).toHaveValue("50");
-  expect(errors).toEqual([]);
+  await expect(page.locator("#coverage")).toHaveText(coverage);
+  await openFirstJob(page);
+  await page.getByRole("button", { name: "Operating range", exact: true }).click();
+  await toggle.click();
+  await expect(point).toHaveAttribute("aria-valuenow", setting!);
+  await expect(page.getByLabel("Minimum success rate")).toHaveValue("73");
 });
 
 test("report tabs share the pooled export and load other reports on demand", async ({ page }) => {
@@ -448,8 +495,8 @@ test("report tabs share the pooled export and load other reports on demand", asy
 test("target units and midpoint follow the Y-axis on both plots @narrow", async ({ page }) => {
   await openApp(page, "#q=success&t=0.75");
   await expect(page.getByLabel("Minimum success rate")).toHaveValue("75");
-  for (const tab of ["Operating range", "Regression explorer"]) {
-    await page.getByRole("tab", { name: tab }).click();
+  for (const details of [true, false]) {
+    await page.getByRole("switch", { name: "Show run details" }).setChecked(details);
     const axis = page.getByLabel("Y-axis");
     const field = page.getByRole("spinbutton");
     const line = page.getByRole("slider", { name: "Plot target" });
@@ -516,22 +563,20 @@ test("navigation groups plots and models in keyboard order @narrow", async ({ pa
   const navigation = page.getByRole("tablist", { name: "Experiment sections" });
   const tabs = navigation.getByRole("tab");
   await expect(tabs).toHaveText([
-    "Regression explorer", "Operating range", "Compare decay", "Footprint",
+    "Operating range", "Compare decay", "Footprint",
     "Model validation", "Model training", "Execution cost model",
   ]);
   await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
   await expect(tabs.first()).toHaveAccessibleDescription("Experiment plots");
-  await expect(tabs.nth(3)).toHaveAccessibleDescription("AI models");
+  await expect(tabs.nth(2)).toHaveAccessibleDescription("AI models");
   const position = await navigation.boundingBox();
+  await expect(page.getByRole("switch", { name: "Show run details" })).not.toBeChecked();
   await tabs.nth(1).click();
-  await expect(page.getByRole("region", { name: "Operating range plot" })).toBeVisible();
   expect(await navigation.boundingBox()).toEqual(position);
-  await tabs.nth(2).click();
-  expect(await navigation.boundingBox()).toEqual(position);
-  await tabs.nth(2).press("ArrowRight");
-  await expect(tabs.nth(3)).toBeFocused();
+  await tabs.nth(1).press("ArrowRight");
+  await expect(tabs.nth(2)).toBeFocused();
   await expect(page).toHaveURL(/section=footprint/);
-  await tabs.nth(3).press("End");
+  await tabs.nth(2).press("End");
   await expect(tabs.last()).toBeFocused();
   await expect(page).toHaveURL(/section=cost/);
   await tabs.last().press("Home");

@@ -7,6 +7,7 @@ export type ViewName = "range" | "job" | "calibration";
 
 export interface UrlState {
   section?: string;
+  mode?: string;
   readAt?: string;
   pair?: string;
   matrix?: string;
@@ -45,7 +46,7 @@ export interface UrlState {
 }
 
 const keys: Record<Exclude<keyof UrlState, "calScoped" | "calExpanded">, string> = {
-  readAt: "at", section: "section", pair: "pair", matrix: "matrix", resource: "resource", outcome: "outcome",
+  mode: "mode", readAt: "at", section: "section", pair: "pair", matrix: "matrix", resource: "resource", outcome: "outcome",
   estScope: "eb", estTarget: "et", estSplit: "es", estView: "ev",
   valTarget: "vt", valRegime: "vr", valChip: "vc",
   costSplit: "ks", costCircuit: "kc", costShots: "kn", costPrice: "kp",

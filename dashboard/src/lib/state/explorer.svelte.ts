@@ -16,7 +16,8 @@ import {
   windowKey,
   type Config,
 } from "../domain/scope";
-import { summarize } from "../domain/sweep";
+import { levelMeans } from "../stats/regression";
+import { passes, summarize } from "../domain/sweep";
 import { CalibrationState } from "./calibration.svelte";
 import type { UrlState, ViewName } from "./url";
 
@@ -43,6 +44,8 @@ export class Explorer {
   question = $state<QuestionKey>("success");
   targetText = $state(DEFAULT_TARGET);
   axis = $state<AxisKey>("width");
+  mode = $state<"details" | "overview">("overview");
+  readAt = $state<number | null>(null);
   view = $state<ViewName>("range");
   configChoice = $state<string | null>(null);
   runChoice = $state<string | null>(null);
@@ -77,6 +80,8 @@ export class Explorer {
   families = $derived(familiesIn(this.windowJobs, this.algorithm));
   family = $derived(pick([ALL_GROUPS, ...this.families], this.familyChoice) ?? ALL_GROUPS);
   jobs = $derived(selectJobs(this.windowJobs, this.algorithm, this.family));
+  levels = $derived(levelMeans(this.jobs, this.axis, this.question));
+  chosenLevel = $derived(this.levels.find(p => p.x === this.readAt));
   configs = $derived(groupConfigs(this.jobs));
   collections = $derived(unique(this.jobs.map(windowKey)).length);
 
@@ -108,6 +113,9 @@ export class Explorer {
     return Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
   });
   targetInvalid = $derived(this.targetText.trim() !== "" && this.threshold == null);
+  passingLevel = $derived(this.threshold === null ? undefined :
+    this.levels.filter(p => passes(this.question, p.mean, this.threshold!)).at(-1));
+  overviewLevel = $derived(this.chosenLevel ?? this.passingLevel ?? this.levels[0]);
   summary = $derived(summarize(this.configs, this.jobs, this.question, this.threshold));
 
   // ---- selection ---------------------------------------------------------------------------
@@ -137,6 +145,7 @@ export class Explorer {
     this.resetSelection();
   }
   setFamily(value: string) {
+    this.readAt = null;
     this.familyChoice = value;
     this.configChoice = null;
     this.runChoice = null;
@@ -150,6 +159,7 @@ export class Explorer {
     this.runChoice = null;
   }
   private resetSelection() {
+    this.readAt = null;
     this.familyChoice = ALL_GROUPS;
     this.configChoice = null;
     this.runChoice = null;
@@ -180,6 +190,10 @@ export class Explorer {
 
   // ---- URL ---------------------------------------------------------------------------------
   apply(state: UrlState) {
+    // Existing range and job links opened individual runs before the views were combined.
+    this.mode = state.view === "job" || state.calOrigin === "job" || state.mode === "details" ? "details"
+      : state.mode === "overview" || state.section === "regression" || !Object.keys(state).length ? "overview" : "details";
+    this.readAt = /^\d+$/.test(state.readAt ?? "") && Number.isSafeInteger(Number(state.readAt)) ? Number(state.readAt) : null;
     if (state.backend) this.backendChoice = state.backend;
     this.periodChoice = state.period ?? ALL_PERIODS;
     if (state.algorithm) this.algorithmChoice = state.algorithm;
@@ -200,6 +214,8 @@ export class Explorer {
   toUrl(): UrlState {
     const job = this.view !== "range" || this.configChoice ? this.selectedJob : undefined;
     return {
+      mode: this.mode,
+      readAt: this.chosenLevel?.x.toString(),
       backend: this.backend === this.backends[0] && this.backends.length === 1 ? undefined : this.backend,
       period: this.period || undefined,
       algorithm: this.algorithm,

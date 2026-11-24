@@ -4,10 +4,9 @@
   import type { Explorer } from "../lib/state/explorer.svelte";
   import Select from "../lib/ui/Select.svelte";
 
-  let { explorer, onalgorithmchange, showChipHistory = false }: {
+  let { explorer, onalgorithmchange }: {
     explorer: Explorer;
     onalgorithmchange?: () => void;
-    showChipHistory?: boolean;
   } = $props();
 </script>
 
@@ -17,12 +16,10 @@
     <div class="chip-field">
       <Select icon="chip" label="Chip" value={explorer.backend} options={explorer.backends}
         onchange={(v) => explorer.setBackend(v)} />
-      {#if showChipHistory}
         <button type="button" id="open-calibration" class="text-action"
           onclick={event => explorer.calibration.open(null, event.currentTarget)}>
           Chip calibration history <span aria-hidden="true">→</span>
         </button>
-      {/if}
     </div>
     <Select icon="date" label="Periods (UTC)" value={explorer.period}
       options={[ALL_PERIODS, ...explorer.periods.map(p => p.id)]}

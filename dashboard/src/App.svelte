@@ -5,7 +5,7 @@
   import { createDashboard, sectionGroups } from "./lib/state/dashboard";
   import CalibrationView from "./views/calibration/CalibrationView.svelte";
   import JobView from "./views/job/JobView.svelte";
-  import RegressionView from "./views/regression/RegressionView.svelte";
+  import ExperimentFilters from "./views/ExperimentFilters.svelte";
   import RangeView from "./views/range/RangeView.svelte";
 
   import Tabs from "./lib/ui/Tabs.svelte";
@@ -42,14 +42,7 @@
   {#if explorer}
     <Tabs groups={sectionGroups} label="Experiment sections" selected={section} onselect={dashboard.selectSection}>
     {#snippet panel(id)}
-    {#if id === "range"}
-    <p class="intro">
-      Choose an algorithm and a question to see which circuit sizes met your target on this chip.
-      Select a point to explore that job’s measurement outcomes.
-    </p>
-    {:else if id === "regression"}
-      <p class="intro">Explore how the average outcome changes with circuit resources. Select a point on the fitted trend to read the estimate for that setting.</p>
-    {:else if id === "cost"}
+    {#if id === "cost"}
       <p class="intro">Predict the billed QPU time, in IBM resource units, of a job before submitting it. One model for every chip.</p>
     {:else if id === "validation"}
       <p class="intro">Frozen QAQS models scored on new runs on three IBM chips, including one the models never saw. Predictions were committed before the jobs ran.</p>
@@ -58,9 +51,7 @@
     {:else if id === "estimation"}
       <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
     {/if}
-    {#if id === "regression" && explorer}
-      <RegressionView {explorer} bind:readAt={() => $dashboard.readAt, readAt => dashboard.setChoices({ readAt })} />
-    {:else if id === "decay" && explorer}
+    {#if id === "decay" && explorer}
       <CompareDecay {explorer} reports={index?.decayReports ?? {}} choices={$dashboard.decay} onchange={decay => dashboard.setChoices({ decay })} />
     {:else if id === "cost"}
       <CostView reports={index?.costReports ?? {}} choices={$dashboard.cost} onchange={cost => dashboard.setChoices({ cost })} />
@@ -96,7 +87,10 @@
       {/if}
       <!-- Range and job views stay mounted while hidden so returning restores focus targets,
            open disclosures and scroll position exactly. -->
-      <div hidden={view !== "range"}><RangeView {explorer} /></div>
+      <div hidden={view !== "range"}>
+        <ExperimentFilters {explorer} onalgorithmchange={() => { if (explorer.mode === "overview") explorer.targetValue = 0.5; }} />
+        <RangeView {explorer} />
+      </div>
       {#if explorer.selectedJob}
         <div hidden={view !== "job"}><JobView {explorer} /></div>
       {/if}

@@ -10,7 +10,6 @@ export const sectionGroups: TabGroup[] = [
   {
     label: "Experiment plots", icon: "compare",
     tabs: [
-      { id: "regression", label: "Regression explorer" },
       { id: "range", label: "Operating range" },
       { id: "decay", label: "Compare decay" },
     ],
@@ -28,12 +27,8 @@ export const sectionGroups: TabGroup[] = [
 const tabs = sectionGroups.flatMap(group => group.tabs);
 
 function choicesFromUrl(url: UrlState) {
-  // Older links identify a range or job by its filters without a section.
-  const defaultTab = Object.keys(url).length ? "range" : tabs[0].id;
-  const at = Number(url.readAt);
   return {
-    section: tabs.find(tab => tab.id === url.section)?.id ?? defaultTab,
-    readAt: /^\d+$/.test(url.readAt ?? "") && Number.isSafeInteger(at) ? at : null,
+    section: tabs.find(tab => tab.id === url.section)?.id ?? "range",
     decay: {
       matrix: url.matrix === "direction" ? "direction" : "similarity",
       pair: url.pair || "", resource: url.resource || "", outcome: url.outcome || "",
@@ -66,12 +61,10 @@ interface DashboardState extends DashboardChoices {
 }
 
 function activeRoute(state: DashboardState, current: Explorer): UrlState {
-  const { section, readAt, decay, estimation, prospective, cost } = state;
+  const { section, decay, estimation, prospective, cost } = state;
   switch (section) {
     case "range":
       return { ...current.toUrl(), section };
-    case "regression":
-      return { ...current.toUrl(), section, readAt: readAt?.toString() };
     case "decay":
       return { section, backend: decay.resource ? current.backend : undefined, ...decay };
     case "estimation":
@@ -131,7 +124,7 @@ export function createDashboard() {
     const current = state.getState();
     if (next === current.section) return;
     saveRoute(current);
-    const hash = sectionUrls[next] ?? formatHash({ section: next });
+    const hash = sectionUrls[next] ?? formatHash({ section: next, mode: next === "range" ? "overview" : undefined });
     history.pushState({ ...history.state, dashboardSections: sectionUrls }, "", hash);
     restoreRoute();
   }
