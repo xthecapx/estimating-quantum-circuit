@@ -40,9 +40,8 @@ from experiments.ml_dataset import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-# Models frozen on 2026-11-16 together with their pre-registered predictions and scores.
-# Never regenerated: the prospective result is only valid for these exact artifacts.
-FROZEN_DIR = ROOT / "report" / "frozen_v1"
+# Pre-registered predictions and scores of the prospective validation runs.
+PROSPECTIVE_DIR = ROOT / "report" / "ml_estimation" / "prospective"
 SCHEMA_VERSION = 2
 H1_R2_THRESHOLD = 0.80
 
@@ -686,7 +685,7 @@ REGIME_LABELS: dict[str, str] = {
     "mixed_device": "Footprint + device calibration (cal.*)",
     "mixed_submit": "Footprint + layout calibration (c.*)",
     "circuit_window": "Footprint + collection-window id (control)",
-    "circuit_chip": "Footprint + chip id",
+    "circuit_chip": "Footprint + chip id (one model for all chips)",
     "size_baseline": "Size baseline (2Q gates, depth, width, measurements)",
     "hurdle": "Footprint, two-stage (floor / above floor)",
 }

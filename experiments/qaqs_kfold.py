@@ -55,7 +55,9 @@ from experiments.ml_dataset import (
     FAMILIES,
     RANDOM_ALGORITHM,
     DatasetBundle,
+    add_chip_indicators,
     baseline_predictions,
+    chip_indicator_columns,
     headline_mask,
     infer_provider,
     split_temporal_and_cv,
@@ -84,9 +86,6 @@ from experiments.qaqs_models import (
 )
 
 WAITING_FOR_DATA = "WAITING FOR DATA"
-# v1 = models frozen on 2026-11-16 and scored prospectively (report/frozen_v1).
-# v2 = this pipeline; not prospectively validated until a new pre-registered run.
-MODEL_VERSION = "v2"
 
 # Thesis names for the three QAQS validation tests. Keep in sync with VALIDATION in
 # dashboard/src/views/estimation/model.ts and with the manuscript.
@@ -136,7 +135,6 @@ STABLE_SELECTION_FREQUENCY = 0.80
 HURDLE_FLOOR = 0.02
 HURDLE_MIN_SHARE = 0.05
 WINDOW_CODE = "_window_code"
-CHIP_CODE = "_chip_code"
 
 # Analytical M2 estimate expressed in each target's space (pre-runtime: it uses
 # only the circuit and the calibration at submission). DSR has no counterpart.
@@ -269,11 +267,13 @@ def _nested_fold(
     random_state: int,
     device_pool: Sequence[str] = (),
     hurdle: bool = False,
+    chip_cols: Sequence[str] = (),
 ) -> dict[str, Any]:
     """One outer fold: all selection on ``train``; predictions for ``test`` only.
 
-    ``circuit_only`` and ``mixed_submit`` are the deployed procedures (tuned, model
-    chosen by inner CV). The other regimes are fixed-LightGBM comparisons.
+    ``circuit_only``, ``mixed_submit`` and, in a multi-chip scope, ``circuit_chip``
+    (footprint + one-hot chip id) are the deployed procedures: tuned, model chosen by
+    inner CV. The other regimes are fixed-LightGBM comparisons.
     """
     warnings.simplefilter("ignore")
     models = build_models(random_state=random_state)
@@ -307,8 +307,10 @@ def _nested_fold(
         fixed.append(("mixed_device", fp_cols + dev_cols if dev_cols else []))
         if WINDOW_CODE in train.columns and train[WINDOW_CODE].nunique() > 1:
             fixed.append(("circuit_window", fp_cols + [WINDOW_CODE]))
-        if CHIP_CODE in train.columns and train[CHIP_CODE].nunique() > 1:
-            fixed.append(("circuit_chip", fp_cols + [CHIP_CODE]))
+        if chip_cols:
+            cols = fp_cols + list(chip_cols)
+            regimes["circuit_chip"] = _fit_regime(train, test, cols, target_col, True, random_state)
+            regimes["circuit_chip"]["nFeatures"] = len(cols)
     for regime, cols in fixed:
         if cols:
             regimes[regime] = _fit_fixed(train, test, cols, target_col, "LightGBM", models["LightGBM"])
@@ -1031,7 +1033,8 @@ def analyze_scope_kfold(
     scope_frame[WINDOW_CODE] = pd.factorize(
         scope_frame["meta.backend_name"].astype(str) + "|" + scope_frame["period"].astype(str)
     )[0].astype(float)
-    scope_frame[CHIP_CODE] = pd.factorize(scope_frame["meta.backend_name"].astype(str))[0].astype(float)
+    chip_cols = chip_indicator_columns(scope_frame) if multi_chip else []
+    add_chip_indicators(scope_frame, chip_cols)
 
     for target_key, (target_col, target_label, higher_better) in ALL_TARGETS.items():
         if target_col not in scope_frame.columns or not np.isfinite(scope_frame[target_col]).any():
@@ -1049,7 +1052,7 @@ def analyze_scope_kfold(
         head = headline_mask(valid, target_key)
         floor_share = float((valid.loc[head, target_col] <= HURDLE_FLOOR).mean())
         use_hurdle = floor_share >= HURDLE_MIN_SHARE
-        extra = [WINDOW_CODE] + ([CHIP_CODE] if multi_chip else [])
+        extra = [WINDOW_CODE] + chip_cols
         work_cols = sorted(set(circuit_pool + hw_pool + device_pool + extra + [target_col, "meta.config_id"]))
         work = valid[work_cols]
 
@@ -1062,7 +1065,7 @@ def analyze_scope_kfold(
                     continue
                 tasks.append((r, k, work.loc[~te_mask], work.loc[te_mask]))
         results = Parallel(n_jobs=n_jobs)(
-            delayed(_nested_fold)(tr, te, target_col, circuit_pool, hw_pool, random_state, device_pool, use_hurdle)
+            delayed(_nested_fold)(tr, te, target_col, circuit_pool, hw_pool, random_state, device_pool, use_hurdle, chip_cols)
             for _, _, tr, te in tasks
         )
         folds_by_repeat: dict[int, list[dict[str, Any]]] = {}
@@ -1114,7 +1117,11 @@ def analyze_scope_kfold(
             item["stable"] = bool(item["selectionFrequency"] >= STABLE_SELECTION_FREQUENCY)
         saved_models: dict[str, Any] = {}
         deployed_names: dict[str, str] = {}
-        for regime, cols in (("circuit_only", fp_full), ("mixed_submit", fp_full + hw_full)):
+        for regime, cols in (
+            ("circuit_only", fp_full),
+            ("mixed_submit", fp_full + hw_full),
+            ("circuit_chip", fp_full + chip_cols if chip_cols else []),
+        ):
             if not cols or regime not in regimes_out:
                 continue
             fit = _fit_regime(valid, None, cols, target_col, True, random_state)
@@ -1137,8 +1144,6 @@ def analyze_scope_kfold(
                 )
                 info["params"] = fit["perModel"][name]["params"]
                 info["evaluation"] = "nested repeated grouped K-fold (procedure score)"
-                info["modelVersion"] = MODEL_VERSION
-                info["prospectivelyValidated"] = False
                 saved_models[regime] = info
 
         # ---- analytical baselines (no training), same scored jobs as the headline
@@ -1218,6 +1223,10 @@ def analyze_scope_kfold(
             "chanceCorrected": target_key in CHANCE_CORRECTED_TARGETS,
             "scoredJobs": int(head.sum()),
             "bestModel": deployed_names.get("circuit_only", ""),
+            # The model to use: one model for all chips with chip id where there are
+            # several chips; the circuit-only model inside a single chip.
+            "bestRegime": "circuit_chip" if "circuit_chip" in regimes_out else "circuit_only",
+            "chipLeaderboard": regimes_out.get("circuit_chip", []),
             "footprintCount": len(fp_full),
             "candidateFootprintCount": len(fp_items),
             "hardwareFeatureCount": len(hw_full),
@@ -1263,7 +1272,6 @@ def analyze_scope_kfold(
     return _clean_json(
         {
             "schemaVersion": SCHEMA_VERSION,
-            "modelVersion": MODEL_VERSION,
             "backend": scope_name,
             "provider": prov,
             "modality": modality,

@@ -38,8 +38,8 @@ TARGETS: dict[str, tuple[str, str, bool]] = {
 
 # Chance-corrected targets: the outcome with the chance level of the circuit removed,
 # so an algorithm that only reaches chance scores 0 whatever its success-set size.
-# Kept apart from ``TARGETS`` because the frozen v1 models and their prospective
-# scores cover ``TARGETS`` only.
+# Kept apart from ``TARGETS``: the prospective run of 2026-11-16 pre-registered
+# ``TARGETS`` only.
 CHANCE_CORRECTED_TARGETS: dict[str, tuple[str, str, bool]] = {
     "success_adj": (
         "f.fidelity.chance_corrected_success",
@@ -455,6 +455,27 @@ def split_temporal_and_cv(
 
     holdout_periods = sorted(frame.loc[is_holdout, "period"].unique().tolist())
     return is_holdout, holdout_periods
+
+
+CHIP_INDICATOR_PREFIX = "chip."
+
+
+def chip_indicator_columns(frame: pd.DataFrame) -> list[str]:
+    """Names of the one-hot chip columns for the chips present in ``frame``."""
+    return [CHIP_INDICATOR_PREFIX + str(b) for b in sorted(frame["meta.backend_name"].astype(str).unique())]
+
+
+def add_chip_indicators(frame: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
+    """Add one-hot chip columns in place (1.0 on that chip, else 0.0) and return ``frame``.
+
+    A chip the model was not trained on gets all zeros: the model falls back to what
+    is common to the chips it knows.
+    """
+    backend = frame["meta.backend_name"].astype(str)
+    for col in columns:
+        if col.startswith(CHIP_INDICATOR_PREFIX):
+            frame[col] = (backend == col[len(CHIP_INDICATOR_PREFIX):]).astype(float)
+    return frame
 
 
 def headline_mask(frame: pd.DataFrame, target_key: str) -> pd.Series:

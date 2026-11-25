@@ -8,15 +8,29 @@ Dataset `2fdcc81e9ec2` · chips: ibm_fez, ibm_kingston · providers: ibm.
 | validation | 252 | prospective validation only; never trained on |
 | exploratory | 20 | one-off studies; never trained on |
 
-Scopes: `ibm_fez`, `ibm_kingston`, `pooled`. Model version: **v2**.
+Scopes: `ibm_fez`, `ibm_kingston`, `pooled`.
+
+## Best model: one pooled model with chip id
+
+One model for all chips: the circuit footprint plus a one-hot chip id. Per-chip models are the reference. Unseen-circuit R² ± sd [95% CI] of each tuned procedure:
+
+| Target | Pooled + chip id | H1 | Pooled, no chip id | Per-chip models (reference) |
+|---|---:|:---:|---:|---|
+| Differential Success Rate (`dsr`) | 0.453 ± 0.018 [0.30, 0.59] | FAIL | 0.391 | `ibm_fez` 0.403, `ibm_kingston` 0.510 |
+| Hellinger Fidelity (`hellinger`) | 0.794 ± 0.003 [0.74, 0.85] | INCONCLUSIVE | 0.755 | `ibm_fez` 0.757, `ibm_kingston` 0.873 |
+| Total Variation Distance (`tvd`) | 0.793 ± 0.010 [0.73, 0.85] | INCONCLUSIVE | 0.759 | `ibm_fez` 0.775, `ibm_kingston` 0.866 |
+| Success Rate (`success`) | 0.736 ± 0.009 [0.64, 0.81] | INCONCLUSIVE | 0.703 | `ibm_fez` 0.691, `ibm_kingston` 0.826 |
+| Chance-Corrected Success (`success_adj`) | 0.765 ± 0.012 [0.62, 0.86] | INCONCLUSIVE | 0.737 | `ibm_fez` 0.696, `ibm_kingston` 0.853 |
+
+A chip without training data gets no chip id (all zeros) and is predicted from what the known chips share. Scores on the validation run are in `model_comparison.md`.
 
 ## Verdicts
 
-| Scope | `dsr` | `hellinger` | `success` | `success_adj` | `tvd` |
+| Scope | `dsr` | `hellinger` | `tvd` | `success` | `success_adj` |
 |---|---|---|---|---|---|
-| `ibm_fez` | FAIL (0.37) | INCONCLUSIVE (0.75) | FAIL (0.69) | INCONCLUSIVE (0.69) | INCONCLUSIVE (0.76) |
-| `ibm_kingston` | FAIL (0.48) | PASS (0.86) | INCONCLUSIVE (0.82) | INCONCLUSIVE (0.85) | PASS (0.87) |
-| `pooled` | FAIL (0.37) | FAIL (0.74) | FAIL (0.68) | INCONCLUSIVE (0.74) | INCONCLUSIVE (0.76) |
+| `ibm_fez` | FAIL (0.40) | INCONCLUSIVE (0.76) | INCONCLUSIVE (0.78) | FAIL (0.69) | INCONCLUSIVE (0.70) |
+| `ibm_kingston` | FAIL (0.51) | PASS (0.87) | PASS (0.87) | INCONCLUSIVE (0.83) | INCONCLUSIVE (0.85) |
+| `pooled` | FAIL (0.39) | INCONCLUSIVE (0.75) | INCONCLUSIVE (0.76) | FAIL (0.70) | INCONCLUSIVE (0.74) |
 
 ## Validation tests
 
@@ -41,31 +55,31 @@ Unseen-circuit validation. PASS needs the whole 95% interval at or above 0.80.
 
 | Target | R² ± sd [95% CI] | H1 | MAE | Ceiling | Config-mean R² | Size baseline R² | Gain over size [95% CI] |
 |---|---:|:---:|---:|---:|---:|---:|---:|
-| Differential Success Rate (`dsr`) | 0.368 ± 0.009 [0.22, 0.50] | FAIL | 0.1230 | 0.550 | 0.585 [0.36, 0.74] | 0.373 | -0.001 [-0.08, 0.08] |
-| Hellinger Fidelity (`hellinger`) | 0.750 ± 0.008 [0.68, 0.81] | INCONCLUSIVE | 0.0690 | 0.721 | 0.918 [0.88, 0.94] | 0.743 | -0.003 [-0.04, 0.03] |
-| Success Rate (`success`) | 0.688 ± 0.021 [0.57, 0.78] | FAIL | 0.0738 | 0.763 | 0.842 [0.74, 0.92] | 0.700 | +0.007 [-0.04, 0.06] |
-| Chance-Corrected Success (`success_adj`) | 0.690 ± 0.008 [0.53, 0.80] | INCONCLUSIVE | 0.0869 | 0.810 | 0.819 [0.67, 0.92] | 0.697 | +0.003 [-0.04, 0.04] |
-| Total Variation Distance (`tvd`) | 0.757 ± 0.008 [0.69, 0.82] | INCONCLUSIVE | 0.0683 | 0.732 | 0.923 [0.88, 0.95] | 0.755 | +0.003 [-0.03, 0.04] |
+| Differential Success Rate (`dsr`) | 0.403 ± 0.012 [0.27, 0.53] | FAIL | 0.1212 | 0.550 | 0.614 [0.42, 0.75] | 0.373 | +0.054 [-0.04, 0.14] |
+| Hellinger Fidelity (`hellinger`) | 0.757 ± 0.003 [0.68, 0.82] | INCONCLUSIVE | 0.0677 | 0.721 | 0.924 [0.89, 0.95] | 0.743 | +0.010 [-0.02, 0.05] |
+| Total Variation Distance (`tvd`) | 0.775 ± 0.006 [0.71, 0.84] | INCONCLUSIVE | 0.0655 | 0.732 | 0.930 [0.90, 0.95] | 0.755 | +0.012 [-0.02, 0.05] |
+| Success Rate (`success`) | 0.691 ± 0.016 [0.58, 0.78] | FAIL | 0.0732 | 0.763 | 0.843 [0.74, 0.92] | 0.700 | -0.001 [-0.05, 0.05] |
+| Chance-Corrected Success (`success_adj`) | 0.696 ± 0.018 [0.54, 0.81] | INCONCLUSIVE | 0.0833 | 0.810 | 0.822 [0.67, 0.92] | 0.697 | +0.022 [-0.03, 0.07] |
 
 ### `ibm_kingston` · 1173 jobs, 189 configurations
 
 | Target | R² ± sd [95% CI] | H1 | MAE | Ceiling | Config-mean R² | Size baseline R² | Gain over size [95% CI] |
 |---|---:|:---:|---:|---:|---:|---:|---:|
-| Differential Success Rate (`dsr`) | 0.480 ± 0.019 [0.28, 0.63] | FAIL | 0.0917 | 0.771 | 0.570 [0.32, 0.76] | 0.193 | +0.231 [0.09, 0.38] |
-| Hellinger Fidelity (`hellinger`) | 0.860 ± 0.011 [0.80, 0.91] | PASS | 0.0465 | 0.912 | 0.916 [0.87, 0.95] | 0.800 | +0.033 [-0.00, 0.07] |
-| Success Rate (`success`) | 0.818 ± 0.025 [0.73, 0.89] | INCONCLUSIVE | 0.0523 | 0.918 | 0.867 [0.77, 0.93] | 0.744 | +0.048 [0.00, 0.10] |
-| Chance-Corrected Success (`success_adj`) | 0.851 ± 0.001 [0.72, 0.93] | INCONCLUSIVE | 0.0608 | 0.953 | 0.857 [0.70, 0.95] | 0.774 | +0.091 [0.03, 0.17] |
-| Total Variation Distance (`tvd`) | 0.874 ± 0.006 [0.82, 0.92] | PASS | 0.0431 | 0.911 | 0.932 [0.89, 0.96] | 0.800 | +0.050 [0.01, 0.10] |
+| Differential Success Rate (`dsr`) | 0.510 ± 0.025 [0.28, 0.67] | FAIL | 0.0874 | 0.771 | 0.604 [0.33, 0.80] | 0.193 | +0.248 [0.08, 0.43] |
+| Hellinger Fidelity (`hellinger`) | 0.873 ± 0.004 [0.82, 0.92] | PASS | 0.0437 | 0.912 | 0.930 [0.90, 0.96] | 0.800 | +0.051 [0.02, 0.09] |
+| Total Variation Distance (`tvd`) | 0.866 ± 0.001 [0.80, 0.92] | PASS | 0.0434 | 0.911 | 0.923 [0.86, 0.96] | 0.800 | +0.045 [0.01, 0.08] |
+| Success Rate (`success`) | 0.826 ± 0.032 [0.74, 0.89] | INCONCLUSIVE | 0.0507 | 0.918 | 0.876 [0.78, 0.93] | 0.744 | +0.048 [-0.00, 0.10] |
+| Chance-Corrected Success (`success_adj`) | 0.853 ± 0.005 [0.72, 0.93] | INCONCLUSIVE | 0.0597 | 0.953 | 0.861 [0.70, 0.95] | 0.774 | +0.098 [0.03, 0.18] |
 
 ### `pooled` · 2409 jobs, 189 configurations
 
 | Target | R² ± sd [95% CI] | H1 | MAE | Ceiling | Config-mean R² | Size baseline R² | Gain over size [95% CI] |
 |---|---:|:---:|---:|---:|---:|---:|---:|
-| Differential Success Rate (`dsr`) | 0.372 ± 0.006 [0.22, 0.51] | FAIL | 0.1118 | 0.634 | 0.524 [0.31, 0.69] | 0.274 | +0.085 [0.01, 0.16] |
-| Hellinger Fidelity (`hellinger`) | 0.738 ± 0.013 [0.67, 0.80] | FAIL | 0.0677 | 0.798 | 0.866 [0.81, 0.90] | 0.725 | +0.005 [-0.03, 0.04] |
-| Success Rate (`success`) | 0.684 ± 0.007 [0.58, 0.77] | FAIL | 0.0714 | 0.826 | 0.800 [0.68, 0.87] | 0.683 | -0.009 [-0.04, 0.03] |
-| Chance-Corrected Success (`success_adj`) | 0.743 ± 0.007 [0.58, 0.84] | INCONCLUSIVE | 0.0806 | 0.879 | 0.811 [0.66, 0.90] | 0.718 | +0.037 [-0.01, 0.10] |
-| Total Variation Distance (`tvd`) | 0.758 ± 0.007 [0.69, 0.81] | INCONCLUSIVE | 0.0637 | 0.804 | 0.880 [0.83, 0.91] | 0.730 | +0.016 [-0.02, 0.05] |
+| Differential Success Rate (`dsr`) | 0.391 ± 0.015 [0.24, 0.52] | FAIL | 0.1113 | 0.634 | 0.533 [0.32, 0.70] | 0.274 | +0.117 [0.05, 0.19] |
+| Hellinger Fidelity (`hellinger`) | 0.755 ± 0.005 [0.69, 0.81] | INCONCLUSIVE | 0.0657 | 0.798 | 0.881 [0.84, 0.91] | 0.725 | +0.021 [-0.01, 0.05] |
+| Total Variation Distance (`tvd`) | 0.759 ± 0.007 [0.69, 0.82] | INCONCLUSIVE | 0.0630 | 0.804 | 0.883 [0.84, 0.91] | 0.730 | +0.016 [-0.02, 0.06] |
+| Success Rate (`success`) | 0.703 ± 0.013 [0.60, 0.78] | FAIL | 0.0699 | 0.826 | 0.815 [0.71, 0.88] | 0.683 | +0.016 [-0.01, 0.05] |
+| Chance-Corrected Success (`success_adj`) | 0.737 ± 0.011 [0.58, 0.84] | INCONCLUSIVE | 0.0814 | 0.879 | 0.805 [0.67, 0.89] | 0.718 | +0.034 [-0.01, 0.09] |
 
 ### What each group of circuits contributes
 
@@ -73,21 +87,21 @@ R² of the same out-of-fold predictions on subsets. `all jobs` includes the comp
 
 | Scope | Target | Headline | Core 6 | Random volumetric | Composite anchor | All jobs |
 |---|---|---:|---:|---:|---:|---:|
-| `ibm_fez` | `dsr` | 0.368 | 0.366 | 0.260 | -80.092 | 0.578 |
-| `ibm_fez` | `hellinger` | 0.750 | 0.730 | 0.869 | 0.455 | 0.781 |
-| `ibm_fez` | `success` | 0.688 | 0.653 | 0.896 | 0.000 | 0.777 |
-| `ibm_fez` | `success_adj` | 0.690 | 0.498 | 0.889 | -3.037 | 0.690 |
-| `ibm_fez` | `tvd` | 0.757 | 0.739 | 0.864 | 0.307 | 0.777 |
-| `ibm_kingston` | `dsr` | 0.480 | 0.473 | 0.189 | -547.535 | 0.769 |
-| `ibm_kingston` | `hellinger` | 0.860 | 0.863 | 0.813 | 0.501 | 0.884 |
-| `ibm_kingston` | `success` | 0.818 | 0.820 | 0.779 | 0.448 | 0.905 |
-| `ibm_kingston` | `success_adj` | 0.851 | 0.668 | 0.740 | -1.383 | 0.851 |
-| `ibm_kingston` | `tvd` | 0.874 | 0.881 | 0.813 | 0.677 | 0.904 |
-| `pooled` | `dsr` | 0.372 | 0.373 | 0.041 | -21.607 | 0.658 |
-| `pooled` | `hellinger` | 0.738 | 0.728 | 0.771 | 0.350 | 0.783 |
-| `pooled` | `success` | 0.684 | 0.663 | 0.784 | -0.260 | 0.799 |
-| `pooled` | `success_adj` | 0.743 | 0.523 | 0.798 | -2.568 | 0.743 |
-| `pooled` | `tvd` | 0.758 | 0.747 | 0.816 | 0.342 | 0.793 |
+| `ibm_fez` | `dsr` | 0.403 | 0.404 | 0.221 | -10.180 | 0.615 |
+| `ibm_fez` | `hellinger` | 0.757 | 0.737 | 0.870 | 0.437 | 0.785 |
+| `ibm_fez` | `tvd` | 0.775 | 0.759 | 0.872 | 0.523 | 0.801 |
+| `ibm_fez` | `success` | 0.691 | 0.657 | 0.893 | -0.152 | 0.777 |
+| `ibm_fez` | `success_adj` | 0.696 | 0.518 | 0.885 | -4.995 | 0.696 |
+| `ibm_kingston` | `dsr` | 0.510 | 0.508 | -0.142 | -980.790 | 0.771 |
+| `ibm_kingston` | `hellinger` | 0.873 | 0.878 | 0.815 | 0.454 | 0.888 |
+| `ibm_kingston` | `tvd` | 0.866 | 0.870 | 0.821 | 0.637 | 0.896 |
+| `ibm_kingston` | `success` | 0.826 | 0.830 | 0.773 | 0.425 | 0.909 |
+| `ibm_kingston` | `success_adj` | 0.853 | 0.679 | 0.757 | -2.142 | 0.853 |
+| `pooled` | `dsr` | 0.391 | 0.387 | 0.225 | -81.424 | 0.661 |
+| `pooled` | `hellinger` | 0.755 | 0.744 | 0.800 | 0.424 | 0.798 |
+| `pooled` | `tvd` | 0.759 | 0.744 | 0.849 | 0.416 | 0.798 |
+| `pooled` | `success` | 0.703 | 0.684 | 0.794 | -0.354 | 0.809 |
+| `pooled` | `success_adj` | 0.737 | 0.507 | 0.816 | -2.481 | 0.737 |
 
 ### Per algorithm (`success`)
 
@@ -95,30 +109,30 @@ R² inside one algorithm is a harder test: the spread to explain is only that al
 
 | Scope | Algorithm | Configs | Observed mean ± sd | R² [95% CI] | MAE | Ceiling |
 |---|---|---:|---:|---:|---:|---:|
-| `ibm_fez` | BERNSTEIN-VAZIRANI | 39 | 0.78 ± 0.21 | 0.750 [0.58, 0.88] | 0.0555 | 0.749 |
-| `ibm_fez` | GHZ | 15 | 0.84 ± 0.09 | 0.383 [-0.56, 0.89] | 0.0414 | 0.934 |
-| `ibm_fez` | GROVER | 29 | 0.64 ± 0.28 | 0.724 [0.42, 0.90] | 0.0784 | 0.794 |
-| `ibm_fez` | PHASE-ESTIMATION | 21 | 0.72 ± 0.22 | 0.672 [0.52, 0.81] | 0.0825 | 0.808 |
-| `ibm_fez` | QFT | 27 | 0.75 ± 0.21 | 0.506 [-0.69, 0.86] | 0.0867 | 0.876 |
-| `ibm_fez` | RANDOM-VOLUMETRIC | 15 | 0.62 ± 0.26 | 0.896 [0.79, 0.94] | 0.0633 | 0.923 |
-| `ibm_fez` | SHOR | 13 | 0.15 ± 0.10 | 0.000 [-1.24, 0.62] | 0.0739 | 0.900 |
-| `ibm_fez` | VTP | 30 | 0.74 ± 0.20 | 0.346 [0.11, 0.54] | 0.0989 | 0.242 |
-| `ibm_kingston` | BERNSTEIN-VAZIRANI | 39 | 0.76 ± 0.20 | 0.776 [0.57, 0.91] | 0.0524 | 0.850 |
-| `ibm_kingston` | GHZ | 15 | 0.85 ± 0.08 | 0.845 [0.70, 0.90] | 0.0277 | 0.911 |
-| `ibm_kingston` | GROVER | 29 | 0.67 ± 0.28 | 0.899 [0.68, 0.98] | 0.0444 | 0.969 |
-| `ibm_kingston` | PHASE-ESTIMATION | 21 | 0.79 ± 0.15 | 0.768 [0.63, 0.87] | 0.0512 | 0.938 |
-| `ibm_kingston` | QFT | 27 | 0.82 ± 0.15 | 0.618 [-0.48, 0.81] | 0.0698 | 0.923 |
-| `ibm_kingston` | RANDOM-VOLUMETRIC | 15 | 0.68 ± 0.23 | 0.779 [0.55, 0.89] | 0.0729 | 0.903 |
-| `ibm_kingston` | SHOR | 13 | 0.14 ± 0.10 | 0.448 [-0.48, 0.77] | 0.0525 | 0.843 |
-| `ibm_kingston` | VTP | 30 | 0.83 ± 0.09 | 0.548 [0.28, 0.70] | 0.0467 | 0.650 |
-| `pooled` | BERNSTEIN-VAZIRANI | 39 | 0.77 ± 0.20 | 0.725 [0.56, 0.85] | 0.0577 | 0.795 |
-| `pooled` | GHZ | 15 | 0.85 ± 0.09 | 0.621 [0.16, 0.87] | 0.0358 | 0.924 |
-| `pooled` | GROVER | 29 | 0.65 ± 0.28 | 0.749 [0.43, 0.91] | 0.0729 | 0.875 |
-| `pooled` | PHASE-ESTIMATION | 21 | 0.75 ± 0.19 | 0.651 [0.50, 0.76] | 0.0739 | 0.852 |
-| `pooled` | QFT | 27 | 0.78 ± 0.18 | 0.472 [-0.73, 0.76] | 0.0918 | 0.896 |
-| `pooled` | RANDOM-VOLUMETRIC | 15 | 0.65 ± 0.25 | 0.784 [0.57, 0.87] | 0.0854 | 0.916 |
-| `pooled` | SHOR | 13 | 0.15 ± 0.10 | -0.260 [-1.71, 0.39] | 0.0833 | 0.867 |
-| `pooled` | VTP | 30 | 0.79 ± 0.16 | 0.297 [0.07, 0.48] | 0.0791 | 0.365 |
+| `ibm_fez` | BERNSTEIN-VAZIRANI | 39 | 0.78 ± 0.21 | 0.738 [0.56, 0.89] | 0.0527 | 0.749 |
+| `ibm_fez` | GHZ | 15 | 0.84 ± 0.09 | 0.370 [-0.58, 0.89] | 0.0426 | 0.934 |
+| `ibm_fez` | GROVER | 29 | 0.64 ± 0.28 | 0.739 [0.45, 0.91] | 0.0768 | 0.794 |
+| `ibm_fez` | PHASE-ESTIMATION | 21 | 0.72 ± 0.22 | 0.645 [0.45, 0.79] | 0.0856 | 0.808 |
+| `ibm_fez` | QFT | 27 | 0.75 ± 0.21 | 0.514 [-0.67, 0.86] | 0.0859 | 0.876 |
+| `ibm_fez` | RANDOM-VOLUMETRIC | 15 | 0.62 ± 0.26 | 0.893 [0.79, 0.94] | 0.0664 | 0.923 |
+| `ibm_fez` | SHOR | 13 | 0.15 ± 0.10 | -0.152 [-1.72, 0.63] | 0.0771 | 0.900 |
+| `ibm_fez` | VTP | 30 | 0.74 ± 0.20 | 0.374 [0.14, 0.57] | 0.0966 | 0.242 |
+| `ibm_kingston` | BERNSTEIN-VAZIRANI | 39 | 0.76 ± 0.20 | 0.790 [0.60, 0.91] | 0.0504 | 0.850 |
+| `ibm_kingston` | GHZ | 15 | 0.85 ± 0.08 | 0.825 [0.63, 0.90] | 0.0286 | 0.911 |
+| `ibm_kingston` | GROVER | 29 | 0.67 ± 0.28 | 0.900 [0.68, 0.98] | 0.0439 | 0.969 |
+| `ibm_kingston` | PHASE-ESTIMATION | 21 | 0.79 ± 0.15 | 0.760 [0.60, 0.85] | 0.0542 | 0.938 |
+| `ibm_kingston` | QFT | 27 | 0.82 ± 0.15 | 0.675 [-0.26, 0.86] | 0.0624 | 0.923 |
+| `ibm_kingston` | RANDOM-VOLUMETRIC | 15 | 0.68 ± 0.23 | 0.773 [0.54, 0.89] | 0.0724 | 0.903 |
+| `ibm_kingston` | SHOR | 13 | 0.14 ± 0.10 | 0.425 [-0.37, 0.71] | 0.0555 | 0.843 |
+| `ibm_kingston` | VTP | 30 | 0.83 ± 0.09 | 0.575 [0.32, 0.73] | 0.0451 | 0.650 |
+| `pooled` | BERNSTEIN-VAZIRANI | 39 | 0.77 ± 0.20 | 0.751 [0.61, 0.86] | 0.0560 | 0.795 |
+| `pooled` | GHZ | 15 | 0.85 ± 0.09 | 0.686 [0.34, 0.89] | 0.0338 | 0.924 |
+| `pooled` | GROVER | 29 | 0.65 ± 0.28 | 0.743 [0.42, 0.90] | 0.0748 | 0.875 |
+| `pooled` | PHASE-ESTIMATION | 21 | 0.75 ± 0.19 | 0.653 [0.49, 0.77] | 0.0728 | 0.852 |
+| `pooled` | QFT | 27 | 0.78 ± 0.18 | 0.542 [-0.39, 0.78] | 0.0858 | 0.896 |
+| `pooled` | RANDOM-VOLUMETRIC | 15 | 0.65 ± 0.25 | 0.794 [0.62, 0.87] | 0.0850 | 0.916 |
+| `pooled` | SHOR | 13 | 0.15 ± 0.10 | -0.354 [-2.82, 0.58] | 0.0808 | 0.867 |
+| `pooled` | VTP | 30 | 0.79 ± 0.16 | 0.359 [0.18, 0.51] | 0.0781 | 0.365 |
 
 ### Targets with a point mass at the floor
 
@@ -126,10 +140,10 @@ Two-stage model (is the job above the floor, then how far) on the same footprint
 
 | Scope | Target | Jobs at floor | Procedure R² | Two-stage R² | Procedure MAE | Two-stage MAE |
 |---|---|---:|---:|---:|---:|---:|
-| `ibm_fez` | `dsr` | 5.4% | 0.368 | 0.369 | 0.1230 | 0.1210 |
-| `ibm_fez` | `success_adj` | 6.7% | 0.690 | 0.713 | 0.0869 | 0.0863 |
-| `ibm_kingston` | `success_adj` | 6.2% | 0.851 | 0.864 | 0.0608 | 0.0582 |
-| `pooled` | `success_adj` | 6.5% | 0.743 | 0.744 | 0.0806 | 0.0825 |
+| `ibm_fez` | `dsr` | 5.4% | 0.403 | 0.400 | 0.1212 | 0.1156 |
+| `ibm_fez` | `success_adj` | 6.7% | 0.696 | 0.726 | 0.0833 | 0.0826 |
+| `ibm_kingston` | `success_adj` | 6.2% | 0.853 | 0.864 | 0.0597 | 0.0575 |
+| `pooled` | `success_adj` | 6.5% | 0.737 | 0.753 | 0.0814 | 0.0811 |
 
 ## H2 · Generalization to unseen configurations (`success`)
 
@@ -140,19 +154,19 @@ The held-out circuits are larger than any trained one, or from an algorithm abse
 | `ibm_fez` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) | 232 / 72 | -0.288 [-1.71, 0.16] | 0.2070 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior alone | 0 / 72 | -0.131 [-1.82, 0.38] | 0.1967 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior + residual | 232 / 72 | 0.528 [0.05, 0.72] | 0.1215 |
-| `ibm_fez` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) | 352 / 110 | -1.010 [-2.14, -0.44] | 0.2770 |
+| `ibm_fez` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) | 352 / 110 | -1.134 [-2.31, -0.53] | 0.2892 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior alone | 0 / 110 | 0.241 [-0.30, 0.58] | 0.1664 |
-| `ibm_fez` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior + residual | 352 / 110 | 0.590 [0.28, 0.79] | 0.0927 |
+| `ibm_fez` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior + residual | 352 / 110 | 0.587 [0.27, 0.79] | 0.0914 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) | 214 / 72 | -0.171 [-0.53, -0.03] | 0.1122 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior alone | 0 / 36 | -0.891 [-1.80, -0.72] | 0.1918 |
 | `ibm_fez` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior + residual | 214 / 72 | -0.156 [-0.61, 0.17] | 0.1002 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 882 / 170 | 0.353 [-0.92, 0.70] | 0.1239 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 918 / 134 | 0.423 [0.13, 0.60] | 0.1201 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 850 / 202 | 0.545 [0.23, 0.71] | 0.1123 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 792 / 260 | -0.510 [-1.49, -0.14] | 0.2213 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> VTP | 864 / 188 | 0.187 [-0.01, 0.38] | 0.1194 |
-| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 954 / 98 | -2.585 [-7.27, -0.74] | 0.1454 |
-| `ibm_fez` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 1052 / 86 | -6.965 [-25.73, -2.26] | 0.2254 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 882 / 170 | 0.188 [-1.50, 0.60] | 0.1568 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 918 / 134 | 0.377 [0.08, 0.56] | 0.1223 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 850 / 202 | 0.533 [0.22, 0.70] | 0.1121 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 792 / 260 | -1.170 [-2.84, -0.60] | 0.2718 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> VTP | 864 / 188 | 0.031 [-0.26, 0.30] | 0.1265 |
+| `ibm_fez` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 954 / 98 | -5.501 [-13.23, -2.53] | 0.2064 |
+| `ibm_fez` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 1052 / 86 | -6.573 [-24.63, -2.00] | 0.2201 |
 | `ibm_kingston` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) | 216 / 72 | -0.182 [-1.99, 0.39] | 0.1330 |
 | `ibm_kingston` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior alone | 0 / 72 | 0.340 [-0.81, 0.66] | 0.1034 |
 | `ibm_kingston` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior + residual | 216 / 72 | 0.737 [0.28, 0.88] | 0.0597 |
@@ -162,29 +176,29 @@ The held-out circuits are larger than any trained one, or from an algorithm abse
 | `ibm_kingston` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) | 198 / 72 | 0.376 [-0.36, 0.49] | 0.0476 |
 | `ibm_kingston` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior alone | 0 / 36 | -2.614 [-9.18, -1.75] | 0.0767 |
 | `ibm_kingston` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior + residual | 198 / 72 | 0.459 [-0.03, 0.55] | 0.0429 |
-| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 804 / 162 | 0.399 [-1.09, 0.69] | 0.0909 |
-| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 840 / 126 | 0.216 [-0.35, 0.49] | 0.1011 |
-| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 792 / 174 | -0.227 [-0.72, 0.11] | 0.1903 |
-| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 732 / 234 | 0.181 [-0.04, 0.28] | 0.1474 |
+| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 804 / 162 | 0.405 [-1.03, 0.69] | 0.0852 |
+| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 840 / 126 | 0.197 [-0.45, 0.51] | 0.1009 |
+| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 792 / 174 | 0.048 [-0.34, 0.30] | 0.1694 |
+| `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 732 / 234 | 0.155 [-0.26, 0.30] | 0.1511 |
 | `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> VTP | 786 / 180 | 0.429 [0.13, 0.62] | 0.0597 |
 | `ibm_kingston` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 876 / 90 | -2.491 [-6.23, -1.09] | 0.1389 |
-| `ibm_kingston` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 966 / 117 | -11.289 [-33.12, -5.54] | 0.2988 |
+| `ibm_kingston` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 966 / 117 | -12.242 [-33.55, -6.58] | 0.3138 |
 | `pooled` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) | 448 / 144 | 0.001 [-0.98, 0.42] | 0.1550 |
 | `pooled` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior alone | 0 / 144 | 0.137 [-0.82, 0.50] | 0.1501 |
 | `pooled` | scaling_extrapolation | Scaling · Fourier (QFT/PHASE-ESTIMATION) · M2 prior + residual | 448 / 144 | 0.638 [0.28, 0.80] | 0.0904 |
-| `pooled` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) | 658 / 212 | -0.788 [-1.86, -0.30] | 0.2549 |
+| `pooled` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) | 658 / 212 | -0.956 [-2.12, -0.42] | 0.2718 |
 | `pooled` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior alone | 0 / 212 | 0.556 [0.22, 0.75] | 0.1150 |
-| `pooled` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior + residual | 658 / 212 | 0.743 [0.54, 0.87] | 0.0744 |
+| `pooled` | scaling_extrapolation | Scaling · Oracle (GROVER/BERNSTEIN-VAZIRANI) · M2 prior + residual | 658 / 212 | 0.743 [0.54, 0.87] | 0.0745 |
 | `pooled` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) | 412 / 144 | 0.042 [-0.15, 0.13] | 0.0875 |
 | `pooled` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior alone | 0 / 72 | -0.609 [-1.14, -0.50] | 0.1342 |
 | `pooled` | scaling_extrapolation | Scaling · Entanglement (VTP/GHZ) · M2 prior + residual | 412 / 144 | 0.055 [-0.20, 0.31] | 0.0746 |
-| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 1686 / 332 | 0.153 [-1.61, 0.55] | 0.1429 |
-| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 1758 / 260 | 0.551 [0.35, 0.72] | 0.0830 |
-| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 1642 / 376 | -0.409 [-0.88, -0.10] | 0.2214 |
-| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 1524 / 494 | -0.780 [-1.98, -0.35] | 0.2345 |
+| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> QFT | 1686 / 332 | 0.236 [-1.30, 0.61] | 0.1313 |
+| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> PHASE-ESTIMATION | 1758 / 260 | 0.393 [0.11, 0.65] | 0.1018 |
+| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> GROVER | 1642 / 376 | -0.581 [-1.11, -0.25] | 0.2338 |
+| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> BERNSTEIN-VAZIRANI | 1524 / 494 | -0.326 [-1.12, -0.06] | 0.2029 |
 | `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> VTP | 1650 / 368 | 0.243 [0.05, 0.42] | 0.0784 |
-| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 1830 / 188 | -3.906 [-9.43, -1.79] | 0.1741 |
-| `pooled` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 2018 / 203 | -5.442 [-15.45, -2.28] | 0.2095 |
+| `pooled` | leave_algorithm_out | Zero-shot · Core 5 -> GHZ | 1830 / 188 | -1.882 [-5.17, -0.50] | 0.1314 |
+| `pooled` | composite_anchor | Zero-shot composite · Core 6 -> SHOR | 2018 / 203 | -5.804 [-16.36, -2.47] | 0.2149 |
 
 ## H3 · Hardware context and transfer (`success`)
 
@@ -194,28 +208,28 @@ Judge calibration regimes on the **calibration-cycle** column: there the test wi
 
 | Scope | Regime | Features | Unseen-circuit R² ± sd | Calibration-cycle R² [95% CI] | Calibration-cycle MAE |
 |---|---|---:|---:|---:|---:|
-| `ibm_fez` | Circuit footprint only (a.* + b.*) | 4 | 0.688 ± 0.021 | 0.649 [0.53, 0.76] | 0.0855 |
+| `ibm_fez` | Circuit footprint only (a.* + b.*) | 7 | 0.691 ± 0.016 | 0.649 [0.53, 0.76] | 0.0855 |
 | `ibm_fez` | Size baseline (2Q gates, depth, width, measurements) | 4 | 0.700 ± 0.007 | 0.654 [0.54, 0.77] | 0.0864 |
 | `ibm_fez` | Device calibration only (cal.*, one value per snapshot) | 7 | 0.037 ± 0.005 | -0.183 [-0.34, -0.03] | 0.2085 |
 | `ibm_fez` | Layout calibration only (c.*, qubits the circuit uses) | 7 | 0.613 ± 0.002 | 0.362 [0.20, 0.47] | 0.1670 |
-| `ibm_fez` | Footprint + device calibration (cal.*) | 11 | 0.734 ± 0.012 | 0.671 [0.57, 0.77] | 0.0855 |
-| `ibm_fez` | Footprint + layout calibration (c.*) | 11 | 0.806 ± 0.004 | 0.672 [0.58, 0.77] | 0.0953 |
-| `ibm_fez` | Footprint + collection-window id (control) | 5 | 0.721 ± 0.008 | — | — |
-| `ibm_kingston` | Circuit footprint only (a.* + b.*) | 5 | 0.818 ± 0.025 | 0.909 [0.86, 0.94] | 0.0414 |
+| `ibm_fez` | Footprint + device calibration (cal.*) | 14 | 0.754 ± 0.012 | 0.671 [0.57, 0.77] | 0.0855 |
+| `ibm_fez` | Footprint + layout calibration (c.*) | 14 | 0.813 ± 0.001 | 0.672 [0.58, 0.77] | 0.0953 |
+| `ibm_fez` | Footprint + collection-window id (control) | 8 | 0.741 ± 0.011 | — | — |
+| `ibm_kingston` | Circuit footprint only (a.* + b.*) | 6 | 0.826 ± 0.032 | 0.909 [0.86, 0.94] | 0.0414 |
 | `ibm_kingston` | Size baseline (2Q gates, depth, width, measurements) | 4 | 0.744 ± 0.010 | 0.908 [0.86, 0.94] | 0.0437 |
 | `ibm_kingston` | Device calibration only (cal.*, one value per snapshot) | 7 | -0.137 ± 0.002 | -0.797 [-1.49, -0.45] | 0.2088 |
 | `ibm_kingston` | Layout calibration only (c.*, qubits the circuit uses) | 7 | 0.585 ± 0.019 | 0.122 [-0.15, 0.29] | 0.1325 |
-| `ibm_kingston` | Footprint + device calibration (cal.*) | 12 | 0.811 ± 0.008 | 0.908 [0.86, 0.94] | 0.0415 |
-| `ibm_kingston` | Footprint + layout calibration (c.*) | 12 | 0.795 ± 0.012 | 0.877 [0.82, 0.91] | 0.0468 |
-| `ibm_kingston` | Footprint + collection-window id (control) | 6 | 0.811 ± 0.013 | — | — |
-| `pooled` | Circuit footprint only (a.* + b.*) | 5 | 0.684 ± 0.007 | — | — |
+| `ibm_kingston` | Footprint + device calibration (cal.*) | 13 | 0.810 ± 0.007 | 0.908 [0.86, 0.94] | 0.0415 |
+| `ibm_kingston` | Footprint + layout calibration (c.*) | 13 | 0.795 ± 0.016 | 0.877 [0.82, 0.91] | 0.0468 |
+| `ibm_kingston` | Footprint + collection-window id (control) | 7 | 0.809 ± 0.010 | — | — |
+| `pooled` | Circuit footprint only (a.* + b.*) | 7 | 0.703 ± 0.013 | — | — |
 | `pooled` | Size baseline (2Q gates, depth, width, measurements) | 4 | 0.683 ± 0.010 | — | — |
 | `pooled` | Device calibration only (cal.*, one value per snapshot) | 7 | -0.023 ± 0.004 | — | — |
 | `pooled` | Layout calibration only (c.*, qubits the circuit uses) | 7 | 0.591 ± 0.010 | — | — |
-| `pooled` | Footprint + device calibration (cal.*) | 12 | 0.765 ± 0.010 | — | — |
-| `pooled` | Footprint + layout calibration (c.*) | 12 | 0.791 ± 0.012 | — | — |
-| `pooled` | Footprint + collection-window id (control) | 6 | 0.761 ± 0.006 | — | — |
-| `pooled` | Footprint + chip id | 6 | 0.738 ± 0.006 | — | — |
+| `pooled` | Footprint + device calibration (cal.*) | 14 | 0.783 ± 0.002 | — | — |
+| `pooled` | Footprint + layout calibration (c.*) | 14 | 0.808 ± 0.007 | — | — |
+| `pooled` | Footprint + collection-window id (control) | 8 | 0.776 ± 0.005 | — | — |
+| `pooled` | Footprint + chip id (one model for all chips) | 9 | 0.736 ± 0.009 | — | — |
 
 - `ibm_fez` calibration-cycle split: 787 training jobs (16 calibration snapshots), 410 test jobs (6 snapshots); 171 of 176 test configurations also trained; strictly later than training: yes.
 - `ibm_kingston` calibration-cycle split: 782 training jobs (3 calibration snapshots), 352 test jobs (3 snapshots); 176 of 176 test configurations also trained; strictly later than training: yes.
@@ -226,18 +240,18 @@ Model trained on the source chip with the footprint chosen there, scored on ever
 
 | Source | Target | Regime | Same provider | R² [95% CI] | MAE |
 |---|---|---|:---:|---:|---:|
-| `ibm_fez` | `ibm_fez` | Circuit Footprint Only | yes | 0.691 [0.57, 0.79] | 0.0754 |
+| `ibm_fez` | `ibm_fez` | Circuit Footprint Only | yes | 0.702 [0.59, 0.80] | 0.0731 |
 | `ibm_fez` | `ibm_fez` | Device Calibration Only | yes | 0.053 [-0.04, 0.12] | 0.1763 |
-| `ibm_fez` | `ibm_fez` | Mixed (Footprint + Layout Calibration) | yes | 0.807 [0.70, 0.88] | 0.0584 |
-| `ibm_fez` | `ibm_kingston` | Circuit Footprint Only | yes | 0.667 [0.54, 0.75] | 0.0812 |
+| `ibm_fez` | `ibm_fez` | Mixed (Footprint + Layout Calibration) | yes | 0.808 [0.70, 0.88] | 0.0567 |
+| `ibm_fez` | `ibm_kingston` | Circuit Footprint Only | yes | 0.661 [0.52, 0.75] | 0.0811 |
 | `ibm_fez` | `ibm_kingston` | Device Calibration Only | yes | -0.800 [-1.43, -0.49] | 0.2272 |
-| `ibm_fez` | `ibm_kingston` | Mixed (Footprint + Layout Calibration) | yes | 0.435 [0.20, 0.62] | 0.0894 |
-| `ibm_kingston` | `ibm_fez` | Circuit Footprint Only | yes | 0.614 [0.52, 0.70] | 0.0827 |
+| `ibm_fez` | `ibm_kingston` | Mixed (Footprint + Layout Calibration) | yes | 0.416 [0.16, 0.61] | 0.0898 |
+| `ibm_kingston` | `ibm_fez` | Circuit Footprint Only | yes | 0.618 [0.53, 0.70] | 0.0810 |
 | `ibm_kingston` | `ibm_fez` | Device Calibration Only | yes | -0.657 [-1.01, -0.44] | 0.2250 |
-| `ibm_kingston` | `ibm_fez` | Mixed (Footprint + Layout Calibration) | yes | 0.660 [0.58, 0.74] | 0.0797 |
-| `ibm_kingston` | `ibm_kingston` | Circuit Footprint Only | yes | 0.814 [0.71, 0.88] | 0.0524 |
+| `ibm_kingston` | `ibm_fez` | Mixed (Footprint + Layout Calibration) | yes | 0.630 [0.54, 0.72] | 0.0783 |
+| `ibm_kingston` | `ibm_kingston` | Circuit Footprint Only | yes | 0.823 [0.73, 0.89] | 0.0494 |
 | `ibm_kingston` | `ibm_kingston` | Device Calibration Only | yes | -0.137 [-0.33, -0.05] | 0.1672 |
-| `ibm_kingston` | `ibm_kingston` | Mixed (Footprint + Layout Calibration) | yes | 0.811 [0.71, 0.89] | 0.0500 |
+| `ibm_kingston` | `ibm_kingston` | Mixed (Footprint + Layout Calibration) | yes | 0.823 [0.73, 0.89] | 0.0488 |
 
 ### Cross-provider transfer (leave one provider out)
 
@@ -249,41 +263,41 @@ Forward rows test on paradigm circuits, reverse rows on random-volumetric (RV) c
 
 | Scope | Regime | nTrain | nTest | R² [95% CI] | MAE |
 |---|---|---:|---:|---:|---:|
-| `ibm_fez` | Random Volumetric Only (RV) | 98 | 1052 | 0.343 [0.19, 0.47] | 0.1353 |
-| `ibm_fez` | Paradigm Algorithms Only (6 Core) | 841 | 1052 | 0.669 [0.56, 0.77] | 0.0771 |
-| `ibm_fez` | Combined (RV + 6 Core) | 939 | 1052 | 0.679 [0.57, 0.78] | 0.0757 |
-| `ibm_fez` | Paradigm Only, size-matched to RV | 98 | 1052 | 0.331 [0.26, 0.49] | 0.1196 |
-| `ibm_fez` | Reverse · paradigm-trained, tested on RV | 841 | 98 | 0.841 [0.60, 0.92] | 0.0766 |
-| `ibm_fez` | Reverse · RV-trained, tested on unseen RV | 78 | 98 | 0.812 [0.65, 0.89] | 0.0855 |
-| `ibm_kingston` | Random Volumetric Only (RV) | 90 | 966 | 0.542 [0.37, 0.66] | 0.0907 |
-| `ibm_kingston` | Paradigm Algorithms Only (6 Core) | 772 | 966 | 0.785 [0.65, 0.86] | 0.0551 |
-| `ibm_kingston` | Combined (RV + 6 Core) | 862 | 966 | 0.802 [0.67, 0.88] | 0.0531 |
-| `ibm_kingston` | Paradigm Only, size-matched to RV | 90 | 966 | 0.416 [0.28, 0.61] | 0.0990 |
-| `ibm_kingston` | Reverse · paradigm-trained, tested on RV | 772 | 90 | 0.829 [0.68, 0.89] | 0.0785 |
-| `ibm_kingston` | Reverse · RV-trained, tested on unseen RV | 72 | 90 | 0.753 [0.49, 0.84] | 0.0912 |
-| `pooled` | Random Volumetric Only (RV) | 188 | 2018 | 0.424 [0.27, 0.56] | 0.1024 |
-| `pooled` | Paradigm Algorithms Only (6 Core) | 1614 | 2018 | 0.691 [0.57, 0.78] | 0.0704 |
-| `pooled` | Combined (RV + 6 Core) | 1802 | 2018 | 0.686 [0.56, 0.78] | 0.0706 |
-| `pooled` | Paradigm Only, size-matched to RV | 188 | 2018 | 0.367 [0.20, 0.48] | 0.1077 |
-| `pooled` | Reverse · paradigm-trained, tested on RV | 1614 | 188 | 0.722 [0.38, 0.83] | 0.1005 |
-| `pooled` | Reverse · RV-trained, tested on unseen RV | 150 | 188 | 0.817 [0.68, 0.88] | 0.0778 |
+| `ibm_fez` | Random Volumetric Only (RV) | 98 | 1052 | 0.262 [0.10, 0.40] | 0.1415 |
+| `ibm_fez` | Paradigm Algorithms Only (6 Core) | 841 | 1052 | 0.692 [0.58, 0.79] | 0.0737 |
+| `ibm_fez` | Combined (RV + 6 Core) | 939 | 1052 | 0.701 [0.60, 0.80] | 0.0722 |
+| `ibm_fez` | Paradigm Only, size-matched to RV | 98 | 1052 | 0.336 [0.22, 0.46] | 0.1243 |
+| `ibm_fez` | Reverse · paradigm-trained, tested on RV | 841 | 98 | 0.801 [0.49, 0.91] | 0.0844 |
+| `ibm_fez` | Reverse · RV-trained, tested on unseen RV | 78 | 98 | 0.812 [0.65, 0.88] | 0.0840 |
+| `ibm_kingston` | Random Volumetric Only (RV) | 90 | 966 | 0.563 [0.37, 0.68] | 0.0873 |
+| `ibm_kingston` | Paradigm Algorithms Only (6 Core) | 772 | 966 | 0.783 [0.64, 0.86] | 0.0544 |
+| `ibm_kingston` | Combined (RV + 6 Core) | 862 | 966 | 0.802 [0.67, 0.88] | 0.0526 |
+| `ibm_kingston` | Paradigm Only, size-matched to RV | 90 | 966 | 0.429 [0.26, 0.61] | 0.0976 |
+| `ibm_kingston` | Reverse · paradigm-trained, tested on RV | 772 | 90 | 0.839 [0.69, 0.89] | 0.0757 |
+| `ibm_kingston` | Reverse · RV-trained, tested on unseen RV | 72 | 90 | 0.776 [0.54, 0.86] | 0.0805 |
+| `pooled` | Random Volumetric Only (RV) | 188 | 2018 | 0.305 [0.12, 0.46] | 0.1266 |
+| `pooled` | Paradigm Algorithms Only (6 Core) | 1614 | 2018 | 0.700 [0.59, 0.79] | 0.0685 |
+| `pooled` | Combined (RV + 6 Core) | 1802 | 2018 | 0.693 [0.57, 0.78] | 0.0696 |
+| `pooled` | Paradigm Only, size-matched to RV | 188 | 2018 | 0.385 [0.21, 0.49] | 0.1066 |
+| `pooled` | Reverse · paradigm-trained, tested on RV | 1614 | 188 | 0.654 [0.17, 0.80] | 0.1143 |
+| `pooled` | Reverse · RV-trained, tested on unseen RV | 150 | 188 | 0.829 [0.69, 0.88] | 0.0765 |
 
 Two intervals that overlap do not show two regimes are equal, and two that do not overlap are not the test either. The comparison is the paired difference on the same test jobs:
 
 | Scope | Question | R²(a) − R²(b) [95% CI] | Verdict |
 |---|---|---:|---|
-| `ibm_fez` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | +0.045 [-0.07, 0.18] | no difference shown |
-| `ibm_fez` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | +0.010 [0.00, 0.02] | first is better |
-| `ibm_fez` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.336 [0.23, 0.46] | first is better |
-| `ibm_fez` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | -0.029 [-0.13, 0.11] | no difference shown |
-| `ibm_kingston` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | -0.073 [-0.19, 0.04] | no difference shown |
-| `ibm_kingston` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | +0.018 [-0.00, 0.04] | no difference shown |
-| `ibm_kingston` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.260 [0.17, 0.39] | first is better |
-| `ibm_kingston` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | -0.075 [-0.21, 0.00] | no difference shown |
-| `pooled` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | -0.068 [-0.21, 0.07] | no difference shown |
-| `pooled` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | -0.006 [-0.02, 0.01] | no difference shown |
-| `pooled` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.262 [0.17, 0.38] | first is better |
-| `pooled` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | +0.095 [-0.00, 0.30] | no difference shown |
+| `ibm_fez` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | +0.089 [-0.05, 0.24] | no difference shown |
+| `ibm_fez` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | +0.009 [-0.00, 0.02] | no difference shown |
+| `ibm_fez` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.439 [0.32, 0.60] | first is better |
+| `ibm_fez` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | +0.011 [-0.12, 0.25] | no difference shown |
+| `ibm_kingston` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | -0.102 [-0.22, 0.01] | no difference shown |
+| `ibm_kingston` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | +0.018 [0.00, 0.04] | first is better |
+| `ibm_kingston` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.238 [0.15, 0.36] | first is better |
+| `ibm_kingston` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | -0.063 [-0.20, 0.05] | no difference shown |
+| `pooled` | Same training size: do paradigm circuits predict paradigm circuits better than RV circuits do? (`paradigm_matched` − `random_only`) | +0.059 [-0.08, 0.20] | no difference shown |
+| `pooled` | Do RV circuits add anything once paradigm circuits are in training? (`combined` − `paradigm_only`) | -0.007 [-0.02, 0.01] | no difference shown |
+| `pooled` | Do paradigm circuits add anything once RV circuits are in training? (`combined` − `random_only`) | +0.389 [0.29, 0.52] | first is better |
+| `pooled` | Reverse: do RV circuits predict RV circuits better than paradigm circuits do? (`reverse_random_cv` − `reverse_paradigm`) | +0.175 [0.04, 0.51] | first is better |
 
 ## The footprint
 
@@ -291,38 +305,40 @@ A feature belongs to the footprint only if the selection procedure picks it in a
 
 | Feature | Category | Stable in (scope × target) | Mean selection frequency |
 |---|---|---:|---:|
-| `b.ComplexityMetrics.standardized_metrics.circuit_volume` | ISA Compiled | 12 / 15 | 1.00 |
-| `b.ComplexityMetrics.standardized_metrics.gate_density` | ISA Compiled | 9 / 15 | 0.90 |
-| `a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio` | Logical Complexity | 5 / 15 | 0.83 |
+| `b.ComplexityMetrics.standardized_metrics.circuit_volume` | ISA Compiled | 13 / 15 | 0.99 |
+| `b.ComplexityMetrics.standardized_metrics.gate_density` | ISA Compiled | 9 / 15 | 0.92 |
+| `a.quantum_specific.magic` | Quantum Specific | 6 / 15 | 0.91 |
+| `a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio` | Logical Complexity | 6 / 15 | 0.84 |
 | `b.ComplexityMetrics.entanglement_metrics.entangling_width` | ISA Compiled | 4 / 15 | 0.95 |
+| `b.StructuralMetrics.effort` | ISA Compiled | 3 / 15 | 0.80 |
 | `b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio` | ISA Compiled | 2 / 15 | 1.00 |
-| `a.quantum_specific.magic` | Quantum Specific | 2 / 15 | 0.90 |
 | `a.StructuralMetrics.difficulty` | Logical Structural | 1 / 15 | 0.87 |
-| `b.StructuralMetrics.effort` | ISA Compiled | 1 / 15 | 0.80 |
+| `b.StructuralMetrics.vocabulary` | ISA Compiled | 1 / 15 | 0.87 |
+| `a.StructuralMetrics.effort` | Logical Structural | 1 / 15 | 0.80 |
 
-Footprint size is chosen by the one-standard-error rule (smallest k within one standard error of the best k). The ablation R² in `footprint_ablation.csv` is a selection score, not accuracy.
+Footprint size is the smallest k whose selection score is within 0.0015 R² of the best k. The ablation R² in `footprint_ablation.csv` is a selection score, not accuracy.
 
 | Scope | Target | k deployed | k across folds (min–median–max) | Stable features |
 |---|---|---:|---:|---:|
-| `ibm_fez` | `dsr` | 5 | 5–5–5 | 3 |
-| `ibm_fez` | `hellinger` | 5 | 3–5–5 | 3 |
-| `ibm_fez` | `success` | 5 | 3–5–6 | 1 |
-| `ibm_fez` | `success_adj` | 5 | 3–5–6 | 2 |
-| `ibm_fez` | `tvd` | 5 | 3–5–5 | 1 |
-| `ibm_kingston` | `dsr` | 5 | 5–5–5 | 3 |
-| `ibm_kingston` | `hellinger` | 5 | 5–5–7 | 3 |
-| `ibm_kingston` | `success` | 5 | 4–5–6 | 4 |
-| `ibm_kingston` | `success_adj` | 5 | 4–5–5 | 4 |
-| `ibm_kingston` | `tvd` | 5 | 4–5–6 | 4 |
-| `pooled` | `dsr` | 5 | 5–5–5 | 3 |
-| `pooled` | `hellinger` | 5 | 5–5–5 | 2 |
-| `pooled` | `success` | 8 | 5–5–6 | 1 |
-| `pooled` | `success_adj` | 5 | 5–5–5 | 1 |
-| `pooled` | `tvd` | 5 | 5–5–5 | 1 |
+| `ibm_fez` | `dsr` | 6 | 6–8–10 | 5 |
+| `ibm_fez` | `hellinger` | 10 | 3–6–10 | 3 |
+| `ibm_fez` | `tvd` | 10 | 3–7–10 | 3 |
+| `ibm_fez` | `success` | 8 | 3–7–10 | 2 |
+| `ibm_fez` | `success_adj` | 10 | 3–7–10 | 2 |
+| `ibm_kingston` | `dsr` | 6 | 5–6–8 | 3 |
+| `ibm_kingston` | `hellinger` | 8 | 5–7–10 | 5 |
+| `ibm_kingston` | `tvd` | 7 | 4–7–10 | 4 |
+| `ibm_kingston` | `success` | 10 | 4–7–10 | 4 |
+| `ibm_kingston` | `success_adj` | 6 | 4–6–8 | 4 |
+| `pooled` | `dsr` | 10 | 5–8–10 | 5 |
+| `pooled` | `hellinger` | 8 | 5–7–10 | 3 |
+| `pooled` | `tvd` | 8 | 5–7–10 | 1 |
+| `pooled` | `success` | 10 | 5–7–10 | 1 |
+| `pooled` | `success_adj` | 7 | 5–7–10 | 1 |
 
-## Prospective validation (frozen v1 models)
+## Prospective validation (run of 2026-11-16)
 
-Models frozen on 2026-11-16 and scored on a run collected afterwards, predictions committed first. These are the **v1** models in `report/frozen_v1`; the models saved by this report are **v2** and have no prospective score until a new pre-registered run. The pre-registered H1 rule applies to the `new` group of every model scope; all scopes are listed, because which source chip transfers best to an unseen chip is not known beforehand.
+Predictions were committed on 2026-11-16, before the run, by the models of that date (in git history). The models saved by this report were trained later and are compared on the same run in `model_comparison.md`; that comparison is not pre-registered. The H1 rule applies to the `new` group of every model scope; all scopes are listed, because which source chip transfers best to an unseen chip is not known beforehand.
 
 | Chip | QPU | Model scope | Group | Configs | R² [95% CI] | MAE |
 |---|---|---|---|---:|---:|---:|
@@ -350,40 +366,45 @@ Models frozen on 2026-11-16 and scored on a run collected afterwards, prediction
 
 `new` holds 13 configurations and `extrapolation` 9 per chip, so their intervals are wide.
 
-## Saved models (v2)
+## Saved models
 
-Fitted on every training-role job with the procedure scored above. Not prospectively validated.
+Fitted on every training-role job with the procedure scored above. `circuit_chip` in the pooled scope is the best model; per-chip models are kept as reference.
 
 | Scope | Target | Regime | Model | Features | Procedure R² | MAE | Artifact |
 |---|---|---|---|---:|---:|---:|---|
-| `ibm_fez` | `dsr` | `circuit_only` | XGBoost | 5 | 0.368 | 0.1230 | `models/ibm_fez_dsr_circuit_only.joblib` |
-| `ibm_fez` | `dsr` | `mixed_submit` | LightGBM | 12 | 0.643 | 0.0935 | `models/ibm_fez_dsr_mixed_submit.joblib` |
-| `ibm_fez` | `hellinger` | `circuit_only` | XGBoost | 5 | 0.750 | 0.0690 | `models/ibm_fez_hellinger_circuit_only.joblib` |
-| `ibm_fez` | `hellinger` | `mixed_submit` | XGBoost | 12 | 0.889 | 0.0506 | `models/ibm_fez_hellinger_mixed_submit.joblib` |
-| `ibm_fez` | `success` | `circuit_only` | XGBoost | 5 | 0.688 | 0.0738 | `models/ibm_fez_success_circuit_only.joblib` |
-| `ibm_fez` | `success` | `mixed_submit` | XGBoost | 12 | 0.806 | 0.0590 | `models/ibm_fez_success_mixed_submit.joblib` |
-| `ibm_fez` | `success_adj` | `circuit_only` | SVR | 5 | 0.690 | 0.0869 | `models/ibm_fez_success_adj_circuit_only.joblib` |
-| `ibm_fez` | `success_adj` | `mixed_submit` | LightGBM | 12 | 0.810 | 0.0664 | `models/ibm_fez_success_adj_mixed_submit.joblib` |
-| `ibm_fez` | `tvd` | `circuit_only` | XGBoost | 5 | 0.757 | 0.0683 | `models/ibm_fez_tvd_circuit_only.joblib` |
-| `ibm_fez` | `tvd` | `mixed_submit` | Stacking (AutoML) | 12 | 0.891 | 0.0477 | `models/ibm_fez_tvd_mixed_submit.joblib` |
-| `ibm_kingston` | `dsr` | `circuit_only` | LightGBM | 5 | 0.480 | 0.0917 | `models/ibm_kingston_dsr_circuit_only.joblib` |
-| `ibm_kingston` | `dsr` | `mixed_submit` | RF | 12 | 0.522 | 0.0846 | `models/ibm_kingston_dsr_mixed_submit.joblib` |
-| `ibm_kingston` | `hellinger` | `circuit_only` | SVR | 5 | 0.860 | 0.0465 | `models/ibm_kingston_hellinger_circuit_only.joblib` |
-| `ibm_kingston` | `hellinger` | `mixed_submit` | RF | 12 | 0.873 | 0.0428 | `models/ibm_kingston_hellinger_mixed_submit.joblib` |
-| `ibm_kingston` | `success` | `circuit_only` | SVR | 5 | 0.818 | 0.0523 | `models/ibm_kingston_success_circuit_only.joblib` |
-| `ibm_kingston` | `success` | `mixed_submit` | LightGBM | 12 | 0.795 | 0.0529 | `models/ibm_kingston_success_mixed_submit.joblib` |
-| `ibm_kingston` | `success_adj` | `circuit_only` | SVR | 5 | 0.851 | 0.0608 | `models/ibm_kingston_success_adj_circuit_only.joblib` |
-| `ibm_kingston` | `success_adj` | `mixed_submit` | XGBoost | 12 | 0.836 | 0.0640 | `models/ibm_kingston_success_adj_mixed_submit.joblib` |
-| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 5 | 0.874 | 0.0431 | `models/ibm_kingston_tvd_circuit_only.joblib` |
-| `ibm_kingston` | `tvd` | `mixed_submit` | LightGBM | 12 | 0.881 | 0.0410 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
-| `pooled` | `dsr` | `circuit_only` | SVR | 5 | 0.372 | 0.1118 | `models/pooled_dsr_circuit_only.joblib` |
-| `pooled` | `dsr` | `mixed_submit` | Stacking (AutoML) | 12 | 0.621 | 0.0883 | `models/pooled_dsr_mixed_submit.joblib` |
-| `pooled` | `hellinger` | `circuit_only` | RF | 5 | 0.738 | 0.0677 | `models/pooled_hellinger_circuit_only.joblib` |
-| `pooled` | `hellinger` | `mixed_submit` | Stacking (AutoML) | 12 | 0.879 | 0.0475 | `models/pooled_hellinger_mixed_submit.joblib` |
-| `pooled` | `success` | `circuit_only` | LightGBM | 8 | 0.684 | 0.0714 | `models/pooled_success_circuit_only.joblib` |
-| `pooled` | `success` | `mixed_submit` | LightGBM | 15 | 0.791 | 0.0584 | `models/pooled_success_mixed_submit.joblib` |
-| `pooled` | `success_adj` | `circuit_only` | KNN | 5 | 0.743 | 0.0806 | `models/pooled_success_adj_circuit_only.joblib` |
-| `pooled` | `success_adj` | `mixed_submit` | RF | 12 | 0.809 | 0.0685 | `models/pooled_success_adj_mixed_submit.joblib` |
-| `pooled` | `tvd` | `circuit_only` | RF | 5 | 0.758 | 0.0637 | `models/pooled_tvd_circuit_only.joblib` |
-| `pooled` | `tvd` | `mixed_submit` | LightGBM | 12 | 0.882 | 0.0466 | `models/pooled_tvd_mixed_submit.joblib` |
+| `ibm_fez` | `dsr` | `circuit_only` | XGBoost | 6 | 0.403 | 0.1212 | `models/ibm_fez_dsr_circuit_only.joblib` |
+| `ibm_fez` | `dsr` | `mixed_submit` | LightGBM | 13 | 0.655 | 0.0903 | `models/ibm_fez_dsr_mixed_submit.joblib` |
+| `ibm_fez` | `hellinger` | `circuit_only` | XGBoost | 10 | 0.757 | 0.0677 | `models/ibm_fez_hellinger_circuit_only.joblib` |
+| `ibm_fez` | `hellinger` | `mixed_submit` | LightGBM | 17 | 0.889 | 0.0500 | `models/ibm_fez_hellinger_mixed_submit.joblib` |
+| `ibm_fez` | `tvd` | `circuit_only` | RF | 10 | 0.775 | 0.0655 | `models/ibm_fez_tvd_circuit_only.joblib` |
+| `ibm_fez` | `tvd` | `mixed_submit` | XGBoost | 17 | 0.890 | 0.0489 | `models/ibm_fez_tvd_mixed_submit.joblib` |
+| `ibm_fez` | `success` | `circuit_only` | RF | 8 | 0.691 | 0.0732 | `models/ibm_fez_success_circuit_only.joblib` |
+| `ibm_fez` | `success` | `mixed_submit` | XGBoost | 15 | 0.813 | 0.0570 | `models/ibm_fez_success_mixed_submit.joblib` |
+| `ibm_fez` | `success_adj` | `circuit_only` | SVR | 10 | 0.696 | 0.0833 | `models/ibm_fez_success_adj_circuit_only.joblib` |
+| `ibm_fez` | `success_adj` | `mixed_submit` | SVR | 17 | 0.799 | 0.0697 | `models/ibm_fez_success_adj_mixed_submit.joblib` |
+| `ibm_kingston` | `dsr` | `circuit_only` | SVR | 6 | 0.510 | 0.0874 | `models/ibm_kingston_dsr_circuit_only.joblib` |
+| `ibm_kingston` | `dsr` | `mixed_submit` | XGBoost | 13 | 0.524 | 0.0845 | `models/ibm_kingston_dsr_mixed_submit.joblib` |
+| `ibm_kingston` | `hellinger` | `circuit_only` | SVR | 8 | 0.873 | 0.0437 | `models/ibm_kingston_hellinger_circuit_only.joblib` |
+| `ibm_kingston` | `hellinger` | `mixed_submit` | XGBoost | 15 | 0.879 | 0.0417 | `models/ibm_kingston_hellinger_mixed_submit.joblib` |
+| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 7 | 0.866 | 0.0434 | `models/ibm_kingston_tvd_circuit_only.joblib` |
+| `ibm_kingston` | `tvd` | `mixed_submit` | XGBoost | 14 | 0.881 | 0.0407 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
+| `ibm_kingston` | `success` | `circuit_only` | SVR | 10 | 0.826 | 0.0507 | `models/ibm_kingston_success_circuit_only.joblib` |
+| `ibm_kingston` | `success` | `mixed_submit` | SVR | 17 | 0.795 | 0.0526 | `models/ibm_kingston_success_mixed_submit.joblib` |
+| `ibm_kingston` | `success_adj` | `circuit_only` | SVR | 6 | 0.853 | 0.0597 | `models/ibm_kingston_success_adj_circuit_only.joblib` |
+| `ibm_kingston` | `success_adj` | `mixed_submit` | XGBoost | 13 | 0.836 | 0.0642 | `models/ibm_kingston_success_adj_mixed_submit.joblib` |
+| `pooled` | `dsr` | `circuit_chip` | LightGBM | 12 | 0.453 | 0.1048 | `models/pooled_dsr_circuit_chip.joblib` |
+| `pooled` | `dsr` | `circuit_only` | RF | 10 | 0.391 | 0.1113 | `models/pooled_dsr_circuit_only.joblib` |
+| `pooled` | `dsr` | `mixed_submit` | LightGBM | 17 | 0.621 | 0.0871 | `models/pooled_dsr_mixed_submit.joblib` |
+| `pooled` | `hellinger` | `circuit_chip` | LightGBM | 10 | 0.794 | 0.0582 | `models/pooled_hellinger_circuit_chip.joblib` |
+| `pooled` | `hellinger` | `circuit_only` | LightGBM | 8 | 0.755 | 0.0657 | `models/pooled_hellinger_circuit_only.joblib` |
+| `pooled` | `hellinger` | `mixed_submit` | LightGBM | 15 | 0.885 | 0.0468 | `models/pooled_hellinger_mixed_submit.joblib` |
+| `pooled` | `tvd` | `circuit_chip` | LightGBM | 10 | 0.793 | 0.0571 | `models/pooled_tvd_circuit_chip.joblib` |
+| `pooled` | `tvd` | `circuit_only` | LightGBM | 8 | 0.759 | 0.0630 | `models/pooled_tvd_circuit_only.joblib` |
+| `pooled` | `tvd` | `mixed_submit` | LightGBM | 15 | 0.888 | 0.0451 | `models/pooled_tvd_mixed_submit.joblib` |
+| `pooled` | `success` | `circuit_chip` | LightGBM | 12 | 0.736 | 0.0647 | `models/pooled_success_circuit_chip.joblib` |
+| `pooled` | `success` | `circuit_only` | LightGBM | 10 | 0.703 | 0.0699 | `models/pooled_success_circuit_only.joblib` |
+| `pooled` | `success` | `mixed_submit` | LightGBM | 17 | 0.808 | 0.0559 | `models/pooled_success_mixed_submit.joblib` |
+| `pooled` | `success_adj` | `circuit_chip` | RF | 9 | 0.765 | 0.0751 | `models/pooled_success_adj_circuit_chip.joblib` |
+| `pooled` | `success_adj` | `circuit_only` | RF | 7 | 0.737 | 0.0814 | `models/pooled_success_adj_circuit_only.joblib` |
+| `pooled` | `success_adj` | `mixed_submit` | SVR | 14 | 0.823 | 0.0651 | `models/pooled_success_adj_mixed_submit.joblib` |
 

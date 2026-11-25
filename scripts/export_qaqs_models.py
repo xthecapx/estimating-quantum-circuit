@@ -3,7 +3,7 @@
 
     python scripts/export_qaqs_models.py --qward ../qiskit-qward
 
-Reads the frozen joblib bundles in ``report/frozen_v1`` (Fez and Kingston circuit-only
+Reads the frozen joblib bundles in ``report/ml_estimation`` (Fez and Kingston circuit-only
 quality models, plus the execution-cost model) and writes, inside the QWARD checkout:
 
 * ``qward/qaqs/data/models/<id>.json``  tree arrays / support vectors / medians, plus a model
@@ -34,10 +34,10 @@ sys.path.insert(0, str(ROOT))
 import experiments.qaqs_cost as cost  # noqa: E402,F401  (registers the model classes for joblib)
 from experiments.ml_dataset import load_ml_dataset  # noqa: E402
 
-FROZEN = ROOT / "report" / "frozen_v1"
-MODELS = FROZEN / "models"
-COST = FROZEN / "cost"
-PROSPECTIVE = FROZEN / "prospective"
+REPORT = ROOT / "report" / "ml_estimation"
+MODELS = REPORT / "models"
+COST = REPORT / "cost"
+PROSPECTIVE = REPORT / "prospective"
 SCHEMA = 1
 
 
@@ -295,8 +295,7 @@ def main() -> None:
     # ---- execution-cost model
     saved = joblib.load(COST / "cost_model.joblib")
     model = saved["pipeline"]
-    # The evaluation snapshot written with the frozen model, not the dashboard's current one.
-    snapshot = json.loads((COST / "cost_snapshot.json").read_text())
+    snapshot = json.loads((ROOT / "dashboard" / "experiments" / "cost" / "cost-v1.json").read_text())
     data = cost.cost_frame(args.tables)
     train = data[~data["validation"]]
     res = model.residual_

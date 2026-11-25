@@ -407,7 +407,7 @@ def _group_cv_r2_mae(
     """Clipped [0, 1] out-of-fold GroupKFold R^2 and MAE, plus the standard error of R^2.
 
     The standard error is the sd of the per-fold R^2 divided by sqrt(folds); it sizes
-    the noise of one ablation point for the one-standard-error rule.
+    the noise of one ablation point.
     """
     n_groups = int(groups.nunique())
     n_splits = min(max_splits, n_groups)
@@ -463,7 +463,7 @@ def select_best_footprint(
     ``contrib_model`` to compute out-of-sample Permutation Importance and SHAP, and
     ranks candidates by composite predictive contribution.
     Stage 2 runs a GroupKFold CV ablation over top-k subsets and selects the smallest
-    subset within one standard error of the peak CV R^2 (one-standard-error rule).
+    subset within ``r2_tolerance`` of the peak CV R^2.
     The ablation R^2 is a selection score, not a performance estimate.
 
     Contributions are computed out-of-fold on ``train_frame`` by default so that the
@@ -568,11 +568,12 @@ def select_best_footprint(
         if min_eff <= row["k"] <= max_k_allowed and row["cvR2"] is not None
     ]
     if eligible_rows:
-        # One-standard-error rule: the smallest k whose CV R^2 is within one standard
-        # error of the best k. ``r2_tolerance`` is only a floor for the margin.
+        # Smallest k within ``r2_tolerance`` of the best k. A one-standard-error margin
+        # was tried and dropped: it cut the footprint to ~5 features and scored slightly
+        # worse on the validation run. ``cvR2Se`` is still reported per ablation point.
         peak_row = max(eligible_rows, key=lambda row: float(row["cvR2"]))
         peak_r2 = float(peak_row["cvR2"])
-        margin = max(float(peak_row.get("cvR2Se") or 0.0), r2_tolerance)
+        margin = r2_tolerance
         best_k = min(
             int(row["k"])
             for row in eligible_rows

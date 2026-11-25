@@ -82,8 +82,7 @@ Marrakesh jobs billed just above 2 s. The physical model alone matches the hybri
 every chip (Fez 0.1 ms against 0.4 ms), so the residual adds nothing on these jobs.
 
 These figures come from the current export; the model and its report are in
-`report/ml_estimation/cost/`. The model frozen on 2026-11-17 (one per-shot constant for
-all chips, exported to `qward.qaqs`) is kept unchanged in `report/frozen_v1/cost/`.
+`report/ml_estimation/cost/`.
 
 ## Limits
 

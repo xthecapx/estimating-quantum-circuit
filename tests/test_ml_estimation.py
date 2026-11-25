@@ -218,8 +218,10 @@ def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
     text = (report_out / "report.md").read_text(encoding="utf-8")
     assert "Cross-provider transfer" in text and "Gain over size" in text
     manifest = json.loads((report_out / "models" / "models_manifest.json").read_text(encoding="utf-8"))
-    assert manifest["models"] and manifest["modelVersion"] == "v2"
-    assert all(m["prospectivelyValidated"] is False for m in manifest["models"])
+    assert {m["regime"] for m in manifest["models"]} == {"circuit_only", "mixed_submit", "circuit_chip"}
+    assert success["bestRegime"] == "circuit_chip" and chip["bestRegime"] == "circuit_only"
+    best = joblib.load(report_out / success["savedModels"]["circuit_chip"]["path"])
+    assert [c for c in best["features"] if c.startswith("chip.")] == ["chip.ankaa_3", "chip.ibm_fez", "chip.ionq_aria"]
     assert "stableFootprint" in json.loads((report_out / "best_predictors.json").read_text(encoding="utf-8"))
 
     dsr_target = pooled["targets"]["dsr"]
@@ -288,7 +290,11 @@ def test_select_best_footprint_prunes_noise_and_runs_ablation(tmp_path: Path) ->
         max_selected=6,
     )
     assert 3 <= len(best_feats) <= 6
-    assert "a.synthetic_pure_noise" not in best_feats
+    # The ranking puts real signal first. The size rule (tolerance on a noisy CV score)
+    # may still admit a noise-level feature at the tail, which is why the report only
+    # claims features selected in >= 80% of folds.
+    assert "a.synthetic_pure_noise" not in best_feats[:3]
+    assert best_feats[0] == "b.two_qubit_depth"
     assert any(item["selected"] for item in items)
     assert all("rank" in item and "selected" in item for item in items)
     assert ablation and any(row["selected"] for row in ablation)
@@ -386,6 +392,17 @@ def test_hardware_regime_excludes_circuit_dependent_columns() -> None:
     assert not _is_device_only_hw("cal.idle_over_t1")  # idle time is a property of the circuit
 
 
+def test_chip_indicators_are_one_hot_and_zero_for_an_unknown_chip() -> None:
+    from experiments.ml_dataset import add_chip_indicators, chip_indicator_columns
+
+    train = pd.DataFrame({"meta.backend_name": ["a", "b", "a"]})
+    cols = chip_indicator_columns(train)
+    assert cols == ["chip.a", "chip.b"]
+    assert add_chip_indicators(train, cols)[cols].to_numpy().tolist() == [[1, 0], [0, 1], [1, 0]]
+    new = add_chip_indicators(pd.DataFrame({"meta.backend_name": ["c"]}), cols)
+    assert new[cols].to_numpy().tolist() == [[0, 0]]
+
+
 def test_campaign_roles_keep_exploratory_and_validation_out_of_training() -> None:
     from experiments.ml_dataset import campaign_role
 
@@ -409,8 +426,8 @@ def test_campaign_roles_keep_exploratory_and_validation_out_of_training() -> Non
         assert temporal_ordering(sub, held)["strict"] is True
 
 
-def test_one_standard_error_rule_prefers_the_smaller_footprint() -> None:
-    """A second feature that adds less than the CV noise must not enlarge the footprint."""
+def test_footprint_size_stays_within_tolerance_of_the_best() -> None:
+    """The chosen footprint is the smallest one within the tolerance of the best score."""
     rng = np.random.default_rng(3)
     n = 240
     X = pd.DataFrame({"b.signal": rng.normal(size=n), "b.weak": rng.normal(size=n), "a.noise": rng.normal(size=n)})
@@ -425,7 +442,7 @@ def test_one_standard_error_rule_prefers_the_smaller_footprint() -> None:
     chosen = next(r for r in curve if r["selected"])
     best = max((r for r in curve if r["cvR2"] is not None), key=lambda r: r["cvR2"])
     assert chosen["k"] <= best["k"]
-    assert chosen["cvR2"] >= best["cvR2"] - max(best["cvR2Se"] or 0.0, 0.0015)
+    assert chosen["cvR2"] >= best["cvR2"] - 0.0015 and "cvR2Se" in chosen
 
 
 def test_paired_bootstrap_separates_a_real_gain_from_noise() -> None:

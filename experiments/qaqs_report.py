@@ -17,7 +17,7 @@ import pandas as pd
 
 from experiments.ml_dataset import CAMPAIGN_ROLES, COMPOSITE_ANCHOR
 from experiments.qaqs_kfold import STABLE_SELECTION_FREQUENCY, WAITING_FOR_DATA
-from experiments.qaqs_models import FROZEN_DIR, H1_R2_THRESHOLD, SCHEMA_VERSION, _clean_json
+from experiments.qaqs_models import H1_R2_THRESHOLD, PROSPECTIVE_DIR, SCHEMA_VERSION, _clean_json
 
 HEADLINE_TARGET = "success"
 
@@ -93,6 +93,7 @@ def collect_rows(snapshots: Mapping[str, dict[str, Any]]) -> dict[str, list[dict
                 rows["per_algorithm.csv"].append({**base, **item})
             for regime, board in (
                 ("circuit_only", t.get("leaderboard", [])),
+                ("circuit_chip", t.get("chipLeaderboard", [])),
                 ("mixed_submit", t.get("mixedLeaderboard", [])),
                 ("analytical", t.get("baselines", [])),
             ):
@@ -397,6 +398,39 @@ def _section_h4(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
     return out
 
 
+def _section_best(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
+    """The model to use, against the per-chip reference models."""
+    pooled = snapshots.get("pooled")
+    if not pooled:
+        return []
+    out = [
+        "## Best model: one pooled model with chip id",
+        "",
+        "One model for all chips: the circuit footprint plus a one-hot chip id. Per-chip models are the "
+        "reference. Unseen-circuit R² ± sd [95% CI] of each tuned procedure:",
+        "",
+        "| Target | Pooled + chip id | H1 | Pooled, no chip id | Per-chip models (reference) |",
+        "|---|---:|:---:|---:|---|",
+    ]
+    chips = [s for s in snapshots if s != "pooled" and not s.startswith("provider_")]
+    for tkey, t in pooled["targets"].items():
+        best = (t.get("chipLeaderboard") or [{}])[0].get("cv") or {}
+        ref = ", ".join(
+            f"`{c}` {_fmt(_procedure(snapshots[c]['targets'].get(tkey) or {}).get('r2'))}" for c in chips
+        )
+        out.append(
+            f"| {t['label']} (`{tkey}`) | {_r2(best, sd=True)} | {str(best.get('h1Verdict', '—')).upper()} "
+            f"| {_fmt(_procedure(t).get('r2'))} | {ref} |"
+        )
+    out += [
+        "",
+        "A chip without training data gets no chip id (all zeros) and is predicted from what the known "
+        "chips share. Scores on the validation run are in `model_comparison.md`.",
+        "",
+    ]
+    return out
+
+
 def _section_footprint(snapshots: Mapping[str, dict[str, Any]], stable: list[dict[str, Any]]) -> list[str]:
     out = [
         "## The footprint",
@@ -417,8 +451,8 @@ def _section_footprint(snapshots: Mapping[str, dict[str, Any]], stable: list[dic
         out.append("| none reached the threshold | | | |")
     out += [
         "",
-        "Footprint size is chosen by the one-standard-error rule (smallest k within one standard error of "
-        "the best k). The ablation R² in `footprint_ablation.csv` is a selection score, not accuracy.",
+        "Footprint size is the smallest k whose selection score is within 0.0015 R² of the best k. The "
+        "ablation R² in `footprint_ablation.csv` is a selection score, not accuracy.",
         "",
         "| Scope | Target | k deployed | k across folds (min–median–max) | Stable features |",
         "|---|---|---:|---:|---:|",
@@ -435,18 +469,18 @@ def _section_footprint(snapshots: Mapping[str, dict[str, Any]], stable: list[dic
 
 
 def _section_prospective() -> list[str]:
-    out = ["## Prospective validation (frozen v1 models)", ""]
-    path = FROZEN_DIR / "prospective" / "validation-v1_summary.csv"
+    out = ["## Prospective validation (run of 2026-11-16)", ""]
+    path = PROSPECTIVE_DIR / "validation-v1_summary.csv"
     if not path.is_file():
-        return out + [f"{WAITING_FOR_DATA}: no scored prospective run in `{FROZEN_DIR.name}/prospective`.", ""]
+        return out + [f"{WAITING_FOR_DATA}: no scored prospective run in `{PROSPECTIVE_DIR.name}/`.", ""]
     s = pd.read_csv(path)
     s = s[(s["target"] == HEADLINE_TARGET) & (s["regime"] == "circuit_only") & (s["group"] != "all")]
     out += [
-        "Models frozen on 2026-11-16 and scored on a run collected afterwards, predictions committed "
-        "first. These are the **v1** models in `report/frozen_v1`; the models saved by this report are "
-        "**v2** and have no prospective score until a new pre-registered run. The pre-registered H1 rule "
-        "applies to the `new` group of every model scope; all scopes are listed, because which source "
-        "chip transfers best to an unseen chip is not known beforehand.",
+        "Predictions were committed on 2026-11-16, before the run, by the models of that date (in git "
+        "history). The models saved by this report were trained later and are compared on the same run "
+        "in `model_comparison.md`; that comparison is not pre-registered. The H1 rule applies to the "
+        "`new` group of every model scope; all scopes are listed, because which source chip transfers "
+        "best to an unseen chip is not known beforehand.",
         "",
         "| Chip | QPU | Model scope | Group | Configs | R² [95% CI] | MAE |",
         "|---|---|---|---|---:|---:|---:|",
@@ -490,7 +524,8 @@ def write_reports(
             "",
         ]
         assert set(roles) <= set(CAMPAIGN_ROLES)
-    lines += [f"Scopes: {', '.join(f'`{s}`' for s in snapshots)}. Model version: **{any_snap.get('modelVersion', '?')}**.", ""]
+    lines += [f"Scopes: {', '.join(f'`{s}`' for s in snapshots)}.", ""]
+    lines += _section_best(snapshots)
 
     lines += [
         "## Verdicts",
@@ -532,9 +567,10 @@ def write_reports(
 
     if rows["_models"]:
         lines += [
-            "## Saved models (v2)",
+            "## Saved models",
             "",
-            "Fitted on every training-role job with the procedure scored above. Not prospectively validated.",
+            "Fitted on every training-role job with the procedure scored above. `circuit_chip` in the pooled "
+            "scope is the best model; per-chip models are kept as reference.",
             "",
             "| Scope | Target | Regime | Model | Features | Procedure R² | MAE | Artifact |",
             "|---|---|---|---|---:|---:|---:|---|",
@@ -581,7 +617,6 @@ def write_reports(
             _clean_json(
                 {
                     "schemaVersion": SCHEMA_VERSION,
-                    "modelVersion": any_snap.get("modelVersion"),
                     "models": rows["_models"],
                 }
             ),
