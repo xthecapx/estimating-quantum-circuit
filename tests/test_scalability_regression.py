@@ -362,3 +362,179 @@ def test_extensions_hold_out_shor_and_include_extra_size_tests(cohort, tmp_path)
     assert not paired.empty
     assert set(scores["outcome"]) == {"raw_success", "ideal_chance_normalized"}
     assert (tmp_path / "extension_predictions.csv").exists()
+
+
+def _decay_jobs(shor_floor):
+    """Three algorithms on shared widths, two jobs per configuration, one period."""
+    random = np.random.default_rng(7)
+    rows = []
+    for algorithm, slope in [("QFT", -0.10), ("PHASE-ESTIMATION", -0.11), ("SHOR", None)]:
+        for width in (3, 4, 5, 6):
+            chance = 2.0 ** -(width - 1)
+            for config in ("a", "b"):
+                for _ in range(2):
+                    if algorithm == "SHOR":
+                        success = (chance if shor_floor else 0.9 - 0.1 * (width - 3)) + random.normal(0, 0.004)
+                    else:
+                        success = 0.9 + slope * (width - 3) + random.normal(0, 0.01)
+                    rows.append(
+                        dict(
+                            algorithm=algorithm,
+                            config=config,
+                            cluster=f"{algorithm}:{width}:{config}",
+                            backend="chip",
+                            period="full",
+                            width=width,
+                            success=success,
+                            ideal_success=1.0,
+                            chance=chance,
+                            chance_corrected=max(0.0, (success - chance) / (1 - chance)),
+                        )
+                    )
+    return pd.DataFrame(rows)
+
+
+def test_decay_gaps_carry_bootstrap_intervals_and_keep_existing_columns(tmp_path):
+    data = _decay_jobs(shor_floor=True)
+    decay_relationships.analyze_decay(
+        data, ["width"], analysis.FAMILIES, tmp_path, plots=False, bootstrap_draws=200
+    )
+    scores = pd.read_csv(tmp_path / "decay_comparisons.csv")
+    for column in ("slope_1", "slope_2", "slope_difference_2_minus_1", "profile_spearman"):
+        assert column in scores  # additive change: earlier columns are still exported
+    fitted = scores.dropna(subset=["gap_ci_low"])
+    assert len(fitted) == len(scores)
+    assert (fitted.gap_ci_low <= fitted.gap_ci_high).all()
+    assert fitted.p_within_tolerance.between(0, 1).all()
+    assert (fitted.p_match <= fitted.p_within_tolerance + 1e-12).all()
+    expected = 100 * fitted.slope_difference_2_minus_1.abs() * (fitted.metric_max - fitted.metric_min)
+    np.testing.assert_allclose(fitted.gap_points, expected)
+    # Same seed, same intervals: the bootstrap does not depend on job order.
+    other = tmp_path / "shuffled"
+    decay_relationships.analyze_decay(
+        data.sample(frac=1, random_state=3), ["width"], analysis.FAMILIES, other, plots=False,
+        bootstrap_draws=200,
+    )
+    again = pd.read_csv(other / "decay_comparisons.csv")
+    keys = ["algorithm_1", "algorithm_2", "outcome"]
+    merged = scores.merge(again, on=keys, suffixes=("", "_again"))
+    np.testing.assert_allclose(merged.gap_ci_low, merged.gap_ci_low_again)
+    catalog = pd.read_csv(tmp_path / "groups" / "pair_comparisons.csv")
+    assert {"gap_points", "within_tolerance", "grouped_together"}.issubset(catalog.columns)
+    assert {"gap_ci_low", "gap_ci_high", "p_within_tolerance", "primary_outcome"}.issubset(catalog.columns)
+    groups = json.loads((tmp_path / "groups" / "decay_groups.json").read_text())
+    assert groups["bootstrap"]["draws"] == 200 and "resampled" in groups["bootstrap"]["method"]
+    assert "gap_points" in groups["comparisons"][0]
+
+
+def test_shor_pairs_are_read_on_chance_corrected_success(tmp_path):
+    """A Shor circuit pinned to its chance floor falls on raw success but not on the corrected one."""
+    decay_relationships.analyze_decay(
+        _decay_jobs(shor_floor=True), ["width"], analysis.FAMILIES, tmp_path, plots=False,
+        bootstrap_draws=100,
+    )
+    scores = pd.read_csv(tmp_path / "decay_comparisons.csv")
+    shor = scores[scores.algorithm_2.eq("SHOR") & scores.algorithm_1.eq("PHASE-ESTIMATION")]
+    primary = shor[shor.primary]
+    assert primary.outcome.tolist() == ["chance_corrected"]
+    raw = shor[shor.outcome.eq("success")].iloc[0]
+    assert raw.slope_2 < -0.03  # raw Shor success falls with the chance floor
+    assert abs(primary.iloc[0].slope_2) < 0.01  # corrected Shor is flat: there is no signal
+    assert primary.iloc[0].gap_points > 20 > raw.gap_points
+    other = scores[scores.algorithm_1.eq("QFT") & scores.algorithm_2.eq("PHASE-ESTIMATION")]
+    assert other[other.primary].outcome.tolist() == ["success"]
+    report = (tmp_path / "report.md").read_text()
+    assert "chance-corrected" in report and "Do related pairs agree more often" in report
+    rates = pd.read_csv(tmp_path / "base_rates.csv")
+    assert rates.comparison_class.tolist() == ["family", "random-volumetric control", "unrelated"]
+    family = rates.set_index("comparison_class").loc["family"]
+    assert family.windows == 3 and family.windows_point_match == 1  # QFT/PE only
+
+
+def test_r2_interval_resamples_configurations_not_jobs():
+    random = np.random.default_rng(2)
+    truth = np.repeat(np.linspace(0.2, 0.9, 12), 6)
+    observed = truth + random.normal(0, 0.01, truth.size)
+    predicted = truth + np.repeat(random.normal(0, 0.08, 12), 6)
+    clusters = np.repeat(np.arange(12), 6)
+    low, high = analysis.bootstrap_r2(observed, predicted, clusters, draws=500)
+    point = analysis.prediction_scores(observed, predicted)["r2"]
+    assert low < point < high
+    # Treating every job as independent understates the uncertainty.
+    job_low, job_high = analysis.bootstrap_r2(observed, predicted, np.arange(truth.size), draws=500)
+    assert high - low > 1.5 * (job_high - job_low)
+    assert np.isnan(analysis.bootstrap_r2(observed, predicted, np.zeros(truth.size))).all()
+
+
+def test_skill_is_scored_against_the_largest_training_tercile(cohort):
+    source = cohort[cohort["algorithm"].eq("QFT")]
+    train, test = analysis.larger_configuration_split(source, "a.depth")
+    summary, rows = analysis.evaluate_transfer(train, test, "a.depth", "binomial_logit", {})
+    largest = train[train["a.depth"] >= train.groupby("cluster")["a.depth"].median().quantile(2 / 3)]
+    expected = test["period"].map(largest.groupby("period")["success"].mean())
+    np.testing.assert_allclose(rows["baseline_predicted"], expected)
+    # Success falls with depth, so the all-configuration mean is the easier baseline to beat.
+    assert summary["baseline_rmse"] < summary["period_mean_baseline_rmse"]
+    assert summary["rmse_skill"] < summary["period_mean_rmse_skill"]
+    assert summary["r2_ci_low"] <= summary["r2"] <= summary["r2_ci_high"]
+
+
+def test_replication_summary_requires_both_directions_on_every_chip():
+    def scores(values):
+        return pd.DataFrame(
+            [
+                dict(protocol="unseen_algorithm", family="fourier", metric="a.depth", model="ols",
+                     source=source, target=target, r2=r2, r2_ci_low=r2 - 0.1)
+                for (source, target), r2 in zip(
+                    [("QFT", "PHASE-ESTIMATION"), ("PHASE-ESTIMATION", "QFT")], values
+                )
+            ]
+        )
+
+    one_way = analysis.replication_table({"a": scores([0.9, 0.5]), "b": scores([0.85, 0.2])}, 0.8)
+    row = one_way.iloc[0]
+    assert row.passes == 2 and row.one_direction_on_every_chip
+    assert not row.both_directions_on_a_chip and not row.both_directions_on_every_chip
+    assert row.interval_passes == 1
+    text = " ".join(analysis.replication_lines(one_way, ["a", "b"], 0.8))
+    assert "No family, metric and model combination" in text
+    both = analysis.replication_table({"a": scores([0.9, 0.9]), "b": scores([0.85, 0.82])}, 0.8)
+    assert both.iloc[0].both_directions_on_every_chip
+    assert "reach the criterion in both directions on every chip" in " ".join(
+        analysis.replication_lines(both, ["a", "b"], 0.8)
+    )
+    single = " ".join(analysis.replication_lines(one_way, ["a"], 0.8))
+    assert "WAITING FOR DATA" in single
+
+
+def test_backend_is_derived_from_the_export_and_never_guessed(tmp_path):
+    tables = exported_tables(tmp_path)
+    assert analysis.analysis_backends(tables) == ["ibm_fez"]
+    data, provenance = analysis.load_data(tables, ["a.depth"])  # the only chip is selected
+    assert provenance["backend"] == "ibm_fez" and provenance["timing_available"] is False
+    path = tables / "dataset-001.csv"
+    frame = pd.read_csv(path)
+    frame["meta.backend_name"] = ["chip_a", "chip_b"]
+    frame.to_csv(path, index=False)
+    manifest_path = tables / "dataset_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["parts"][0]["bytes"] = path.stat().st_size
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    assert analysis.analysis_backends(tables) == ["chip_a", "chip_b"]
+    with pytest.raises(ValueError, match="Choose one backend"):
+        analysis.load_data(tables, ["a.depth"])
+    assert len(analysis.load_data(tables, ["a.depth"], "chip_b")[0]) == 1
+
+
+def test_time_in_window_is_an_optional_sensitivity_covariate(cohort):
+    _, plain = analysis.describe_pair(cohort, "a.depth", "ols", "fourier", analysis.FAMILIES["fourier"])
+    assert plain["time_adjustment"] == "timing not exported"
+    assert np.isnan(plain["slope_difference_p_time_adjusted"])
+    timed = cohort.copy()
+    timed["hours_in_window"] = np.random.default_rng(5).uniform(0, 1, len(timed))
+    timed["success"] -= 0.05 * timed["hours_in_window"]  # drift unrelated to circuit size
+    _, adjusted = analysis.describe_pair(timed, "a.depth", "ols", "fourier", analysis.FAMILIES["fourier"])
+    assert adjusted["time_slope_per_hour"] == pytest.approx(-0.05, abs=0.02)
+    assert adjusted["slope_difference_time_adjusted"] == pytest.approx(adjusted["slope_difference"], rel=0.2)
+    order = analysis.run_order_confounding(timed.assign(calibration_id="c"), ["a.depth"])
+    assert order["jobs"].sum() == len(timed) and order["calibrations"].eq(1).all()

@@ -15,6 +15,84 @@ LABELS = {
     "SHOR": "Shor",
 }
 MIN_PERIODS = 2
+CHANCE_OUTCOME = "chance_corrected"
+# Shor's raw success falls with width because its chance floor falls (0.25 to 0.03), even
+# for configurations that never leave chance. Pairs involving these workloads are therefore
+# read on the chance-corrected outcome whenever the export provides it.
+CHANCE_PRIMARY_ALGORITHMS = frozenset({"SHOR"})
+FAMILY_ROLES = frozenset({"fourier", "oracle", "entanglement", "composition"})
+CONTROL_ROLES = frozenset({"control", "mirror_protocol"})
+COMPARISON_CLASSES = ("family", "random-volumetric control", "unrelated")
+
+
+def primary_outcome(first, second, available):
+    """The outcome a pair is read on: chance-corrected success when either side is Shor."""
+    if CHANCE_OUTCOME in available and CHANCE_PRIMARY_ALGORITHMS & {first, second}:
+        return CHANCE_OUTCOME
+    return "success"
+
+
+def comparison_class(role):
+    if role in FAMILY_ROLES:
+        return "family"
+    return "random-volumetric control" if role in CONTROL_ROLES else "unrelated"
+
+
+def gap_interval(draws, tolerance):
+    """Percentile interval and P(gap <= tolerance) from bootstrap gaps; empty when no draws."""
+    if draws is None or len(draws) == 0:
+        return np.nan, np.nan, np.nan
+    low, high = np.percentile(draws, [2.5, 97.5])
+    return float(low), float(high), float(np.mean(draws <= tolerance))
+
+
+def base_rates(scores, tolerance):
+    """How often do family, control and unrelated pairs meet the same matching rule?
+
+    Uses each pair's primary outcome. A window is a point match when both fitted lines fall
+    and the gap is within tolerance; ``mean_p_match`` averages the bootstrap probability of
+    that event, so it discounts gaps that sit on the threshold.
+    """
+    columns = [
+        "comparison_class",
+        "pairs",
+        "windows",
+        "windows_point_match",
+        "share_point_match",
+        "mean_p_match",
+        "cells_with_min_periods",
+        "cells_repeated_match",
+        "share_repeated_match",
+    ]
+    if scores.empty or "primary" not in scores:
+        return pd.DataFrame(columns=columns)
+    rows = scores[scores.primary.astype(bool)].copy()
+    rows["comparison_class"] = rows.role.map(comparison_class)
+    rows["point_match"] = (
+        rows.slope_1.lt(0) & rows.slope_2.lt(0) & rows.gap_points.le(tolerance)
+    )
+    out = []
+    for name in COMPARISON_CLASSES:
+        sub = rows[rows.comparison_class.eq(name)]
+        cells = sub.groupby(["algorithm_1", "algorithm_2", "metric"]).point_match.agg(
+            ["size", "sum"]
+        )
+        eligible = cells[cells["size"].ge(MIN_PERIODS)]
+        repeated = int(eligible["sum"].ge(MIN_PERIODS).sum())
+        out.append(
+            dict(
+                comparison_class=name,
+                pairs=int(sub.groupby(["algorithm_1", "algorithm_2"]).ngroups),
+                windows=len(sub),
+                windows_point_match=int(sub.point_match.sum()),
+                share_point_match=float(sub.point_match.mean()) if len(sub) else np.nan,
+                mean_p_match=float(sub.p_match.mean()) if len(sub) else np.nan,
+                cells_with_min_periods=len(eligible),
+                cells_repeated_match=repeated,
+                share_repeated_match=repeated / len(eligible) if len(eligible) else np.nan,
+            )
+        )
+    return pd.DataFrame(out, columns=columns)
 
 
 def group_by_decay(algorithms, distances, tolerance):
@@ -37,8 +115,23 @@ def group_by_decay(algorithms, distances, tolerance):
         groups.sort()
 
 
-def compare_groups(scores, coverage, algorithms, output, plots=True, tolerance=5.0, backend=None):
-    """Group independently for each resource/outcome, then compare with expected relationships."""
+def compare_groups(
+    scores,
+    coverage,
+    algorithms,
+    output,
+    plots=True,
+    tolerance=5.0,
+    backend=None,
+    gap_draws=None,
+    bootstrap=None,
+):
+    """Group independently for each resource/outcome, then compare with expected relationships.
+
+    ``gap_draws`` maps (metric, outcome, algorithm_1, algorithm_2) to one array of bootstrap
+    gaps per eligible period. The median across periods is taken draw by draw, giving an
+    interval for the same median gap that the grouping uses.
+    """
     folder = output / "groups"
     folder.mkdir(exist_ok=True)
     panel = ["metric", "outcome"]
@@ -63,6 +156,19 @@ def compare_groups(scores, coverage, algorithms, output, plots=True, tolerance=5
         catalog.gap_points.le(tolerance).where(catalog.supported).astype("boolean")
     )
     catalog["grouped_together"] = pd.Series(pd.NA, index=catalog.index, dtype="boolean")
+    # Additive uncertainty fields; every earlier column keeps its meaning.
+    available = set(catalog.outcome.unique())
+    catalog["primary_outcome"] = [
+        r.outcome == primary_outcome(r.algorithm_1, r.algorithm_2, available)
+        for r in catalog.itertuples()
+    ]
+    intervals = []
+    for r in catalog.itertuples():
+        draws = (gap_draws or {}).get((r.metric, r.outcome, r.algorithm_1, r.algorithm_2))
+        median = np.median(np.vstack(draws), axis=0) if draws else None
+        intervals.append(gap_interval(median, tolerance))
+    for index, name in enumerate(("gap_ci_low", "gap_ci_high", "p_within_tolerance")):
+        catalog[name] = [values[index] for values in intervals]
     memberships = []
     for (metric, outcome), subset in catalog.groupby(panel):
         for minimum in (1, MIN_PERIODS):
@@ -129,6 +235,10 @@ def compare_groups(scores, coverage, algorithms, output, plots=True, tolerance=5
         "tolerance_points": tolerance,
         "minimum_periods": MIN_PERIODS,
         "distance": "median of 100 × absolute slope difference × shared resource span, across eligible periods",
+        "bootstrap": bootstrap,
+        "primary_outcome_rule": "chance_corrected when either algorithm is in "
+        + ", ".join(sorted(CHANCE_PRIMARY_ALGORITHMS))
+        + " and the export provides it; otherwise success",
         "comparisons": json.loads(catalog.to_json(orient="records")),
         "memberships": json.loads(members.to_json(orient="records")),
     }
@@ -136,7 +246,7 @@ def compare_groups(scores, coverage, algorithms, output, plots=True, tolerance=5
         json.dumps(payload, allow_nan=False), encoding="utf-8"
     )
     figure = plot_gaps(catalog, algorithms, folder) if plots and not catalog.empty else None
-    write_group_report(folder, catalog, members, algorithms, tolerance, figure)
+    write_group_report(folder, catalog, members, algorithms, tolerance, figure, bootstrap)
     return catalog, members
 
 
@@ -144,7 +254,7 @@ def short_group(group):
     return " + ".join(LABELS.get(name, name) for name in group.split(" / "))
 
 
-def write_group_report(folder, catalog, members, algorithms, tolerance, figure):
+def write_group_report(folder, catalog, members, algorithms, tolerance, figure, bootstrap=None):
     central = members[
         members.tolerance_points.eq(tolerance) & members.minimum_periods.eq(MIN_PERIODS)
     ]
@@ -172,7 +282,37 @@ def write_group_report(folder, catalog, members, algorithms, tolerance, figure):
         "observed in only one period (minimum_periods=1 in memberships.csv). Repeated periods reuse configurations. "
         "The groups describe these data and have no inferential equivalence interpretation.",
         "",
+        "Read each gap with its interval. pair_comparisons.csv gives a 95% bootstrap interval "
+        "for the median gap (gap_ci_low, gap_ci_high) and the bootstrap probability that the "
+        f"median gap is within {tolerance:g} points (p_within_tolerance). A gap whose interval "
+        "straddles the tolerance is neither a match nor a mismatch. Pairs involving Shor are "
+        "read on chance-corrected success (primary_outcome), because Shor's raw success falls "
+        "with its chance floor.",
+        "",
     ]
+    if bootstrap:
+        lines += [f"Bootstrap: {bootstrap['draws']} draws; {bootstrap['method']}.", ""]
+    close = catalog[
+        catalog.primary_outcome & catalog.supported & catalog.gap_ci_low.le(tolerance)
+    ].sort_values(["gap_points", "metric", "algorithm_1", "algorithm_2"])
+    if not close.empty:
+        lines += [
+            f"## Pairs whose interval reaches the {tolerance:g}-point tolerance",
+            "",
+            "Primary outcome only. Family labels are annotations; unrelated pairs appear here too.",
+            "",
+            "| Resource | Pair | Role | Outcome | Periods | Median gap [95% interval] | "
+            f"P(gap ≤ {tolerance:g}) |",
+            "| --- | --- | --- | --- | ---: | ---: | ---: |",
+        ]
+        for r in close.itertuples():
+            lines.append(
+                f"| {r.metric} | {LABELS.get(r.algorithm_1, r.algorithm_1)} / "
+                f"{LABELS.get(r.algorithm_2, r.algorithm_2)} | {r.role} | {r.outcome} | "
+                f"{r.periods} | {r.gap_points:.2f} [{r.gap_ci_low:.2f}, {r.gap_ci_high:.2f}] | "
+                f"{r.p_within_tolerance:.2f} |"
+            )
+        lines.append("")
     if figure:
         lines += [f"![Pairwise differences in fitted success loss]({figure})", ""]
     lines += [
@@ -201,7 +341,7 @@ def write_group_report(folder, catalog, members, algorithms, tolerance, figure):
 
 
 def plot_gaps(catalog, algorithms, folder):
-    """Display pairwise distances for success on the thesis's width and gate-count axes."""
+    """Display pairwise distances on the width and gate-count axes, on each pair's primary outcome."""
     import matplotlib
 
     matplotlib.use("Agg")
@@ -212,12 +352,12 @@ def plot_gaps(catalog, algorithms, folder):
         "a.ComplexityMetrics.gate_based_metrics.two_qubit_count": "Logical two-qubit gates",
     }
     metrics = {key: name for key, name in metrics.items() if catalog.metric.eq(key).any()}
-    if not metrics or not catalog.outcome.eq("success").any():
+    if not metrics or not catalog.primary_outcome.any():
         return None
     arrays = []
     for metric in metrics:
         matrix = pd.DataFrame(np.nan, index=algorithms, columns=algorithms)
-        sub = catalog[catalog.metric.eq(metric) & catalog.outcome.eq("success") & catalog.supported]
+        sub = catalog[catalog.metric.eq(metric) & catalog.primary_outcome & catalog.supported]
         for r in sub.itertuples():
             matrix.at[r.algorithm_1, r.algorithm_2] = matrix.at[r.algorithm_2, r.algorithm_1] = (
                 r.gap_points
@@ -253,7 +393,9 @@ def plot_gaps(catalog, algorithms, folder):
     fig.colorbar(im, ax=list(axes.flat), shrink=0.7, label="Gap in fitted success loss (pp)")
     fig.suptitle("How far apart are the fitted losses on shared resource levels?")
     fig.supxlabel(
-        "Smaller values mean closer decay. A dash indicates insufficient overlap.", fontsize=10
+        "Smaller values mean closer decay. A dash indicates insufficient overlap. "
+        "Shor pairs use chance-corrected success.",
+        fontsize=9,
     )
     fig.savefig(folder / "success_gaps.png", dpi=150)
     plt.close(fig)

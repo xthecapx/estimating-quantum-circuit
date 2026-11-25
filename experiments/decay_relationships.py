@@ -1,18 +1,36 @@
 """Descriptive comparisons of success decay on jointly observed circuit resource levels."""
 
 import json
+import zlib
 from itertools import combinations
 
 import numpy as np
 import pandas as pd
 
-from experiments.decay_groups import compare_groups
+from experiments.decay_groups import (
+    CHANCE_OUTCOME,
+    base_rates,
+    compare_groups,
+    gap_interval,
+    primary_outcome,
+)
 
 EXPORTED_TARGETS = {
     "f.fidelity.hellinger_fidelity": "hellinger_fidelity",
     "f.fidelity.tvd_fidelity": "tvd_similarity",
     "f.fidelity.dsr": "dsr",
+    "f.fidelity.chance_corrected_success": CHANCE_OUTCOME,
 }
+BOOTSTRAP_DRAWS = 1000
+BOOTSTRAP_SEED = 11
+BOOTSTRAP_METHOD = (
+    "jobs are resampled with replacement within each configuration at each resource level "
+    "(algorithm × level × configuration × period), so the set of configurations and levels "
+    "stays fixed; deviations of a resampled configuration mean are scaled by sqrt(n/(n-1)) "
+    "to offset the small number of repetitions, and a configuration with one job contributes "
+    "no variation. This is not binomial shot resampling: it reflects job-to-job variation, "
+    "which includes shot noise. Intervals are 2.5th to 97.5th percentiles"
+)
 TARGETS = {
     "success": ("Success rate", "Fraction of accepted shots"),
     "normalized": ("Adjusted success", "Fraction of the chance-to-ideal success gap recovered"),
@@ -27,6 +45,10 @@ TARGETS = {
     "dsr": (
         "Differential success rate",
         "Clipped Michelson contrast of mean expected probability against the strongest unexpected outcome",
+    ),
+    CHANCE_OUTCOME: (
+        "Chance-corrected success",
+        "Exported (success − chance) / (1 − chance), floored at zero",
     ),
 }
 WIDTH = "a.num_qubits"
@@ -93,7 +115,51 @@ def paired_decay(levels):
     }
 
 
-def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5.0):
+def bootstrap_level_means(valid, metric, outcome, draws, rng):
+    """Bootstrap the equally weighted level means of every algorithm, design held fixed.
+
+    Returns {algorithm: DataFrame(levels × draws)}. See BOOTSTRAP_METHOD.
+    """
+    grouped = valid.groupby(["algorithm", metric, "config"], sort=True)[outcome]
+    index = grouped.mean().index
+    cells = np.empty((len(index), draws))
+    for row, (_, values) in enumerate(grouped):
+        values = values.to_numpy(dtype=float)
+        n = len(values)
+        if n == 1:
+            cells[row] = values[0]
+            continue
+        center = values.mean()
+        resampled = values[rng.integers(n, size=(draws, n))].mean(axis=1)
+        cells[row] = center + np.sqrt(n / (n - 1)) * (resampled - center)
+    levels = pd.DataFrame(cells, index=index).groupby(level=["algorithm", metric]).mean()
+    return {
+        algorithm: levels.xs(algorithm, level="algorithm")
+        for algorithm in levels.index.get_level_values("algorithm").unique()
+    }
+
+
+def bootstrap_gaps(level_draws, first, second, levels):
+    """Slopes and gap (target points over the shared span) for every bootstrap draw."""
+    x = np.asarray(levels, dtype=float)
+    centered = x - x.mean()
+    slopes = [
+        centered @ level_draws[name].reindex(levels).to_numpy() / (centered @ centered)
+        for name in (first, second)
+    ]
+    return slopes[0], slopes[1], 100 * np.abs(slopes[1] - slopes[0]) * (x[-1] - x[0])
+
+
+def analyze_decay(
+    data,
+    metrics,
+    families,
+    output,
+    plots=True,
+    group_tolerance=5.0,
+    bootstrap_draws=BOOTSTRAP_DRAWS,
+    seed=BOOTSTRAP_SEED,
+):
     """Compare equally weighted configuration means at exact shared levels, within periods."""
     output.mkdir(parents=True, exist_ok=True)
     pairs = [(family, *pair) for family, pair in families.items()]
@@ -111,11 +177,12 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
     frame = data.copy()
     gap = frame["ideal_success"] - frame["chance"]
     frame["normalized"] = (frame["success"] - frame["chance"]) / gap.where(gap > 1e-8)
-    scores, matched, coverage, controls = [], [], [], []
+    scores, matched, coverage, controls, gap_draws = [], [], [], [], {}
+    outcomes = [target for target in TARGETS if target in frame]
     for metric in metrics:
         for period, jobs in frame.groupby("period"):
             finite = jobs[np.isfinite(jobs[metric])]
-            for outcome in (target for target in TARGETS if target in frame):
+            for outcome in outcomes:
                 # Canonical summation order also makes floating-point means invariant
                 # to the order of jobs in an export.
                 valid = finite.dropna(subset=[outcome]).sort_values(
@@ -125,6 +192,15 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
                 by_level = configs.groupby(level=["algorithm", metric])
                 means = by_level.mean().unstack("algorithm")
                 counts = by_level.count().unstack("algorithm")
+                # A stable per-panel stream keeps intervals independent of export order.
+                stream = zlib.crc32(f"{metric}|{period}|{outcome}".encode())
+                level_draws = (
+                    bootstrap_level_means(
+                        valid, metric, outcome, bootstrap_draws, np.random.default_rng([seed, stream])
+                    )
+                    if bootstrap_draws and not valid.empty
+                    else {}
+                )
                 for role, first, second in pairs:
                     key = dict(
                         role=role,
@@ -139,6 +215,29 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
                     if len(pair) < 3:
                         continue
                     fit = paired_decay(pair)
+                    fit["gap_points"] = (
+                        100
+                        * abs(fit["slope_difference_2_minus_1"])
+                        * (fit["metric_max"] - fit["metric_min"])
+                    )
+                    fit["primary"] = outcome == primary_outcome(first, second, outcomes)
+                    fit["gap_ci_low"] = fit["gap_ci_high"] = np.nan
+                    fit["p_within_tolerance"] = fit["p_match"] = np.nan
+                    if level_draws:
+                        slope_1, slope_2, draws = bootstrap_gaps(
+                            level_draws, first, second, pair.index
+                        )
+                        low, high, within = gap_interval(draws, group_tolerance)
+                        fit.update(
+                            gap_ci_low=low,
+                            gap_ci_high=high,
+                            p_within_tolerance=within,
+                            # The matching rule also requires both fitted lines to fall.
+                            p_match=float(
+                                np.mean((slope_1 < 0) & (slope_2 < 0) & (draws <= group_tolerance))
+                            ),
+                        )
+                        gap_draws.setdefault((metric, outcome, first, second), []).append(draws)
                     scores.append({**key, **fit})
                     if role in {*families, "composition"}:
                         rv = "RANDOM-VOLUMETRIC"
@@ -188,6 +287,12 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
             "both_rise",
             "opposite_direction",
             "either_flat",
+            "gap_points",
+            "gap_ci_low",
+            "gap_ci_high",
+            "p_within_tolerance",
+            "p_match",
+            "primary",
         ],
     )
     results.to_csv(output / "decay_comparisons.csv", index=False)
@@ -207,7 +312,12 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
     observations.to_csv(output / "matched_levels.csv", index=False)
     coverage = pd.DataFrame(coverage, columns=[*keys, "shared_levels", "eligible"])
     coverage.to_csv(output / "overlap.csv", index=False)
-    compare_groups(
+    bootstrap = (
+        {"draws": int(bootstrap_draws), "seed": int(seed), "method": BOOTSTRAP_METHOD}
+        if bootstrap_draws
+        else None
+    )
+    catalog, _ = compare_groups(
         results,
         coverage,
         sorted(data.algorithm.unique()),
@@ -215,7 +325,11 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
         plots,
         group_tolerance,
         data.backend.iloc[0],
+        gap_draws,
+        bootstrap,
     )
+    rates = base_rates(results, group_tolerance)
+    rates.to_csv(output / "base_rates.csv", index=False)
     pd.DataFrame(
         controls,
         columns=[
@@ -229,7 +343,7 @@ def analyze_decay(data, metrics, families, output, plots=True, group_tolerance=5
     ).to_csv(output / "matched_controls.csv", index=False)
     figure = plot_widths(observations, output, families) if plots and matched else None
     write_trend_review(frame, results, observations, output, plots)
-    write_decay_report(output, data, results, figure)
+    write_decay_report(output, data, results, figure, catalog, rates, group_tolerance, bootstrap)
     return results
 
 
@@ -241,9 +355,12 @@ def plot_widths(observations, output, families):
     import matplotlib.pyplot as plt
     from matplotlib.ticker import MaxNLocator
 
-    width = observations[
-        observations.metric.eq("a.num_qubits") & observations.outcome.eq("success")
+    available = set(observations.outcome.unique())
+    chosen = [
+        primary_outcome(a, b, available)
+        for a, b in zip(observations.algorithm_1, observations.algorithm_2)
     ]
+    width = observations[observations.metric.eq("a.num_qubits") & observations.outcome.eq(chosen)]
     pairs = [*families.values(), ("PHASE-ESTIMATION", "SHOR")]
     if width.empty:
         return None
@@ -274,20 +391,25 @@ def plot_widths(observations, output, families):
             ax.text(0.5, 0.5, "Insufficient shared widths", ha="center", transform=ax.transAxes)
         else:
             ax.legend(frameon=False, fontsize=9)
-        ax.set_title(f"{labels.get(first, first)} / {labels.get(second, second)}", fontsize=11)
+        suffix = " (chance-corrected)" if rows.outcome.eq(CHANCE_OUTCOME).any() else ""
+        ax.set_title(
+            f"{labels.get(first, first)} / {labels.get(second, second)}{suffix}", fontsize=11
+        )
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.set_ylim(-2, 102)
         ax.grid(axis="y", alpha=0.2)
     fig.suptitle("Observed success at shared circuit widths")
     fig.supxlabel("Total logical qubits")
-    fig.supylabel("Mean success (%)")
+    fig.supylabel("Mean outcome × 100")
     filename = "shared_widths.png"
     fig.savefig(output / filename, dpi=150)
     plt.close(fig)
     return filename
 
 
-def write_decay_report(output, data, scores, figure):
+def write_decay_report(
+    output, data, scores, figure, catalog=None, rates=None, tolerance=5.0, bootstrap=None
+):
     """Make the Fez baseline reproducible on another chip without a predictive threshold."""
     lines = [
         "# Do related circuits lose success in the same way?",
@@ -317,6 +439,9 @@ def write_decay_report(output, data, scores, figure):
         "same magnitudes. Normalized comparisons use (success − chance) / (ideal success − "
         "chance) wherever the denominator exceeds 1e-8.",
         "",
+    ]
+    lines += gap_sections(catalog, rates, tolerance, bootstrap)
+    lines += [
         "## Width comparisons",
         "",
         "Ranges below span eligible collection periods and describe variation across periods. "
@@ -332,12 +457,14 @@ def write_decay_report(output, data, scores, figure):
             "",
         ]
     if not scores.empty:
-        width = scores[scores.metric.eq("a.num_qubits") & scores.outcome.eq("success")]
+        width = scores[scores.metric.eq("a.num_qubits") & scores.primary.astype(bool)]
         if not width.empty:
             lines += [
-                "| Pair | Periods | Shared widths per period | Spearman ρ | "
-                "Success change A (pp/qubit) | Success change B (pp/qubit) |",
-                "| --- | ---: | ---: | ---: | ---: | ---: |",
+                "Pairs involving Shor use chance-corrected success; all others use success.",
+                "",
+                "| Pair | Outcome | Periods | Shared widths per period | Spearman ρ | "
+                "Change A (points/qubit) | Change B (points/qubit) |",
+                "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
             ]
             for (first, second), pair in width.groupby(["algorithm_1", "algorithm_2"], sort=False):
 
@@ -349,7 +476,8 @@ def write_decay_report(output, data, scores, figure):
                     return bounds[0] if bounds[0] == bounds[1] else " to ".join(bounds)
 
                 lines.append(
-                    f"| {first} / {second} | {len(pair)} | {span(pair.levels, 0)} | "
+                    f"| {first} / {second} | {pair.outcome.iloc[0]} | {len(pair)} | "
+                    f"{span(pair.levels, 0)} | "
                     f"{span(pair.profile_spearman, 2)} | {span(100 * pair.slope_1, 2)} | "
                     f"{span(100 * pair.slope_2, 2)} |"
                 )
@@ -400,6 +528,77 @@ def write_decay_report(output, data, scores, figure):
         "",
     ]
     (output / "report.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def gap_sections(catalog, rates, tolerance, bootstrap):
+    """Headline: gaps with intervals on each pair's primary outcome, then the base rates."""
+    if catalog is None or catalog.empty or not bootstrap:
+        return []
+    lines = [
+        "## How far apart are the fitted losses?",
+        "",
+        "The gap is 100 × |slope A − slope B| × (largest − smallest shared level): the "
+        "difference in fitted change over the shared range, in target points. Each pair is "
+        "read on success, except pairs involving Shor, which are read on chance-corrected "
+        "success because Shor's raw success falls with its chance floor. The table gives the "
+        "median gap across eligible periods with a 95% bootstrap interval and the bootstrap "
+        f"probability that this median is within {tolerance:g} points. An interval that "
+        f"straddles {tolerance:g} supports neither similar nor different decay.",
+        "",
+        f"Bootstrap: {bootstrap['draws']} draws; {bootstrap['method']}.",
+        "",
+    ]
+    for metric, title in ((WIDTH, "Total logical qubits"), (TWO_QUBIT, "Logical two-qubit gates")):
+        rows = catalog[
+            catalog.metric.eq(metric) & catalog.primary_outcome & catalog.periods.gt(0)
+        ].sort_values(["gap_points", "algorithm_1", "algorithm_2"])
+        if rows.empty:
+            continue
+        lines += [
+            f"### {title}",
+            "",
+            "| Pair | Role | Outcome | Periods | Median gap [95% interval] | "
+            f"P(gap ≤ {tolerance:g}) |",
+            "| --- | --- | --- | ---: | ---: | ---: |",
+        ]
+        for r in rows.itertuples():
+            lines.append(
+                f"| {r.algorithm_1} / {r.algorithm_2} | {r.role} | {r.outcome} | {r.periods} | "
+                f"{r.gap_points:.2f} [{r.gap_ci_low:.2f}, {r.gap_ci_high:.2f}] | "
+                f"{r.p_within_tolerance:.2f} |"
+            )
+        lines.append("")
+    if rates is not None and not rates.empty:
+        lines += [
+            "## Do related pairs agree more often than unrelated ones?",
+            "",
+            "Base rates over every resource, on each pair's primary outcome. A window is a "
+            f"point match when both fitted lines fall and the gap is at most {tolerance:g} "
+            "points. Mean P(match) averages the bootstrap probability of that event. A cell is "
+            "one pair on one resource with at least two eligible windows; it repeats when two "
+            "or more of its windows are point matches. Family = QFT/PE, Grover/BV, vTP/GHZ and "
+            "QFT or PE with Shor. Control = any workload with random volumetric. Agreement "
+            "within a family is evidence of family-specific decay only to the extent that it "
+            "exceeds the unrelated and control rates.",
+            "",
+            "| Pair class | Pairs | Windows | Point matches | Mean P(match) | "
+            "Cells | Repeated matches |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ]
+
+        def share(count, total):
+            return f"{count} ({100 * count / total:.1f}%)" if total else "0"
+
+        for r in rates.itertuples():
+            lines.append(
+                f"| {r.comparison_class} | {r.pairs} | {r.windows} | "
+                f"{share(r.windows_point_match, r.windows)} | "
+                f"{'—' if pd.isna(r.mean_p_match) else format(r.mean_p_match, '.3f')} | "
+                f"{r.cells_with_min_periods} | "
+                f"{share(r.cells_repeated_match, r.cells_with_min_periods)} |"
+            )
+        lines += ["", "[Base rates as a table](base_rates.csv)", ""]
+    return lines
 
 
 def plot_linear_trend(chart, output):
@@ -498,6 +697,10 @@ def write_trend_review(data, scores, observations, output, plots):
         available = int(data[outcome].count()) if outcome in data else 0
         lines.append(f"| {name} | {meaning} | {available} / {len(data)} |")
     lines += [
+        "",
+        "Chance-corrected success is the primary outcome for pairs involving Shor. Eight "
+        "of the thirteen Shor configurations stay at their chance floor, so their raw success "
+        "falls with width only because that floor falls.",
         "",
         "For an ideal distribution concentrated on a single accepted bitstring, "
         "Hellinger fidelity and TVD similarity both equal success. Agreement across these "
