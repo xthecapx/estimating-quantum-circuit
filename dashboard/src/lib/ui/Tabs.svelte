@@ -4,6 +4,7 @@
   export interface TabItem {
     id: string;
     label: string;
+    icon?: IconName;
   }
   export interface TabGroup {
     label: string;

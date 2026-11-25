@@ -42,7 +42,7 @@ src/lib/domain/              Pure logic: scope/periods, sweep verdicts and bound
                              histogram binning, calibration merge/schematic, formatting
 src/lib/stats/               Pure statistics (Wilson interval); add new estimators here
 src/lib/state/               Zustand dashboard store, tab navigation, Explorer + CalibrationState
-src/lib/ui/                  Select, Dialog, Tabs, Metadata, Icon
+src/lib/ui/                  Select, Dialog, NavDrawer, Tabs, Metadata, Icon
 src/lib/charts/              EChart wrapper (init, resize, dispose, reduced motion) + palette
 src/views/{range,job,calibration}/   One folder per screen
 tests/unit/                  Vitest for domain/stats/state (no DOM)

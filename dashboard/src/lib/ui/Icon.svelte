@@ -12,8 +12,12 @@
     group: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
     filter: '<path d="M3 5h18l-7 8v5l-4 2v-7z"/>',
     compare: '<path d="M4 3v17h17M8 15l4-5 4 2 4-6"/>',
+    decay: '<path d="M4 3v17h17"/><path d="M7 7c2.5 5 6 8.5 12 9.5"/><path d="M7 12c2.5 2.8 6 4.8 12 5.5" stroke-dasharray="2 2"/>',
+    validation: '<circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.8-5.2"/>',
+    cost: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
     sliders: '<path d="M3 7h7m4 0h7M3 17h11m4 0h3"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/>',
     close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
     search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/>',
   } as const;
   export type IconName = keyof typeof icons;
@@ -24,7 +28,7 @@
 </script>
 
 {#if size}
-  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-width="2">{@html icons[name]}</svg>
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{@html icons[name]}</svg>
 {:else}
   <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">{@html icons[name]}</svg>
 {/if}

@@ -9,22 +9,22 @@ import { formatHash, parseHash, type UrlState } from "./url";
 export const sectionGroups: TabGroup[] = [
   {
     label: "Summary", icon: "experiment",
-    tabs: [{ id: "findings", label: "Findings" }],
+    tabs: [{ id: "findings", label: "Findings", icon: "experiment" }],
   },
   {
     label: "Experiment plots", icon: "compare",
     tabs: [
-      { id: "range", label: "Operating range" },
-      { id: "decay", label: "Compare decay" },
+      { id: "range", label: "Operating range", icon: "compare" },
+      { id: "decay", label: "Compare decay", icon: "decay" },
     ],
   },
   {
     label: "Prediction models", icon: "qubits",
     tabs: [
-      { id: "footprint", label: "Footprint" },
-      { id: "validation", label: "Model validation" },
-      { id: "estimation", label: "Model training" },
-      { id: "cost", label: "Execution cost model" },
+      { id: "footprint", label: "Footprint", icon: "qubits" },
+      { id: "validation", label: "Model validation", icon: "validation" },
+      { id: "estimation", label: "Model training", icon: "sliders" },
+      { id: "cost", label: "Execution cost model", icon: "cost" },
     ],
   },
 ];

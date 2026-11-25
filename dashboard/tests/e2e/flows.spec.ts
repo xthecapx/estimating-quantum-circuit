@@ -16,11 +16,24 @@ async function openFirstJob(page: Page) {
   await expect(page.locator("#histogram-title")).toBeFocused();
 }
 
+async function openNavigation(page: Page) {
+  const toggle = page.getByRole("banner").getByRole("button", { name: /navigation menu/i });
+  if ((await toggle.getAttribute("aria-expanded")) !== "true") {
+    await toggle.click();
+  }
+  return page.getByRole("tablist", { name: "Experiment sections" });
+}
+
+async function selectSection(page: Page, name: string, exact = false) {
+  const navigation = await openNavigation(page);
+  await navigation.getByRole("tab", { name, exact }).click();
+}
+
 test("1 · inline axes and scope filters update the plot and open a histogram @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=range");
   await expect(page.locator("#plot-title")).toContainText("At which qubit counts");
   await page.getByLabel("Algorithm").selectOption({ label: "Grover" });
-  const plot = page.getByRole("region", {name:"Operating range plot"});
+  const plot = page.getByRole("region", { name: "Operating range plot" });
   const y = plot.getByLabel("Y-axis");
   await expect(y.locator("option:checked")).toHaveText("Success rate: How often was the answer accepted?");
   await expect(y.locator("option")).toHaveCount(7);
@@ -33,7 +46,7 @@ test("1 · inline axes and scope filters update the plot and open a histogram @n
   const before = await page.locator("#coverage").textContent();
   await periods.selectOption({ index: 1 });
   await expect(page.locator("#coverage")).not.toHaveText(before!);
-  await plot.getByLabel("X-axis").selectOption({label:"Executed ISA depth"});
+  await plot.getByLabel("X-axis").selectOption({ label: "Executed ISA depth" });
   await expect(page.locator("#plot-title")).toContainText("At which depths");
   await page.reload();
   await expect(y.locator("option:checked")).toHaveText("Differential Success Rate: Did accepted peaks stand out?");
@@ -184,9 +197,9 @@ test("deep links restore the histogram view", async ({ page }) => {
 
 test("compare decay shows matched fits, shares selections and restores range settings @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=range");
-  await page.getByLabel("Algorithm", {exact:true}).selectOption({label:"Grover"});
-  await page.getByRole("tab", {name:"Compare decay"}).click();
-  const panel = page.getByRole("region", {name:"Decay comparison"});
+  await page.getByLabel("Algorithm", { exact: true }).selectOption({ label: "Grover" });
+  await selectSection(page, "Compare decay");
+  const panel = page.getByRole("region", { name: "Decay comparison" });
   const partner = panel.getByLabel("Compare with");
   const outcomePicker = panel.getByLabel("Outcome");
   const outcomeOrder = [
@@ -195,135 +208,135 @@ test("compare decay shows matched fits, shares selections and restores range set
     "Differential success rate · 7 matching pairs",
   ];
   await expect(outcomePicker.locator("option")).toHaveText(outcomeOrder);
-  const primary = panel.getByLabel("Algorithm", {exact:true});
+  const primary = panel.getByLabel("Algorithm", { exact: true });
   await expect(primary.locator("option:checked")).toHaveText("vTP · 5 matching partners");
   await expect(primary.locator("option").last()).toHaveText("Grover · 0 matching partners");
-  await primary.selectOption({label:"Phase estimation · 3 matching partners"});
+  await primary.selectOption({ label: "Phase estimation · 3 matching partners" });
   await expect(partner).toHaveValue("QFT");
   await expect(panel.locator(".worked-example")).toBeHidden();
-  await panel.getByText("How to read this comparison", {exact:true}).click();
-  await expect(panel.getByRole("heading", {name:"Phase estimation contains an inverse QFT"})).toBeVisible();
-  const ratios = panel.getByRole("row", {name:/^Entanglement ratio/});
+  await panel.getByText("How to read this comparison", { exact: true }).click();
+  await expect(panel.getByRole("heading", { name: "Phase estimation contains an inverse QFT" })).toBeVisible();
+  const ratios = panel.getByRole("row", { name: /^Entanglement ratio/ });
   await expect(panel.locator(".worked-example")).toContainText("this window counts toward the first number");
   await expect(ratios.locator("button")).toHaveText(["2 of 3 ✓", "2 of 3 ✓"]);
-  await expect(ratios.locator("td strong")).toHaveText(["4 of 6","2 of 3","2 of 3"]);
-  const gates = panel.getByRole("row", {name:/^Logical two-qubit gates/});
-  await expect(gates.locator("td strong")).toHaveText(["2 of 6","2 of 3","0 of 3"]);
-  await gates.getByRole("button", {name:/ibm_fez/}).click();
-  await expect(panel.locator(".gap-chart li strong")).toHaveText(["31.01 pp","2.25 pp","4.34 pp"]);
-  await panel.getByText("Observed outcomes and fitted trends", {exact:true}).click();
+  await expect(ratios.locator("td strong")).toHaveText(["4 of 6", "2 of 3", "2 of 3"]);
+  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
+  await expect(gates.locator("td strong")).toHaveText(["2 of 6", "2 of 3", "0 of 3"]);
+  await gates.getByRole("button", { name: /ibm_fez/ }).click();
+  await expect(panel.locator(".gap-chart li strong")).toHaveText(["31.01 pp", "2.25 pp", "4.34 pp"]);
+  await panel.getByText("Observed outcomes and fitted trends", { exact: true }).click();
   await expect(panel.locator(".panels article")).toHaveCount(3);
-  await gates.getByRole("button", {name:/ibm_kingston/}).click();
-  await expect(panel.getByRole("heading", {name:"Similar decline in 0 of 3 eligible windows"})).toBeVisible();
+  await gates.getByRole("button", { name: /ibm_kingston/ }).click();
+  await expect(panel.getByRole("heading", { name: "Similar decline in 0 of 3 eligible windows" })).toBeVisible();
   await page.reload();
-  await expect(gates.getByRole("button", {name:/ibm_kingston/})).toHaveAttribute("aria-pressed","true");
+  await expect(gates.getByRole("button", { name: /ibm_kingston/ })).toHaveAttribute("aria-pressed", "true");
   await panel.getByText("Slopes and rank correlations by window").click();
-  await expect(panel.locator(".fit-details tbody tr td:last-child")).toHaveText(["0.90","0.90","0.90"]);
+  await expect(panel.locator(".fit-details tbody tr td:last-child")).toHaveText(["0.90", "0.90", "0.90"]);
   await expect(outcomePicker.locator("option")).toHaveText(outcomeOrder);
-  await outcomePicker.selectOption({label:"Hellinger fidelity · 10 matching pairs"});
-  await expect(panel.getByRole("heading", {name:/how often did Hellinger fidelity fall/i})).toBeVisible();
+  await outcomePicker.selectOption({ label: "Hellinger fidelity · 10 matching pairs" });
+  await expect(panel.getByRole("heading", { name: /how often did Hellinger fidelity fall/i })).toBeVisible();
   await expect(partner).toHaveValue("QFT");
-  await page.getByRole("tab",{name:"Operating range"}).click();
-  await expect(page.getByLabel("Algorithm",{exact:true}).locator("option:checked")).toHaveText("Grover");
+  await selectSection(page, "Operating range");
+  await expect(page.getByLabel("Algorithm", { exact: true }).locator("option:checked")).toHaveText("Grover");
   expect(errors).toEqual([]);
 });
 
-test("compare decay distinguishes limited coverage and includes other measured partners @narrow", async ({page}) => {
+test("compare decay distinguishes limited coverage and includes other measured partners @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=decay");
-  const panel = page.getByRole("region", {name:"Decay comparison"});
-  await panel.getByLabel("Algorithm", {exact:true}).selectOption({label:"Phase estimation · 3 matching partners"});
+  const panel = page.getByRole("region", { name: "Decay comparison" });
+  await panel.getByLabel("Algorithm", { exact: true }).selectOption({ label: "Phase estimation · 3 matching partners" });
   await panel.getByLabel("Compare with").selectOption("SHOR");
-  const width = panel.getByRole("row", {name:/^Total logical qubits/});
+  const width = panel.getByRole("row", { name: /^Total logical qubits/ });
   await expect(width.locator(".match")).toHaveText(["3 of 4", "3 of 3 ✓"]);
   await expect(panel.locator("#count-guide")).toContainText("Unavailable for comparison");
-  await expect(width.locator("td strong")).toHaveText(["3 of 4","0 of 1","3 of 3"]);
-  const unavailable = panel.getByRole("checkbox", {name:"Show unavailable comparisons"});
-  const gates = panel.getByRole("row", {name:/^Logical two-qubit gates/});
+  await expect(width.locator("td strong")).toHaveText(["3 of 4", "0 of 1", "3 of 3"]);
+  const unavailable = panel.getByRole("checkbox", { name: "Show unavailable comparisons" });
+  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates).toHaveCount(0);
   await unavailable.check();
   await expect(panel.locator("#coverage-guide")).toBeVisible();
-  await expect(gates.getByRole("button", {name:/ibm_fez, 0 of 3 shared levels/})).toBeVisible();
+  await expect(gates.getByRole("button", { name: /ibm_fez, 0 of 3 shared levels/ })).toBeVisible();
   await unavailable.uncheck();
   await expect(panel.locator("#coverage-guide")).toHaveCount(0);
   await expect(gates).toHaveCount(0);
-  await width.getByRole("button", {name:/ibm_fez/}).click();
-  await expect(panel.getByRole("heading", {name:"Too few comparable windows"})).toBeVisible();
-  await width.getByRole("button", {name:/ibm_kingston/}).click();
+  await width.getByRole("button", { name: /ibm_fez/ }).click();
+  await expect(panel.getByRole("heading", { name: "Too few comparable windows" })).toBeVisible();
+  await width.getByRole("button", { name: /ibm_kingston/ }).click();
   await expect(panel.locator(".stat strong")).toHaveText("2.59 pp");
-  await panel.getByLabel("Algorithm", {exact:true}).selectOption({label:"Grover · 0 matching partners"});
+  await panel.getByLabel("Algorithm", { exact: true }).selectOption({ label: "Grover · 0 matching partners" });
   await panel.getByLabel("Compare with").selectOption("QFT");
   await page.reload();
-  await expect(panel.getByRole("heading",{name:"Grover and QFT",exact:true})).toBeVisible();
+  await expect(panel.getByRole("heading", { name: "Grover and QFT", exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
   expect(errors).toEqual([]);
 });
 
-test("all-data GHZ and BV comparison includes the new Fez window @narrow", async ({page}) => {
+test("all-data GHZ and BV comparison includes the new Fez window @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=decay&pair=GHZ%2FBERNSTEIN-VAZIRANI&outcome=success");
-  const panel = page.getByRole("region", {name:"Decay comparison"});
+  const panel = page.getByRole("region", { name: "Decay comparison" });
   await expect(panel.getByRole("columnheader")).toHaveText([
     "Circuit resource", "All data", "ibm_fez", "ibm_kingston",
   ]);
-  const gates = panel.getByRole("row", {name:/^Logical two-qubit gates/});
+  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates.locator("td strong")).toHaveText(["0 of 7", "0 of 4", "0 of 3"]);
-  await gates.getByRole("button", {name:/ibm_fez/}).click();
-  const window = panel.locator(".gap-chart li").filter({hasText:"Nov 23, 2026"});
+  await gates.getByRole("button", { name: /ibm_fez/ }).click();
+  const window = panel.locator(".gap-chart li").filter({ hasText: "Nov 23, 2026" });
   await expect(window).toContainText("25.94 pp");
   expect(errors).toEqual([]);
 });
 
-test("Marrakesh validation contributes only to the all-data count @narrow", async ({page}) => {
+test("Marrakesh validation contributes only to the all-data count @narrow", async ({ page }) => {
   await openApp(page, "#section=decay&pair=PHASE-ESTIMATION%2FRANDOM-VOLUMETRIC&outcome=success");
-  const panel = page.getByRole("region", {name:"Decay comparison"});
-  const widths = panel.getByRole("row", {name:/^Total logical qubits/});
+  const panel = page.getByRole("region", { name: "Decay comparison" });
+  const widths = panel.getByRole("row", { name: /^Total logical qubits/ });
   await expect(widths.locator("td strong")).toHaveText(["2 of 7", "0 of 3", "1 of 3"]);
   await expect(panel.getByRole("columnheader")).toHaveText(["Circuit resource", "All data", "ibm_fez", "ibm_kingston"]);
 });
 
-test("footprint tab traces metric selection, subset scores and model results @narrow", async ({page}) => {
+test("footprint tab traces metric selection, subset scores and model results @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=range");
-  await page.getByRole("tab", {name:"Footprint", exact:true}).click();
-  const panel = page.getByRole("region", {name:"Footprint selection experiment"});
-  await panel.getByLabel("Target quality metric").selectOption({label:"Success Rate"});
-  const selected = panel.getByRole("region", {name:"Selected footprint"});
+  await selectSection(page, "Footprint", true);
+  const panel = page.getByRole("region", { name: "Footprint selection experiment" });
+  await panel.getByLabel("Target quality metric").selectOption({ label: "Success Rate" });
+  const selected = panel.getByRole("region", { name: "Selected footprint" });
   await expect(selected.getByRole("button")).toHaveCount(10);
-  await expect(panel.getByRole("list", {name:"Footprint generation process"}).getByRole("listitem")).toHaveCount(3);
-  const volume = selected.getByRole("button", {name:"Circuit volume",exact:true});
+  await expect(panel.getByRole("list", { name: "Footprint generation process" }).getByRole("listitem")).toHaveCount(3);
+  const volume = selected.getByRole("button", { name: "Circuit volume", exact: true });
   await volume.click();
   await expect(volume).toHaveAttribute("aria-pressed", "true");
   await expect(selected.getByText(/Circuit width multiplied by depth/)).toBeVisible();
   await expect(panel.locator(".evidence details[open]")).toHaveCount(0);
-  await panel.getByText("Why each metric was kept or left out", {exact:true}).click();
-  const metrics = panel.getByRole("table", {name:"Metric selection evidence"});
+  await panel.getByText("Why each metric was kept or left out", { exact: true }).click();
+  const metrics = panel.getByRole("table", { name: "Metric selection evidence" });
   await expect(metrics.locator("tbody tr")).toHaveCount(11);
-  await expect(metrics.getByText("Retained", {exact:true})).toHaveCount(10);
-  await panel.getByText("How many metrics were enough?", {exact:true}).click();
-  await expect(panel.getByRole("table", {name:"LightGBM footprint size experiment"}).getByRole("row", {name:/10 · Selected/})).toContainText("0.8323");
-  await panel.getByText("How did the regressors perform?", {exact:true}).click();
-  await expect(panel.getByRole("table", {name:"Circuit-only regressor performance"}).locator("tbody tr")).toHaveCount(8);
+  await expect(metrics.getByText("Retained", { exact: true })).toHaveCount(10);
+  await panel.getByText("How many metrics were enough?", { exact: true }).click();
+  await expect(panel.getByRole("table", { name: "LightGBM footprint size experiment" }).getByRole("row", { name: /10 · Selected/ })).toContainText("0.8323");
+  await panel.getByText("How did the regressors perform?", { exact: true }).click();
+  await expect(panel.getByRole("table", { name: "Circuit-only regressor performance" }).locator("tbody tr")).toHaveCount(8);
   await panel.getByText("Ranking formula and SHAP contributions").click();
-  await expect(panel.getByRole("img", {name:"Mean absolute SHAP by circuit metric"}).locator("svg")).toBeVisible();
-  await panel.getByLabel("Chip / Scope").selectOption({label:"IBM Fez (ibm_fez)"});
+  await expect(panel.getByRole("img", { name: "Mean absolute SHAP by circuit metric" }).locator("svg")).toBeVisible();
+  await panel.getByLabel("Chip / Scope").selectOption({ label: "IBM Fez (ibm_fez)" });
   await expect(selected.getByRole("button")).toHaveCount(8);
   await page.reload();
-  await panel.getByText("Why each metric was kept or left out", {exact:true}).click();
+  await panel.getByText("Why each metric was kept or left out", { exact: true }).click();
   await expect(metrics.locator("tbody tr")).toHaveCount(15);
   await expect(panel.getByLabel("Target quality metric").locator("option:checked")).toHaveText("Success Rate");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-  await page.getByRole("tab", {name:"Model training"}).click();
+  await selectSection(page, "Model training");
   await expect(page.getByLabel("Thesis view")).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test("direction compares column loss to row loss and preserves the question on reload @narrow", async ({page}) => {
+test("direction compares column loss to row loss and preserves the question on reload @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=decay&b=ibm_kingston&resource=a.num_qubits&outcome=success&pair=QFT%2FPHASE-ESTIMATION");
-  const panel = page.getByRole("region", {name:"Decay comparison"});
+  const panel = page.getByRole("region", { name: "Decay comparison" });
   await panel.locator(".matrix-section > summary").click();
   await expect(panel.locator("#matrix-guide")).toContainText("Which algorithm pairs show similar changes");
-  await panel.getByLabel("Matrix view").selectOption({label:"Direction"});
+  await panel.getByLabel("Matrix view").selectOption({ label: "Direction" });
   await expect(panel.locator("#matrix-guide")).toContainText("larger fitted decrease in success rate");
-  const forward = panel.getByRole("button", {name:/^QFT to PE:/});
-  const reverse = panel.getByRole("button", {name:/^PE to QFT:/});
+  const forward = panel.getByRole("button", { name: /^QFT to PE:/ });
+  const reverse = panel.getByRole("button", { name: /^PE to QFT:/ });
   const shown = Number(await forward.innerText());
   expect(Number.isFinite(shown)).toBeTruthy();
   expect(Number(await reverse.innerText()) + shown).toBeCloseTo(0);
@@ -334,7 +347,7 @@ test("direction compares column loss to row loss and preserves the question on r
   await panel.locator(".matrix-section > summary").click();
   await expect(reverse).toHaveAttribute("aria-pressed", "true");
   await expect(panel.locator(".gap-chart")).toBeVisible();
-  await panel.getByLabel("Matrix view").selectOption({label:"Similarity"});
+  await panel.getByLabel("Matrix view").selectOption({ label: "Similarity" });
   await expect(panel.locator(".stat span")).toHaveText("Median gap in fitted change");
   expect(errors).toEqual([]);
 });
@@ -558,9 +571,47 @@ test("touch dragging the target grip changes the success percentage @narrow", as
   expect(Number(await page.getByLabel("Minimum success rate").inputValue())).toBeLessThan(50);
 });
 
-test("navigation groups plots and models in keyboard order @narrow", async ({ page }) => {
+test("navigation drawer collapses to icon rail on desktop and slides as overlay on mobile @narrow", async ({ page, isMobile }) => {
   await openApp(page, "#section=range&mode=overview");
+  const toggle = page.getByRole("banner").getByRole("button", { name: /navigation menu/i });
+  const drawer = page.locator("#nav-drawer");
+
+  if (isMobile) {
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await expect(drawer).toBeHidden();
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(drawer).toBeVisible();
+  } else {
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(drawer).toBeVisible();
+    const expandedBox = (await drawer.boundingBox())!;
+    expect(expandedBox.width).toBeGreaterThanOrEqual(240);
+
+    // Collapsing on desktop shrinks to the icon rail instead of hiding completely.
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveClass(/collapsed/);
+    await expect.poll(async () => (await drawer.boundingBox())!.width).toBeLessThanOrEqual(70);
+    await expect(drawer.getByRole("tab")).toHaveCount(7);
+    await expect(drawer.getByRole("tab", { name: "Compare decay" })).toHaveAttribute("title", "Compare decay");
+
+    // Collapsed icon buttons stay interactive.
+    await drawer.getByRole("tab", { name: "Compare decay" }).click();
+    await expect(page).toHaveURL(/section=decay/);
+    await drawer.getByRole("tab", { name: "Operating range" }).click();
+    await expect(page).toHaveURL(/section=range/);
+
+    // Expanding restores the full labeled drawer.
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(drawer).not.toHaveClass(/collapsed/);
+    await expect.poll(async () => (await drawer.boundingBox())!.width).toBeGreaterThanOrEqual(240);
+  }
+
   const navigation = page.getByRole("tablist", { name: "Experiment sections" });
+  await expect(navigation).toHaveAttribute("aria-orientation", "vertical");
   const tabs = navigation.getByRole("tab");
   await expect(tabs).toHaveText([
     "Findings", "Operating range", "Compare decay", "Footprint",
@@ -570,11 +621,32 @@ test("navigation groups plots and models in keyboard order @narrow", async ({ pa
   await expect(tabs.first()).toHaveAccessibleDescription("Summary");
   await expect(tabs.nth(1)).toHaveAccessibleDescription("Experiment plots");
   await expect(tabs.nth(3)).toHaveAccessibleDescription("Prediction models");
+
+  // All section links stack in a single vertical column.
+  const boxes = await Promise.all(Array.from({ length: 7 }, (_, i) => tabs.nth(i).boundingBox()));
+  for (let i = 1; i < boxes.length; i++) {
+    expect(boxes[i]!.y).toBeGreaterThan(boxes[i - 1]!.y);
+    expect(Math.abs(boxes[i]!.x - boxes[0]!.x)).toBeLessThanOrEqual(1);
+  }
+
   const position = await navigation.boundingBox();
-  await expect(page.getByRole("switch", { name: "Show run details" })).not.toBeChecked();
-  await tabs.nth(2).click();
-  expect(await navigation.boundingBox()).toEqual(position);
-  await tabs.nth(2).press("ArrowRight");
+  if (isMobile) {
+    await tabs.nth(2).click();
+    await expect(drawer).toBeHidden();
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await toggle.click();
+    await expect(tabs.nth(2)).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(drawer).toBeHidden();
+    await expect(toggle).toBeFocused();
+    await toggle.click();
+  } else {
+    await expect(page.getByRole("switch", { name: "Show run details" })).not.toBeChecked();
+    await tabs.nth(2).click();
+    expect(await navigation.boundingBox()).toEqual(position);
+  }
+
+  await tabs.nth(2).press("ArrowDown");
   await expect(tabs.nth(3)).toBeFocused();
   await expect(page).toHaveURL(/section=footprint/);
   await tabs.nth(3).press("End");
@@ -589,24 +661,35 @@ test("navigation groups plots and models in keyboard order @narrow", async ({ pa
 
 test("execution cost label stays on one line without moving on selection", async ({ page }) => {
   await openApp(page);
-  const cost = page.getByRole("tab", { name: "Execution cost model" });
-  const training = page.getByRole("tab", { name: "Model training" });
+  const toggle = page.getByRole("banner").getByRole("button", { name: /navigation menu/i });
   for (const width of [1280, 1024, 901, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
-    await training.click();
+    await expect(toggle).toHaveAttribute("aria-expanded", width >= 960 ? "true" : "false");
+    await selectSection(page, "Model training");
+    const navigation = await openNavigation(page);
+    const cost = navigation.getByRole("tab", { name: "Execution cost model" });
     const before = await cost.boundingBox();
     await cost.click();
-    await expect(cost).toHaveAttribute("aria-selected", "true");
-    expect(await cost.boundingBox()).toEqual(before);
-    const fits = await cost.evaluate(button => {
+    const afterNav = await openNavigation(page);
+    const activeCost = afterNav.getByRole("tab", { name: "Execution cost model" });
+    await expect(activeCost).toHaveAttribute("aria-selected", "true");
+    if (width >= 960) {
+      expect(await activeCost.boundingBox()).toEqual(before);
+    }
+    await expect.poll(() => activeCost.evaluate(button => {
+      const label = button.querySelector(".tab-label") ?? button;
       const range = document.createRange();
-      range.selectNodeContents(button);
+      range.selectNodeContents(label);
       const lines = range.getClientRects();
       const bounds = button.getBoundingClientRect();
       return lines.length === 1 && lines[0].left >= bounds.left && lines[0].right <= bounds.right &&
         bounds.left >= 0 && bounds.right <= innerWidth;
-    });
-    expect(fits, `Label fits at ${width}px`).toBe(true);
+    }), { message: `Label fits at ${width}px` }).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+    if (width < 960) {
+      await toggle.click();
+      await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    }
   }
 });
 
@@ -621,7 +704,8 @@ test("findings is the landing page and explains the result in plain terms @narro
   await panel.getByLabel("Quality measure").selectOption({ label: "Hellinger fidelity" });
   await expect(panel.getByText(/Hellinger fidelity: how close/)).toBeVisible();
   await panel.getByRole("button", { name: "Pre-registered test" }).click();
-  await expect(page.getByRole("tab", { name: "Model validation", exact: true })).toHaveAttribute("aria-selected", "true");
+  const navigation = await openNavigation(page);
+  await expect(navigation.getByRole("tab", { name: "Model validation", exact: true })).toHaveAttribute("aria-selected", "true");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
   expect(errors).toEqual([]);
 });
