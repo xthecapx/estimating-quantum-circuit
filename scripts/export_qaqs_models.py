@@ -3,7 +3,7 @@
 
     python scripts/export_qaqs_models.py --qward ../qiskit-qward
 
-Reads the frozen joblib bundles in ``report/ml_estimation`` (Fez and Kingston circuit-only
+Reads the frozen joblib bundles in ``report/frozen_v1`` (Fez and Kingston circuit-only
 quality models, plus the execution-cost model) and writes, inside the QWARD checkout:
 
 * ``qward/qaqs/data/models/<id>.json``  tree arrays / support vectors / medians, plus a model
@@ -34,10 +34,29 @@ sys.path.insert(0, str(ROOT))
 import experiments.qaqs_cost as cost  # noqa: E402,F401  (registers the model classes for joblib)
 from experiments.ml_dataset import load_ml_dataset  # noqa: E402
 
-MODELS = ROOT / "report" / "ml_estimation" / "models"
-COST = ROOT / "report" / "ml_estimation" / "cost"
+FROZEN = ROOT / "report" / "frozen_v1"
+MODELS = FROZEN / "models"
+COST = FROZEN / "cost"
+PROSPECTIVE = FROZEN / "prospective"
 SCHEMA = 1
-CHIPS = ("ibm_fez", "ibm_kingston")
+
+
+def frozen_chips() -> tuple[str, ...]:
+    """Chips that have a frozen circuit-only model, read from the model manifest."""
+    manifest = json.loads((MODELS / "models_manifest.json").read_text())["models"]
+    return tuple(sorted({m["scope"] for m in manifest if m["scope"] != "pooled" and m["regime"] == "circuit_only"}))
+
+
+def prospective_registration(chip: str) -> Path | None:
+    """Latest scored pre-registration for a chip, or None (WAITING FOR DATA)."""
+    for path in sorted(PROSPECTIVE.glob("*-validation-v*_predictions.json"), reverse=True):
+        if not path.with_name(path.name.replace("_predictions.json", "_scores.csv")).is_file():
+            continue
+        if json.loads(path.read_text()).get("backend") == chip:
+            return path
+    return None
+
+
 TARGETS = ("success", "hellinger", "tvd", "dsr")
 GOLDEN_ROWS = 40
 # Circuit-size columns reported in every model card so users can tell when a circuit is
@@ -152,13 +171,16 @@ def _write_fixtures(args, *, frame_all: pd.DataFrame, out: Path, model, saved) -
     pre-registered / frozen-model predictions, for end-to-end parity tests in QWARD."""
     import glob
 
-    chips = {"ibm_fez": "fez", "ibm_kingston": "kingston"}
+    chips = frozen_chips()
     fixtures = []
-    needed = sorted({f for t in TARGETS for c in CHIPS for f in json.loads(
+    needed = sorted({f for t in TARGETS for c in chips for f in json.loads(
         (args.qward / "qward" / "qaqs" / "data" / "models" / f"{c}_{t}.json").read_text())["features"]})
     cost_feats = list(saved["features"])
-    for chip, short in chips.items():
-        reg = json.loads((ROOT / "report" / "ml_estimation" / "prospective" / f"{short}-validation-v1-2026-11-16_predictions.json").read_text())
+    for chip in chips:
+        registration = prospective_registration(chip)
+        if registration is None:  # WAITING FOR DATA: no scored prospective run for this chip
+            continue
+        reg = json.loads(registration.read_text())
         preds = pd.DataFrame(reg["predictions"])
         for config in FIXTURE_CONFIGS:
             rows = frame_all[(frame_all["meta.backend_name"] == chip) & (frame_all["meta.config_id"] == config)
@@ -212,7 +234,7 @@ def main() -> None:
 
     frame = load_ml_dataset(args.tables).frame  # training view: validation campaigns excluded
     manifest = {(m["scope"], m["target"], m["regime"]): m for m in json.loads((MODELS / "models_manifest.json").read_text())["models"]}
-    summary = pd.read_csv(ROOT / "report" / "ml_estimation" / "prospective" / "validation-v1_summary.csv")
+    summary = pd.read_csv(PROSPECTIVE / "validation-v1_summary.csv")
     provenance = {
         "thesisCommit": _git("rev-parse", "HEAD"),
         "modelsManifestSha256": hashlib.sha256((MODELS / "models_manifest.json").read_bytes()).hexdigest(),
@@ -221,7 +243,8 @@ def main() -> None:
     }
     golden: dict = {"schemaVersion": SCHEMA, "models": {}}
 
-    for chip in CHIPS:
+    trained = frozen_chips()
+    for chip in trained:
         sub = frame[frame["meta.backend_name"] == chip]
         for target in TARGETS:
             bundle = joblib.load(MODELS / f"{chip}_{target}_circuit_only.joblib")
@@ -230,7 +253,7 @@ def main() -> None:
             row = manifest[(chip, target, "circuit_only")]
             rows = summary[(summary.regime == "circuit_only") & (summary.group == "new") & (summary.target == target) & (summary.scope == chip)]
             same = rows[rows.backend == chip]
-            unseen = rows[rows.backend == "ibm_marrakesh"]
+            unseen = rows[~rows.backend.isin(trained)].sort_values("backend").head(1)
 
             def card(df):
                 if df.empty:
@@ -272,7 +295,8 @@ def main() -> None:
     # ---- execution-cost model
     saved = joblib.load(COST / "cost_model.joblib")
     model = saved["pipeline"]
-    snapshot = json.loads((ROOT / "dashboard" / "experiments" / "cost" / "cost-v1.json").read_text())
+    # The evaluation snapshot written with the frozen model, not the dashboard's current one.
+    snapshot = json.loads((COST / "cost_snapshot.json").read_text())
     data = cost.cost_frame(args.tables)
     train = data[~data["validation"]]
     res = model.residual_

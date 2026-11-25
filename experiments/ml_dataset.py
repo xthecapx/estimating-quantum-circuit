@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from dataclasses import dataclass
+import warnings
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
@@ -34,6 +35,19 @@ TARGETS: dict[str, tuple[str, str, bool]] = {
         True,
     ),
 }
+
+# Chance-corrected targets: the outcome with the chance level of the circuit removed,
+# so an algorithm that only reaches chance scores 0 whatever its success-set size.
+# Kept apart from ``TARGETS`` because the frozen v1 models and their prospective
+# scores cover ``TARGETS`` only.
+CHANCE_CORRECTED_TARGETS: dict[str, tuple[str, str, bool]] = {
+    "success_adj": (
+        "f.fidelity.chance_corrected_success",
+        "Chance-Corrected Success",
+        True,
+    ),
+}
+ALL_TARGETS: dict[str, tuple[str, str, bool]] = {**TARGETS, **CHANCE_CORRECTED_TARGETS}
 
 FAMILIES: dict[str, tuple[str, str]] = {
     "fourier": ("QFT", "PHASE-ESTIMATION"),
@@ -100,30 +114,43 @@ EXCLUDED_PREFIXES = (
     "b.QiskitMetrics.scheduling_metrics.",
 )
 
-# Explicit holdout campaign patterns per backend for reproducible thesis evaluation.
-DEFAULT_HOLDOUT_CAMPAIGNS: dict[str, tuple[str, ...]] = {
-    # `fez-dataset-v2-pilot-r2` is deliberately NOT held out: it ran on 2026-11-04 01:43Z,
-    # before the `fez-dataset-v2` window-1 training data (2026-11-04 13:13Z), so holding
-    # it out would break the strictly-later-than-training guarantee of the temporal split.
-    "ibm_fez": (
-        "fez-full-shor-growth-v1-2026-11-06",
-        "fez-oracle-growth-v1-2026-11-07",
-        "fez-oracle-growth-v1-2026-11-07-makeup",
-        "fez-oracle-growth-v1-2026-11-07-standalone",
-    ),
-    "ibm_kingston": (
-        "kingston-full-oracle-growth-v1-2026-11-11",
-    ),
-}
-
-
-# Prospective-validation collections. They are scored against frozen models and must
-# never enter training, feature selection or tuning: excluded unless explicitly asked.
+# --------------------------------------------------------------------------- campaigns
+#
+# Every campaign has exactly one role. Nothing else in the pipeline names a campaign.
+#
+#   train        enters model fitting, feature selection, tuning and every split.
+#   validation   prospective validation: scored against frozen models, never trained on.
+#   exploratory  one-off studies with their own question (e.g. a transfer window). Kept
+#                out of training so they can never leak into a later evaluation.
+#
+# New providers need no entry here: an unlisted campaign is `train` unless its id
+# carries a validation marker.
 VALIDATION_CAMPAIGN_MARKERS: tuple[str, ...] = ("-validation-v",)
+EXPLORATORY_CAMPAIGNS: frozenset[str] = frozenset({"fez-ghz-bv-transfer-v1-2026-11-23"})
+CAMPAIGN_ROLES: tuple[str, ...] = ("train", "validation", "exploratory")
+
+# Calibration-cycle validation holds out the latest windows of each chip until they
+# cover at least this share of the chip's training-role jobs.
+CALIBRATION_CYCLE_HOLDOUT_SHARE = 0.30
+
+# Device-level calibration: one value per (chip, calibration snapshot). The exported
+# `c.*` columns summarise only the qubits a circuit was mapped to, so they encode circuit
+# size; `cal.*` is the median of those summaries over every job that shares a snapshot.
+DEVICE_CALIBRATION_PREFIX = "cal."
+CHANCE_BASELINE_COLUMN = "f.fidelity.chance_baseline"
 
 
 def is_validation_campaign(campaign_id: str) -> bool:
     return any(marker in str(campaign_id) for marker in VALIDATION_CAMPAIGN_MARKERS)
+
+
+def campaign_role(campaign_id: str) -> str:
+    """Role of a campaign: ``train``, ``validation`` or ``exploratory``."""
+    if is_validation_campaign(campaign_id):
+        return "validation"
+    if str(campaign_id) in EXPLORATORY_CAMPAIGNS:
+        return "exploratory"
+    return "train"
 
 
 @dataclass(frozen=True)
@@ -137,6 +164,7 @@ class DatasetBundle:
     hardware_submit_features: list[str]
     hardware_exec_features: list[str]
     exec_to_submit_map: dict[str, str]
+    device_calibration_features: list[str] = field(default_factory=list)
 
 
 def infer_provider(backend_name: str, explicit_provider: str | None = None) -> tuple[str, str]:
@@ -198,15 +226,17 @@ def load_ml_dataset(
     backends: Sequence[str] | None = None,
     providers: Sequence[str] | None = None,
     include_validation: bool = False,
+    roles: Sequence[str] | None = None,
 ) -> DatasetBundle:
     """Load and validate CSV dataset parts against `dataset_manifest.json`.
 
     Compatible with current IBM exports and future Rigetti / IonQ CSV exports using
     the same schema convention (`meta.*`, `a.*`, `b.*`, `c.*`, `d.*`, `e.*`, `f.*`, `g.*`).
 
-    Prospective-validation campaigns are dropped unless ``include_validation`` is set,
-    so the training pipeline can never see them. ``manifest_hash``/``inputs`` still
-    describe the full export.
+    Only ``train``-role campaigns are returned by default (see ``campaign_role``), so the
+    training pipeline can never see prospective-validation or exploratory collections.
+    ``include_validation=True`` returns every campaign; ``roles`` selects explicitly.
+    ``manifest_hash``/``inputs`` still describe the full export.
     """
     manifest_path = tables / "dataset_manifest.json"
     if manifest_path.exists():
@@ -250,8 +280,12 @@ def load_ml_dataset(
     frame["meta.provider"] = [pair[0] for pair in inferred]
     frame["meta.modality"] = [pair[1] for pair in inferred]
 
-    if not include_validation:
-        frame = frame[~frame["meta.campaign_id"].map(is_validation_campaign)].copy()
+    frame["meta.campaign_role"] = frame["meta.campaign_id"].map(campaign_role)
+    wanted = set(roles) if roles is not None else (set(CAMPAIGN_ROLES) if include_validation else {"train"})
+    unknown = wanted - set(CAMPAIGN_ROLES)
+    if unknown:
+        raise ValueError(f"Unknown campaign roles: {sorted(unknown)}")
+    frame = frame[frame["meta.campaign_role"].isin(wanted)].copy()
     if backends:
         allowed_backends = set(backends)
         frame = frame[frame["meta.backend_name"].isin(allowed_backends)].copy()
@@ -296,9 +330,10 @@ def load_ml_dataset(
     hw_submit_features = _extract_numeric_features(frame, "c.")
     hw_exec_features = _extract_numeric_features(frame, "d.")
     exec_to_submit = _canonicalize_hardware_columns(frame, hw_submit_features, hw_exec_features)
+    device_features = add_device_calibration(frame, hw_submit_features)
 
     # Ensure targets and baselines are numeric where present.
-    for col, _, _ in TARGETS.values():
+    for col, _, _ in ALL_TARGETS.values():
         if col in frame.columns:
             frame[col] = pd.to_numeric(frame[col], errors="coerce")
 
@@ -321,7 +356,36 @@ def load_ml_dataset(
         hardware_submit_features=hw_submit_features,
         hardware_exec_features=hw_exec_features,
         exec_to_submit_map=exec_to_submit,
+        device_calibration_features=device_features,
     )
+
+
+def add_device_calibration(frame: pd.DataFrame, hw_submit_features: Sequence[str]) -> list[str]:
+    """Add ``cal.*`` device-level calibration columns in place; return their names.
+
+    One value per (chip, calibration snapshot): the median, over every job submitted
+    under that snapshot, of the job's ``c.<metric>.median``. It cannot vary with the
+    circuit inside a snapshot, unlike ``c.*``. Jobs without a snapshot timestamp fall
+    back to their collection window.
+    """
+    if "c.calibrated_at" in frame.columns:
+        snapshot = frame["c.calibrated_at"].astype(str)
+        snapshot = snapshot.where(frame["c.calibrated_at"].notna(), frame["period"].astype(str))
+    else:
+        snapshot = frame["period"].astype(str)
+    key = frame["meta.backend_name"].astype(str) + " @ " + snapshot
+    out: list[str] = []
+    with warnings.catch_warnings():  # a handful of in-place columns on an already wide frame
+        warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+        frame["meta.calibration_snapshot"] = key
+        for col in hw_submit_features:
+            if not col.endswith(".median"):
+                continue
+            name = DEVICE_CALIBRATION_PREFIX + col[2 : -len(".median")]
+            frame[name] = frame.groupby(key)[col].transform("median")
+            if frame[name].notna().any():
+                out.append(name)
+    return out
 
 
 def baseline_predictions(frame: pd.DataFrame, target_key: str) -> dict[str, pd.Series]:
@@ -357,81 +421,52 @@ def baseline_predictions(frame: pd.DataFrame, target_key: str) -> dict[str, pd.S
 def split_temporal_and_cv(
     frame: pd.DataFrame,
     holdout_campaigns: Sequence[str] | None = None,
+    holdout_share: float = CALIBRATION_CYCLE_HOLDOUT_SHARE,
 ) -> tuple[pd.Series, list[str]]:
-    """Return boolean mask `is_holdout` and list of holdout period labels.
+    """Calibration-cycle split: boolean mask ``is_holdout`` and the held-out periods.
 
-    Supports multi-backend / multi-provider datasets by holding out the specified
-    `holdout_campaigns`, or else the backend defaults (`DEFAULT_HOLDOUT_CAMPAIGNS`),
-    or automatically the chronologically latest period for newly added backends
-    (such as future Rigetti or IonQ campaigns).
+    Per chip, collection windows are ordered by their last finished job and the latest
+    ones are held out until they cover ``holdout_share`` of the chip's jobs. The rule
+    is derived from the data, so a new chip or provider needs no configuration.
+    ``holdout_campaigns`` overrides it with explicit campaign ids.
     """
     is_holdout = pd.Series(False, index=frame.index)
-    explicit = set(holdout_campaigns) if holdout_campaigns else set()
-
-    if explicit:
-        is_holdout = frame["meta.campaign_id"].isin(explicit)
+    if holdout_campaigns:
+        is_holdout = frame["meta.campaign_id"].isin(set(holdout_campaigns))
     else:
-        for backend, sub in frame.groupby("meta.backend_name"):
-            default_campaigns = DEFAULT_HOLDOUT_CAMPAIGNS.get(str(backend))
-            if default_campaigns:
-                matched = sub["meta.campaign_id"].isin(default_campaigns)
-                if matched.any() and (~matched).any():
-                    is_holdout.loc[sub.index] = matched
-                    continue
-            # Automatic chronological fallback for future QPUs (Rigetti, IonQ, new IBM).
-            periods = sub["period"].unique()
-            if len(periods) > 1:
-                if "g.finished_at" in sub.columns and sub["g.finished_at"].notna().any():
-                    order = (
-                        sub.groupby("period")["g.finished_at"]
-                        .max()
-                        .sort_values()
-                        .index.tolist()
-                    )
-                else:
-                    order = sorted(periods)
-                latest_period = order[-1]
-                is_holdout.loc[sub.index] = sub["period"] == latest_period
+        has_time = "g.finished_at" in frame.columns
+        for _, sub in frame.groupby("meta.backend_name"):
+            if sub["period"].nunique() < 2:
+                continue
+            if has_time and sub["g.finished_at"].notna().any():
+                finished = pd.to_datetime(sub["g.finished_at"], utc=True, errors="coerce")
+                order = finished.groupby(sub["period"]).max().sort_values().index.tolist()
+            else:
+                order = sorted(sub["period"].unique())
+            sizes = sub["period"].value_counts()
+            held: list[str] = []
+            covered = 0
+            for period in reversed(order[1:]):  # the earliest window always trains
+                held.append(period)
+                covered += int(sizes[period])
+                if covered >= holdout_share * len(sub):
+                    break
+            is_holdout.loc[sub.index] = sub["period"].isin(held)
 
     holdout_periods = sorted(frame.loc[is_holdout, "period"].unique().tolist())
     return is_holdout, holdout_periods
 
 
-def split_by_config(
-    frame: pd.DataFrame,
-    holdout_frac: float = 0.15,
-    seed: int = 11,
-) -> tuple[pd.Series, list[str]]:
-    """Hold out ``holdout_frac`` of circuit *configurations* (never individual jobs).
+def headline_mask(frame: pd.DataFrame, target_key: str) -> pd.Series:
+    """Jobs that count towards the headline score of a target.
 
-    All repetitions of a configuration, on every chip and in every window, go to the
-    same side, so train and test never share a circuit. Configurations are stratified
-    by algorithm and by size (median two-qubit gate count): each algorithm's sorted
-    configurations are cut into ``k`` contiguous size bins and one is drawn per bin,
-    so the holdout spans small and large circuits of every algorithm.
-
-    The choice depends only on the set of configuration ids, so the same holdout is
-    obtained for each single-chip scope and for the pooled scope.
+    The composite anchor sits at its chance level on raw targets, so separating it
+    from the other algorithms earns R^2 without predicting anything: it is scored
+    separately. On a chance-corrected target every job counts.
     """
-    size_col = "b.two_qubit_gates" if "b.two_qubit_gates" in frame.columns else "a.num_qubits"
-    cfg = (
-        frame.assign(_size=pd.to_numeric(frame[size_col], errors="coerce"))
-        .groupby("meta.config_id")
-        .agg(algorithm=("meta.algorithm", "first"), size=("_size", "median"))
-        .reset_index()
-    )
-    rng = np.random.default_rng(seed)
-    held: list[str] = []
-    for _, grp in cfg.groupby("algorithm"):
-        grp = grp.sort_values(["size", "meta.config_id"])
-        n = len(grp)
-        k = int(round(holdout_frac * n))
-        if n < 4 or k < 1:
-            continue
-        for chunk in np.array_split(grp["meta.config_id"].to_numpy(), k):
-            held.append(str(rng.choice(chunk)))
-    held_sorted = sorted(held)
-    return frame["meta.config_id"].astype(str).isin(set(held_sorted)), held_sorted
+    if target_key in CHANCE_CORRECTED_TARGETS:
+        return pd.Series(True, index=frame.index)
+    return frame["meta.algorithm"] != COMPOSITE_ANCHOR
 
 
 def temporal_ordering(frame: pd.DataFrame, is_holdout: pd.Series) -> dict[str, object]:

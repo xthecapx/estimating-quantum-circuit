@@ -403,11 +403,16 @@ def _group_cv_r2_mae(
     y: np.ndarray,
     groups: pd.Series,
     max_splits: int = 5,
-) -> tuple[float | None, float | None]:
-    """Compute clipped [0, 1] out-of-fold GroupKFold R^2 and MAE for feature ablation."""
+) -> tuple[float | None, float | None, float | None]:
+    """Clipped [0, 1] out-of-fold GroupKFold R^2 and MAE, plus the standard error of R^2.
+
+    The standard error is the sd of the per-fold R^2 divided by sqrt(folds); it sizes
+    the noise of one ablation point for the one-standard-error rule.
+    """
     n_groups = int(groups.nunique())
     n_splits = min(max_splits, n_groups)
     preds = np.full(len(X), np.nan, dtype=float)
+    fold_r2: list[float] = []
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         if n_splits < 2:
@@ -422,13 +427,18 @@ def _group_cv_r2_mae(
                 preds[val_idx] = np.clip(
                     np.asarray(est.predict(X.iloc[val_idx]), dtype=float), 0.0, 1.0
                 )
+                yv = y[val_idx]
+                ok = np.isfinite(yv)
+                if int(ok.sum()) >= 3 and np.std(yv[ok]) > 1e-12:
+                    fold_r2.append(float(r2_score(yv[ok], preds[val_idx][ok])))
     mask = np.isfinite(y) & np.isfinite(preds)
     if int(mask.sum()) < 3:
-        return None, None
+        return None, None, None
     yt, yp = y[mask], preds[mask]
     r2 = float(r2_score(yt, yp)) if np.std(yt) > 1e-12 else 0.0
     mae = float(mean_absolute_error(yt, yp))
-    return (r2 if np.isfinite(r2) else None), (mae if np.isfinite(mae) else None)
+    se = float(np.std(fold_r2, ddof=1) / np.sqrt(len(fold_r2))) if len(fold_r2) > 1 else None
+    return (r2 if np.isfinite(r2) else None), (mae if np.isfinite(mae) else None), se
 
 
 def select_best_footprint(
@@ -453,7 +463,8 @@ def select_best_footprint(
     ``contrib_model`` to compute out-of-sample Permutation Importance and SHAP, and
     ranks candidates by composite predictive contribution.
     Stage 2 runs a GroupKFold CV ablation over top-k subsets and selects the smallest
-    parsimonious subset within ``r2_tolerance`` of peak positive-feature CV R^2.
+    subset within one standard error of the peak CV R^2 (one-standard-error rule).
+    The ablation R^2 is a selection score, not a performance estimate.
 
     Contributions are computed out-of-fold on ``train_frame`` by default so that the
     temporal holdout never influences which features are selected (otherwise the
@@ -534,7 +545,7 @@ def select_best_footprint(
     ablation_curve: list[dict[str, Any]] = []
     for k in ks:
         feats_k = ranked_feats[:k]
-        cv_r2, cv_mae = _group_cv_r2_mae(
+        cv_r2, cv_mae, cv_se = _group_cv_r2_mae(
             ablation_model,
             train_frame[feats_k],
             y_tr,
@@ -544,6 +555,7 @@ def select_best_footprint(
             {
                 "k": int(k),
                 "cvR2": cv_r2,
+                "cvR2Se": cv_se,
                 "cvMae": cv_mae,
                 "features": feats_k,
                 "selected": False,
@@ -556,11 +568,15 @@ def select_best_footprint(
         if min_eff <= row["k"] <= max_k_allowed and row["cvR2"] is not None
     ]
     if eligible_rows:
-        peak_r2 = max(float(row["cvR2"]) for row in eligible_rows)
+        # One-standard-error rule: the smallest k whose CV R^2 is within one standard
+        # error of the best k. ``r2_tolerance`` is only a floor for the margin.
+        peak_row = max(eligible_rows, key=lambda row: float(row["cvR2"]))
+        peak_r2 = float(peak_row["cvR2"])
+        margin = max(float(peak_row.get("cvR2Se") or 0.0), r2_tolerance)
         best_k = min(
             int(row["k"])
             for row in eligible_rows
-            if float(row["cvR2"]) >= peak_r2 - r2_tolerance
+            if float(row["cvR2"]) >= peak_r2 - margin
         )
     else:
         best_k = min_eff

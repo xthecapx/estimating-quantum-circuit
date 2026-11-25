@@ -5,7 +5,7 @@ Two stages, with a commit in between:
 1. ``predict`` (after ``ibm_campaign_ci.py prepare``, before ``submit``). Reads the
    frozen prepared records of a validation collection, builds the same pre-runtime
    feature row the exporter would, and predicts every target with the frozen models
-   in ``report/ml_estimation/models``. Writes one predictions file per collection
+   in ``report/frozen_v1/models``. Writes one predictions file per collection
    with the model manifest hash, the git commit and every input hash. Commit it
    before submitting any job.
 
@@ -46,11 +46,11 @@ import pandas as pd
 from experiments import validation_profile as vp
 from experiments.dataset_export import _group, flatten
 from experiments.ml_dataset import TARGETS, load_ml_dataset
-from experiments.ml_estimation import H1_R2_THRESHOLD, evaluate_predictions
+from experiments.qaqs_models import H1_R2_THRESHOLD, evaluate_predictions
 
 ROOT = Path(__file__).resolve().parents[1]
-MODELS_SUBDIR = Path("report") / "ml_estimation" / "models"
-OUT_SUBDIR = Path("report") / "ml_estimation" / "prospective"
+MODELS_SUBDIR = Path("report") / "frozen_v1" / "models"
+OUT_SUBDIR = Path("report") / "frozen_v1" / "prospective"
 
 
 def models_dir() -> Path:
@@ -96,7 +96,7 @@ def _git_commit() -> str | None:
         dirty = subprocess.run(
             [
                 "git", "status", "--porcelain", "--untracked-files=no", "--",
-                "report/ml_estimation/models", "experiments", "scripts",
+                "report/frozen_v1/models", "experiments", "scripts",
             ],
             cwd=ROOT,
             capture_output=True,

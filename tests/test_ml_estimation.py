@@ -17,7 +17,7 @@ from experiments.footprint_analysis import (
     select_best_footprint,
 )
 from experiments.ml_dataset import infer_provider, load_ml_dataset, split_temporal_and_cv
-from experiments.ml_estimation import build_models, run_pipeline
+from experiments.ml_estimation import build_models, build_scopes, run_pipeline
 
 
 def _synthetic_multichip_tables(tmp_path: Path) -> Path:
@@ -31,11 +31,15 @@ def _synthetic_multichip_tables(tmp_path: Path) -> Path:
         "VTP",
         "GHZ",
         "RANDOM-VOLUMETRIC",
+        "SHOR",
     ]
+    # Three providers; each chip has two collection windows under different calibrations.
     chips = [
         ("ibm_fez", "w0", "2026-11-01T10:00:00Z"),
         ("ibm_fez", "w1", "2026-11-05T10:00:00Z"),
+        ("ankaa_3", "rigetti-w0", "2026-11-08T10:00:00Z"),
         ("ankaa_3", "rigetti-w1", "2026-11-10T10:00:00Z"),
+        ("ionq_aria", "ionq-w0", "2026-11-11T10:00:00Z"),
         ("ionq_aria", "ionq-w1", "2026-11-12T10:00:00Z"),
     ]
     idx = 0
@@ -44,18 +48,24 @@ def _synthetic_multichip_tables(tmp_path: Path) -> Path:
             for size in (3, 5, 7, 9):
                 depth = size * 8 + int(rng.integers(0, 12))
                 g2 = size * 3 + int(rng.integers(0, 8))
+                if algo == "SHOR":  # the composite anchor is far larger than the core circuits
+                    depth, g2 = depth * 8, g2 * 8
                 comm = float(rng.uniform(0.1, 0.95))
                 n_single = int(rng.integers(5, 45))
                 noise_base = 0.015 if "ibm" in backend else (0.025 if "ankaa" in backend else 0.008)
+                noise_base *= 1.0 if campaign.endswith("0") else 1.15  # the later window is noisier
+                chance = 0.25 if algo == "SHOR" else 0.02
                 dsr = float(np.clip(np.exp(-noise_base * g2) - 0.1 * comm + rng.normal(0, 0.02), 0.02, 0.99))
                 hf = float(np.clip(dsr * 0.95 + 0.03, 0.02, 0.99))
                 tvd = float(np.clip(1.0 - hf + rng.normal(0, 0.01), 0.01, 0.98))
                 succ = float(np.clip(dsr * 0.9 + 0.05, 0.01, 0.99))
+                if algo == "SHOR":  # the composite anchor sits at its chance level
+                    succ, dsr = float(np.clip(chance + rng.normal(0, 0.01), 0.0, 1.0)), 0.0
                 rows.append(
                     {
                         "meta.backend_name": backend,
                         "meta.campaign_id": campaign,
-                        "meta.window": 1 if campaign != "w0" else 0,
+                        "meta.window": 0 if campaign.endswith("0") else 1,
                         "meta.algorithm": algo,
                         "meta.config_id": f"{algo[:3]}-{size}",
                         "meta.job_id": f"job-{idx}",
@@ -77,7 +87,9 @@ def _synthetic_multichip_tables(tmp_path: Path) -> Path:
                         "b.size": (depth + 4) * 2,
                         "b.two_qubit_depth": g2 // 2,
                         "b.two_qubit_gates": g2,
-                        "c.two_qubit_gate_error.median": noise_base,
+                        "b.BehavioralMetrics.measurement": size,
+                        "c.calibrated_at": ts,
+                        "c.two_qubit_gate_error.median": noise_base * (1 + 0.02 * size),
                         "c.readout_error.median": noise_base * 1.1,
                         "c.t1_us.median": 120.0 if "ionq" not in backend else 100000.0,
                         "c.t2_us.median": 85.0 if "ionq" not in backend else 50000.0,
@@ -96,6 +108,8 @@ def _synthetic_multichip_tables(tmp_path: Path) -> Path:
                         "f.fidelity.hellinger_fidelity": hf,
                         "f.fidelity.tvd": tvd,
                         "f.fidelity.success_rate": succ,
+                        "f.fidelity.chance_baseline": chance,
+                        "f.fidelity.chance_corrected_success": float(max(0.0, (succ - chance) / (1 - chance))),
                         "g.finished_at": ts,
                     }
                 )
@@ -125,15 +139,24 @@ def test_provider_inference_supports_ibm_rigetti_ionq() -> None:
 
 
 def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
+    """The whole pipeline runs on three providers with no chip or provider named in code."""
     tables = _synthetic_multichip_tables(tmp_path)
     bundle = load_ml_dataset(tables)
     assert set(bundle.frame["meta.provider"].unique()) == {"ibm", "rigetti", "ionq"}
     assert "a.quantum_specific_present" in bundle.circuit_features
     assert "c.two_qubit_gate_error.median" in bundle.hardware_submit_features
+    assert "cal.two_qubit_gate_error" in bundle.device_calibration_features
+    # device calibration is one value per calibration snapshot: blind to the circuit
+    per_snapshot = bundle.frame.groupby("meta.calibration_snapshot")["cal.two_qubit_gate_error"].nunique()
+    assert (per_snapshot == 1).all()
+    assert bundle.frame.groupby("meta.calibration_snapshot")["c.two_qubit_gate_error.median"].nunique().max() > 1
 
     is_holdout, periods = split_temporal_and_cv(bundle.frame)
-    assert is_holdout.any()
-    assert periods
+    assert is_holdout.any() and periods
+    for _, sub in bundle.frame.groupby("meta.backend_name"):
+        held = is_holdout.loc[sub.index]
+        assert held.any() and not held.all()  # every chip: latest window held out, earliest trains
+        assert sub.loc[held, "g.finished_at"].min() > sub.loc[~held, "g.finished_at"].max()
 
     selected, stats_df = curate_footprint_vif(
         bundle.frame, bundle.circuit_features, "f.fidelity.dsr", max_vif=10.0, max_features=8
@@ -146,56 +169,102 @@ def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
     xgb.fit(bundle.frame[selected], bundle.frame["f.fidelity.dsr"].to_numpy())
     vif_map = dict(zip(stats_df["feature"], stats_df["vif"]))
     contrib = compute_feature_contributions(
-        xgb,
-        bundle.frame,
-        bundle.frame["f.fidelity.dsr"],
-        selected,
-        stats_df,
-        vif_map,
+        xgb, bundle.frame, bundle.frame["f.fidelity.dsr"], selected, stats_df, vif_map
     )
     assert len(contrib) == len(selected)
     assert all("shapMeanAbs" in r and "permutationImportance" in r for r in contrib)
 
+    assert [name for name, _ in build_scopes(bundle.frame)] == ["ankaa_3", "ibm_fez", "ionq_aria", "pooled"]
+
     report_out = tmp_path / "reports"
     dash_out = tmp_path / "dash_est"
-    snapshots = run_pipeline(
-        tables=tables,
-        report_out=report_out,
-        dashboard_out=dash_out,
-        n_repeats=1,
-        n_jobs=1,
-    )
+    snapshots = run_pipeline(tables=tables, report_out=report_out, dashboard_out=dash_out, n_repeats=1, n_jobs=1)
     assert set(snapshots) == {"ibm_fez", "ankaa_3", "ionq_aria", "pooled"}
     pooled = snapshots["pooled"]
     assert set(pooled["providersIncluded"]) == {"ibm", "rigetti", "ionq"}
-    xfer = pooled["targets"]["dsr"]["h3"]["transferMatrix"]
-    pairs = {(c["sourceProvider"], c["targetProvider"]) for c in xfer}
-    assert ("ibm", "rigetti") in pairs
-    assert ("ibm", "ionq") in pairs
-    assert (report_out / "report.md").is_file()
-    assert (report_out / "best_predictors.json").is_file()
-    assert (report_out / "footprint_ablation.csv").is_file()
-    manifest_file = report_out / "models" / "models_manifest.json"
-    assert manifest_file.is_file()
-    manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-    assert manifest["models"]
+    assert snapshots["ankaa_3"]["provider"] == "rigetti" and snapshots["ionq_aria"]["modality"] == "trapped_ion"
+    assert set(pooled["targets"]) == {"dsr", "hellinger", "tvd", "success", "success_adj"}
 
-    best_pred_doc = json.loads((report_out / "best_predictors.json").read_text(encoding="utf-8"))
-    assert best_pred_doc["globalCorePreRuntimePredictors"]
+    success = pooled["targets"]["success"]
+    xfer = success["h3"]["transferMatrix"]
+    pairs = {(c["sourceProvider"], c["targetProvider"]) for c in xfer}
+    assert ("ibm", "rigetti") in pairs and ("ibm", "ionq") in pairs
+    # leave-one-provider-out runs as soon as a second provider is in the export
+    lopo = success["h3"]["providerTransfer"]
+    assert lopo["status"] == "ok"
+    assert {r["heldOutProvider"] for r in lopo["rows"]} == {"ibm", "rigetti", "ionq"}
+    assert all(r["heldOutProvider"] not in r["trainProviders"] for r in lopo["rows"])
+
+    # the composite anchor is scored apart from the headline on raw targets, with it on success_adj
+    assert success["scoredJobs"] < pooled["targets"]["success_adj"]["scoredJobs"] == pooled["jobs"]
+    diag = success["diagnostics"]
+    assert {"headline", "core", "compositeAnchor", "allJobs"} <= set(diag["subsets"])
+    assert diag["sizeBaseline"]["r2"] is not None
+    assert {r["algorithm"] for r in diag["perAlgorithm"]} >= {"QFT", "SHOR"}
+    regimes = {r["regime"] for r in success["h3"]["regimes"]}
+    assert {"circuit_only", "size_baseline", "hardware_only", "layout_only", "mixed_submit", "circuit_chip"} <= regimes
+    chip = snapshots["ibm_fez"]["targets"]["success"]
+    assert chip["h3"]["temporal"]["ordering"]["strict"] is True
+    cycle = {r["regime"] for r in chip["h3"]["temporal"]["regimes"]}
+    assert cycle >= {"circuit_only", "layout_only", "mixed_submit", "size_baseline"}
+    # one training snapshot: device calibration is constant there, so that regime cannot be fitted
+    assert chip["h3"]["temporal"]["trainCalibrationSnapshots"] == 1 and "hardware_only" not in cycle
+    assert {"forward", "reverse"} == {r["direction"] for r in success["h4"]}
+    assert all({"diff", "ciLow", "ciHigh", "verdict"} <= set(c) for c in success["h4Contrasts"])
+
+    for name in ("report.md", "best_predictors.json", "h1_summary.csv", "per_algorithm.csv", "h3_regimes.csv",
+                 "h3_provider_transfer.csv", "h4_contrasts.csv", "footprint_ablation.csv"):
+        assert (report_out / name).is_file(), name
+    text = (report_out / "report.md").read_text(encoding="utf-8")
+    assert "Cross-provider transfer" in text and "Gain over size" in text
+    manifest = json.loads((report_out / "models" / "models_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["models"] and manifest["modelVersion"] == "v2"
+    assert all(m["prospectivelyValidated"] is False for m in manifest["models"])
+    assert "stableFootprint" in json.loads((report_out / "best_predictors.json").read_text(encoding="utf-8"))
 
     dsr_target = pooled["targets"]["dsr"]
-    assert "circuit_only" in dsr_target["savedModels"]
-    assert "mixed_submit" in dsr_target["savedModels"]
-    model_rel = dsr_target["savedModels"]["circuit_only"]["path"]
-    saved_bundle = joblib.load(report_out / model_rel)
-    preds = np.clip(
-        saved_bundle["pipeline"].predict(bundle.frame[saved_bundle["features"]].head(10)),
-        0.0,
-        1.0,
-    )
+    assert "circuit_only" in dsr_target["savedModels"] and "mixed_submit" in dsr_target["savedModels"]
+    saved_bundle = joblib.load(report_out / dsr_target["savedModels"]["circuit_only"]["path"])
+    preds = np.clip(saved_bundle["pipeline"].predict(bundle.frame[saved_bundle["features"]].head(10)), 0.0, 1.0)
     assert preds.shape == (10,)
     assert np.all(np.isfinite(preds)) and np.all((preds >= 0.0) & (preds <= 1.0))
     assert (dash_out / "pooled.json").is_file()
+
+
+def test_single_provider_marks_provider_transfer_as_waiting_for_data(tmp_path: Path) -> None:
+    from experiments.qaqs_kfold import WAITING_FOR_DATA, provider_transfer
+
+    tables = _synthetic_multichip_tables(tmp_path)
+    bundle = load_ml_dataset(tables, backends=["ibm_fez"])
+    out = provider_transfer(bundle, "success")
+    assert out == {"status": WAITING_FOR_DATA, "providers": ["ibm"], "rows": []}
+
+
+def test_provider_specific_inputs_are_skipped_not_fatal(tmp_path: Path) -> None:
+    """A provider without analytical baselines, chance levels or calibration still evaluates."""
+    from experiments.qaqs_kfold import WAITING_FOR_DATA, analyze_scope_kfold, assign_config_folds
+
+    tables = _synthetic_multichip_tables(tmp_path)
+    csv = tables / "dataset-000.csv"
+    frame = pd.read_csv(csv)
+    frame = frame[frame["meta.backend_name"] == "ionq_aria"]
+    drop = [c for c in frame.columns if c.startswith(("c.", "d.", "e.")) or "chance" in c]
+    frame.drop(columns=drop).to_csv(csv, index=False)
+    manifest = json.loads((tables / "dataset_manifest.json").read_text())
+    for part in manifest["parts"]:
+        part.pop("bytes", None)
+        part.pop("rows", None)
+    (tables / "dataset_manifest.json").write_text(json.dumps(manifest))
+    bundle = load_ml_dataset(tables)
+    assert bundle.hardware_submit_features == [] and bundle.device_calibration_features == []
+    folds = assign_config_folds(bundle.frame, n_splits=4, n_repeats=1, seed=3)
+    snap = analyze_scope_kfold(bundle, "ionq_aria", bundle.frame, folds, n_jobs=1)
+    assert snap["skippedTargets"]["success_adj"].startswith(WAITING_FOR_DATA)
+    success = snap["targets"]["success"]
+    assert success["leaderboard"][0]["cv"]["r2"] is not None
+    assert {r["regime"] for r in success["h3"]["regimes"]} == {"circuit_only", "size_baseline", "circuit_window"}
+    assert success["baselines"] == [] and success["selectedHardwareFeatures"] == []
+    assert all(r["variant"] == "footprint" for r in success["h2"])
 
 
 def test_select_best_footprint_prunes_noise_and_runs_ablation(tmp_path: Path) -> None:
@@ -299,7 +368,7 @@ def test_footprint_selection_ignores_holdout_labels() -> None:
 
 
 def test_h1_verdict_requires_ci_to_clear_threshold() -> None:
-    from experiments.ml_estimation import h1_verdict
+    from experiments.qaqs_models import h1_verdict
 
     assert h1_verdict(0.85, (0.82, 0.88)) == "pass"
     assert h1_verdict(0.81, (0.70, 0.90)) == "inconclusive"
@@ -308,12 +377,95 @@ def test_h1_verdict_requires_ci_to_clear_threshold() -> None:
 
 
 def test_hardware_regime_excludes_circuit_dependent_columns() -> None:
-    from experiments.ml_estimation import _is_device_only_hw
+    from experiments.qaqs_models import _is_device_only_hw
 
     for col in ("c.num_used_qubits", "c.duration_s", "c.calibration_coverage", "c.idle_over_t1.median"):
         assert not _is_device_only_hw(col)
     for col in ("c.t1_us.median", "c.two_qubit_gate_error.median", "c.readout_error.median"):
         assert _is_device_only_hw(col)
+    assert not _is_device_only_hw("cal.idle_over_t1")  # idle time is a property of the circuit
+
+
+def test_campaign_roles_keep_exploratory_and_validation_out_of_training() -> None:
+    from experiments.ml_dataset import campaign_role
+
+    assert campaign_role("kingston-full-oracle-growth-v1-2026-11-11") == "train"
+    assert campaign_role("marrakesh-validation-v1-2026-11-16") == "validation"
+    assert campaign_role("fez-ghz-bv-transfer-v1-2026-11-23") == "exploratory"
+    assert campaign_role("ankaa-3-dataset-v1-2027-01-10") == "train"  # a new provider needs no entry
+
+    root = Path(__file__).resolve().parents[1]
+    tables = root / "experiments" / "dataset_out"
+    train = load_ml_dataset(tables).frame
+    assert set(train["meta.campaign_role"]) == {"train"}
+    everything = load_ml_dataset(tables, include_validation=True).frame
+    assert set(everything["meta.campaign_role"]) == {"train", "validation", "exploratory"}
+    assert len(load_ml_dataset(tables, roles=["exploratory"]).frame) == 20
+    # with the exploratory window out of training, the calibration-cycle split is temporal again
+    from experiments.ml_dataset import temporal_ordering
+
+    for _, sub in train.groupby("meta.backend_name"):
+        held, _ = split_temporal_and_cv(sub)
+        assert temporal_ordering(sub, held)["strict"] is True
+
+
+def test_one_standard_error_rule_prefers_the_smaller_footprint() -> None:
+    """A second feature that adds less than the CV noise must not enlarge the footprint."""
+    rng = np.random.default_rng(3)
+    n = 240
+    X = pd.DataFrame({"b.signal": rng.normal(size=n), "b.weak": rng.normal(size=n), "a.noise": rng.normal(size=n)})
+    y = np.clip(0.5 + 0.25 * X["b.signal"] + 0.004 * X["b.weak"] + rng.normal(0, 0.06, n), 0, 1)
+    df = X.assign(y=y, cfg=[f"c{i % 60}" for i in range(n)])
+    models = build_models(random_state=11)
+    feats, _, curve = select_best_footprint(
+        df, df.iloc[0:0], list(X.columns), "y", contrib_model=models["XGBoost"],
+        ablation_model=models["LightGBM"], groups=df["cfg"], min_features=1, max_selected=3,
+    )
+    assert feats[0] == "b.signal"
+    chosen = next(r for r in curve if r["selected"])
+    best = max((r for r in curve if r["cvR2"] is not None), key=lambda r: r["cvR2"])
+    assert chosen["k"] <= best["k"]
+    assert chosen["cvR2"] >= best["cvR2"] - max(best["cvR2Se"] or 0.0, 0.0015)
+
+
+def test_paired_bootstrap_separates_a_real_gain_from_noise() -> None:
+    from experiments.qaqs_models import cluster_bootstrap_r2_diff
+
+    rng = np.random.default_rng(1)
+    y = rng.uniform(0, 1, 300)
+    groups = np.repeat(np.arange(60), 5)
+    good, bad = y + rng.normal(0, 0.05, 300), y + rng.normal(0, 0.25, 300)
+    twin = good + rng.normal(0, 0.002, 300)
+    gain = cluster_bootstrap_r2_diff(y, good, bad, groups)
+    assert gain["ciLow"] > 0 and gain["diff"] > 0
+    same = cluster_bootstrap_r2_diff(y, good, twin, groups)
+    assert same["ciLow"] < 0 < same["ciHigh"]
+
+
+def test_noise_ceiling_is_the_replicate_agreement() -> None:
+    from experiments.qaqs_kfold import noise_ceiling
+
+    rng = np.random.default_rng(2)
+    level = np.repeat(rng.uniform(0.1, 0.9, 50), 6)
+    frame = pd.DataFrame({"meta.backend_name": "chip", "meta.config_id": np.repeat(np.arange(50), 6)})
+    frame["quiet"] = level + rng.normal(0, 0.01, 300)
+    frame["noisy"] = level + rng.normal(0, 0.20, 300)
+    assert noise_ceiling(frame, "quiet")["looReplicateR2"] > 0.98
+    assert noise_ceiling(frame, "noisy")["looReplicateR2"] < 0.6
+
+
+def test_hurdle_model_handles_a_floor_point_mass() -> None:
+    from experiments.qaqs_models import build_hurdle
+
+    rng = np.random.default_rng(4)
+    x = rng.uniform(0, 1, 400)
+    y = np.where(x < 0.3, 0.0, np.clip(x + rng.normal(0, 0.03, 400), 0, 1))
+    X = pd.DataFrame({"x": x, "z": rng.normal(size=400)})
+    pred = build_hurdle().fit(X.iloc[:300], y[:300]).predict(X.iloc[300:])
+    assert np.abs(pred[x[300:] < 0.25]).max() < 0.1
+    assert np.corrcoef(pred, y[300:])[0, 1] > 0.95
+    plain = build_hurdle().fit(X.iloc[:300], np.clip(x[:300], 0.05, 1))  # nothing at the floor
+    assert plain[-1].two_stage_ is False
 
 
 def test_temporal_ordering_flags_overlap() -> None:
@@ -331,24 +483,31 @@ def test_temporal_ordering_flags_overlap() -> None:
     assert temporal_ordering(frame2, pd.Series([False, True]))["strict"] is True
 
 
-def test_h4_includes_size_matched_control_and_footprint_only() -> None:
-    from experiments.ml_estimation import _run_h4_benchmarking_regimes
+def test_h4_is_scored_in_both_directions_with_paired_contrasts() -> None:
+    from experiments.qaqs_kfold import _h4_kfold
 
-    rng = np.random.default_rng(3)
+    rng = np.random.default_rng(0)
     rows = []
-    for algo, n_cfg in (("QFT", 12), ("GROVER", 12), ("RANDOM-VOLUMETRIC", 8)):
+    for algo, n_cfg in (("RANDOM-VOLUMETRIC", 15), ("QFT", 20), ("GROVER", 20)):
         for c in range(n_cfg):
+            x = rng.uniform(0, 1)
             for _ in range(3):
-                x = rng.uniform(0, 1)
                 rows.append({"meta.algorithm": algo, "meta.config_id": f"{algo}-{c}", "x": x,
                              "y": float(np.clip(1 - 0.8 * x + rng.normal(0, 0.03), 0, 1))})
     df = pd.DataFrame(rows)
-    train, test = df.sample(frac=0.7, random_state=1), df.sample(frac=0.4, random_state=2)
-    out = _run_h4_benchmarking_regimes(train, test, "y", ["x"], build_models()["LightGBM"])
-    regimes = {r["regime"]: r for r in out}
-    assert {"random_only", "paradigm_only", "combined"} <= set(regimes)
-    if "paradigm_matched" in regimes:
-        assert regimes["paradigm_matched"]["nTrain"] <= regimes["paradigm_only"]["nTrain"]
+    cfgs = df["meta.config_id"].drop_duplicates().reset_index(drop=True)
+    fold_of = df["meta.config_id"].map(dict(zip(cfgs, cfgs.index % 5)))
+    out = _h4_kfold(df, "y", [{"footprint": ["x"]}] * 5, fold_of, random_state=11, n_matched_draws=2)
+    regimes = {r["regime"]: r for r in out["rows"]}
+    assert set(regimes) == {
+        "random_only", "paradigm_only", "combined", "paradigm_matched", "reverse_paradigm", "reverse_random_cv"
+    }
+    assert regimes["paradigm_only"]["nTest"] == 120 and regimes["reverse_paradigm"]["nTest"] == 45
+    assert regimes["paradigm_matched"]["nTrain"] <= regimes["paradigm_only"]["nTrain"]
+    assert len(regimes["paradigm_matched"]["r2PerDraw"]) == 2
+    assert {(c["a"], c["b"]) for c in out["contrasts"]} >= {("paradigm_matched", "random_only")}
+    # same relation in every algorithm here, so no regime can be shown to win
+    assert all(c["verdict"] in {"a_better", "b_better", "no_difference_shown"} for c in out["contrasts"])
 
 
 def test_config_folds_are_shared_across_chips_and_cover_every_config(tmp_path: Path) -> None:
@@ -376,9 +535,12 @@ def test_kfold_procedure_scores_unseen_configs_only(tmp_path: Path) -> None:
     test = frame[frame["meta.config_id"].isin(cfgs[::4])]
     train = frame.drop(test.index)
     res = _nested_fold(
-        train, test, "f.fidelity.dsr", bundle.circuit_features, bundle.hardware_submit_features, 11
+        train, test, "f.fidelity.dsr", bundle.circuit_features, bundle.hardware_submit_features, 11,
+        device_pool=bundle.device_calibration_features, hurdle=True,
     )
     assert set(res["testIndex"]) == set(test.index)
+    assert {"circuit_only", "size_baseline", "hardware_only", "layout_only", "hurdle"} <= set(res["regimes"])
+    assert all(c.startswith("cal.") for c in res["device"])
     reg = res["regimes"]["circuit_only"]
     assert reg["selected"] in reg["perModel"]
     assert all(len(m["pred"]) == len(test) for m in reg["perModel"].values() if "pred" in m)

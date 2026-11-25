@@ -2,7 +2,7 @@
 
     python dashboard/export_prospective.py
 
-Reads every scored ``report/ml_estimation/prospective/*-validation-v*_predictions.json``
+Reads every scored ``report/frozen_v1/prospective/*-validation-v*_predictions.json``
 (skipping abandoned collections), joins each prediction to its observed job in the
 export, and writes ``dashboard/experiments/prospective/validation-v1.json``:
 
@@ -31,12 +31,12 @@ ROOT = PROJECT.parent
 sys.path.insert(0, str(ROOT))
 
 from experiments.ml_dataset import TARGETS, load_ml_dataset  # noqa: E402
-from experiments.ml_estimation import evaluate_predictions  # noqa: E402
+from experiments.qaqs_models import evaluate_predictions  # noqa: E402
 from experiments.qaqs_prospective import ABANDONED_CAMPAIGNS  # noqa: E402
 from experiments.validation_profile import GROUPS  # noqa: E402
 
-PROSPECTIVE = ROOT / "report" / "ml_estimation" / "prospective"
-MODELS = ROOT / "report" / "ml_estimation" / "models" / "models_manifest.json"
+PROSPECTIVE = ROOT / "report" / "frozen_v1" / "prospective"
+MODELS = ROOT / "report" / "frozen_v1" / "models" / "models_manifest.json"
 SCHEMA_VERSION = 1
 
 
