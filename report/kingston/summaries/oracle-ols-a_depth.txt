@@ -3,8 +3,8 @@
 Dep. Variable:                success   R-squared:                       0.661
 Model:                            OLS   Adj. R-squared:                  0.657
 Method:                 Least Squares   F-statistic:                     50.48
-Date:                Mon, 23 Nov 2026   Prob (F-statistic):           2.08e-21
-Time:                        14:39:05   Log-Likelihood:                 229.70
+Date:                Tue, 24 Nov 2026   Prob (F-statistic):           2.08e-21
+Time:                        16:50:35   Log-Likelihood:                 229.70
 No. Observations:                 408   AIC:                            -447.4
 Df Residuals:                     402   BIC:                            -423.3
 Df Model:                           5                                         

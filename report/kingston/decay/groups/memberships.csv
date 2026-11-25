@@ -1,4 +1,52 @@
 metric,outcome,tolerance_points,minimum_periods,algorithm,group,status
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,1,VTP,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,1,VTP,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,1,VTP,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,2.5,2,VTP,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,5.0,2,VTP,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,GHZ,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,GROVER,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,PHASE-ESTIMATION,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,QFT,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.BehavioralMetrics.program_communication,chance_corrected,10.0,2,VTP,,insufficient overlap
 a.BehavioralMetrics.program_communication,dsr,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
 a.BehavioralMetrics.program_communication,dsr,2.5,1,GHZ,,insufficient overlap
 a.BehavioralMetrics.program_communication,dsr,2.5,1,GROVER,,insufficient overlap
@@ -239,6 +287,54 @@ a.BehavioralMetrics.program_communication,tvd_similarity,10.0,2,QFT,,insufficien
 a.BehavioralMetrics.program_communication,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
 a.BehavioralMetrics.program_communication,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.BehavioralMetrics.program_communication,tvd_similarity,10.0,2,VTP,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,GHZ,GHZ,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,QFT,QFT,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,1,VTP,VTP,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,GHZ,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,QFT,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,1,VTP,VTP,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,GHZ,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,QFT,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,1,VTP,VTP,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,GHZ,GHZ,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,QFT,QFT,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,2.5,2,VTP,VTP,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,GHZ,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,QFT,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,5.0,2,VTP,VTP,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,GHZ,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,GROVER,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,QFT,GHZ / QFT,grouped
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.ComplexityMetrics.gate_based_metrics.two_qubit_count,chance_corrected,10.0,2,VTP,VTP,singleton
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,2.5,1,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,dsr,2.5,1,GROVER,,insufficient overlap
@@ -479,6 +575,54 @@ a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,10.0,2,QFT
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.ComplexityMetrics.gate_based_metrics.two_qubit_count,tvd_similarity,10.0,2,VTP,GHZ / VTP,grouped
+a.StructuralMetrics.volume,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,1,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,1,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,2.5,1,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,1,VTP,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,5.0,1,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,1,VTP,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,10.0,1,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,1,VTP,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,2.5,2,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,2.5,2,VTP,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,5.0,2,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,5.0,2,VTP,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,GHZ,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,GROVER,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.StructuralMetrics.volume,chance_corrected,10.0,2,QFT,QFT,singleton
+a.StructuralMetrics.volume,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.StructuralMetrics.volume,chance_corrected,10.0,2,VTP,,insufficient overlap
 a.StructuralMetrics.volume,dsr,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
 a.StructuralMetrics.volume,dsr,2.5,1,GHZ,,insufficient overlap
 a.StructuralMetrics.volume,dsr,2.5,1,GROVER,,insufficient overlap
@@ -719,6 +863,54 @@ a.StructuralMetrics.volume,tvd_similarity,10.0,2,QFT,PHASE-ESTIMATION / QFT,grou
 a.StructuralMetrics.volume,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
 a.StructuralMetrics.volume,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.StructuralMetrics.volume,tvd_similarity,10.0,2,VTP,,insufficient overlap
+a.depth,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,2.5,1,GHZ,GHZ,singleton
+a.depth,chance_corrected,2.5,1,GROVER,GROVER,singleton
+a.depth,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,2.5,1,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.depth,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.depth,chance_corrected,2.5,1,VTP,VTP,singleton
+a.depth,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,5.0,1,GHZ,GHZ,singleton
+a.depth,chance_corrected,5.0,1,GROVER,GROVER,singleton
+a.depth,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,5.0,1,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.depth,chance_corrected,5.0,1,VTP,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,10.0,1,GHZ,GHZ,singleton
+a.depth,chance_corrected,10.0,1,GROVER,GROVER,singleton
+a.depth,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,10.0,1,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.depth,chance_corrected,10.0,1,VTP,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,2.5,2,GHZ,GHZ,singleton
+a.depth,chance_corrected,2.5,2,GROVER,GROVER,singleton
+a.depth,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,2.5,2,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.depth,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.depth,chance_corrected,2.5,2,VTP,VTP,singleton
+a.depth,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,5.0,2,GHZ,GHZ,singleton
+a.depth,chance_corrected,5.0,2,GROVER,GROVER,singleton
+a.depth,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,5.0,2,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.depth,chance_corrected,5.0,2,VTP,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,10.0,2,GHZ,GHZ,singleton
+a.depth,chance_corrected,10.0,2,GROVER,GROVER,singleton
+a.depth,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.depth,chance_corrected,10.0,2,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+a.depth,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC / VTP,grouped
+a.depth,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.depth,chance_corrected,10.0,2,VTP,RANDOM-VOLUMETRIC / VTP,grouped
 a.depth,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 a.depth,dsr,2.5,1,GHZ,GHZ,singleton
 a.depth,dsr,2.5,1,GROVER,GROVER,singleton
@@ -959,6 +1151,54 @@ a.depth,tvd_similarity,10.0,2,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
 a.depth,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC / VTP,grouped
 a.depth,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.depth,tvd_similarity,10.0,2,VTP,RANDOM-VOLUMETRIC / VTP,grouped
+a.num_qubits,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,2.5,1,GHZ,GHZ,singleton
+a.num_qubits,chance_corrected,2.5,1,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,2.5,1,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,2.5,1,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,2.5,1,VTP,VTP,singleton
+a.num_qubits,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,5.0,1,GHZ,GHZ,singleton
+a.num_qubits,chance_corrected,5.0,1,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,5.0,1,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,5.0,1,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,5.0,1,VTP,VTP,singleton
+a.num_qubits,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,10.0,1,GHZ,GHZ / VTP,grouped
+a.num_qubits,chance_corrected,10.0,1,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,10.0,1,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,10.0,1,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,10.0,1,VTP,GHZ / VTP,grouped
+a.num_qubits,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,2.5,2,GHZ,GHZ,singleton
+a.num_qubits,chance_corrected,2.5,2,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,2.5,2,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,2.5,2,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,2.5,2,VTP,VTP,singleton
+a.num_qubits,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,5.0,2,GHZ,GHZ,singleton
+a.num_qubits,chance_corrected,5.0,2,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,5.0,2,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,5.0,2,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,5.0,2,VTP,VTP,singleton
+a.num_qubits,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.num_qubits,chance_corrected,10.0,2,GHZ,GHZ / VTP,grouped
+a.num_qubits,chance_corrected,10.0,2,GROVER,GROVER,singleton
+a.num_qubits,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.num_qubits,chance_corrected,10.0,2,QFT,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.num_qubits,chance_corrected,10.0,2,SHOR,QFT / SHOR,grouped
+a.num_qubits,chance_corrected,10.0,2,VTP,GHZ / VTP,grouped
 a.num_qubits,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 a.num_qubits,dsr,2.5,1,GHZ,GHZ,singleton
 a.num_qubits,dsr,2.5,1,GROVER,GROVER,singleton
@@ -1199,6 +1439,54 @@ a.num_qubits,tvd_similarity,10.0,2,QFT,QFT,singleton
 a.num_qubits,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
 a.num_qubits,tvd_similarity,10.0,2,SHOR,SHOR,singleton
 a.num_qubits,tvd_similarity,10.0,2,VTP,BERNSTEIN-VAZIRANI / VTP,grouped
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,QFT,QFT,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,1,VTP,VTP,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,QFT,QFT,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,1,VTP,VTP,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,QFT,PHASE-ESTIMATION / QFT,grouped
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,1,VTP,VTP,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,QFT,QFT,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,2.5,2,VTP,VTP,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,QFT,QFT,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,5.0,2,VTP,VTP,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,GHZ,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,GROVER,GROVER,singleton
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,QFT,PHASE-ESTIMATION / QFT,grouped
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.quantum_specific.entanglement_ratio,chance_corrected,10.0,2,VTP,VTP,singleton
 a.quantum_specific.entanglement_ratio,dsr,2.5,1,BERNSTEIN-VAZIRANI,,insufficient overlap
 a.quantum_specific.entanglement_ratio,dsr,2.5,1,GHZ,,insufficient overlap
 a.quantum_specific.entanglement_ratio,dsr,2.5,1,GROVER,GROVER,singleton
@@ -1439,6 +1727,54 @@ a.quantum_specific.entanglement_ratio,tvd_similarity,10.0,2,QFT,PHASE-ESTIMATION
 a.quantum_specific.entanglement_ratio,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
 a.quantum_specific.entanglement_ratio,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.quantum_specific.entanglement_ratio,tvd_similarity,10.0,2,VTP,VTP,singleton
+a.size,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,2.5,1,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,2.5,1,GROVER,GROVER,singleton
+a.size,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,2.5,1,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.size,chance_corrected,2.5,1,SHOR,,insufficient overlap
+a.size,chance_corrected,2.5,1,VTP,VTP,singleton
+a.size,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,5.0,1,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,5.0,1,GROVER,GROVER,singleton
+a.size,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,5.0,1,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.size,chance_corrected,5.0,1,SHOR,,insufficient overlap
+a.size,chance_corrected,5.0,1,VTP,VTP,singleton
+a.size,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,10.0,1,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,10.0,1,GROVER,GROVER / RANDOM-VOLUMETRIC,grouped
+a.size,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,10.0,1,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,GROVER / RANDOM-VOLUMETRIC,grouped
+a.size,chance_corrected,10.0,1,SHOR,,insufficient overlap
+a.size,chance_corrected,10.0,1,VTP,VTP,singleton
+a.size,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,2.5,2,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,2.5,2,GROVER,GROVER,singleton
+a.size,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,2.5,2,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.size,chance_corrected,2.5,2,SHOR,,insufficient overlap
+a.size,chance_corrected,2.5,2,VTP,VTP,singleton
+a.size,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,5.0,2,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,5.0,2,GROVER,GROVER,singleton
+a.size,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,5.0,2,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+a.size,chance_corrected,5.0,2,SHOR,,insufficient overlap
+a.size,chance_corrected,5.0,2,VTP,VTP,singleton
+a.size,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+a.size,chance_corrected,10.0,2,GHZ,GHZ / QFT,grouped
+a.size,chance_corrected,10.0,2,GROVER,GROVER / RANDOM-VOLUMETRIC,grouped
+a.size,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+a.size,chance_corrected,10.0,2,QFT,GHZ / QFT,grouped
+a.size,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,GROVER / RANDOM-VOLUMETRIC,grouped
+a.size,chance_corrected,10.0,2,SHOR,,insufficient overlap
+a.size,chance_corrected,10.0,2,VTP,VTP,singleton
 a.size,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 a.size,dsr,2.5,1,GHZ,GHZ / QFT,grouped
 a.size,dsr,2.5,1,GROVER,GROVER,singleton
@@ -1679,6 +2015,54 @@ a.size,tvd_similarity,10.0,2,QFT,PHASE-ESTIMATION / QFT,grouped
 a.size,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
 a.size,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 a.size,tvd_similarity,10.0,2,VTP,VTP,singleton
+b.depth,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.depth,chance_corrected,2.5,1,GHZ,GHZ,singleton
+b.depth,chance_corrected,2.5,1,GROVER,,insufficient overlap
+b.depth,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,2.5,1,QFT,QFT,singleton
+b.depth,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,2.5,1,SHOR,,insufficient overlap
+b.depth,chance_corrected,2.5,1,VTP,VTP,singleton
+b.depth,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.depth,chance_corrected,5.0,1,GHZ,GHZ,singleton
+b.depth,chance_corrected,5.0,1,GROVER,,insufficient overlap
+b.depth,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,5.0,1,QFT,QFT,singleton
+b.depth,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,5.0,1,SHOR,,insufficient overlap
+b.depth,chance_corrected,5.0,1,VTP,VTP,singleton
+b.depth,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / QFT,grouped
+b.depth,chance_corrected,10.0,1,GHZ,GHZ,singleton
+b.depth,chance_corrected,10.0,1,GROVER,,insufficient overlap
+b.depth,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,10.0,1,QFT,BERNSTEIN-VAZIRANI / QFT,grouped
+b.depth,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,10.0,1,SHOR,,insufficient overlap
+b.depth,chance_corrected,10.0,1,VTP,VTP,singleton
+b.depth,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.depth,chance_corrected,2.5,2,GHZ,GHZ,singleton
+b.depth,chance_corrected,2.5,2,GROVER,,insufficient overlap
+b.depth,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,2.5,2,QFT,,insufficient overlap
+b.depth,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,2.5,2,SHOR,,insufficient overlap
+b.depth,chance_corrected,2.5,2,VTP,VTP,singleton
+b.depth,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.depth,chance_corrected,5.0,2,GHZ,GHZ,singleton
+b.depth,chance_corrected,5.0,2,GROVER,,insufficient overlap
+b.depth,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,5.0,2,QFT,,insufficient overlap
+b.depth,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,5.0,2,SHOR,,insufficient overlap
+b.depth,chance_corrected,5.0,2,VTP,VTP,singleton
+b.depth,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.depth,chance_corrected,10.0,2,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.depth,chance_corrected,10.0,2,GROVER,,insufficient overlap
+b.depth,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.depth,chance_corrected,10.0,2,QFT,,insufficient overlap
+b.depth,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
+b.depth,chance_corrected,10.0,2,SHOR,,insufficient overlap
+b.depth,chance_corrected,10.0,2,VTP,VTP,singleton
 b.depth,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 b.depth,dsr,2.5,1,GHZ,GHZ,singleton
 b.depth,dsr,2.5,1,GROVER,,insufficient overlap
@@ -1919,6 +2303,54 @@ b.depth,tvd_similarity,10.0,2,QFT,,insufficient overlap
 b.depth,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,,insufficient overlap
 b.depth,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 b.depth,tvd_similarity,10.0,2,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,GHZ,GHZ,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,QFT,QFT,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,2.5,1,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,2.5,1,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,5.0,1,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,5.0,1,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,5.0,1,QFT,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,5.0,1,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,5.0,1,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,10.0,1,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,10.0,1,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,10.0,1,QFT,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,10.0,1,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,10.0,1,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,GHZ,GHZ,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,QFT,QFT,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,2.5,2,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,2.5,2,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,5.0,2,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,5.0,2,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,5.0,2,QFT,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,5.0,2,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,5.0,2,VTP,VTP,singleton
+b.two_qubit_depth,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,10.0,2,GHZ,BERNSTEIN-VAZIRANI / GHZ,grouped
+b.two_qubit_depth,chance_corrected,10.0,2,GROVER,,insufficient overlap
+b.two_qubit_depth,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,10.0,2,QFT,PHASE-ESTIMATION / QFT,grouped
+b.two_qubit_depth,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_depth,chance_corrected,10.0,2,SHOR,,insufficient overlap
+b.two_qubit_depth,chance_corrected,10.0,2,VTP,VTP,singleton
 b.two_qubit_depth,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 b.two_qubit_depth,dsr,2.5,1,GHZ,GHZ,singleton
 b.two_qubit_depth,dsr,2.5,1,GROVER,,insufficient overlap
@@ -2159,6 +2591,54 @@ b.two_qubit_depth,tvd_similarity,10.0,2,QFT,QFT,singleton
 b.two_qubit_depth,tvd_similarity,10.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
 b.two_qubit_depth,tvd_similarity,10.0,2,SHOR,,insufficient overlap
 b.two_qubit_depth,tvd_similarity,10.0,2,VTP,VTP,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,2.5,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_gates,chance_corrected,2.5,1,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,2.5,1,VTP,VTP,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,5.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_gates,chance_corrected,5.0,1,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,5.0,1,VTP,VTP,singleton
+b.two_qubit_gates,chance_corrected,10.0,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / RANDOM-VOLUMETRIC,grouped
+b.two_qubit_gates,chance_corrected,10.0,1,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,10.0,1,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,10.0,1,PHASE-ESTIMATION,PHASE-ESTIMATION / VTP,grouped
+b.two_qubit_gates,chance_corrected,10.0,1,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,10.0,1,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI / RANDOM-VOLUMETRIC,grouped
+b.two_qubit_gates,chance_corrected,10.0,1,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,10.0,1,VTP,PHASE-ESTIMATION / VTP,grouped
+b.two_qubit_gates,chance_corrected,2.5,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_gates,chance_corrected,2.5,2,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,2.5,2,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,2.5,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_gates,chance_corrected,2.5,2,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,2.5,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_gates,chance_corrected,2.5,2,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,2.5,2,VTP,VTP,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,5.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,RANDOM-VOLUMETRIC,RANDOM-VOLUMETRIC,singleton
+b.two_qubit_gates,chance_corrected,5.0,2,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,5.0,2,VTP,VTP,singleton
+b.two_qubit_gates,chance_corrected,10.0,2,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI / RANDOM-VOLUMETRIC,grouped
+b.two_qubit_gates,chance_corrected,10.0,2,GHZ,GHZ,singleton
+b.two_qubit_gates,chance_corrected,10.0,2,GROVER,,insufficient overlap
+b.two_qubit_gates,chance_corrected,10.0,2,PHASE-ESTIMATION,PHASE-ESTIMATION / VTP,grouped
+b.two_qubit_gates,chance_corrected,10.0,2,QFT,QFT,singleton
+b.two_qubit_gates,chance_corrected,10.0,2,RANDOM-VOLUMETRIC,BERNSTEIN-VAZIRANI / RANDOM-VOLUMETRIC,grouped
+b.two_qubit_gates,chance_corrected,10.0,2,SHOR,,insufficient overlap
+b.two_qubit_gates,chance_corrected,10.0,2,VTP,PHASE-ESTIMATION / VTP,grouped
 b.two_qubit_gates,dsr,2.5,1,BERNSTEIN-VAZIRANI,BERNSTEIN-VAZIRANI,singleton
 b.two_qubit_gates,dsr,2.5,1,GHZ,GHZ,singleton
 b.two_qubit_gates,dsr,2.5,1,GROVER,,insufficient overlap

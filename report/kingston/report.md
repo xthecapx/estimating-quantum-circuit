@@ -24,7 +24,7 @@ Exported rates are rounded to six decimals. Exact success is reconstructed from 
 
 The descriptive model adds algorithm intercept and slope differences. Its slope contrast is algorithm 2 minus algorithm 1; coefficients are per original metric unit. BH q-values adjust all reported slope tests across families, metrics, and model types. A large p/q-value is NOT evidence of equivalent decay or generalization.
 
-Unseen-algorithm tests train on one member of a family and predict the other without using target outcomes. Larger-configuration tests hold out the upper tail of configuration median metric values, preserving all repetitions and campaigns of a configuration. Scaling and per-period mean baselines are learned from training data only. Unseen collection periods cannot be predicted by fixed effects and are explicitly counted as unsupported. Metric range overlap is reported separately from extrapolation. OLS predictions are not clipped.
+Unseen-algorithm tests train on one member of a family and predict the other without using target outcomes. Larger-configuration tests hold out the upper tail of configuration median metric values, preserving all repetitions and campaigns of a configuration. Scaling and baselines are learned from training data only. Unseen collection periods cannot be predicted by fixed effects and are explicitly counted as unsupported. Metric range overlap is reported separately from extrapolation. OLS predictions are not clipped.
 
 ## Interpretation limits
 
@@ -34,38 +34,59 @@ Unseen-algorithm tests train on one member of a family and predict the other wit
 - Campaign/window effects reduce observed period confounding; they do not remove within-period calibration, layout, or structural differences. One backend cannot establish cross-provider transfer.
 - Missing metrics are excluded per feature, not imputed. Rank deficiency, separation, insufficient independent configurations, and convergence failures are logged in skipped_models.csv.
 - Confidence bands describe fitted mean uncertainty, not prediction intervals for future jobs.
+- Repeated jobs of one configuration run minutes apart. The number of independent units in a held-out score is test_configs, not test_jobs.
+
+## Run order and calibration
+
+Jobs run in algorithm blocks, so collection-period effects do not remove drift inside a window. The table shows, per period, the share of consecutive jobs from the same algorithm, the number of calibration snapshots, and the Spearman correlation between run time and each circuit metric within an algorithm block.
+
+| Period | Jobs | Hours | Calibrations | Consecutive jobs, same algorithm | Median \|ρ(time, metric)\| | Blocks with \|ρ\| > 0.5 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| kingston-full-oracle-growth-v1-2026-11-09 / window 20261109 | 391 | 0.86 | 2 | 94% | 0.24 | 5 / 69 |
+| kingston-full-oracle-growth-v1-2026-11-10 / window 20261110 | 391 | 0.68 | 1 | 94% | 0.25 | 5 / 69 |
+| kingston-full-oracle-growth-v1-2026-11-11 / window 20261111 | 391 | 4.20 | 3 | 94% | 0.43 | 31 / 69 |
+
+Sensitivity: each slope comparison is refitted with hours since the first job of its period as a covariate. Of 52 comparisons, 38 have q < 0.05 without the time term and 38 with it; the slope difference changes sign in 0. This is a partial adjustment. A linear time term cannot separate algorithms that ran in disjoint blocks, and it is not applied to the held-out transfer scores. A calibration-snapshot fixed effect is not fitted: snapshots coincide with algorithm blocks in most periods, so it would be confounded with the algorithm terms. Randomized submission order is needed to remove this.
 
 ## Held-out performance
 
-The thesis R² ≥ 0.80 criterion is displayed per prespecified candidate; MAE, RMSE, and improvement over the training-only campaign baseline must also be assessed. Negative R² values and out-of-bounds OLS predictions are retained.
+The thesis R² ≥ 0.80 criterion is displayed per prespecified candidate. Every R² carries a 95% interval (r2_ci_low, r2_ci_high) from 1000 bootstrap draws of whole target configurations, with predictions held fixed. An interval that includes the criterion neither passes nor fails it. Negative R² values and out-of-bounds OLS predictions are retained.
+
+rmse_skill is 1 − RMSE / baseline RMSE, where the baseline predicts the per-period mean success of the largest third of the training configurations. The earlier baseline, the per-period mean of all training configurations, overpredicts larger targets by construction; it remains in period_mean_rmse_skill for comparison.
+
+<!-- replication-summary:start -->
+Replication across chips and directions (ibm_fez, ibm_kingston), unseen-algorithm transfer, R² ≥ 0.80: 6 of 210 candidates pass. 0 combination(s) pass in the same direction on every chip, 0 pass in both directions on at least one chip, and 0 candidate(s) keep the lower end of their 95% interval at or above 0.80. **No family, metric and model combination reaches the criterion in both directions on every chip.**
+<!-- replication-summary:end -->
 
 ```text
-                                      tests  median_r2  median_mae  median_rmse
-protocol              model                                                    
-larger_configurations binomial_logit     52  -1.343026    0.105835     0.121602
-                      ols                52  -0.700326    0.096140     0.116753
-unseen_algorithm      binomial_logit     53  -0.222221    0.111980     0.145622
-                      ols                53  -0.228517    0.125303     0.141067
+                                      tests  median_r2  median_mae  median_rmse  beats_largest_tercile  beats_period_mean
+protocol              model                                                                                              
+larger_configurations binomial_logit     52     -1.343       0.106        0.122                  0.808              0.923
+                      ols                52     -0.700       0.096        0.117                  0.846              0.962
+unseen_algorithm      binomial_logit     53     -0.222       0.112        0.146                  0.604              0.491
+                      ols                53     -0.229       0.125        0.141                  0.585              0.472
 ```
 
-Candidates reaching the R² criterion: 6 / 210. These are candidate-level results, not acceptance of H2.
+Candidates reaching the R² criterion: 6 / 210; with the whole 95% interval at or above it: 0 / 210. These are candidate-level results, not acceptance of H2.
 
 Best observed binomial transfer scores among the explored metrics (post hoc screening; use a fresh holdout to confirm):
 
 ```text
-      family             source             target                                                 metric       r2      mae     rmse
-entanglement                VTP                GHZ a.ComplexityMetrics.gate_based_metrics.two_qubit_count 0.839087 0.027799 0.033903
-     fourier                QFT   PHASE-ESTIMATION                             a.StructuralMetrics.volume 0.833499 0.043684 0.059842
-     fourier   PHASE-ESTIMATION                QFT a.ComplexityMetrics.gate_based_metrics.two_qubit_count 0.555074 0.080640 0.100568
-entanglement                GHZ                VTP a.ComplexityMetrics.gate_based_metrics.two_qubit_count 0.259854 0.063158 0.079534
-      oracle BERNSTEIN-VAZIRANI             GROVER                  a.quantum_specific.entanglement_ratio 0.151443 0.185362 0.253093
-      oracle             GROVER BERNSTEIN-VAZIRANI                  a.quantum_specific.entanglement_ratio 0.114317 0.055733 0.076058
+      family             source             target                                                 metric  test_configs    r2  r2_ci_low  r2_ci_high   mae  rmse_skill
+entanglement                VTP                GHZ a.ComplexityMetrics.gate_based_metrics.two_qubit_count            15 0.839      0.736       0.879 0.028       0.698
+     fourier                QFT   PHASE-ESTIMATION                             a.StructuralMetrics.volume            21 0.833      0.748       0.897 0.044       0.616
+     fourier   PHASE-ESTIMATION                QFT a.ComplexityMetrics.gate_based_metrics.two_qubit_count            27 0.555     -0.450       0.784 0.081       0.565
+entanglement                GHZ                VTP a.ComplexityMetrics.gate_based_metrics.two_qubit_count            30 0.260     -0.050       0.433 0.063       0.348
+      oracle BERNSTEIN-VAZIRANI             GROVER                  a.quantum_specific.entanglement_ratio            29 0.151     -0.176       0.315 0.185       0.223
+      oracle             GROVER BERNSTEIN-VAZIRANI                  a.quantum_specific.entanglement_ratio            18 0.114     -1.013       0.505 0.056       0.850
 ```
 
 ## Artifacts
 
 - `provenance.json`: hashed inputs, selected campaigns, software versions, and settings.
-- `slope_comparisons.csv`: slopes, cluster-robust contrast intervals, p/q-values, missingness.
+- `slope_comparisons.csv`: slopes, cluster-robust contrast intervals, p/q-values, missingness, and the time-adjusted contrast.
+- `run_order_confounding.csv`: run order against algorithm, calibration and circuit size.
+- `replication_summary.csv`: which chips and directions reach the criterion per metric.
 - `summaries/`: full statsmodels descriptive fit summaries and coefficient tables. Their residual normality diagnostics are descriptive; they do not account for clustering.
 - `heldout_scores.csv`: all algorithm-transfer and larger-configuration evaluations.
 - `heldout_predictions.csv`: per-job held-out predictions, chance floors, baselines, support.

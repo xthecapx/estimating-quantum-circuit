@@ -1,353 +1,122 @@
 {
-  "schemaVersion": 1,
-  "globalCorePreRuntimePredictors": [
+  "schemaVersion": 2,
+  "stableSelectionFrequency": 0.8,
+  "stableFootprint": [
     {
       "feature": "b.ComplexityMetrics.standardized_metrics.circuit_volume",
       "label": "ISA \u00b7 standardized metrics circuit volume",
       "category": "ISA Compiled",
-      "selectionCount": 10,
-      "totalTargets": 12,
-      "selectionRate": 0.8333,
-      "meanRank": 1.4,
-      "meanShap": 0.117794,
-      "meanPermutationImportance": 0.708283,
-      "meanFoldSelectionFrequency": 0.9867
+      "stableIn": 12,
+      "of": 15,
+      "meanSelectionFrequency": 1.0,
+      "where": [
+        "ibm_fez/hellinger",
+        "ibm_fez/success",
+        "ibm_fez/success_adj",
+        "ibm_fez/tvd",
+        "ibm_kingston/hellinger",
+        "ibm_kingston/success",
+        "ibm_kingston/success_adj",
+        "ibm_kingston/tvd",
+        "pooled/hellinger",
+        "pooled/success",
+        "pooled/success_adj",
+        "pooled/tvd"
+      ]
     },
     {
       "feature": "b.ComplexityMetrics.standardized_metrics.gate_density",
       "label": "ISA \u00b7 standardized metrics gate density",
       "category": "ISA Compiled",
-      "selectionCount": 10,
-      "totalTargets": 12,
-      "selectionRate": 0.8333,
-      "meanRank": 2.7,
-      "meanShap": 0.038807,
-      "meanPermutationImportance": 0.116858,
-      "meanFoldSelectionFrequency": 0.86
-    },
-    {
-      "feature": "a.quantum_specific.magic",
-      "label": "Quantum magic",
-      "category": "Quantum Specific",
-      "selectionCount": 8,
-      "totalTargets": 12,
-      "selectionRate": 0.6667,
-      "meanRank": 5.5,
-      "meanShap": 0.015549,
-      "meanPermutationImportance": 0.022298,
-      "meanFoldSelectionFrequency": 0.85
-    },
-    {
-      "feature": "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-      "label": "ISA \u00b7 entanglement metrics entangling width",
-      "category": "ISA Compiled",
-      "selectionCount": 8,
-      "totalTargets": 12,
-      "selectionRate": 0.6667,
-      "meanRank": 5.12,
-      "meanShap": 0.014606,
-      "meanPermutationImportance": 0.030088,
-      "meanFoldSelectionFrequency": 0.725
-    },
-    {
-      "feature": "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-      "label": "ISA \u00b7 gate based metrics multi qubit ratio",
-      "category": "ISA Compiled",
-      "selectionCount": 7,
-      "totalTargets": 12,
-      "selectionRate": 0.5833,
-      "meanRank": 3.57,
-      "meanShap": 0.03011,
-      "meanPermutationImportance": 0.053528,
-      "meanFoldSelectionFrequency": 0.7429
-    },
-    {
-      "feature": "b.BehavioralMetrics.measurement",
-      "label": "ISA \u00b7 BehavioralMetrics measurement",
-      "category": "ISA Compiled",
-      "selectionCount": 7,
-      "totalTargets": 12,
-      "selectionRate": 0.5833,
-      "meanRank": 6.29,
-      "meanShap": 0.009165,
-      "meanPermutationImportance": 0.016293,
-      "meanFoldSelectionFrequency": 0.4571
-    },
-    {
-      "feature": "b.StructuralMetrics.effort",
-      "label": "ISA \u00b7 StructuralMetrics effort",
-      "category": "ISA Compiled",
-      "selectionCount": 6,
-      "totalTargets": 12,
-      "selectionRate": 0.5,
-      "meanRank": 3.0,
-      "meanShap": 0.032376,
-      "meanPermutationImportance": 0.063567,
-      "meanFoldSelectionFrequency": 0.6222
+      "stableIn": 9,
+      "of": 15,
+      "meanSelectionFrequency": 0.9037037037037039,
+      "where": [
+        "ibm_fez/dsr",
+        "ibm_fez/hellinger",
+        "ibm_kingston/dsr",
+        "ibm_kingston/hellinger",
+        "ibm_kingston/success",
+        "ibm_kingston/success_adj",
+        "ibm_kingston/tvd",
+        "pooled/dsr",
+        "pooled/hellinger"
+      ]
     },
     {
       "feature": "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
       "label": "Logical \u00b7 gate based metrics multi qubit ratio",
       "category": "Logical Complexity",
-      "selectionCount": 6,
-      "totalTargets": 12,
-      "selectionRate": 0.5,
-      "meanRank": 4.67,
-      "meanShap": 0.020142,
-      "meanPermutationImportance": 0.039297,
-      "meanFoldSelectionFrequency": 0.7556
+      "stableIn": 5,
+      "of": 15,
+      "meanSelectionFrequency": 0.8266666666666665,
+      "where": [
+        "ibm_kingston/dsr",
+        "ibm_kingston/success",
+        "ibm_kingston/success_adj",
+        "ibm_kingston/tvd",
+        "pooled/dsr"
+      ]
     },
     {
-      "feature": "b.StructuralMetrics.vocabulary",
-      "label": "ISA \u00b7 StructuralMetrics vocabulary",
+      "feature": "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+      "label": "ISA \u00b7 entanglement metrics entangling width",
       "category": "ISA Compiled",
-      "selectionCount": 6,
-      "totalTargets": 12,
-      "selectionRate": 0.5,
-      "meanRank": 4.33,
-      "meanShap": 0.015202,
-      "meanPermutationImportance": 0.023919,
-      "meanFoldSelectionFrequency": 0.5889
+      "stableIn": 4,
+      "of": 15,
+      "meanSelectionFrequency": 0.95,
+      "where": [
+        "ibm_kingston/hellinger",
+        "ibm_kingston/success",
+        "ibm_kingston/success_adj",
+        "ibm_kingston/tvd"
+      ]
     },
     {
-      "feature": "a.quantum_specific.coherence",
-      "label": "Quantum coherence",
+      "feature": "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+      "label": "ISA \u00b7 gate based metrics multi qubit ratio",
+      "category": "ISA Compiled",
+      "stableIn": 2,
+      "of": 15,
+      "meanSelectionFrequency": 1.0,
+      "where": [
+        "ibm_fez/dsr",
+        "pooled/dsr"
+      ]
+    },
+    {
+      "feature": "a.quantum_specific.magic",
+      "label": "Quantum magic",
       "category": "Quantum Specific",
-      "selectionCount": 4,
-      "totalTargets": 12,
-      "selectionRate": 0.3333,
-      "meanRank": 7.0,
-      "meanShap": 0.012063,
-      "meanPermutationImportance": 0.019934,
-      "meanFoldSelectionFrequency": 0.2667
-    },
-    {
-      "feature": "b.ComplexityMetrics.derived_metrics.square_ratio",
-      "label": "ISA \u00b7 derived metrics square ratio",
-      "category": "ISA Compiled",
-      "selectionCount": 3,
-      "totalTargets": 12,
-      "selectionRate": 0.25,
-      "meanRank": 5.0,
-      "meanShap": 0.014535,
-      "meanPermutationImportance": 0.034631,
-      "meanFoldSelectionFrequency": 0.4667
-    },
-    {
-      "feature": "a.BehavioralMetrics.parallelism",
-      "label": "Logical \u00b7 BehavioralMetrics parallelism",
-      "category": "Logical Behavioral",
-      "selectionCount": 3,
-      "totalTargets": 12,
-      "selectionRate": 0.25,
-      "meanRank": 7.0,
-      "meanShap": 0.009577,
-      "meanPermutationImportance": 0.012461,
-      "meanFoldSelectionFrequency": 0.0
+      "stableIn": 2,
+      "of": 15,
+      "meanSelectionFrequency": 0.9,
+      "where": [
+        "ibm_fez/hellinger",
+        "ibm_kingston/dsr"
+      ]
     },
     {
       "feature": "a.StructuralMetrics.difficulty",
       "label": "Logical \u00b7 StructuralMetrics difficulty",
       "category": "Logical Structural",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 1.0,
-      "meanShap": 0.090269,
-      "meanPermutationImportance": 0.244013,
-      "meanFoldSelectionFrequency": 0.6333
+      "stableIn": 1,
+      "of": 15,
+      "meanSelectionFrequency": 0.8666666666666667,
+      "where": [
+        "ibm_fez/dsr"
+      ]
     },
     {
-      "feature": "b.BehavioralMetrics.liveness",
-      "label": "ISA \u00b7 BehavioralMetrics liveness",
+      "feature": "b.StructuralMetrics.effort",
+      "label": "ISA \u00b7 StructuralMetrics effort",
       "category": "ISA Compiled",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 4.5,
-      "meanShap": 0.014254,
-      "meanPermutationImportance": 0.018305,
-      "meanFoldSelectionFrequency": 0.1333
-    },
-    {
-      "feature": "a.ComplexityMetrics.standardized_metrics.gate_density",
-      "label": "Logical \u00b7 standardized metrics gate density",
-      "category": "Logical Complexity",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 6.0,
-      "meanShap": 0.011514,
-      "meanPermutationImportance": 0.027376,
-      "meanFoldSelectionFrequency": 0.1
-    },
-    {
-      "feature": "b.StructuralMetrics.difficulty",
-      "label": "ISA \u00b7 StructuralMetrics difficulty",
-      "category": "ISA Compiled",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 7.5,
-      "meanShap": 0.010373,
-      "meanPermutationImportance": 0.001415,
-      "meanFoldSelectionFrequency": 0.5
-    },
-    {
-      "feature": "b.BehavioralMetrics.critical_depth",
-      "label": "ISA \u00b7 BehavioralMetrics critical depth",
-      "category": "ISA Compiled",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 9.0,
-      "meanShap": 0.010109,
-      "meanPermutationImportance": 0.009951,
-      "meanFoldSelectionFrequency": 0.3333
-    },
-    {
-      "feature": "a.ElementMetrics.percent_qm",
-      "label": "Logical \u00b7 ElementMetrics percent qm",
-      "category": "Logical Element",
-      "selectionCount": 2,
-      "totalTargets": 12,
-      "selectionRate": 0.1667,
-      "meanRank": 10.0,
-      "meanShap": 0.004917,
-      "meanPermutationImportance": 0.007937,
-      "meanFoldSelectionFrequency": 0.0333
-    },
-    {
-      "feature": "a.StructuralMetrics.total_operands",
-      "label": "Logical \u00b7 StructuralMetrics total operands",
-      "category": "Logical Structural",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 1.0,
-      "meanShap": 0.103965,
-      "meanPermutationImportance": 0.334502,
-      "meanFoldSelectionFrequency": 0.7333
-    },
-    {
-      "feature": "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-      "label": "ISA \u00b7 instruction metrics num nonlocal gates",
-      "category": "ISA Compiled",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 5.0,
-      "meanShap": 0.029657,
-      "meanPermutationImportance": 0.017967,
-      "meanFoldSelectionFrequency": 0.2
-    },
-    {
-      "feature": "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-      "label": "ISA entangling gate density",
-      "category": "ISA Compiled",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 10.0,
-      "meanShap": 0.011058,
-      "meanPermutationImportance": 0.001159,
-      "meanFoldSelectionFrequency": 0.2667
-    },
-    {
-      "feature": "a.BehavioralMetrics.measurement",
-      "label": "Logical \u00b7 BehavioralMetrics measurement",
-      "category": "Logical Behavioral",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 7.0,
-      "meanShap": 0.009392,
-      "meanPermutationImportance": 0.018369,
-      "meanFoldSelectionFrequency": 0.3333
-    },
-    {
-      "feature": "b.StructuralMetrics.loc_phi6_num_gate_types",
-      "label": "ISA \u00b7 StructuralMetrics loc phi6 num gate types",
-      "category": "ISA Compiled",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 8.0,
-      "meanShap": 0.008158,
-      "meanPermutationImportance": 0.015689,
-      "meanFoldSelectionFrequency": 0.0
-    },
-    {
-      "feature": "b.ElementMetrics.percent_single_gates",
-      "label": "ISA \u00b7 ElementMetrics percent single gates",
-      "category": "ISA Compiled",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 10.0,
-      "meanShap": 0.007786,
-      "meanPermutationImportance": -0.003586,
-      "meanFoldSelectionFrequency": 0.0
-    },
-    {
-      "feature": "a.StructuralMetrics.effort",
-      "label": "Logical \u00b7 StructuralMetrics effort",
-      "category": "Logical Structural",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 7.0,
-      "meanShap": 0.006299,
-      "meanPermutationImportance": 0.006939,
-      "meanFoldSelectionFrequency": 0.8
-    },
-    {
-      "feature": "a.BehavioralMetrics.liveness",
-      "label": "Logical \u00b7 BehavioralMetrics liveness",
-      "category": "Logical Behavioral",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 9.0,
-      "meanShap": 0.006119,
-      "meanPermutationImportance": 0.007338,
-      "meanFoldSelectionFrequency": 0.1333
-    },
-    {
-      "feature": "a.quantum_specific.entanglement_ratio",
-      "label": "Quantum entanglement ratio",
-      "category": "Quantum Specific",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 8.0,
-      "meanShap": 0.006085,
-      "meanPermutationImportance": 0.008378,
-      "meanFoldSelectionFrequency": 0.0
-    },
-    {
-      "feature": "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-      "label": "Logical \u00b7 entanglement metrics entangling width",
-      "category": "Logical Complexity",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 9.0,
-      "meanShap": 0.005324,
-      "meanPermutationImportance": 0.005149,
-      "meanFoldSelectionFrequency": 0.0
-    },
-    {
-      "feature": "a.ElementMetrics.percent_single_gates",
-      "label": "Logical \u00b7 ElementMetrics percent single gates",
-      "category": "Logical Element",
-      "selectionCount": 1,
-      "totalTargets": 12,
-      "selectionRate": 0.0833,
-      "meanRank": 8.0,
-      "meanShap": 0.003613,
-      "meanPermutationImportance": 0.004296,
-      "meanFoldSelectionFrequency": 0.2667
+      "stableIn": 1,
+      "of": 15,
+      "meanSelectionFrequency": 0.8,
+      "where": [
+        "ibm_fez/success_adj"
+      ]
     }
   ],
   "byScopeTarget": {
@@ -358,25 +127,14 @@
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-          "a.quantum_specific.magic"
+          "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates"
         ],
-        "hardware_submit": [
-          "c.one_qubit_gate_error.median",
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.readout_p0_given_1.median",
-          "c.two_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
-          "a.StructuralMetrics.difficulty",
+        "stable": [
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-          "a.quantum_specific.magic",
+          "a.StructuralMetrics.difficulty",
+          "b.ComplexityMetrics.standardized_metrics.gate_density"
+        ],
+        "layout_calibration": [
           "c.one_qubit_gate_error.median",
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
@@ -385,135 +143,14 @@
           "c.t1_us.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.5725383263892507,
-            "cvMae": 0.12194828504910749,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.5851453175155354,
-            "cvMae": 0.12283049586511859,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.6060424119377548,
-            "cvMae": 0.11614994837149728,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.6298108641923005,
-            "cvMae": 0.11381726083852371,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.6414640315415339,
-            "cvMae": 0.11318544300896635,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-              "a.quantum_specific.magic"
-            ],
-            "selected": true
-          },
-          {
-            "k": 7,
-            "cvR2": 0.637041374049814,
-            "cvMae": 0.11368617051300207,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.6400449670879593,
-            "cvMae": 0.11233674675202701,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.6406229167113304,
-            "cvMae": 0.11226373071324486,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "b.StructuralMetrics.unique_operators",
-              "a.StructuralMetrics.max_dens"
-            ],
-            "selected": false
-          },
-          {
-            "k": 11,
-            "cvR2": 0.6387484450995211,
-            "cvMae": 0.11267181830981658,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "b.StructuralMetrics.unique_operators",
-              "a.StructuralMetrics.max_dens",
-              "a.ElementMetrics.no_p_z"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "hellinger": {
@@ -522,14 +159,14 @@
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "a.quantum_specific.magic",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.StructuralMetrics.vocabulary",
-          "b.BehavioralMetrics.measurement",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.coherence"
+          "b.StructuralMetrics.effort"
         ],
-        "hardware_submit": [
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "a.quantum_specific.magic",
+          "b.ComplexityMetrics.standardized_metrics.gate_density"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.two_qubit_gate_error.median",
@@ -538,375 +175,14 @@
           "c.t1_us.median",
           "c.t2_us.median"
         ],
-        "mixed_submit": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.magic",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.StructuralMetrics.vocabulary",
-          "b.BehavioralMetrics.measurement",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.coherence",
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.two_qubit_gate_error.median",
-          "c.one_qubit_gate_error.median",
-          "c.readout_p0_given_1.median",
-          "c.t1_us.median",
-          "c.t2_us.median"
-        ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.724611048866687,
-            "cvMae": 0.08444641404238626,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7434502096125369,
-            "cvMae": 0.0799499512668123,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7751065810386604,
-            "cvMae": 0.07537404724626251,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.7669198146071522,
-            "cvMae": 0.07437111437766993,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.7738750902439778,
-            "cvMae": 0.07282399506119226,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.782397262504928,
-            "cvMae": 0.07104348523555876,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.7851070000470137,
-            "cvMae": 0.07140851364965896,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.7898777801347199,
-            "cvMae": 0.06955568662859063,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence"
-            ],
-            "selected": true
-          },
-          {
-            "k": 12,
-            "cvR2": 0.7826575141264877,
-            "cvMae": 0.07179954862524485,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "b.ComplexityMetrics.standardized_metrics.clifford_ratio",
-              "a.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 16,
-            "cvR2": 0.7852526016420811,
-            "cvMae": 0.07109478938107462,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "b.ComplexityMetrics.standardized_metrics.clifford_ratio",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types",
-              "b.BehavioralMetrics.critical_depth",
-              "a.quantum_specific.entanglement_ratio",
-              "a.ElementMetrics.percent_q_in_or"
-            ],
-            "selected": false
-          }
-        ]
-      },
-      "tvd": {
-        "circuit_only": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.magic",
-          "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.BehavioralMetrics.measurement",
-          "a.BehavioralMetrics.liveness",
-          "a.ElementMetrics.percent_qm"
-        ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.readout_p0_given_1.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median",
-          "c.t1_us.median"
-        ],
-        "mixed_submit": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.magic",
-          "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.BehavioralMetrics.measurement",
-          "a.BehavioralMetrics.liveness",
-          "a.ElementMetrics.percent_qm",
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.readout_p0_given_1.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median",
-          "c.t1_us.median"
-        ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.7415273673260466,
-            "cvMae": 0.081650602359044,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7493728830914659,
-            "cvMae": 0.07847982184235552,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7522649099386186,
-            "cvMae": 0.07718574378621973,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.7698256969948379,
-            "cvMae": 0.07296542357084325,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.7759641346377304,
-            "cvMae": 0.07224584454467708,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.7775620132263966,
-            "cvMae": 0.07161024792108463,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.7870697329398144,
-            "cvMae": 0.07068155461196407,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.7929544057857191,
-            "cvMae": 0.0687338735281745,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.BehavioralMetrics.liveness",
-              "a.ElementMetrics.percent_qm"
-            ],
-            "selected": true
-          },
-          {
-            "k": 12,
-            "cvR2": 0.7966132389036084,
-            "cvMae": 0.06825186208098237,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.BehavioralMetrics.liveness",
-              "a.ElementMetrics.percent_qm",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 15,
-            "cvR2": 0.7975054278016943,
-            "cvMae": 0.06854773584795953,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.BehavioralMetrics.liveness",
-              "a.ElementMetrics.percent_qm",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "b.BehavioralMetrics.critical_depth",
-              "a.BehavioralMetrics.measurement",
-              "a.ElementMetrics.t_no_csqg"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "success": {
@@ -915,12 +191,12 @@
           "b.StructuralMetrics.effort",
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "a.quantum_specific.magic",
-          "b.BehavioralMetrics.measurement"
+          "b.ComplexityMetrics.derived_metrics.square_ratio"
         ],
-        "hardware_submit": [
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.one_qubit_gate_error.median",
@@ -929,197 +205,75 @@
           "c.t1_us.median",
           "c.t2_us.median"
         ],
-        "mixed_submit": [
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "success_adj": {
+        "circuit_only": [
           "b.ComplexityMetrics.standardized_metrics.circuit_volume",
           "b.StructuralMetrics.effort",
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.derived_metrics.square_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "a.quantum_specific.magic",
-          "b.BehavioralMetrics.measurement",
+          "b.ComplexityMetrics.derived_metrics.square_ratio"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.StructuralMetrics.effort"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.one_qubit_gate_error.median",
-          "c.two_qubit_gate_error.median",
           "c.readout_p0_given_1.median",
-          "c.t1_us.median",
-          "c.t2_us.median"
+          "c.two_qubit_gate_error.median",
+          "c.t2_us.median",
+          "c.t1_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.7592056325930053,
-            "cvMae": 0.08210587091589411,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7606176615199559,
-            "cvMae": 0.08199492938605753,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7584943532189377,
-            "cvMae": 0.08033626126842668,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.7787419404117272,
-            "cvMae": 0.07555544073926469,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.778053494411332,
-            "cvMae": 0.0751482791208102,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.7845375749486063,
-            "cvMae": 0.07360359823918369,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.7867352122977781,
-            "cvMae": 0.07315143155792214,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": true
-          },
-          {
-            "k": 10,
-            "cvR2": 0.7859655246203915,
-            "cvMae": 0.07343021015565061,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "a.ElementMetrics.percent_qm",
-              "b.BehavioralMetrics.critical_depth"
-            ],
-            "selected": false
-          },
-          {
-            "k": 12,
-            "cvR2": 0.7894489761074273,
-            "cvMae": 0.0732080972587931,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "a.ElementMetrics.percent_qm",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.BehavioralMetrics.critical_depth"
-            ],
-            "selected": false
-          },
-          {
-            "k": 13,
-            "cvR2": 0.7853517197727018,
-            "cvMae": 0.07297327697249487,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "a.ElementMetrics.percent_qm",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.BehavioralMetrics.critical_depth",
-              "a.ElementMetrics.t_no_csqg"
-            ],
-            "selected": false
-          },
-          {
-            "k": 15,
-            "cvR2": 0.7907269647548503,
-            "cvMae": 0.07268647905321589,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.derived_metrics.square_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.measurement",
-              "a.ElementMetrics.percent_qm",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.BehavioralMetrics.critical_depth",
-              "a.ElementMetrics.t_no_csqg",
-              "a.ElementMetrics.no_p_z",
-              "a.StructuralMetrics.unique_operators"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "tvd": {
+        "circuit_only": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "b.StructuralMetrics.effort",
+          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+          "a.quantum_specific.magic"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
+        ],
+        "layout_calibration": [
+          "c.readout_error.median",
+          "c.readout_p1_given_0.median",
+          "c.one_qubit_gate_error.median",
+          "c.readout_p0_given_1.median",
+          "c.two_qubit_gate_error.median",
+          "c.t2_us.median",
+          "c.t1_us.median"
+        ],
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       }
     },
@@ -1130,25 +284,14 @@
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "a.quantum_specific.coherence",
-          "a.quantum_specific.magic",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
+          "a.quantum_specific.magic"
         ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.one_qubit_gate_error.median",
-          "c.readout_p1_given_0.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
-          "a.StructuralMetrics.total_operands",
+        "stable": [
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.quantum_specific.coherence",
-          "a.quantum_specific.magic",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+          "a.quantum_specific.magic"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p0_given_1.median",
           "c.one_qubit_gate_error.median",
@@ -1157,160 +300,14 @@
           "c.two_qubit_gate_error.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.5843407037233381,
-            "cvMae": 0.12376863261215042,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7262633530272404,
-            "cvMae": 0.09699954538309859,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7454409887107113,
-            "cvMae": 0.09279211988983883,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.7413832923012131,
-            "cvMae": 0.09024957187922886,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.772575486707165,
-            "cvMae": 0.08553172939089825,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": true
-          },
-          {
-            "k": 7,
-            "cvR2": 0.7501557834886073,
-            "cvMae": 0.08958940172948038,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.7518623129415359,
-            "cvMae": 0.08869669383171787,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.7447658915253956,
-            "cvMae": 0.08857682254081849,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_qm"
-            ],
-            "selected": false
-          },
-          {
-            "k": 12,
-            "cvR2": 0.7589678598006148,
-            "cvMae": 0.08734971267422394,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_qm",
-              "a.ElementMetrics.no_swap",
-              "a.ElementMetrics.percent_q_in_or"
-            ],
-            "selected": false
-          },
-          {
-            "k": 16,
-            "cvR2": 0.7540004782982559,
-            "cvMae": 0.08761977730936707,
-            "features": [
-              "a.StructuralMetrics.total_operands",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.magic",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_qm",
-              "a.ElementMetrics.no_swap",
-              "a.ElementMetrics.percent_q_in_or",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.unique_operators",
-              "a.ElementMetrics.no_p_z",
-              "b.BehavioralMetrics.program_communication"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "hellinger": {
@@ -1319,180 +316,14 @@
           "b.StructuralMetrics.vocabulary",
           "b.ComplexityMetrics.entanglement_metrics.entangling_width",
           "b.BehavioralMetrics.liveness",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.StructuralMetrics.effort",
-          "a.BehavioralMetrics.parallelism"
+          "b.ComplexityMetrics.standardized_metrics.gate_density"
         ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.StructuralMetrics.vocabulary",
+        "stable": [
           "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.BehavioralMetrics.liveness",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.StructuralMetrics.effort",
-          "a.BehavioralMetrics.parallelism",
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.8190626501696726,
-            "cvMae": 0.06745147116280627,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.8592347966113973,
-            "cvMae": 0.05939945795232174,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.8600427208725144,
-            "cvMae": 0.05757449298834141,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.879269517948086,
-            "cvMae": 0.053556378684406755,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.8972263570437992,
-            "cvMae": 0.049602591693141906,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.896966261455612,
-            "cvMae": 0.048614061386061294,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8993247433881268,
-            "cvMae": 0.04847253495449634,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.StructuralMetrics.effort",
-              "a.BehavioralMetrics.parallelism"
-            ],
-            "selected": true
-          },
-          {
-            "k": 10,
-            "cvR2": 0.8982603478934821,
-            "cvMae": 0.04914911420730701,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.StructuralMetrics.effort",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.magic",
-              "a.ComplexityMetrics.derived_metrics.square_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 12,
-            "cvR2": 0.9043098212813387,
-            "cvMae": 0.048549546013437424,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.vocabulary",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.liveness",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.StructuralMetrics.effort",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.magic",
-              "a.ComplexityMetrics.derived_metrics.square_ratio",
-              "a.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.advanced_metrics.circuit_efficiency"
-            ],
-            "selected": false
-          }
-        ]
-      },
-      "tvd": {
-        "circuit_only": [
           "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.BehavioralMetrics.measurement",
-          "b.StructuralMetrics.difficulty"
+          "b.ComplexityMetrics.standardized_metrics.gate_density"
         ],
-        "hardware_submit": [
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p0_given_1.median",
           "c.readout_p1_given_0.median",
@@ -1501,195 +332,14 @@
           "c.two_qubit_gate_error.median",
           "c.t2_us.median"
         ],
-        "mixed_submit": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.BehavioralMetrics.measurement",
-          "b.StructuralMetrics.difficulty",
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.853298226759317,
-            "cvMae": 0.06075694851420726,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.8609012819625386,
-            "cvMae": 0.056446818715182825,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.8930736222376183,
-            "cvMae": 0.05019173081883444,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.891837641852783,
-            "cvMae": 0.04942612872576895,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.8914887892906972,
-            "cvMae": 0.04924938454101905,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.8942916582380999,
-            "cvMae": 0.049046593097124544,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty"
-            ],
-            "selected": true
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8931028130177278,
-            "cvMae": 0.04905253701945303,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.890202756498724,
-            "cvMae": 0.049408284245826065,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 12,
-            "cvR2": 0.8917416528965828,
-            "cvMae": 0.049080085160344074,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 13,
-            "cvR2": 0.887848493577348,
-            "cvMae": 0.049954738681149656,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_qm"
-            ],
-            "selected": false
-          },
-          {
-            "k": 14,
-            "cvR2": 0.8946014398151213,
-            "cvMae": 0.04872873274991994,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.difficulty",
-              "a.quantum_specific.magic",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_qm",
-              "a.quantum_specific_present"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "success": {
@@ -1698,33 +348,15 @@
           "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "b.ComplexityMetrics.entanglement_metrics.entangling_width",
           "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "b.BehavioralMetrics.measurement",
-          "a.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.difficulty",
-          "b.BehavioralMetrics.critical_depth",
-          "a.ElementMetrics.percent_qm"
+          "b.StructuralMetrics.vocabulary"
         ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.readout_p1_given_0.median",
-          "c.one_qubit_gate_error.median",
-          "c.two_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
+        "stable": [
           "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "b.ComplexityMetrics.entanglement_metrics.entangling_width",
           "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "b.BehavioralMetrics.measurement",
-          "a.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.difficulty",
-          "b.BehavioralMetrics.critical_depth",
-          "a.ElementMetrics.percent_qm",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p0_given_1.median",
           "c.readout_p1_given_0.median",
@@ -1733,157 +365,80 @@
           "c.t1_us.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.8058289245308617,
-            "cvMae": 0.07679905955640262,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.8523788094014728,
-            "cvMae": 0.06401663419716681,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.8950110293168584,
-            "cvMae": 0.05472264493948316,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.897701092033631,
-            "cvMae": 0.054055646846353694,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.9016268606788198,
-            "cvMae": 0.0509365643119758,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.9021221853522685,
-            "cvMae": 0.050424339032416936,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8977666735464847,
-            "cvMae": 0.05157832787932443,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.difficulty"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.9046696658328315,
-            "cvMae": 0.05071040773080996,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.difficulty",
-              "b.BehavioralMetrics.critical_depth",
-              "a.ElementMetrics.percent_qm"
-            ],
-            "selected": true
-          },
-          {
-            "k": 12,
-            "cvR2": 0.9024702543644907,
-            "cvMae": 0.05105480831765415,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.difficulty",
-              "b.BehavioralMetrics.critical_depth",
-              "a.ElementMetrics.percent_qm",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 13,
-            "cvR2": 0.9015634680791255,
-            "cvMae": 0.05193840863695121,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.difficulty",
-              "b.BehavioralMetrics.critical_depth",
-              "a.ElementMetrics.percent_qm",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.quantum_specific.magic",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "success_adj": {
+        "circuit_only": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+          "a.quantum_specific.sensitivity"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
+        ],
+        "layout_calibration": [
+          "c.readout_error.median",
+          "c.readout_p0_given_1.median",
+          "c.readout_p1_given_0.median",
+          "c.one_qubit_gate_error.median",
+          "c.two_qubit_gate_error.median",
+          "c.t1_us.median",
+          "c.t2_us.median"
+        ],
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "tvd": {
+        "circuit_only": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "b.StructuralMetrics.vocabulary",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+          "b.ComplexityMetrics.entanglement_metrics.entangling_width"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
+        ],
+        "layout_calibration": [
+          "c.readout_error.median",
+          "c.readout_p0_given_1.median",
+          "c.readout_p1_given_0.median",
+          "c.one_qubit_gate_error.median",
+          "c.t1_us.median",
+          "c.two_qubit_gate_error.median",
+          "c.t2_us.median"
+        ],
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       }
     },
@@ -1894,33 +449,14 @@
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
           "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.measurement",
-          "b.StructuralMetrics.loc_phi6_num_gate_types",
-          "b.BehavioralMetrics.critical_depth",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
         ],
-        "hardware_submit": [
-          "c.one_qubit_gate_error.median",
-          "c.readout_error.median",
-          "c.readout_p0_given_1.median",
-          "c.readout_p1_given_0.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
-          "a.StructuralMetrics.difficulty",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
+        "stable": [
           "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.measurement",
-          "b.StructuralMetrics.loc_phi6_num_gate_types",
-          "b.BehavioralMetrics.critical_depth",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
+          "b.ComplexityMetrics.standardized_metrics.gate_density",
+          "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
+        ],
+        "layout_calibration": [
           "c.one_qubit_gate_error.median",
           "c.readout_error.median",
           "c.readout_p0_given_1.median",
@@ -1929,182 +465,14 @@
           "c.two_qubit_gate_error.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.6069517871858408,
-            "cvMae": 0.11635216615161463,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.592630505224258,
-            "cvMae": 0.1153687754210371,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.6172819908895912,
-            "cvMae": 0.11238556287587367,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.6261251416804713,
-            "cvMae": 0.11066040030306888,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.6348181200185601,
-            "cvMae": 0.10831666544121528,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.6428595411318652,
-            "cvMae": 0.10672903703311226,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.641635307344118,
-            "cvMae": 0.10683293591192734,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.6576902175631465,
-            "cvMae": 0.10593508590114187,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
-            ],
-            "selected": true
-          },
-          {
-            "k": 12,
-            "cvR2": 0.666390508510533,
-            "cvMae": 0.10445008950405478,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.derived_metrics.square_ratio",
-              "a.ComplexityMetrics.advanced_metrics.parallelism_efficiency"
-            ],
-            "selected": false
-          },
-          {
-            "k": 14,
-            "cvR2": 0.6641690472600987,
-            "cvMae": 0.10495011982818642,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.derived_metrics.square_ratio",
-              "a.ComplexityMetrics.advanced_metrics.parallelism_efficiency",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.advanced_metrics.quantum_resource_utilization"
-            ],
-            "selected": false
-          },
-          {
-            "k": 16,
-            "cvR2": 0.6621834410242349,
-            "cvMae": 0.10408928222510433,
-            "features": [
-              "a.StructuralMetrics.difficulty",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.measurement",
-              "b.StructuralMetrics.loc_phi6_num_gate_types",
-              "b.BehavioralMetrics.critical_depth",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
-              "a.ComplexityMetrics.derived_metrics.square_ratio",
-              "a.ComplexityMetrics.advanced_metrics.parallelism_efficiency",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ComplexityMetrics.advanced_metrics.quantum_resource_utilization",
-              "a.quantum_specific.spposq_ratio",
-              "a.ElementMetrics.percent_q_in_or"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "hellinger": {
@@ -2113,29 +481,13 @@
           "b.ComplexityMetrics.standardized_metrics.gate_density",
           "b.StructuralMetrics.vocabulary",
           "b.StructuralMetrics.effort",
-          "b.BehavioralMetrics.liveness",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.parallelism",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width"
+          "b.BehavioralMetrics.liveness"
         ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.readout_p0_given_1.median",
-          "c.one_qubit_gate_error.median",
-          "c.two_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
+        "stable": [
           "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "b.StructuralMetrics.effort",
-          "b.BehavioralMetrics.liveness",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.parallelism",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+          "b.ComplexityMetrics.standardized_metrics.gate_density"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.readout_p0_given_1.median",
@@ -2144,301 +496,14 @@
           "c.t1_us.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.7645991426163739,
-            "cvMae": 0.07973172342061806,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7776815033698153,
-            "cvMae": 0.07455736300716374,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7942576593179504,
-            "cvMae": 0.07073671552856804,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.787374821101708,
-            "cvMae": 0.07257220948807715,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.793217204405166,
-            "cvMae": 0.0723367425697721,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.797661088890778,
-            "cvMae": 0.07076825581745763,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8000872257407099,
-            "cvMae": 0.06970090415957093,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": true
-          },
-          {
-            "k": 9,
-            "cvR2": 0.8005915057636019,
-            "cvMae": 0.06977894101464031,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.7974812480397564,
-            "cvMae": 0.07022209574526496,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "b.StructuralMetrics.effort",
-              "b.BehavioralMetrics.liveness",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "a.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          }
-        ]
-      },
-      "tvd": {
-        "circuit_only": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.BehavioralMetrics.measurement",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.parallelism",
-          "a.quantum_specific.coherence",
-          "a.ElementMetrics.percent_single_gates"
-        ],
-        "hardware_submit": [
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.readout_p0_given_1.median",
-          "c.one_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "mixed_submit": [
-          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-          "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-          "b.BehavioralMetrics.measurement",
-          "a.quantum_specific.magic",
-          "a.BehavioralMetrics.parallelism",
-          "a.quantum_specific.coherence",
-          "a.ElementMetrics.percent_single_gates",
-          "c.readout_error.median",
-          "c.readout_p1_given_0.median",
-          "c.readout_p0_given_1.median",
-          "c.one_qubit_gate_error.median",
-          "c.t1_us.median",
-          "c.two_qubit_gate_error.median",
-          "c.t2_us.median"
-        ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.7816909995627803,
-            "cvMae": 0.07316593140689594,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7890355308693447,
-            "cvMae": 0.07253740577423243,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.8066396795178661,
-            "cvMae": 0.06870733680504708,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.7986147580891654,
-            "cvMae": 0.07027409979450518,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.805979537358457,
-            "cvMae": 0.06874404301120003,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.8071631913086769,
-            "cvMae": 0.06894912093351566,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.coherence"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8092959467903731,
-            "cvMae": 0.06835000913164548,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.coherence",
-              "a.ElementMetrics.percent_single_gates"
-            ],
-            "selected": true
-          },
-          {
-            "k": 10,
-            "cvR2": 0.8002618250065066,
-            "cvMae": 0.06945443558842665,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.coherence",
-              "a.ElementMetrics.percent_single_gates",
-              "a.quantum_specific.entanglement_ratio",
-              "a.ElementMetrics.no_swap"
-            ],
-            "selected": false
-          },
-          {
-            "k": 11,
-            "cvR2": 0.7961195924906159,
-            "cvMae": 0.07040552607277076,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-              "b.BehavioralMetrics.measurement",
-              "a.quantum_specific.magic",
-              "a.BehavioralMetrics.parallelism",
-              "a.quantum_specific.coherence",
-              "a.ElementMetrics.percent_single_gates",
-              "a.quantum_specific.entanglement_ratio",
-              "a.ElementMetrics.no_swap",
-              "b.BehavioralMetrics.program_communication"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       },
       "success": {
@@ -2450,11 +515,12 @@
           "a.ComplexityMetrics.standardized_metrics.gate_density",
           "b.StructuralMetrics.vocabulary",
           "a.quantum_specific.coherence",
-          "a.quantum_specific.entanglement_ratio",
-          "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.ElementMetrics.percent_single_gates"
+          "a.quantum_specific.entanglement_ratio"
         ],
-        "hardware_submit": [
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.readout_p0_given_1.median",
@@ -2463,17 +529,28 @@
           "c.two_qubit_gate_error.median",
           "c.t2_us.median"
         ],
-        "mixed_submit": [
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "success_adj": {
+        "circuit_only": [
           "b.ComplexityMetrics.standardized_metrics.circuit_volume",
           "b.StructuralMetrics.effort",
-          "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+          "b.ComplexityMetrics.derived_metrics.square_ratio",
           "b.BehavioralMetrics.measurement",
-          "a.ComplexityMetrics.standardized_metrics.gate_density",
-          "b.StructuralMetrics.vocabulary",
-          "a.quantum_specific.coherence",
-          "a.quantum_specific.entanglement_ratio",
-          "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-          "b.ElementMetrics.percent_single_gates",
+          "a.BehavioralMetrics.critical_depth"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
+        ],
+        "layout_calibration": [
           "c.readout_error.median",
           "c.readout_p1_given_0.median",
           "c.readout_p0_given_1.median",
@@ -2482,135 +559,44 @@
           "c.two_qubit_gate_error.median",
           "c.t2_us.median"
         ],
-        "ablation": [
-          {
-            "k": 2,
-            "cvR2": 0.7770747944600114,
-            "cvMae": 0.07989137065070158,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort"
-            ],
-            "selected": false
-          },
-          {
-            "k": 3,
-            "cvR2": 0.7757464515805855,
-            "cvMae": 0.07788604650822735,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width"
-            ],
-            "selected": false
-          },
-          {
-            "k": 4,
-            "cvR2": 0.7803315126327037,
-            "cvMae": 0.0778385819125554,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement"
-            ],
-            "selected": false
-          },
-          {
-            "k": 5,
-            "cvR2": 0.8004398063582445,
-            "cvMae": 0.07366011928621488,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density"
-            ],
-            "selected": false
-          },
-          {
-            "k": 6,
-            "cvR2": 0.799356193687986,
-            "cvMae": 0.074075284207979,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary"
-            ],
-            "selected": false
-          },
-          {
-            "k": 7,
-            "cvR2": 0.813774029160579,
-            "cvMae": 0.0713707791915634,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.quantum_specific.coherence"
-            ],
-            "selected": false
-          },
-          {
-            "k": 8,
-            "cvR2": 0.8174653666366287,
-            "cvMae": 0.07141926905719334,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.entanglement_ratio"
-            ],
-            "selected": false
-          },
-          {
-            "k": 10,
-            "cvR2": 0.832299300794326,
-            "cvMae": 0.06814334163359115,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.entanglement_ratio",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_single_gates"
-            ],
-            "selected": true
-          },
-          {
-            "k": 11,
-            "cvR2": 0.8288007472234138,
-            "cvMae": 0.06913216187679272,
-            "features": [
-              "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-              "b.StructuralMetrics.effort",
-              "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.BehavioralMetrics.measurement",
-              "a.ComplexityMetrics.standardized_metrics.gate_density",
-              "b.StructuralMetrics.vocabulary",
-              "a.quantum_specific.coherence",
-              "a.quantum_specific.entanglement_ratio",
-              "a.ComplexityMetrics.entanglement_metrics.entangling_width",
-              "b.ElementMetrics.percent_single_gates",
-              "b.BehavioralMetrics.program_communication"
-            ],
-            "selected": false
-          }
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
+        ]
+      },
+      "tvd": {
+        "circuit_only": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+          "b.StructuralMetrics.effort",
+          "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+          "b.BehavioralMetrics.measurement",
+          "a.quantum_specific.magic"
+        ],
+        "stable": [
+          "b.ComplexityMetrics.standardized_metrics.circuit_volume"
+        ],
+        "layout_calibration": [
+          "c.readout_error.median",
+          "c.readout_p1_given_0.median",
+          "c.readout_p0_given_1.median",
+          "c.one_qubit_gate_error.median",
+          "c.t1_us.median",
+          "c.two_qubit_gate_error.median",
+          "c.t2_us.median"
+        ],
+        "device_calibration": [
+          "cal.one_qubit_gate_error",
+          "cal.readout_error",
+          "cal.readout_p0_given_1",
+          "cal.readout_p1_given_0",
+          "cal.t1_us",
+          "cal.t2_us",
+          "cal.two_qubit_gate_error"
         ]
       }
     }

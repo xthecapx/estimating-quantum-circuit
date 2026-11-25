@@ -1,0 +1,4 @@
+period,jobs,span_hours,calibrations,adjacent_same_algorithm,median_abs_rho_time_metric,blocks_abs_rho_above_half,blocks
+kingston-full-oracle-growth-v1-2026-11-09 / window 20261109,391,0.8586318966666666,2,0.941025641025641,0.24191925402441763,5,69
+kingston-full-oracle-growth-v1-2026-11-10 / window 20261110,391,0.6785943733333333,1,0.941025641025641,0.2451681696259852,5,69
+kingston-full-oracle-growth-v1-2026-11-11 / window 20261111,391,4.197517885833333,3,0.9384615384615385,0.42561544540004925,31,69

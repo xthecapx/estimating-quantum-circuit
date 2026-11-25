@@ -27,7 +27,8 @@
   "exported_target_jobs": {
     "hellinger_fidelity": 1173,
     "tvd_similarity": 1173,
-    "dsr": 1173
+    "dsr": 1173,
+    "chance_corrected": 1173
   },
   "algorithm_configs": {
     "BERNSTEIN-VAZIRANI": 39,
@@ -193,8 +194,9 @@
   ],
   "manifest_sha256": "2fdcc81e9ec2d85e8c1b5ada3e3d80f1a896aee0749f1fba1453ed63c54ea4b0",
   "references_sha256": "b97ad765b871f6bcf06f5e45722af6ef6ef6249d0d2b18131f062e69b5e92d8b",
-  "analysis_source_sha256": "a64460add322fbf98b832c23573ebb4d3d42ab8a805f41443782fb2ec4c657aa",
+  "analysis_source_sha256": "96312a25b9d35f859e8feb46aac7a92593f98a8fd9ea83515c13736444b6c6ee",
   "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
+  "timing_available": true,
   "versions": {
     "python": "3.11.14",
     "statsmodels": "0.15.0",
@@ -202,5 +204,14 @@
     "numpy": "2.4.6"
   },
   "holdout_fraction": 0.2,
-  "r2_threshold": 0.8
+  "r2_threshold": 0.8,
+  "r2_bootstrap": {
+    "draws": 1000,
+    "seed": 11
+  },
+  "skill_baseline": "per-period mean success of the largest third of training configurations",
+  "backends_in_export": [
+    "ibm_fez",
+    "ibm_kingston"
+  ]
 }

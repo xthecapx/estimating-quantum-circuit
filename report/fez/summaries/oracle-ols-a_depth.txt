@@ -1,34 +1,33 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                success   R-squared:                       0.688
-Model:                            OLS   Adj. R-squared:                  0.681
-Method:                 Least Squares   F-statistic:                     848.2
-Date:                Mon, 23 Nov 2026   Prob (F-statistic):           1.15e-70
-Time:                        14:51:18   Log-Likelihood:                 266.27
-No. Observations:                 472   AIC:                            -508.5
-Df Residuals:                     460   BIC:                            -458.7
-Df Model:                          11                                         
+Dep. Variable:                success   R-squared:                       0.686
+Model:                            OLS   Adj. R-squared:                  0.679
+Method:                 Least Squares   F-statistic:                     880.5
+Date:                Tue, 24 Nov 2026   Prob (F-statistic):           5.57e-67
+Time:                        16:50:10   Log-Likelihood:                 256.03
+No. Observations:                 462   AIC:                            -490.1
+Df Residuals:                     451   BIC:                            -444.6
+Df Model:                          10                                         
 Covariance Type:              cluster                                         
 ========================================================================================
                            coef    std err          t      P>|t|      [0.025      0.975]
 ----------------------------------------------------------------------------------------
-intercept                0.2117      0.107      1.975      0.052      -0.002       0.425
-x                       -0.6530      0.167     -3.900      0.000      -0.987      -0.319
+intercept                0.2258      0.104      2.179      0.033       0.019       0.433
+x                       -0.6506      0.167     -3.901      0.000      -0.983      -0.318
 period_1                 0.0055      0.006      1.001      0.320      -0.005       0.017
-period_2                -0.0931      0.025     -3.720      0.000      -0.143      -0.043
-period_3                -0.0217      0.019     -1.129      0.263      -0.060       0.017
-period_4                -0.0601      0.018     -3.256      0.002      -0.097      -0.023
-period_5                 0.0078      0.042      0.186      0.853      -0.076       0.091
-period_6                 0.0300      0.056      0.536      0.594      -0.082       0.142
-period_7                 0.0162      0.039      0.415      0.679      -0.062       0.094
-period_8                -0.2072      0.087     -2.378      0.020      -0.381      -0.034
-algorithm_difference     0.6792      0.107      6.345      0.000       0.466       0.893
-slope_difference         0.4788      0.168      2.847      0.006       0.143       0.814
+period_2                -0.0931      0.025     -3.721      0.000      -0.143      -0.043
+period_3                -0.0216      0.019     -1.121      0.266      -0.060       0.017
+period_4                 0.0078      0.042      0.187      0.852      -0.076       0.091
+period_5                 0.0300      0.056      0.536      0.594      -0.082       0.142
+period_6                 0.0162      0.039      0.415      0.679      -0.062       0.094
+period_7                -0.2072      0.087     -2.379      0.020      -0.381      -0.033
+algorithm_difference     0.6686      0.104      6.459      0.000       0.462       0.875
+slope_difference         0.4777      0.168      2.852      0.006       0.143       0.812
 ==============================================================================
-Omnibus:                      178.536   Durbin-Watson:                   0.628
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              576.496
-Skew:                          -1.786   Prob(JB):                    6.54e-126
-Kurtosis:                       7.068   Cond. No.                         16.8
+Omnibus:                      172.574   Durbin-Watson:                   0.630
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              541.424
+Skew:                          -1.773   Prob(JB):                    2.70e-118
+Kurtosis:                       6.944   Cond. No.                         16.5
 ==============================================================================
 
 Notes:

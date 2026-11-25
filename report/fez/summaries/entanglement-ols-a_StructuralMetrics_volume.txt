@@ -1,31 +1,30 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                success   R-squared:                       0.408
-Model:                            OLS   Adj. R-squared:                  0.391
-Method:                 Least Squares   F-statistic:                     117.0
-Date:                Mon, 23 Nov 2026   Prob (F-statistic):           4.50e-27
-Time:                        14:51:20   Log-Likelihood:                 176.52
-No. Observations:                 296   AIC:                            -335.0
-Df Residuals:                     287   BIC:                            -301.8
-Df Model:                           8                                         
+Dep. Variable:                success   R-squared:                       0.396
+Model:                            OLS   Adj. R-squared:                  0.381
+Method:                 Least Squares   F-statistic:                     128.6
+Date:                Tue, 24 Nov 2026   Prob (F-statistic):           3.74e-27
+Time:                        16:50:14   Log-Likelihood:                 165.71
+No. Observations:                 286   AIC:                            -315.4
+Df Residuals:                     278   BIC:                            -286.2
+Df Model:                           7                                         
 Covariance Type:              cluster                                         
 ========================================================================================
                            coef    std err          t      P>|t|      [0.025      0.975]
 ----------------------------------------------------------------------------------------
-intercept                0.7262      0.037     19.525      0.000       0.651       0.801
-x                       -0.0898      0.013     -6.730      0.000      -0.117      -0.063
-period_1                 0.0848      0.032      2.670      0.011       0.021       0.149
-period_2                 0.0357      0.036      0.998      0.324      -0.036       0.108
-period_3                 0.0629      0.024      2.669      0.011       0.015       0.110
-period_4                 0.0994      0.045      2.204      0.033       0.009       0.190
-period_5                 0.0789      0.036      2.199      0.033       0.007       0.151
-algorithm_difference     0.0196      0.019      1.009      0.318      -0.020       0.059
-slope_difference        -0.0268      0.014     -1.967      0.056      -0.054       0.001
+intercept                0.7236      0.037     19.572      0.000       0.649       0.798
+x                       -0.0901      0.013     -6.739      0.000      -0.117      -0.063
+period_1                 0.0848      0.032      2.674      0.010       0.021       0.149
+period_2                 0.0357      0.036      0.999      0.323      -0.036       0.108
+period_3                 0.0995      0.045      2.208      0.033       0.009       0.190
+period_4                 0.0790      0.036      2.202      0.033       0.007       0.151
+algorithm_difference     0.0189      0.019      0.978      0.334      -0.020       0.058
+slope_difference        -0.0268      0.014     -1.964      0.056      -0.054       0.001
 ==============================================================================
-Omnibus:                      174.769   Durbin-Watson:                   0.972
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              986.987
-Skew:                          -2.515   Prob(JB):                    4.77e-215
-Kurtosis:                      10.397   Cond. No.                         8.55
+Omnibus:                      165.923   Durbin-Watson:                   0.973
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              885.007
+Skew:                          -2.474   Prob(JB):                    6.66e-193
+Kurtosis:                      10.055   Cond. No.                         8.06
 ==============================================================================
 
 Notes:

@@ -1,15 +1,14 @@
 {
   "backend": "ibm_fez",
   "input_jobs": 2681,
-  "selected_jobs": 1256,
-  "configuration_count": 193,
-  "excluded_jobs": 1425,
+  "selected_jobs": 1236,
+  "configuration_count": 189,
+  "excluded_jobs": 1445,
   "campaign_jobs": {
     "fez-dataset-v2": 374,
     "fez-dataset-v2-2026-11-05": 344,
     "fez-dataset-v2-pilot-r2": 30,
     "fez-full-shor-growth-v1-2026-11-06": 381,
-    "fez-ghz-bv-transfer-v1-2026-11-23": 20,
     "fez-oracle-growth-v1-2026-11-07": 51,
     "fez-oracle-growth-v1-2026-11-07-makeup": 10,
     "fez-oracle-growth-v1-2026-11-07-standalone": 7,
@@ -21,15 +20,14 @@
     "fez-dataset-v2-2026-11-05 / window 20261105": 344,
     "fez-dataset-v2-pilot-r2 / window 0": 30,
     "fez-full-shor-growth-v1-2026-11-06 / window 20261106": 381,
-    "fez-ghz-bv-transfer-v1-2026-11-23 / window 20261123": 20,
     "fez-oracle-growth-v1-2026-11-07 / window 20261107": 51,
     "fez-oracle-growth-v1-2026-11-07-makeup / window 20261107": 10,
     "fez-oracle-growth-v1-2026-11-07-standalone / window 20261108": 7,
     "fez-shor-growth-v1-2026-11-05 / window 20261105": 39
   },
   "algorithm_jobs": {
-    "BERNSTEIN-VAZIRANI": 270,
-    "GHZ": 108,
+    "BERNSTEIN-VAZIRANI": 260,
+    "GHZ": 98,
     "GROVER": 202,
     "PHASE-ESTIMATION": 134,
     "QFT": 170,
@@ -38,12 +36,13 @@
     "VTP": 188
   },
   "exported_target_jobs": {
-    "hellinger_fidelity": 1256,
-    "tvd_similarity": 1256,
-    "dsr": 1256
+    "hellinger_fidelity": 1236,
+    "tvd_similarity": 1236,
+    "dsr": 1236,
+    "chance_corrected": 1236
   },
   "algorithm_configs": {
-    "BERNSTEIN-VAZIRANI": 43,
+    "BERNSTEIN-VAZIRANI": 39,
     "GHZ": 15,
     "GROVER": 29,
     "PHASE-ESTIMATION": 21,
@@ -66,43 +65,43 @@
   ],
   "metric_coverage": {
     "a.num_qubits": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.depth": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.size": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.ComplexityMetrics.gate_based_metrics.two_qubit_count": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.StructuralMetrics.volume": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.BehavioralMetrics.program_communication": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "a.quantum_specific.entanglement_ratio": {
-      "available_jobs": 898,
-      "missing_jobs": 358
+      "available_jobs": 890,
+      "missing_jobs": 346
     },
     "b.depth": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "b.two_qubit_depth": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     },
     "b.two_qubit_gates": {
-      "available_jobs": 1256,
+      "available_jobs": 1236,
       "missing_jobs": 0
     }
   },
@@ -206,8 +205,9 @@
   ],
   "manifest_sha256": "2fdcc81e9ec2d85e8c1b5ada3e3d80f1a896aee0749f1fba1453ed63c54ea4b0",
   "references_sha256": "b97ad765b871f6bcf06f5e45722af6ef6ef6249d0d2b18131f062e69b5e92d8b",
-  "analysis_source_sha256": "a64460add322fbf98b832c23573ebb4d3d42ab8a805f41443782fb2ec4c657aa",
+  "analysis_source_sha256": "96312a25b9d35f859e8feb46aac7a92593f98a8fd9ea83515c13736444b6c6ee",
   "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
+  "timing_available": true,
   "versions": {
     "python": "3.11.14",
     "statsmodels": "0.15.0",
@@ -215,5 +215,14 @@
     "numpy": "2.4.6"
   },
   "holdout_fraction": 0.2,
-  "r2_threshold": 0.8
+  "r2_threshold": 0.8,
+  "r2_bootstrap": {
+    "draws": 1000,
+    "seed": 11
+  },
+  "skill_baseline": "per-period mean success of the largest third of training configurations",
+  "backends_in_export": [
+    "ibm_fez",
+    "ibm_kingston"
+  ]
 }

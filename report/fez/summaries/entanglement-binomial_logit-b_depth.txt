@@ -1,24 +1,23 @@
                  Generalized Linear Model Regression Results                  
 ==============================================================================
-Dep. Variable:           ['y1', 'y2']   No. Observations:                  296
-Model:                            GLM   Df Residuals:                      287
-Model Family:                Binomial   Df Model:                            8
+Dep. Variable:           ['y1', 'y2']   No. Observations:                  286
+Model:                            GLM   Df Residuals:                      278
+Model Family:                Binomial   Df Model:                            7
 Link Function:                  Logit   Scale:                          1.0000
-Method:                          IRLS   Log-Likelihood:                -13707.
-Date:                Mon, 23 Nov 2026   Deviance:                       25438.
-Time:                        14:51:21   Pearson chi2:                 2.66e+04
+Method:                          IRLS   Log-Likelihood:                -13658.
+Date:                Tue, 24 Nov 2026   Deviance:                       25401.
+Time:                        16:50:15   Pearson chi2:                 2.65e+04
 No. Iterations:                     6   Pseudo R-squ. (CS):              1.000
 Covariance Type:              cluster                                         
 ========================================================================================
                            coef    std err          t      P>|t|      [0.025      0.975]
 ----------------------------------------------------------------------------------------
-intercept                1.0588      0.209      5.077      0.000       0.638       1.479
-x                       -0.5880      0.092     -6.392      0.000      -0.773      -0.403
-period_1                 0.6671      0.176      3.794      0.000       0.313       1.021
-period_2                 0.3372      0.189      1.783      0.082      -0.044       0.718
-period_3                 0.4468      0.136      3.282      0.002       0.172       0.721
-period_4                 0.8776      0.316      2.781      0.008       0.242       1.514
-period_5                 0.6492      0.238      2.723      0.009       0.169       1.130
-algorithm_difference    -0.4783      0.160     -2.996      0.004      -0.800      -0.157
-slope_difference        -0.6177      0.132     -4.667      0.000      -0.884      -0.351
+intercept                1.0373      0.206      5.037      0.000       0.622       1.452
+x                       -0.5858      0.092     -6.400      0.000      -0.770      -0.401
+period_1                 0.6669      0.176      3.799      0.000       0.313       1.021
+period_2                 0.3371      0.189      1.785      0.081      -0.044       0.718
+period_3                 0.8787      0.315      2.794      0.008       0.245       1.512
+period_4                 0.6502      0.238      2.736      0.009       0.171       1.129
+algorithm_difference    -0.4965      0.158     -3.150      0.003      -0.814      -0.179
+slope_difference        -0.6078      0.133     -4.577      0.000      -0.875      -0.340
 ========================================================================================

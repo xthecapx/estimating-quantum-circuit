@@ -2,13 +2,13 @@
 
 For the relationship between success decay in related algorithms, see the [matched decay profiles](decay/report.md).
 
-Backend: **ibm_fez**. Selected jobs: **1256**; configurations: **193**; campaigns: **9**.
-Collection periods (campaign × window): **10**.
+Backend: **ibm_fez**. Selected jobs: **1236**; configurations: **189**; campaigns: **8**.
+Collection periods (campaign × window): **9**.
 
 ```text
          algorithm  jobs
-BERNSTEIN-VAZIRANI   270
-               GHZ   108
+BERNSTEIN-VAZIRANI   260
+               GHZ    98
             GROVER   202
   PHASE-ESTIMATION   134
                QFT   170
@@ -24,7 +24,7 @@ Exported rates are rounded to six decimals. Exact success is reconstructed from 
 
 The descriptive model adds algorithm intercept and slope differences. Its slope contrast is algorithm 2 minus algorithm 1; coefficients are per original metric unit. BH q-values adjust all reported slope tests across families, metrics, and model types. A large p/q-value is NOT evidence of equivalent decay or generalization.
 
-Unseen-algorithm tests train on one member of a family and predict the other without using target outcomes. Larger-configuration tests hold out the upper tail of configuration median metric values, preserving all repetitions and campaigns of a configuration. Scaling and per-period mean baselines are learned from training data only. Unseen collection periods cannot be predicted by fixed effects and are explicitly counted as unsupported. Metric range overlap is reported separately from extrapolation. OLS predictions are not clipped.
+Unseen-algorithm tests train on one member of a family and predict the other without using target outcomes. Larger-configuration tests hold out the upper tail of configuration median metric values, preserving all repetitions and campaigns of a configuration. Scaling and baselines are learned from training data only. Unseen collection periods cannot be predicted by fixed effects and are explicitly counted as unsupported. Metric range overlap is reported separately from extrapolation. OLS predictions are not clipped.
 
 ## Interpretation limits
 
@@ -34,38 +34,65 @@ Unseen-algorithm tests train on one member of a family and predict the other wit
 - Campaign/window effects reduce observed period confounding; they do not remove within-period calibration, layout, or structural differences. One backend cannot establish cross-provider transfer.
 - Missing metrics are excluded per feature, not imputed. Rank deficiency, separation, insufficient independent configurations, and convergence failures are logged in skipped_models.csv.
 - Confidence bands describe fitted mean uncertainty, not prediction intervals for future jobs.
+- Repeated jobs of one configuration run minutes apart. The number of independent units in a held-out score is test_configs, not test_jobs.
+
+## Run order and calibration
+
+Jobs run in algorithm blocks, so collection-period effects do not remove drift inside a window. The table shows, per period, the share of consecutive jobs from the same algorithm, the number of calibration snapshots, and the Spearman correlation between run time and each circuit metric within an algorithm block.
+
+| Period | Jobs | Hours | Calibrations | Consecutive jobs, same algorithm | Median \|ρ(time, metric)\| | Blocks with \|ρ\| > 0.5 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| fez-dataset-v2 / window 0 | 30 | 0.19 | 2 | 76% | — | 0 / 0 |
+| fez-dataset-v2 / window 1 | 344 | 0.36 | 3 | 98% | 0.11 | 0 / 60 |
+| fez-dataset-v2-2026-11-05 / window 20261105 | 344 | 1.25 | 4 | 98% | 0.08 | 0 / 60 |
+| fez-dataset-v2-pilot-r2 / window 0 | 30 | 0.03 | 1 | 76% | — | 0 / 0 |
+| fez-full-shor-growth-v1-2026-11-06 / window 20261106 | 381 | 0.59 | 2 | 98% | 0.35 | 32 / 69 |
+| fez-oracle-growth-v1-2026-11-07 / window 20261107 | 51 | 1.01 | 1 | 98% | 0.18 | 1 / 17 |
+| fez-oracle-growth-v1-2026-11-07-makeup / window 20261107 | 10 | 2.94 | 2 | 100% | 0.36 | 0 / 8 |
+| fez-oracle-growth-v1-2026-11-07-standalone / window 20261108 | 7 | 0.95 | 2 | 100% | — | 0 / 0 |
+| fez-shor-growth-v1-2026-11-05 / window 20261105 | 39 | 0.41 | 1 | 100% | 0.95 | 8 / 9 |
+
+Sensitivity: each slope comparison is refitted with hours since the first job of its period as a covariate. Of 52 comparisons, 38 have q < 0.05 without the time term and 38 with it; the slope difference changes sign in 0. This is a partial adjustment. A linear time term cannot separate algorithms that ran in disjoint blocks, and it is not applied to the held-out transfer scores. A calibration-snapshot fixed effect is not fitted: snapshots coincide with algorithm blocks in most periods, so it would be confounded with the algorithm terms. Randomized submission order is needed to remove this.
 
 ## Held-out performance
 
-The thesis R² ≥ 0.80 criterion is displayed per prespecified candidate; MAE, RMSE, and improvement over the training-only campaign baseline must also be assessed. Negative R² values and out-of-bounds OLS predictions are retained.
+The thesis R² ≥ 0.80 criterion is displayed per prespecified candidate. Every R² carries a 95% interval (r2_ci_low, r2_ci_high) from 1000 bootstrap draws of whole target configurations, with predictions held fixed. An interval that includes the criterion neither passes nor fails it. Negative R² values and out-of-bounds OLS predictions are retained.
+
+rmse_skill is 1 − RMSE / baseline RMSE, where the baseline predicts the per-period mean success of the largest third of the training configurations. The earlier baseline, the per-period mean of all training configurations, overpredicts larger targets by construction; it remains in period_mean_rmse_skill for comparison.
+
+<!-- replication-summary:start -->
+Replication across chips and directions (ibm_fez, ibm_kingston), unseen-algorithm transfer, R² ≥ 0.80: 6 of 210 candidates pass. 0 combination(s) pass in the same direction on every chip, 0 pass in both directions on at least one chip, and 0 candidate(s) keep the lower end of their 95% interval at or above 0.80. **No family, metric and model combination reaches the criterion in both directions on every chip.**
+<!-- replication-summary:end -->
 
 ```text
-                                      tests  median_r2  median_mae  median_rmse
-protocol              model                                                    
-larger_configurations binomial_logit     52  -0.651342    0.140772     0.169163
-                      ols                52  -0.260255    0.137089     0.173838
-unseen_algorithm      binomial_logit     52  -0.044035    0.146004     0.194913
-                      ols                52  -0.024617    0.152220     0.194873
+                                      tests  median_r2  median_mae  median_rmse  beats_largest_tercile  beats_period_mean
+protocol              model                                                                                              
+larger_configurations binomial_logit     52     -0.651       0.141        0.169                  0.673              0.962
+                      ols                52     -0.260       0.139        0.175                  0.885              0.942
+unseen_algorithm      binomial_logit     52     -0.040       0.146        0.195                  0.577              0.577
+                      ols                52     -0.025       0.152        0.195                  0.596              0.596
 ```
 
-Candidates reaching the R² criterion: 0 / 208. These are candidate-level results, not acceptance of H2.
+Candidates reaching the R² criterion: 0 / 208; with the whole 95% interval at or above it: 0 / 208. These are candidate-level results, not acceptance of H2.
 
 Best observed binomial transfer scores among the explored metrics (post hoc screening; use a fresh holdout to confirm):
 
 ```text
-      family             source             target                                                 metric        r2      mae     rmse
-     fourier                QFT   PHASE-ESTIMATION a.ComplexityMetrics.gate_based_metrics.two_qubit_count  0.681782 0.083116 0.122465
-     fourier   PHASE-ESTIMATION                QFT a.ComplexityMetrics.gate_based_metrics.two_qubit_count  0.430017 0.118256 0.154376
-entanglement                VTP                GHZ                                                b.depth  0.422773 0.058194 0.069594
-      oracle             GROVER BERNSTEIN-VAZIRANI                                      b.two_qubit_gates  0.128493 0.144789 0.191257
-      oracle BERNSTEIN-VAZIRANI             GROVER                  a.quantum_specific.entanglement_ratio  0.054996 0.211028 0.252276
-entanglement                GHZ                VTP a.ComplexityMetrics.gate_based_metrics.two_qubit_count -0.021709 0.115382 0.197921
+      family             source             target                                                 metric  test_configs     r2  r2_ci_low  r2_ci_high   mae  rmse_skill
+     fourier                QFT   PHASE-ESTIMATION a.ComplexityMetrics.gate_based_metrics.two_qubit_count            21  0.682      0.535       0.798 0.083       0.480
+     fourier   PHASE-ESTIMATION                QFT a.ComplexityMetrics.gate_based_metrics.two_qubit_count            27  0.430     -0.608       0.740 0.118       0.503
+entanglement                VTP                GHZ                                                b.depth            15  0.423     -0.126       0.581 0.058       0.691
+      oracle             GROVER BERNSTEIN-VAZIRANI                                      b.two_qubit_gates            39  0.128      0.005       0.162 0.145       0.619
+      oracle BERNSTEIN-VAZIRANI             GROVER                  a.quantum_specific.entanglement_ratio            25  0.055     -0.742       0.399 0.211       0.151
+entanglement                GHZ                VTP a.ComplexityMetrics.gate_based_metrics.two_qubit_count            30 -0.022     -0.295       0.202 0.115      -0.021
 ```
 
 ## Artifacts
 
 - `provenance.json`: hashed inputs, selected campaigns, software versions, and settings.
-- `slope_comparisons.csv`: slopes, cluster-robust contrast intervals, p/q-values, missingness.
+- `slope_comparisons.csv`: slopes, cluster-robust contrast intervals, p/q-values, missingness, and the time-adjusted contrast.
+- `run_order_confounding.csv`: run order against algorithm, calibration and circuit size.
+- `replication_summary.csv`: which chips and directions reach the criterion per metric.
 - `summaries/`: full statsmodels descriptive fit summaries and coefficient tables. Their residual normality diagnostics are descriptive; they do not account for clustering.
 - `heldout_scores.csv`: all algorithm-transfer and larger-configuration evaluations.
 - `heldout_predictions.csv`: per-job held-out predictions, chance floors, baselines, support.

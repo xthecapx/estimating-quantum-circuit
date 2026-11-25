@@ -27,7 +27,8 @@
   "exported_target_jobs": {
     "hellinger_fidelity": 1173,
     "tvd_similarity": 1173,
-    "dsr": 1173
+    "dsr": 1173,
+    "chance_corrected": 1173
   },
   "algorithm_configs": {
     "BERNSTEIN-VAZIRANI": 39,
@@ -193,8 +194,9 @@
   ],
   "manifest_sha256": "2fdcc81e9ec2d85e8c1b5ada3e3d80f1a896aee0749f1fba1453ed63c54ea4b0",
   "references_sha256": "b97ad765b871f6bcf06f5e45722af6ef6ef6249d0d2b18131f062e69b5e92d8b",
-  "analysis_source_sha256": "a64460add322fbf98b832c23573ebb4d3d42ab8a805f41443782fb2ec4c657aa",
+  "analysis_source_sha256": "96312a25b9d35f859e8feb46aac7a92593f98a8fd9ea83515c13736444b6c6ee",
   "maximum_export_rate_rounding_correction": 5.000000000143778e-07,
+  "timing_available": true,
   "versions": {
     "python": "3.11.14",
     "statsmodels": "0.15.0",
@@ -203,6 +205,11 @@
   },
   "minimum_shared_levels": 3,
   "group_tolerance_points": 5.0,
-  "group_source_sha256": "feb35b627a54eb18e1caf7191f73b08d1d6bf40d88c1c20aa461b1a1555531a4",
-  "decay_source_sha256": "d2ce9e60d45b523490f62704fabc1cddeb324d0429f106b7505ed1ec33bfd09b"
+  "gap_bootstrap": {
+    "draws": 1000,
+    "seed": 11,
+    "method": "jobs are resampled with replacement within each configuration at each resource level (algorithm \u00d7 level \u00d7 configuration \u00d7 period), so the set of configurations and levels stays fixed; deviations of a resampled configuration mean are scaled by sqrt(n/(n-1)) to offset the small number of repetitions, and a configuration with one job contributes no variation. This is not binomial shot resampling: it reflects job-to-job variation, which includes shot noise. Intervals are 2.5th to 97.5th percentiles"
+  },
+  "group_source_sha256": "34445cce697f03fde253db2f3c3f2d189838edc93f5f86eb382cf09a1b7ccaf7",
+  "decay_source_sha256": "e16244c92ca34fc2e054e09534818f29f5717d3a6413aa7515b6c83e288b1be3"
 }

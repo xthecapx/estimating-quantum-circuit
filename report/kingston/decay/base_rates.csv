@@ -1,0 +1,4 @@
+comparison_class,pairs,windows,windows_point_match,share_point_match,mean_p_match,cells_with_min_periods,cells_repeated_match,share_repeated_match
+family,5,54,10,0.18518518518518517,0.18053703703703702,18,3,0.16666666666666666
+random-volumetric control,7,51,8,0.1568627450980392,0.15631372549019606,17,2,0.11764705882352941
+unrelated,15,130,27,0.2076923076923077,0.20488461538461536,43,7,0.16279069767441862
