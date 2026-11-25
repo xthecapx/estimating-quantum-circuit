@@ -4,7 +4,7 @@ import { decayData } from "../../src/lib/data/load";
 afterEach(() => vi.unstubAllGlobals());
 
 function chipResponse(backend: string) {
-  return Response.json({ schemaVersion: 1, backend, panels: {} });
+  return Response.json({ schemaVersion: 2, backend, panels: {} });
 }
 
 it("shares in-flight reports and keeps a late response scoped to its original chip", async () => {

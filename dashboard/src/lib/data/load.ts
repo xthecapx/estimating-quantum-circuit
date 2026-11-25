@@ -85,7 +85,7 @@ const calibrations = jsonExport<CalibrationData>(data => !!data.calibrations && 
 export const loadIndex = () => index.load("index.json");
 export const loadCalibrations = () => calibrations.load("calibrations.json");
 
-export const decayData = jsonExport<DecaySnapshot>((data, chip) => data.backend === chip && !!data.panels);
+export const decayData = jsonExport<DecaySnapshot>((data, chip) => data.backend === chip && !!data.panels, 2);
 export const estimationData = jsonExport<EstimationSnapshot>((data, scope) => data.backend === scope && !!data.targets, 2);
 export const comparisonData = jsonExport<ComparisonSnapshot>(data => Array.isArray(data.rows) && Array.isArray(data.points));
 export const validationData = jsonExport<ProspectiveSnapshot>(data => !!data.scores && !!data.chips);

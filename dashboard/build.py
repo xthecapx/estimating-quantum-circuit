@@ -218,6 +218,8 @@ def write_json(path, payload):
 
 
 def _collect_validated_reports(project_subdir, output_prefix, tables, output, digest):
+    for stale in output.glob(f"{output_prefix}-*.json"):
+        stale.unlink()
     reports = {}
     for path in sorted((PROJECT / project_subdir).glob("*.json")):
         snapshot = json.loads(path.read_text(encoding="utf-8"))

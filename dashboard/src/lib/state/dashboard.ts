@@ -39,6 +39,7 @@ function choicesFromUrl(url: UrlState) {
     decay: {
       matrix: url.matrix === "direction" ? "direction" : "similarity",
       pair: url.pair || "", resource: url.resource || "", outcome: url.outcome || "",
+      scope: url.backend || "",
     },
     estimation: {
       scope: url.estScope || "pooled", target: url.estTarget || "",
@@ -73,7 +74,14 @@ function activeRoute(state: DashboardState, current: Explorer): UrlState {
     case "range":
       return { ...current.toUrl(), section };
     case "decay":
-      return { section, backend: decay.resource ? current.backend : undefined, ...decay };
+      return {
+        section,
+        backend: decay.resource ? (decay.scope || "all") : undefined,
+        matrix: decay.matrix,
+        pair: decay.pair,
+        resource: decay.resource,
+        outcome: decay.outcome,
+      };
     case "estimation":
     case "footprint":
       return { section, estScope: estimation.scope, estTarget: estimation.target, estSplit: estimation.split, estView: estimation.view };

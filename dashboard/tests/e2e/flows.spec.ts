@@ -203,8 +203,11 @@ test("compare decay shows matched fits, shares selections and restores range set
   const partner = panel.getByLabel("Compare with");
   const outcomePicker = panel.getByLabel("Outcome");
   const outcomeOrder = [
-    "Success rate · 11 matching pairs", "Hellinger fidelity · 10 matching pairs",
-    "TVD similarity · 10 matching pairs", "Chance-adjusted, ideal-normalized success · 8 matching pairs",
+    "Success rate · 11 matching pairs",
+    "Chance-corrected success · 10 matching pairs",
+    "Hellinger fidelity · 10 matching pairs",
+    "TVD similarity · 10 matching pairs",
+    "Chance-adjusted, ideal-normalized success · 8 matching pairs",
     "Differential success rate · 7 matching pairs",
   ];
   await expect(outcomePicker.locator("option")).toHaveText(outcomeOrder);
@@ -213,28 +216,56 @@ test("compare decay shows matched fits, shares selections and restores range set
   await expect(primary.locator("option").last()).toHaveText("Grover · 0 matching partners");
   await primary.selectOption({ label: "Phase estimation · 3 matching partners" });
   await expect(partner).toHaveValue("QFT");
+  await expect(panel.getByRole("region", { name: "Pair conclusion" })).toContainText("Similar decay on");
+  await expect(panel.getByRole("region", { name: "Selected metric summary" })).toBeVisible();
+  // Chip sits in the top filter bar alongside Algorithm, Compare with, and Outcome; no inline Metric select remains.
+  const chipFilter = panel.getByRole("group", { name: "Decay filters" }).getByLabel("Chip", { exact: true });
+  await expect(chipFilter.locator("option")).toHaveText(["All data", "IBM Fez", "IBM Kingston"]);
+  await expect(panel.getByLabel("Inspected circuit resource")).toHaveCount(0);
+  // Starts focused on All metrics; Window details opens on demand or when inspecting a metric.
+  await expect(panel.getByRole("img", { name: /Median decay gap by circuit resource/ }).locator("svg")).toBeVisible();
+  await expect(panel.locator(".gap-chart")).toHaveCount(0);
+  await chipFilter.selectOption({ label: "IBM Fez" });
+  await expect(panel.getByRole("region", { name: "Selected metric summary" })).toContainText("IBM Fez");
+  await chipFilter.selectOption({ label: "All data" });
+  await panel.getByRole("button", { name: /Window details/ }).click();
+  await expect(panel.locator(".gap-chart")).toBeVisible();
+  await panel.getByRole("button", { name: /Back to all metrics/ }).click();
+  await expect(panel.getByRole("img", { name: /Median decay gap by circuit resource/ }).locator("svg")).toBeVisible();
+
+  // Secondary tables start collapsed to keep the first view focused.
+  await expect(panel.getByRole("table", { name: "Partner by resource preservation map" })).toBeHidden();
+  await expect(panel.locator("table.evidence")).toBeHidden();
+  await panel.getByText(/Which partners preserve decay with Phase estimation/).click();
+  await expect(panel.getByRole("table", { name: "Partner by resource preservation map" })).toBeVisible();
+
+  await panel.locator(".overview-disclosure > summary").click();
   await expect(panel.locator(".worked-example")).toBeHidden();
   await panel.getByText("How to read this comparison", { exact: true }).click();
   await expect(panel.getByRole("heading", { name: "Phase estimation contains an inverse QFT" })).toBeVisible();
-  const ratios = panel.getByRole("row", { name: /^Entanglement ratio/ });
+  const ratios = panel.locator("table.evidence").getByRole("row", { name: /^Entanglement ratio/ });
   await expect(panel.locator(".worked-example")).toContainText("this window counts toward the first number");
-  await expect(ratios.locator("button")).toHaveText(["2 of 3 ✓", "2 of 3 ✓"]);
+  await expect(ratios.locator("button")).toHaveText(["4 of 6", "2 of 3 ✓", "2 of 3 ✓"]);
   await expect(ratios.locator("td strong")).toHaveText(["4 of 6", "2 of 3", "2 of 3"]);
-  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
+  // Clicking All data shows all 6 windows across both chips with chip badges.
+  await ratios.getByRole("button", { name: /All data/ }).click();
+  await expect(panel.locator(".gap-chart li")).toHaveCount(6);
+  const gates = panel.locator("table.evidence").getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates.locator("td strong")).toHaveText(["2 of 6", "2 of 3", "0 of 3"]);
   await gates.getByRole("button", { name: /ibm_fez/ }).click();
   await expect(panel.locator(".gap-chart li strong")).toHaveText(["31.01 pp", "2.25 pp", "4.34 pp"]);
-  await panel.getByText("Observed outcomes and fitted trends", { exact: true }).click();
+  await panel.getByText(/Observed outcomes and fitted trends/).click();
   await expect(panel.locator(".panels article")).toHaveCount(3);
   await gates.getByRole("button", { name: /ibm_kingston/ }).click();
   await expect(panel.getByRole("heading", { name: "Similar decline in 0 of 3 eligible windows" })).toBeVisible();
   await page.reload();
+  await panel.locator(".overview-disclosure > summary").click();
   await expect(gates.getByRole("button", { name: /ibm_kingston/ })).toHaveAttribute("aria-pressed", "true");
   await panel.getByText("Slopes and rank correlations by window").click();
   await expect(panel.locator(".fit-details tbody tr td:last-child")).toHaveText(["0.90", "0.90", "0.90"]);
   await expect(outcomePicker.locator("option")).toHaveText(outcomeOrder);
   await outcomePicker.selectOption({ label: "Hellinger fidelity · 10 matching pairs" });
-  await expect(panel.getByRole("heading", { name: /how often did Hellinger fidelity fall/i })).toBeVisible();
+  await expect(panel.locator(".overview-disclosure > summary")).toContainText(/how often did Hellinger fidelity fall/i);
   await expect(partner).toHaveValue("QFT");
   await selectSection(page, "Operating range");
   await expect(page.getByLabel("Algorithm", { exact: true }).locator("option:checked")).toHaveText("Grover");
@@ -246,12 +277,15 @@ test("compare decay distinguishes limited coverage and includes other measured p
   const panel = page.getByRole("region", { name: "Decay comparison" });
   await panel.getByLabel("Algorithm", { exact: true }).selectOption({ label: "Phase estimation · 3 matching partners" });
   await panel.getByLabel("Compare with").selectOption("SHOR");
-  const width = panel.getByRole("row", { name: /^Total logical qubits/ });
+  // Shor raw-success caveat is surfaced directly on raw success.
+  await expect(panel.getByText(/Shor raw-success caveat/)).toBeVisible();
+  await panel.locator(".overview-disclosure > summary").click();
+  const width = panel.locator("table.evidence").getByRole("row", { name: /^Total logical qubits/ });
   await expect(width.locator(".match")).toHaveText(["3 of 4", "3 of 3 ✓"]);
   await expect(panel.locator("#count-guide")).toContainText("Unavailable for comparison");
   await expect(width.locator("td strong")).toHaveText(["3 of 4", "0 of 1", "3 of 3"]);
   const unavailable = panel.getByRole("checkbox", { name: "Show unavailable comparisons" });
-  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
+  const gates = panel.locator("table.evidence").getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates).toHaveCount(0);
   await unavailable.check();
   await expect(panel.locator("#coverage-guide")).toBeVisible();
@@ -274,10 +308,11 @@ test("compare decay distinguishes limited coverage and includes other measured p
 test("all-data GHZ and BV comparison includes the new Fez window @narrow", async ({ page }) => {
   const errors = await openApp(page, "#section=decay&pair=GHZ%2FBERNSTEIN-VAZIRANI&outcome=success");
   const panel = page.getByRole("region", { name: "Decay comparison" });
-  await expect(panel.getByRole("columnheader")).toHaveText([
+  await panel.locator(".overview-disclosure > summary").click();
+  await expect(panel.locator("table.evidence").getByRole("columnheader")).toHaveText([
     "Circuit resource", "All data", "ibm_fez", "ibm_kingston",
   ]);
-  const gates = panel.getByRole("row", { name: /^Logical two-qubit gates/ });
+  const gates = panel.locator("table.evidence").getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates.locator("td strong")).toHaveText(["0 of 7", "0 of 4", "0 of 3"]);
   await gates.getByRole("button", { name: /ibm_fez/ }).click();
   const window = panel.locator(".gap-chart li").filter({ hasText: "Nov 23, 2026" });
@@ -285,12 +320,16 @@ test("all-data GHZ and BV comparison includes the new Fez window @narrow", async
   expect(errors).toEqual([]);
 });
 
-test("Marrakesh validation contributes only to the all-data count @narrow", async ({ page }) => {
+test("Marrakesh validation contributes to all-data and can be inspected via All data click @narrow", async ({ page }) => {
   await openApp(page, "#section=decay&pair=PHASE-ESTIMATION%2FRANDOM-VOLUMETRIC&outcome=success");
   const panel = page.getByRole("region", { name: "Decay comparison" });
-  const widths = panel.getByRole("row", { name: /^Total logical qubits/ });
+  await panel.locator(".overview-disclosure > summary").click();
+  const widths = panel.locator("table.evidence").getByRole("row", { name: /^Total logical qubits/ });
   await expect(widths.locator("td strong")).toHaveText(["2 of 7", "0 of 3", "1 of 3"]);
-  await expect(panel.getByRole("columnheader")).toHaveText(["Circuit resource", "All data", "ibm_fez", "ibm_kingston"]);
+  await expect(panel.locator("table.evidence").getByRole("columnheader")).toHaveText(["Circuit resource", "All data", "ibm_fez", "ibm_kingston"]);
+  await widths.getByRole("button", { name: /All data/ }).click();
+  await expect(panel.locator(".gap-chart li")).toHaveCount(7);
+  await expect(panel.locator(".gap-chart li").filter({ hasText: "IBM Marrakesh" })).toContainText("Nov 16, 2026");
 });
 
 test("footprint tab traces metric selection, subset scores and model results @narrow", async ({ page }) => {
@@ -348,7 +387,8 @@ test("direction compares column loss to row loss and preserves the question on r
   await expect(reverse).toHaveAttribute("aria-pressed", "true");
   await expect(panel.locator(".gap-chart")).toBeVisible();
   await panel.getByLabel("Matrix view").selectOption({ label: "Similarity" });
-  await expect(panel.locator(".stat span")).toHaveText("Median gap in fitted change");
+  await expect(panel.locator(".stat span")).toContainText("Median gap in fitted change");
+  await expect(panel.locator(".stat span")).toContainText("95% CI");
   expect(errors).toEqual([]);
 });
 
@@ -582,6 +622,7 @@ test("navigation drawer collapses to icon rail on desktop and slides as overlay 
     await toggle.click();
     await expect(toggle).toHaveAttribute("aria-expanded", "true");
     await expect(drawer).toBeVisible();
+    await expect.poll(async () => (await drawer.boundingBox())!.x).toBeGreaterThanOrEqual(0);
   } else {
     await expect(toggle).toHaveAttribute("aria-expanded", "true");
     await expect(drawer).toBeVisible();

@@ -7,6 +7,8 @@ import json
 import math
 from pathlib import Path
 
+SCHEMA_VERSION = 2
+
 
 def records(path):
     with path.open(encoding="utf-8", newline="") as stream:
@@ -15,6 +17,28 @@ def records(path):
 
 def number(value):
     return float(value) if value and math.isfinite(float(value)) else None
+
+
+def base_rates(report):
+    path = report / "base_rates.csv"
+    if not path.is_file():
+        return []
+    rows = []
+    for r in records(path):
+        rows.append(
+            dict(
+                pairClass=r["comparison_class"],
+                pairs=int(r["pairs"]),
+                windows=int(r["windows"]),
+                matchedWindows=int(r["windows_point_match"]),
+                shareMatched=number(r["share_point_match"]),
+                meanPMatch=number(r["mean_p_match"]),
+                cells=int(r["cells_with_min_periods"]),
+                repeatedCells=int(r["cells_repeated_match"]),
+                shareRepeated=number(r["share_repeated_match"]),
+            )
+        )
+    return rows
 
 
 def package(report):
@@ -28,6 +52,10 @@ def package(report):
             b=key[3],
             role=r["role"],
             gap=r["gap_points"],
+            ciLow=r.get("gap_ci_low"),
+            ciHigh=r.get("gap_ci_high"),
+            pWithin=r.get("p_within_tolerance"),
+            primaryOutcome=bool(r.get("primary_outcome", False)),
             grouped=r["grouped_together"],
             periods={},
             overlap={},
@@ -43,6 +71,9 @@ def package(report):
             gap=100
             * abs(float(r["slope_difference_2_minus_1"]))
             * (float(r["metric_max"]) - float(r["metric_min"])),
+            ciLow=number(r.get("gap_ci_low")),
+            ciHigh=number(r.get("gap_ci_high")),
+            pMatch=number(r.get("p_match")),
             rho=number(r["profile_spearman"]),
             points=[],
         )
@@ -55,7 +86,7 @@ def package(report):
     for (metric, outcome, _, _), cell in cells.items():
         panels.setdefault(metric, {}).setdefault(outcome, []).append(cell)
     return dict(
-        schemaVersion=1,
+        schemaVersion=SCHEMA_VERSION,
         backend=provenance["backend"],
         algorithms=groups["algorithms"],
         jobs=provenance["selected_jobs"],
@@ -67,6 +98,7 @@ def package(report):
             **{p["file"]: p["sha256"] for p in provenance["inputs"]},
             "references.csv": provenance["references_sha256"],
         },
+        baseRates=base_rates(report),
         panels=panels,
     )
 
