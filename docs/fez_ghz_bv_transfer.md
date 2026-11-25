@@ -68,6 +68,50 @@ GHZ width varies with gate count, and compiled CZ counts and BV bit positions
 also vary. These runs cannot identify a per-gate causal effect or establish
 repeatability across calibration windows.
 
+## Results
+
+All 20 jobs completed. Scored as stated above: mean of the two jobs per new
+secret, error = prediction − observation.
+
+| New BV configuration | Observed | GHZ transfer error | BV-only interpolation error | Constant error |
+|---|---:|---:|---:|---:|
+| BV12-PREFIX3 | 0.818 | −0.130 | −0.031 | −0.176 |
+| BV12-PREFIX5 | 0.738 | −0.079 | −0.047 | −0.095 |
+| BV12-PREFIX7 | 0.612 | +0.014 | −0.005 | +0.031 |
+| BV12-PREFIX9 | 0.443 | +0.109 | +0.092 | +0.200 |
+| **Mean absolute error** | | **0.083** | **0.044** | **0.125** |
+
+**The pre-stated criterion was not met.** GHZ transfer has a lower MAE than the
+constant comparator and a higher MAE than BV-only interpolation. This window
+does not favor transfer of the GHZ change to BV12.
+
+The miss is in the slope. From 3 to 9 logical CNOTs, BV12 success fell 37.6
+percentage points and GHZ success fell 10.7. Drift does not explain it:
+replacing the historical anchors with this window's GHZ7 and BV12-ALT jobs
+gives a transfer MAE of 0.082. The two jobs of a configuration differ by at
+most 0.044, well below the transfer errors at the ends of the range.
+
+Anchors in this window against the historical means: BV12-ALT 0.674 against
+0.643; GHZ4, GHZ6, GHZ7, GHZ8 and GHZ10 at 0.948, 0.941, 0.915, 0.874 and
+0.841 against 0.939, 0.909, 0.893, 0.875 and 0.801.
+
+Compiled circuits differ more than the logical count suggests. The prepared ISA
+circuits have 3, 5, 6, 7 and 9 two-qubit gates for GHZ and 3, 11, 16, 17 and 25
+for BV at the same logical CNOT counts. Per compiled two-qubit gate the two
+losses are close, about 1.8 points for GHZ and 1.7 for BV. That comparison was
+made after seeing the data. It is a hypothesis for a new window with predictions
+fixed in advance, not a result of this one.
+
+**Pre-registration cannot be verified from this repository.** The prediction
+table, this document and the recovered job data entered git in one commit
+(`805a3d2`, 2026-11-23 14:38 −05:00), minutes after the jobs ran (19:32 UTC).
+The table reproduces to six decimals from the export with the manifest hash
+cited above, which is the export that preceded this window. That is consistent
+with predictions computed before collection. The history cannot prove it.
+
+The transfer window is exploratory data. It is part of the Fez development
+cohort in the decay and regression reports, so it cannot serve as a holdout.
+
 ## Collection
 
 Run from the repository root with the project environment. The dated plans are

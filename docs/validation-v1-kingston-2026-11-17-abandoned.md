@@ -31,7 +31,7 @@ and Shor parts were never submitted.
 ## Status of the files
 
 Plans, manifests, journals, prepared records and the pre-registered predictions file
-(`report/ml_estimation/prospective/kingston-validation-v1-2026-11-17_predictions.json`)
+(`report/frozen_v1/prospective/kingston-validation-v1-2026-11-17_predictions.json`)
 are committed unchanged as they were when the Batches were cancelled. The journals were
 not edited. Because `recover` was never run, the exporter produces no rows for this
 collection.

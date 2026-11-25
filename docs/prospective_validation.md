@@ -34,7 +34,7 @@ Expected cost: about 2 QPU-seconds per job on Fez, so roughly 3–5 QPU-minutes 
 ## Rules
 
 - **Commit the frozen models and code first.** `predict` refuses to run with uncommitted
-  tracked changes under `experiments/`, `scripts/` or `report/ml_estimation/models/`, and
+  tracked changes under `experiments/`, `scripts/` or `report/frozen_v1/models/`, and
   records the commit. New untracked files from `prepare` are expected.
 - **Predictions are committed before `submit`.** `predict` refuses to overwrite an
   existing predictions file and refuses records that already have results.
@@ -82,7 +82,7 @@ python scripts/run.py ibm prepare --date $DATE --backend ibm_marrakesh --profile
 python -m experiments.qaqs_prospective predict --campaign kingston-validation-v1-$DATE
 python -m experiments.qaqs_prospective predict --campaign fez-validation-v1-$DATE
 python -m experiments.qaqs_prospective predict --campaign marrakesh-validation-v1-$DATE
-git add report/ml_estimation/prospective/
+git add report/frozen_v1/prospective/
 git add experiments/*/plans/*validation-v1-d$DATE*
 git add experiments/*/data/qpu/v2
 git add experiments/data/quantum_specific_cache
@@ -125,9 +125,9 @@ done
 python scripts/run.py export-ibm --out experiments/dataset_out
 for C in kingston fez marrakesh; do
   python -m experiments.qaqs_prospective score \
-    --predictions report/ml_estimation/prospective/$C-validation-v1-${DATE}_predictions.json
+    --predictions report/frozen_v1/prospective/$C-validation-v1-${DATE}_predictions.json
 done
-python -m experiments.qaqs_prospective summarize report/ml_estimation/prospective/*-validation-v1-${DATE}_scores.csv
+python -m experiments.qaqs_prospective summarize report/frozen_v1/prospective/*-validation-v1-${DATE}_scores.csv
 ```
 
 `summarize` writes `validation-v1_summary.md` with seen and unseen QPU side by side.

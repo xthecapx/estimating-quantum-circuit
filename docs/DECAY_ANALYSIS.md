@@ -8,10 +8,11 @@ QWARD source checkout or new release is not required. No QPU is contacted.
 
 - `experiments/scalability_regression.py`: table validation, cohort selection,
   provenance, decay entry point, and the existing optional regression analysis.
-- `experiments/decay_relationships.py`: exact shared resource levels and
-  within-period fitted profiles for related algorithms and controls.
-- `experiments/decay_groups.py`: descriptive complete-linkage grouping.
-- `tests/test_scalability_regression.py`: the original 20 offline safeguards.
+- `experiments/decay_relationships.py`: exact shared resource levels,
+  within-period fitted profiles, and a bootstrap interval for every gap.
+- `experiments/decay_groups.py`: descriptive complete-linkage grouping, the
+  outcome each pair is read on, and the base rates by pair class.
+- `tests/test_scalability_regression.py`: the offline safeguards for these modules.
 - `docs/decay-migration.json`: original commit, source/destination file hashes,
   and namespace adaptation. Numerical analysis logic was copied unchanged.
 - `report/{fez,kingston}/decay/`: generated CSVs, figures, report, grouping JSON,
@@ -41,17 +42,35 @@ python dashboard/export_decay.py report/marrakesh-validation/decay
 python scripts/run.py dashboard
 ```
 
+`--backend` has no built-in default. Without it, the runner analyzes every chip
+that has development jobs in the export and writes each to `--out/<backend>`.
+The full reports, including the held-out regression study and the cross-chip
+replication summary, come from the same command without `--decay-only`:
+
+```sh
+python scripts/run.py decay --backend ibm_fez --out report/fez
+python scripts/run.py decay --backend ibm_kingston --out report/kingston --compare report/fez
+```
+
+`--compare` adds another chip's report directory to the replication summary and
+refreshes that summary in both reports.
+
 `python -m experiments.scalability_regression` is the equivalent direct entry
 point. The default tables are `experiments/dataset_out`; `--tables PATH` can
 select a complete alternative snapshot. `--campaign ID` can be repeated to
 select an explicit cohort. `--no-plots` skips figures when only numerical
 results are needed. `--group-tolerance` defaults to five target points.
+`--bootstrap-draws` defaults to 1,000; 0 disables the gap intervals.
 
 The table export includes all completed job results, including successful
 repetitions from incomplete records. The analysis retains only the selected
-backend and supported algorithms. The refreshed snapshot contains 2,409 jobs:
-1,236 Fez jobs and 1,173 Kingston jobs. Later runs should use their generated
-provenance counts instead of assuming these values remain constant.
+backend and supported algorithms. The export contains 2,681 jobs. The
+development cohort analyzed here is the 2,409 training-role jobs: 1,236 on Fez
+and 1,173 on Kingston. Of the rest, 252 are validation jobs (84 on each of Fez,
+Kingston and Marrakesh) and 20 belong to the exploratory Fez GHZ-to-BV transfer
+window; both are analyzed only when named with `--campaign`
+(see `campaign_role` in `experiments/ml_dataset.py`). Later runs should use their generated provenance counts instead of
+assuming these values remain constant.
 
 The dashboard validates the dataset manifest, every CSV part, and the references
 table against each snapshot's hashes. A new export invalidates all three snapshots,
@@ -79,14 +98,39 @@ to the whole circuit. For success rate, a five-percentage-point fall means
 five more shots per hundred missed that algorithm’s acceptance criterion.
 These fits cannot isolate the contribution of a gate or subcircuit.
 
-Each resource-by-chip cell counts windows where **both** slopes are
-negative and the losses differ by at most the report tolerance. The loss
-gap in a window is `100 × |slope A − slope B| × (largest − smallest shared level)`.
-With the published settings, two such windows establish a repeated match, each with at
-least three shared levels. The denominator counts eligible windows on that chip. Unrelated algorithms qualify by the same rule. The full
-matrix also exposes pairs with larger gaps, rising trends and missing overlap.
-The report’s complete-linkage clustering uses the *median* absolute gap
-across eligible windows and also depends on the other algorithms in a group.
+The loss gap in a window is
+`100 × |slope A − slope B| × (largest − smallest shared level)`. Read every gap
+with its interval. The reports give a 95% bootstrap interval for each window's
+gap and for the median gap across windows, and the bootstrap probability that
+the gap is at most the tolerance, `P(gap ≤ 5)`. An interval that straddles the
+tolerance supports neither similar nor different decay.
+
+**Bootstrap.** 1,000 draws. Jobs are resampled with replacement within each
+configuration at each resource level, so the configurations and levels stay
+fixed. Deviations of a resampled configuration mean are scaled by
+`sqrt(n / (n − 1))` because most configurations have two or three jobs. This
+is job resampling, not binomial shot resampling: it reflects job-to-job
+variation, which includes shot noise. A configuration with one job contributes
+no variation, so its interval is too narrow. The interval does not cover the
+choice of configurations or the difference between windows; the per-window
+gaps show that directly.
+
+A window is a *point match* when both slopes are negative and the gap is at most
+the tolerance. Two such windows, each with at least three shared levels, make a
+repeated match. The dashboard still counts point matches. A point match with
+`P(gap ≤ 5)` near one half is a coin toss, so the count is a summary of the
+gaps, not a finding. The report’s complete-linkage clustering uses the *median*
+absolute gap across eligible windows and also depends on the other algorithms
+in a group.
+
+**Outcome for Shor.** Pairs that involve Shor are read on chance-corrected
+success, `f.fidelity.chance_corrected_success` = (success − chance) / (1 − chance),
+floored at zero. Eight of the thirteen Shor configurations stay at their chance
+floor, and that floor falls from 0.25 to 0.03 as counting qubits are added. Raw
+Shor success therefore falls with width even where the circuit returns noise.
+All other pairs are read on raw success. Two limits apply. The zero floor
+raises the mean of configurations that scatter around chance. Ideal Shor
+success is 0.5, so this score cannot reach one for Shor.
 
 **Circuit construction.** The IBM QFT builder runs round trips or period
 detection. Both use an inverse QFT. Phase estimation applies controlled
@@ -103,15 +147,40 @@ CNOT network. Neither invokes the other. GHZ and vTP share entangling gates,
 and vTP and random volumetric share an inverse-validation pattern. Those
 relationships concern operations or protocols rather than an embedded algorithm.
 
-**Examples from the committed success-rate fits.** Gaps are percentage points
-over the shared resource range. Spearman ρ ranks observed level means
-independently of the fitted loss.
+**Examples from the committed fits.** Gaps are points on the outcome × 100
+scale over the shared resource range, with 95% bootstrap intervals. Spearman ρ
+ranks observed level means independently of the fitted loss.
 
 | Pair and resource | Fez | Kingston |
 | --- | --- | --- |
-| QFT and phase estimation, logical two-qubit gates | 2 of 3 windows match. Gaps of 31.01, 2.25 and 4.34. | 0 of 3 match. Gaps of 6.86, 6.61 and 5.28 despite ρ = 0.90 in every window. |
-| Phase estimation and Shor, total logical qubits | Only one eligible window, with four shared widths. | All 3 windows match. Median gap 2.59. |
-| Grover and Bernstein–Vazirani, total logical qubits | 0 of 4 match. Median gap 64.89 despite ρ = 1 in every window. | 0 of 3 match. Median gap 56.16. |
+| QFT and phase estimation, logical two-qubit gates, success | Window gaps 31.01 [29.27, 32.73], 2.25 [0.10, 6.15] and 4.34 [1.08, 7.89]. Median 4.34 [1.66, 7.89], P(gap ≤ 5) = 0.58. The windows disagree by far more than any interval. | Window gaps 6.86 [4.78, 8.83], 6.61 [4.42, 8.62] and 5.28 [2.87, 7.62]. Median 6.61 [4.68, 7.90], P(gap ≤ 5) = 0.06, with ρ = 0.90 in every window. |
+| Phase estimation and Shor, total logical qubits, chance-corrected success | One eligible window with four shared widths. Gap 40.09 [37.47, 42.68]. | Window gaps 22.77 [20.81, 24.87], 13.50 [11.66, 15.29] and 14.96 [5.25, 22.54]. Median 14.96 [12.13, 22.08], P(gap ≤ 5) = 0.00. |
+| Grover and Bernstein–Vazirani, total logical qubits, success | Median 64.89 [63.76, 65.98] over 4 windows, with ρ = 1 in every window. | Median 56.16 [54.76, 57.71] over 3 windows. |
+
+Phase estimation and Shor show why the outcome matters. On raw success the
+three Kingston gaps are 4.86, 2.59 and 0.76, a median of 2.59 [1.31, 5.47],
+and every window is a point match. That agreement comes from Shor's falling
+chance floor. On chance-corrected success no window is within the tolerance on
+either chip.
+
+**Base rates.** A family pair agreeing is informative only if unrelated pairs
+agree less often. Over every resource, on each pair's primary outcome:
+
+| Chip | Pair class | Windows | Point matches | Mean P(match) | Cells | Repeated matches |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Fez | Family | 53 | 11 (20.8%) | 0.203 | 16 | 4 (25.0%) |
+| Fez | Random-volumetric control | 46 | 3 (6.5%) | 0.078 | 16 | 0 (0.0%) |
+| Fez | Unrelated | 131 | 14 (10.7%) | 0.113 | 42 | 4 (9.5%) |
+| Kingston | Family | 54 | 10 (18.5%) | 0.181 | 18 | 3 (16.7%) |
+| Kingston | Random-volumetric control | 51 | 8 (15.7%) | 0.156 | 17 | 2 (11.8%) |
+| Kingston | Unrelated | 130 | 27 (20.8%) | 0.205 | 43 | 7 (16.3%) |
+
+Family = QFT/PE, Grover/BV, vTP/GHZ, and QFT or PE with Shor. A cell is one
+pair on one resource with at least two eligible windows. On Fez, family pairs
+match about twice as often as unrelated pairs. On Kingston they match no more
+often than unrelated pairs. These counts cover five family pairs on two chips
+and carry no significance test. They do not show family-specific decay.
+Each chip's `decay/report.md` and `decay/base_rates.csv` hold the current table.
 
 The five shared logical two-qubit gate counts on both chips are 10, 16, 22,
 30 and 48. At 22, the QFT side contains only the period-detection circuit

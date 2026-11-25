@@ -1,7 +1,11 @@
 # Shor growth campaign evaluation — November 5, 2026
 
-Status: offline evaluation completed. The proposed 39-job workload is now configured
-on the Shor growth branch; no IBM jobs submitted. See [local run instructions](shor_growth_local_run.md).
+Status: collected. The sections from "Objective and measured preflight" to
+"Implementation checklist" are the plan written before submission and are kept
+as written. The 13 configurations ran on Fez (86 jobs in the development
+cohort: the Shor-only campaign of November 5, the full collection of November 6
+and eight earlier M3 jobs) and on Kingston (117 jobs over November 9 to 11).
+[Results](#results) follow the plan.
 The legacy full profile is preserved; the expanded profile is selected explicitly.
 
 ## Objective and measured preflight
@@ -103,5 +107,49 @@ changing existing DSR columns.
 5. Group dashboard Shor sweeps by N/base/strategy, expose total and counting qubits,
    and describe the selected order-finding task, ideal ceiling, and noise baseline.
 6. Export using the new multi-file dataset format after retrieval.
+
+## Results
+
+Signal is (observed success − uniform baseline) / (ideal success − uniform
+baseline) with ideal success 0.5, averaged over the exported jobs of a
+configuration. Zero is uniform noise.
+
+| Family | M3 | M4 | M5 | M6 |
+| --- | ---: | ---: | ---: | ---: |
+| a=7, Fez | 0.003 | −0.025 | 0.001 | −0.007 |
+| a=7, Kingston | −0.036 | 0.007 | −0.001 | 0.001 |
+| a=2, Fez | 0.044 | 0.015 | −0.009 | 0.011 |
+| a=2, Kingston | −0.023 | 0.025 | 0.000 | −0.007 |
+
+| Family | M2 | M3 | M4 | M5 | M6 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| a=4, Fez | 0.244 | 0.374 | 0.302 | 0.108 | 0.074 |
+| a=4, Kingston | 0.395 | 0.255 | 0.188 | 0.071 | 0.122 |
+
+- **a=7 and a=2 are at chance on both chips.** All eight configurations have
+  signal between −0.04 and +0.05. Their ISA circuits have 153 to 1,167
+  two-qubit gates. They describe the noise floor and give no decay slope.
+- **Only a=4 carries signal.** Its five configurations have 59 to 115 two-qubit
+  gates and signal between 0.07 and 0.40.
+- **The a=4 signal is not monotone in M.** On Fez it rises from M2 to M3. On
+  Kingston it rises from M5 to M6. The M6 uniform baseline (3/64) is higher
+  than the M5 baseline (1/32), so the normalization does not move in one
+  direction either. Between-job standard deviation of raw success is 0.01 to
+  0.08 for these configurations.
+- **Raw Shor success falls with M for every family.** It follows the uniform
+  baseline, which falls from 0.25 to 0.03. This is the artifact the plan warned
+  about. A raw-success decay curve for Shor does not measure circuit quality.
+
+Consequences for the other analyses:
+
+- A Shor decay slope rests on five configurations of one family. State it for
+  a=4 only, on the adjusted signal, with its interval.
+- The decay comparison reads every pair involving Shor on chance-corrected
+  success. On raw success, phase estimation and Shor appeared to share a slope
+  on Kingston; on the corrected outcome they do not.
+  See the [decay runbook](DECAY_ANALYSIS.md).
+- Shor is the only workload run with gate twirling and dynamical decoupling.
+  Those settings remain confounded with the algorithm.
+- Two chips and N=15 only. Other providers: WAITING FOR DATA.
 
 Background: [IBM Shor/order-finding tutorial](https://quantum.cloud.ibm.com/docs/en/tutorials/shors-algorithm).
