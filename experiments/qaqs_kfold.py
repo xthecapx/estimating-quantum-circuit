@@ -1223,9 +1223,14 @@ def analyze_scope_kfold(
             "chanceCorrected": target_key in CHANCE_CORRECTED_TARGETS,
             "scoredJobs": int(head.sum()),
             "bestModel": deployed_names.get("circuit_only", ""),
-            # The model to use: one model for all chips with chip id where there are
-            # several chips; the circuit-only model inside a single chip.
-            "bestRegime": "circuit_chip" if "circuit_chip" in regimes_out else "circuit_only",
+            # Role of each saved circuit-only model. Per-chip models are the best choice
+            # on a chip with training data; the pooled model predicts a chip without
+            # any; pooled + chip id is a candidate to re-evaluate when new data arrives.
+            "modelRoles": (
+                {"circuit_only": "unseen_chip_fallback", "circuit_chip": "candidate"}
+                if multi_chip
+                else {"circuit_only": "best"}
+            ),
             "chipLeaderboard": regimes_out.get("circuit_chip", []),
             "footprintCount": len(fp_full),
             "candidateFootprintCount": len(fp_items),

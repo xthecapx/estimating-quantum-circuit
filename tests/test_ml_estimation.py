@@ -219,7 +219,8 @@ def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
     assert "Cross-provider transfer" in text and "Gain over size" in text
     manifest = json.loads((report_out / "models" / "models_manifest.json").read_text(encoding="utf-8"))
     assert {m["regime"] for m in manifest["models"]} == {"circuit_only", "mixed_submit", "circuit_chip"}
-    assert success["bestRegime"] == "circuit_chip" and chip["bestRegime"] == "circuit_only"
+    assert success["modelRoles"] == {"circuit_only": "unseen_chip_fallback", "circuit_chip": "candidate"}
+    assert chip["modelRoles"] == {"circuit_only": "best"}
     best = joblib.load(report_out / success["savedModels"]["circuit_chip"]["path"])
     assert [c for c in best["features"] if c.startswith("chip.")] == ["chip.ankaa_3", "chip.ibm_fez", "chip.ionq_aria"]
     assert "stableFootprint" in json.loads((report_out / "best_predictors.json").read_text(encoding="utf-8"))

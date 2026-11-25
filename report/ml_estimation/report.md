@@ -10,27 +10,31 @@ Dataset `2fdcc81e9ec2` · chips: ibm_fez, ibm_kingston · providers: ibm.
 
 Scopes: `ibm_fez`, `ibm_kingston`, `pooled`.
 
-## Best model: one pooled model with chip id
+## Which model to use
 
-One model for all chips: the circuit footprint plus a one-hot chip id. Per-chip models are the reference. Unseen-circuit R² ± sd [95% CI] of each tuned procedure:
+- **Chip with training data: its per-chip model** (best on the validation run).
+- **Chip without training data: the pooled model**, footprint only (it transferred best to the unseen chip).
+- **Pooled + chip id: candidate.** One model for all chips; it helps the weaker chip but not an unseen one. Re-evaluate when data from more chips or providers arrives.
 
-| Target | Pooled + chip id | H1 | Pooled, no chip id | Per-chip models (reference) |
+Unseen-circuit R² ± sd [95% CI] of each tuned procedure:
+
+| Target | Pooled + chip id (candidate) | H1 | Pooled, no chip id | Per-chip models (best) |
 |---|---:|:---:|---:|---|
 | Differential Success Rate (`dsr`) | 0.453 ± 0.018 [0.30, 0.59] | FAIL | 0.391 | `ibm_fez` 0.403, `ibm_kingston` 0.510 |
 | Hellinger Fidelity (`hellinger`) | 0.794 ± 0.003 [0.74, 0.85] | INCONCLUSIVE | 0.755 | `ibm_fez` 0.757, `ibm_kingston` 0.873 |
-| Total Variation Distance (`tvd`) | 0.793 ± 0.010 [0.73, 0.85] | INCONCLUSIVE | 0.759 | `ibm_fez` 0.775, `ibm_kingston` 0.866 |
 | Success Rate (`success`) | 0.736 ± 0.009 [0.64, 0.81] | INCONCLUSIVE | 0.703 | `ibm_fez` 0.691, `ibm_kingston` 0.826 |
 | Chance-Corrected Success (`success_adj`) | 0.765 ± 0.012 [0.62, 0.86] | INCONCLUSIVE | 0.737 | `ibm_fez` 0.696, `ibm_kingston` 0.853 |
+| Total Variation Distance (`tvd`) | 0.793 ± 0.010 [0.73, 0.85] | INCONCLUSIVE | 0.759 | `ibm_fez` 0.775, `ibm_kingston` 0.866 |
 
-A chip without training data gets no chip id (all zeros) and is predicted from what the known chips share. Scores on the validation run are in `model_comparison.md`.
+Scores of every model on the validation run are in `model_comparison.md`.
 
 ## Verdicts
 
-| Scope | `dsr` | `hellinger` | `tvd` | `success` | `success_adj` |
+| Scope | `dsr` | `hellinger` | `success` | `success_adj` | `tvd` |
 |---|---|---|---|---|---|
-| `ibm_fez` | FAIL (0.40) | INCONCLUSIVE (0.76) | INCONCLUSIVE (0.78) | FAIL (0.69) | INCONCLUSIVE (0.70) |
-| `ibm_kingston` | FAIL (0.51) | PASS (0.87) | PASS (0.87) | INCONCLUSIVE (0.83) | INCONCLUSIVE (0.85) |
-| `pooled` | FAIL (0.39) | INCONCLUSIVE (0.75) | INCONCLUSIVE (0.76) | FAIL (0.70) | INCONCLUSIVE (0.74) |
+| `ibm_fez` | FAIL (0.40) | INCONCLUSIVE (0.76) | FAIL (0.69) | INCONCLUSIVE (0.70) | INCONCLUSIVE (0.78) |
+| `ibm_kingston` | FAIL (0.51) | PASS (0.87) | INCONCLUSIVE (0.83) | INCONCLUSIVE (0.85) | PASS (0.87) |
+| `pooled` | FAIL (0.39) | INCONCLUSIVE (0.75) | FAIL (0.70) | INCONCLUSIVE (0.74) | INCONCLUSIVE (0.76) |
 
 ## Validation tests
 
@@ -57,9 +61,9 @@ Unseen-circuit validation. PASS needs the whole 95% interval at or above 0.80.
 |---|---:|:---:|---:|---:|---:|---:|---:|
 | Differential Success Rate (`dsr`) | 0.403 ± 0.012 [0.27, 0.53] | FAIL | 0.1212 | 0.550 | 0.614 [0.42, 0.75] | 0.373 | +0.054 [-0.04, 0.14] |
 | Hellinger Fidelity (`hellinger`) | 0.757 ± 0.003 [0.68, 0.82] | INCONCLUSIVE | 0.0677 | 0.721 | 0.924 [0.89, 0.95] | 0.743 | +0.010 [-0.02, 0.05] |
-| Total Variation Distance (`tvd`) | 0.775 ± 0.006 [0.71, 0.84] | INCONCLUSIVE | 0.0655 | 0.732 | 0.930 [0.90, 0.95] | 0.755 | +0.012 [-0.02, 0.05] |
 | Success Rate (`success`) | 0.691 ± 0.016 [0.58, 0.78] | FAIL | 0.0732 | 0.763 | 0.843 [0.74, 0.92] | 0.700 | -0.001 [-0.05, 0.05] |
 | Chance-Corrected Success (`success_adj`) | 0.696 ± 0.018 [0.54, 0.81] | INCONCLUSIVE | 0.0833 | 0.810 | 0.822 [0.67, 0.92] | 0.697 | +0.022 [-0.03, 0.07] |
+| Total Variation Distance (`tvd`) | 0.775 ± 0.006 [0.71, 0.84] | INCONCLUSIVE | 0.0655 | 0.732 | 0.930 [0.90, 0.95] | 0.755 | +0.012 [-0.02, 0.05] |
 
 ### `ibm_kingston` · 1173 jobs, 189 configurations
 
@@ -67,9 +71,9 @@ Unseen-circuit validation. PASS needs the whole 95% interval at or above 0.80.
 |---|---:|:---:|---:|---:|---:|---:|---:|
 | Differential Success Rate (`dsr`) | 0.510 ± 0.025 [0.28, 0.67] | FAIL | 0.0874 | 0.771 | 0.604 [0.33, 0.80] | 0.193 | +0.248 [0.08, 0.43] |
 | Hellinger Fidelity (`hellinger`) | 0.873 ± 0.004 [0.82, 0.92] | PASS | 0.0437 | 0.912 | 0.930 [0.90, 0.96] | 0.800 | +0.051 [0.02, 0.09] |
-| Total Variation Distance (`tvd`) | 0.866 ± 0.001 [0.80, 0.92] | PASS | 0.0434 | 0.911 | 0.923 [0.86, 0.96] | 0.800 | +0.045 [0.01, 0.08] |
 | Success Rate (`success`) | 0.826 ± 0.032 [0.74, 0.89] | INCONCLUSIVE | 0.0507 | 0.918 | 0.876 [0.78, 0.93] | 0.744 | +0.048 [-0.00, 0.10] |
 | Chance-Corrected Success (`success_adj`) | 0.853 ± 0.005 [0.72, 0.93] | INCONCLUSIVE | 0.0597 | 0.953 | 0.861 [0.70, 0.95] | 0.774 | +0.098 [0.03, 0.18] |
+| Total Variation Distance (`tvd`) | 0.866 ± 0.001 [0.80, 0.92] | PASS | 0.0434 | 0.911 | 0.923 [0.86, 0.96] | 0.800 | +0.045 [0.01, 0.08] |
 
 ### `pooled` · 2409 jobs, 189 configurations
 
@@ -77,9 +81,9 @@ Unseen-circuit validation. PASS needs the whole 95% interval at or above 0.80.
 |---|---:|:---:|---:|---:|---:|---:|---:|
 | Differential Success Rate (`dsr`) | 0.391 ± 0.015 [0.24, 0.52] | FAIL | 0.1113 | 0.634 | 0.533 [0.32, 0.70] | 0.274 | +0.117 [0.05, 0.19] |
 | Hellinger Fidelity (`hellinger`) | 0.755 ± 0.005 [0.69, 0.81] | INCONCLUSIVE | 0.0657 | 0.798 | 0.881 [0.84, 0.91] | 0.725 | +0.021 [-0.01, 0.05] |
-| Total Variation Distance (`tvd`) | 0.759 ± 0.007 [0.69, 0.82] | INCONCLUSIVE | 0.0630 | 0.804 | 0.883 [0.84, 0.91] | 0.730 | +0.016 [-0.02, 0.06] |
 | Success Rate (`success`) | 0.703 ± 0.013 [0.60, 0.78] | FAIL | 0.0699 | 0.826 | 0.815 [0.71, 0.88] | 0.683 | +0.016 [-0.01, 0.05] |
 | Chance-Corrected Success (`success_adj`) | 0.737 ± 0.011 [0.58, 0.84] | INCONCLUSIVE | 0.0814 | 0.879 | 0.805 [0.67, 0.89] | 0.718 | +0.034 [-0.01, 0.09] |
+| Total Variation Distance (`tvd`) | 0.759 ± 0.007 [0.69, 0.82] | INCONCLUSIVE | 0.0630 | 0.804 | 0.883 [0.84, 0.91] | 0.730 | +0.016 [-0.02, 0.06] |
 
 ### What each group of circuits contributes
 
@@ -89,19 +93,19 @@ R² of the same out-of-fold predictions on subsets. `all jobs` includes the comp
 |---|---|---:|---:|---:|---:|---:|
 | `ibm_fez` | `dsr` | 0.403 | 0.404 | 0.221 | -10.180 | 0.615 |
 | `ibm_fez` | `hellinger` | 0.757 | 0.737 | 0.870 | 0.437 | 0.785 |
-| `ibm_fez` | `tvd` | 0.775 | 0.759 | 0.872 | 0.523 | 0.801 |
 | `ibm_fez` | `success` | 0.691 | 0.657 | 0.893 | -0.152 | 0.777 |
 | `ibm_fez` | `success_adj` | 0.696 | 0.518 | 0.885 | -4.995 | 0.696 |
+| `ibm_fez` | `tvd` | 0.775 | 0.759 | 0.872 | 0.523 | 0.801 |
 | `ibm_kingston` | `dsr` | 0.510 | 0.508 | -0.142 | -980.790 | 0.771 |
 | `ibm_kingston` | `hellinger` | 0.873 | 0.878 | 0.815 | 0.454 | 0.888 |
-| `ibm_kingston` | `tvd` | 0.866 | 0.870 | 0.821 | 0.637 | 0.896 |
 | `ibm_kingston` | `success` | 0.826 | 0.830 | 0.773 | 0.425 | 0.909 |
 | `ibm_kingston` | `success_adj` | 0.853 | 0.679 | 0.757 | -2.142 | 0.853 |
+| `ibm_kingston` | `tvd` | 0.866 | 0.870 | 0.821 | 0.637 | 0.896 |
 | `pooled` | `dsr` | 0.391 | 0.387 | 0.225 | -81.424 | 0.661 |
 | `pooled` | `hellinger` | 0.755 | 0.744 | 0.800 | 0.424 | 0.798 |
-| `pooled` | `tvd` | 0.759 | 0.744 | 0.849 | 0.416 | 0.798 |
 | `pooled` | `success` | 0.703 | 0.684 | 0.794 | -0.354 | 0.809 |
 | `pooled` | `success_adj` | 0.737 | 0.507 | 0.816 | -2.481 | 0.737 |
+| `pooled` | `tvd` | 0.759 | 0.744 | 0.849 | 0.416 | 0.798 |
 
 ### Per algorithm (`success`)
 
@@ -322,19 +326,19 @@ Footprint size is the smallest k whose selection score is within 0.0015 R² of t
 |---|---|---:|---:|---:|
 | `ibm_fez` | `dsr` | 6 | 6–8–10 | 5 |
 | `ibm_fez` | `hellinger` | 10 | 3–6–10 | 3 |
-| `ibm_fez` | `tvd` | 10 | 3–7–10 | 3 |
 | `ibm_fez` | `success` | 8 | 3–7–10 | 2 |
 | `ibm_fez` | `success_adj` | 10 | 3–7–10 | 2 |
+| `ibm_fez` | `tvd` | 10 | 3–7–10 | 3 |
 | `ibm_kingston` | `dsr` | 6 | 5–6–8 | 3 |
 | `ibm_kingston` | `hellinger` | 8 | 5–7–10 | 5 |
-| `ibm_kingston` | `tvd` | 7 | 4–7–10 | 4 |
 | `ibm_kingston` | `success` | 10 | 4–7–10 | 4 |
 | `ibm_kingston` | `success_adj` | 6 | 4–6–8 | 4 |
+| `ibm_kingston` | `tvd` | 7 | 4–7–10 | 4 |
 | `pooled` | `dsr` | 10 | 5–8–10 | 5 |
 | `pooled` | `hellinger` | 8 | 5–7–10 | 3 |
-| `pooled` | `tvd` | 8 | 5–7–10 | 1 |
 | `pooled` | `success` | 10 | 5–7–10 | 1 |
 | `pooled` | `success_adj` | 7 | 5–7–10 | 1 |
+| `pooled` | `tvd` | 8 | 5–7–10 | 1 |
 
 ## Prospective validation (run of 2026-11-16)
 
@@ -368,7 +372,7 @@ Predictions were committed on 2026-11-16, before the run, by the models of that 
 
 ## Saved models
 
-Fitted on every training-role job with the procedure scored above. `circuit_chip` in the pooled scope is the best model; per-chip models are kept as reference.
+Fitted on every training-role job with the procedure scored above. Roles are listed under "Which model to use".
 
 | Scope | Target | Regime | Model | Features | Procedure R² | MAE | Artifact |
 |---|---|---|---|---:|---:|---:|---|
@@ -376,35 +380,35 @@ Fitted on every training-role job with the procedure scored above. `circuit_chip
 | `ibm_fez` | `dsr` | `mixed_submit` | LightGBM | 13 | 0.655 | 0.0903 | `models/ibm_fez_dsr_mixed_submit.joblib` |
 | `ibm_fez` | `hellinger` | `circuit_only` | XGBoost | 10 | 0.757 | 0.0677 | `models/ibm_fez_hellinger_circuit_only.joblib` |
 | `ibm_fez` | `hellinger` | `mixed_submit` | LightGBM | 17 | 0.889 | 0.0500 | `models/ibm_fez_hellinger_mixed_submit.joblib` |
-| `ibm_fez` | `tvd` | `circuit_only` | RF | 10 | 0.775 | 0.0655 | `models/ibm_fez_tvd_circuit_only.joblib` |
-| `ibm_fez` | `tvd` | `mixed_submit` | XGBoost | 17 | 0.890 | 0.0489 | `models/ibm_fez_tvd_mixed_submit.joblib` |
 | `ibm_fez` | `success` | `circuit_only` | RF | 8 | 0.691 | 0.0732 | `models/ibm_fez_success_circuit_only.joblib` |
 | `ibm_fez` | `success` | `mixed_submit` | XGBoost | 15 | 0.813 | 0.0570 | `models/ibm_fez_success_mixed_submit.joblib` |
 | `ibm_fez` | `success_adj` | `circuit_only` | SVR | 10 | 0.696 | 0.0833 | `models/ibm_fez_success_adj_circuit_only.joblib` |
 | `ibm_fez` | `success_adj` | `mixed_submit` | SVR | 17 | 0.799 | 0.0697 | `models/ibm_fez_success_adj_mixed_submit.joblib` |
+| `ibm_fez` | `tvd` | `circuit_only` | RF | 10 | 0.775 | 0.0655 | `models/ibm_fez_tvd_circuit_only.joblib` |
+| `ibm_fez` | `tvd` | `mixed_submit` | XGBoost | 17 | 0.890 | 0.0489 | `models/ibm_fez_tvd_mixed_submit.joblib` |
 | `ibm_kingston` | `dsr` | `circuit_only` | SVR | 6 | 0.510 | 0.0874 | `models/ibm_kingston_dsr_circuit_only.joblib` |
 | `ibm_kingston` | `dsr` | `mixed_submit` | XGBoost | 13 | 0.524 | 0.0845 | `models/ibm_kingston_dsr_mixed_submit.joblib` |
 | `ibm_kingston` | `hellinger` | `circuit_only` | SVR | 8 | 0.873 | 0.0437 | `models/ibm_kingston_hellinger_circuit_only.joblib` |
 | `ibm_kingston` | `hellinger` | `mixed_submit` | XGBoost | 15 | 0.879 | 0.0417 | `models/ibm_kingston_hellinger_mixed_submit.joblib` |
-| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 7 | 0.866 | 0.0434 | `models/ibm_kingston_tvd_circuit_only.joblib` |
-| `ibm_kingston` | `tvd` | `mixed_submit` | XGBoost | 14 | 0.881 | 0.0407 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
 | `ibm_kingston` | `success` | `circuit_only` | SVR | 10 | 0.826 | 0.0507 | `models/ibm_kingston_success_circuit_only.joblib` |
 | `ibm_kingston` | `success` | `mixed_submit` | SVR | 17 | 0.795 | 0.0526 | `models/ibm_kingston_success_mixed_submit.joblib` |
 | `ibm_kingston` | `success_adj` | `circuit_only` | SVR | 6 | 0.853 | 0.0597 | `models/ibm_kingston_success_adj_circuit_only.joblib` |
 | `ibm_kingston` | `success_adj` | `mixed_submit` | XGBoost | 13 | 0.836 | 0.0642 | `models/ibm_kingston_success_adj_mixed_submit.joblib` |
+| `ibm_kingston` | `tvd` | `circuit_only` | SVR | 7 | 0.866 | 0.0434 | `models/ibm_kingston_tvd_circuit_only.joblib` |
+| `ibm_kingston` | `tvd` | `mixed_submit` | XGBoost | 14 | 0.881 | 0.0407 | `models/ibm_kingston_tvd_mixed_submit.joblib` |
 | `pooled` | `dsr` | `circuit_chip` | LightGBM | 12 | 0.453 | 0.1048 | `models/pooled_dsr_circuit_chip.joblib` |
 | `pooled` | `dsr` | `circuit_only` | RF | 10 | 0.391 | 0.1113 | `models/pooled_dsr_circuit_only.joblib` |
 | `pooled` | `dsr` | `mixed_submit` | LightGBM | 17 | 0.621 | 0.0871 | `models/pooled_dsr_mixed_submit.joblib` |
 | `pooled` | `hellinger` | `circuit_chip` | LightGBM | 10 | 0.794 | 0.0582 | `models/pooled_hellinger_circuit_chip.joblib` |
 | `pooled` | `hellinger` | `circuit_only` | LightGBM | 8 | 0.755 | 0.0657 | `models/pooled_hellinger_circuit_only.joblib` |
 | `pooled` | `hellinger` | `mixed_submit` | LightGBM | 15 | 0.885 | 0.0468 | `models/pooled_hellinger_mixed_submit.joblib` |
-| `pooled` | `tvd` | `circuit_chip` | LightGBM | 10 | 0.793 | 0.0571 | `models/pooled_tvd_circuit_chip.joblib` |
-| `pooled` | `tvd` | `circuit_only` | LightGBM | 8 | 0.759 | 0.0630 | `models/pooled_tvd_circuit_only.joblib` |
-| `pooled` | `tvd` | `mixed_submit` | LightGBM | 15 | 0.888 | 0.0451 | `models/pooled_tvd_mixed_submit.joblib` |
 | `pooled` | `success` | `circuit_chip` | LightGBM | 12 | 0.736 | 0.0647 | `models/pooled_success_circuit_chip.joblib` |
 | `pooled` | `success` | `circuit_only` | LightGBM | 10 | 0.703 | 0.0699 | `models/pooled_success_circuit_only.joblib` |
 | `pooled` | `success` | `mixed_submit` | LightGBM | 17 | 0.808 | 0.0559 | `models/pooled_success_mixed_submit.joblib` |
 | `pooled` | `success_adj` | `circuit_chip` | RF | 9 | 0.765 | 0.0751 | `models/pooled_success_adj_circuit_chip.joblib` |
 | `pooled` | `success_adj` | `circuit_only` | RF | 7 | 0.737 | 0.0814 | `models/pooled_success_adj_circuit_only.joblib` |
 | `pooled` | `success_adj` | `mixed_submit` | SVR | 14 | 0.823 | 0.0651 | `models/pooled_success_adj_mixed_submit.joblib` |
+| `pooled` | `tvd` | `circuit_chip` | LightGBM | 10 | 0.793 | 0.0571 | `models/pooled_tvd_circuit_chip.joblib` |
+| `pooled` | `tvd` | `circuit_only` | LightGBM | 8 | 0.759 | 0.0630 | `models/pooled_tvd_circuit_only.joblib` |
+| `pooled` | `tvd` | `mixed_submit` | LightGBM | 15 | 0.888 | 0.0451 | `models/pooled_tvd_mixed_submit.joblib` |
 

@@ -404,12 +404,17 @@ def _section_best(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
     if not pooled:
         return []
     out = [
-        "## Best model: one pooled model with chip id",
+        "## Which model to use",
         "",
-        "One model for all chips: the circuit footprint plus a one-hot chip id. Per-chip models are the "
-        "reference. Unseen-circuit R² ± sd [95% CI] of each tuned procedure:",
+        "- **Chip with training data: its per-chip model** (best on the validation run).",
+        "- **Chip without training data: the pooled model**, footprint only (it transferred best to the "
+        "unseen chip).",
+        "- **Pooled + chip id: candidate.** One model for all chips; it helps the weaker chip but not an "
+        "unseen one. Re-evaluate when data from more chips or providers arrives.",
         "",
-        "| Target | Pooled + chip id | H1 | Pooled, no chip id | Per-chip models (reference) |",
+        "Unseen-circuit R² ± sd [95% CI] of each tuned procedure:",
+        "",
+        "| Target | Pooled + chip id (candidate) | H1 | Pooled, no chip id | Per-chip models (best) |",
         "|---|---:|:---:|---:|---|",
     ]
     chips = [s for s in snapshots if s != "pooled" and not s.startswith("provider_")]
@@ -424,8 +429,7 @@ def _section_best(snapshots: Mapping[str, dict[str, Any]]) -> list[str]:
         )
     out += [
         "",
-        "A chip without training data gets no chip id (all zeros) and is predicted from what the known "
-        "chips share. Scores on the validation run are in `model_comparison.md`.",
+        "Scores of every model on the validation run are in `model_comparison.md`.",
         "",
     ]
     return out
@@ -569,8 +573,8 @@ def write_reports(
         lines += [
             "## Saved models",
             "",
-            "Fitted on every training-role job with the procedure scored above. `circuit_chip` in the pooled "
-            "scope is the best model; per-chip models are kept as reference.",
+            "Fitted on every training-role job with the procedure scored above. Roles are listed under "
+            "\"Which model to use\".",
             "",
             "| Scope | Target | Regime | Model | Features | Procedure R² | MAE | Artifact |",
             "|---|---|---|---|---:|---:|---:|---|",

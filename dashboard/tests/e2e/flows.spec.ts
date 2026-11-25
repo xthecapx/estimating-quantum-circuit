@@ -146,7 +146,7 @@ test("4 · run calibration round-trip preserves the histogram run and settings",
 });
 
 test("5 · chip calibration history opens independently and searches components @narrow", async ({ page }) => {
-  const errors = await openApp(page);
+  const errors = await openApp(page, "#section=range&mode=overview");
   const history = page.getByRole("button", { name: "Chip calibration history" });
   const toggle = page.getByRole("switch", { name: "Show run details" });
   await expect(history).toBeVisible();
@@ -281,7 +281,7 @@ test("Marrakesh validation contributes only to the all-data count @narrow", asyn
 });
 
 test("footprint tab traces metric selection, subset scores and model results @narrow", async ({page}) => {
-  const errors = await openApp(page);
+  const errors = await openApp(page, "#section=range");
   await page.getByRole("tab", {name:"Footprint", exact:true}).click();
   const panel = page.getByRole("region", {name:"Footprint selection experiment"});
   await panel.getByLabel("Target quality metric").selectOption({label:"Success Rate"});
@@ -340,7 +340,7 @@ test("direction compares column loss to row loss and preserves the question on r
 });
 
 test("average explorer selects measured settings and updates both axes @narrow", async ({ page }) => {
-  const errors = await openApp(page);
+  const errors = await openApp(page, "#section=range&mode=overview");
   const panel = page.getByRole("region", { name: "Experiment explorer", exact: true });
   const filters = panel.getByRole("group", { name: "Experiment filters" });
   for (const name of ["Chip", "Periods (UTC)", "Experiment group"]) {
@@ -478,7 +478,7 @@ test("report tabs share the pooled export and load other reports on demand", asy
     const path = new URL(request.url()).pathname;
     if (path.includes("/data/")) requests.push(path.split("/").pop()!);
   });
-  const errors = await openApp(page);
+  const errors = await openApp(page, "#section=range");
   expect(requests).toEqual(["index.json"]);
   await page.getByRole("tab", { name: "Footprint" }).click();
   await expect(page.getByRole("region", { name: "Selected footprint" })).toBeVisible();
@@ -559,29 +559,31 @@ test("touch dragging the target grip changes the success percentage @narrow", as
 });
 
 test("navigation groups plots and models in keyboard order @narrow", async ({ page }) => {
-  await openApp(page);
+  await openApp(page, "#section=range&mode=overview");
   const navigation = page.getByRole("tablist", { name: "Experiment sections" });
   const tabs = navigation.getByRole("tab");
   await expect(tabs).toHaveText([
-    "Operating range", "Compare decay", "Footprint",
+    "Findings", "Operating range", "Compare decay", "Footprint",
     "Model validation", "Model training", "Execution cost model",
   ]);
-  await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
-  await expect(tabs.first()).toHaveAccessibleDescription("Experiment plots");
-  await expect(tabs.nth(2)).toHaveAccessibleDescription("AI models");
+  await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+  await expect(tabs.first()).toHaveAccessibleDescription("Summary");
+  await expect(tabs.nth(1)).toHaveAccessibleDescription("Experiment plots");
+  await expect(tabs.nth(3)).toHaveAccessibleDescription("Prediction models");
   const position = await navigation.boundingBox();
   await expect(page.getByRole("switch", { name: "Show run details" })).not.toBeChecked();
-  await tabs.nth(1).click();
+  await tabs.nth(2).click();
   expect(await navigation.boundingBox()).toEqual(position);
-  await tabs.nth(1).press("ArrowRight");
-  await expect(tabs.nth(2)).toBeFocused();
+  await tabs.nth(2).press("ArrowRight");
+  await expect(tabs.nth(3)).toBeFocused();
   await expect(page).toHaveURL(/section=footprint/);
-  await tabs.nth(2).press("End");
+  await tabs.nth(3).press("End");
   await expect(tabs.last()).toBeFocused();
   await expect(page).toHaveURL(/section=cost/);
   await tabs.last().press("Home");
   await expect(tabs.first()).toBeFocused();
   await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("region", { name: "Findings" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
 });
 
@@ -606,4 +608,20 @@ test("execution cost label stays on one line without moving on selection", async
     });
     expect(fits, `Label fits at ${width}px`).toBe(true);
   }
+});
+
+test("findings is the landing page and explains the result in plain terms @narrow", async ({ page }) => {
+  const errors = await openApp(page);
+  const panel = page.getByRole("region", { name: "Findings" });
+  await expect(panel.getByRole("heading", { name: /before paying to run it/ })).toBeVisible();
+  await expect(panel.getByRole("list", { name: "Prediction accuracy per chip" }).getByRole("listitem")).toHaveCount(3);
+  await expect(panel.getByRole("row", { name: /One model per chip/ })).toContainText("Best");
+  await expect(panel.getByText("H3 · One model works across providers")).toBeVisible();
+  await expect(panel.getByText("Waiting for data")).toBeVisible();
+  await panel.getByLabel("Quality measure").selectOption({ label: "Hellinger fidelity" });
+  await expect(panel.getByText(/Hellinger fidelity: how close/)).toBeVisible();
+  await panel.getByRole("button", { name: "Pre-registered test" }).click();
+  await expect(page.getByRole("tab", { name: "Model validation", exact: true })).toHaveAttribute("aria-selected", "true");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  expect(errors).toEqual([]);
 });

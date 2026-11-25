@@ -4,15 +4,15 @@
 
 Candidates, all circuit-only unless named otherwise:
 
-* ``pooled_chip``   one model for all chips with a one-hot chip id (the best model)
+* ``per_chip``      one model per chip; an unseen chip falls back to ``pooled`` (the best choice)
 * ``pooled``        one model for all chips, no chip id
-* ``per_chip``      one model per chip; an unseen chip falls back to ``pooled`` (reference)
+* ``pooled_chip``   one model for all chips with a one-hot chip id (candidate)
 * ``mixed``         per-chip footprint + layout calibration (reference)
 * ``size``          LightGBM on four size counts, trained per chip (baseline)
 * ``registered``    predictions committed before the run by the models of that date
 
 Scores are R^2 and MAE per chip on every validation job except the composite anchor,
-plus paired differences against ``pooled_chip``. The run has been used to choose the
+plus paired differences against ``per_chip``. The run has been used to choose the
 model, so these numbers describe the choice; they are not a pre-registered test of it.
 """
 
@@ -50,11 +50,11 @@ from experiments.validation_profile import group_of
 DEFAULT_TABLES = ROOT / "experiments" / "dataset_out"
 DEFAULT_REPORT = ROOT / "report" / "ml_estimation"
 DEFAULT_DASHBOARD = ROOT / "dashboard" / "experiments" / "comparison"
-BEST = "pooled_chip"
+BEST = "per_chip"
 LABELS = {
-    "pooled_chip": "Pooled + chip id (best)",
+    "per_chip": "Per-chip models (best)",
     "pooled": "Pooled, no chip id",
-    "per_chip": "Per-chip models (reference)",
+    "pooled_chip": "Pooled + chip id (candidate)",
     "mixed": "Per-chip + layout calibration",
     "size": "Size baseline (4 counts)",
     "registered": "Pre-registered 2026-11-16",
@@ -110,7 +110,8 @@ def _paired(y, a, b, groups, chips, n_boot=1000, seed=11) -> dict[str, Any] | No
 def compare(tables: Path = DEFAULT_TABLES, report_dir: Path = DEFAULT_REPORT) -> dict[str, Any]:
     warnings.simplefilter("ignore")
     models_dir = report_dir / "models"
-    train = load_ml_dataset(tables).frame
+    bundle = load_ml_dataset(tables)
+    train, manifest_hash, inputs = bundle.frame, bundle.manifest_hash, bundle.inputs
     val = load_ml_dataset(tables, roles=["validation"]).frame
     scored = {p.name.split("_predictions")[0] for p in PROSPECTIVE_DIR.glob("*_predictions.json")
               if p.with_name(p.name.replace("_predictions.json", "_scores.csv")).is_file()}
@@ -158,12 +159,18 @@ def compare(tables: Path = DEFAULT_TABLES, report_dir: Path = DEFAULT_REPORT) ->
                 d = _paired(y, preds[BEST], p, groups, chips)
                 if d:
                     contrasts.append({"target": target, "against": key, "label": LABELS[key], **d})
-        best = preds[BEST]
-        for i in np.flatnonzero(np.isfinite(best)):
-            points.append({"target": target, "chip": chips[i], "config": groups[i], "group": val["group"].iloc[i],
-                           "algorithm": val["meta.algorithm"].iloc[i], "observed": float(y[i]), "predicted": float(best[i])})
+        best = pd.DataFrame({"chip": chips, "config": groups, "group": val["group"], "algorithm": val["meta.algorithm"],
+                             "twoQubitGates": val["b.two_qubit_gates"], "observed": y, "predicted": preds[BEST]}).dropna(subset=["predicted"])
+        for (chip, config, group, algo), g in best.groupby(["chip", "config", "group", "algorithm"]):
+            points.append({"target": target, "chip": chip, "config": config, "group": group, "algorithm": algo,
+                           "twoQubitGates": float(g["twoQubitGates"].mean()), "jobs": int(len(g)),
+                           "observed": float(g["observed"].mean()), "predicted": float(g["predicted"].mean())})
     return {
         "status": "ok",
+        "schemaVersion": 1,
+        "backend": "validation-v1",
+        "manifestHash": manifest_hash,
+        "inputs": inputs,
         "best": BEST,
         "labels": LABELS,
         "jobs": int(len(val)),
@@ -206,7 +213,7 @@ def write(result: dict[str, Any], report_dir: Path, dashboard_out: Path | None) 
                              f"{r.iloc[0]['r2']:.3f} [{r.iloc[0]['r2CiLow']:.2f}, {r.iloc[0]['r2CiHigh']:.2f}] ({r.iloc[0]['mae']:.3f})")
             lines.append(f"| {label} | " + " | ".join(cells) + " |")
         lines.append("")
-    lines += ["## Best model against each alternative", "",
+    lines += ["## Per-chip models against each alternative", "",
               "Paired difference in R² (best minus alternative), mean over chips, bootstrap over configurations.", "",
               "| Target | Alternative | ΔR² [95% CI] | Reading |", "|---|---|---:|---|"]
     for c in result["contrasts"]:

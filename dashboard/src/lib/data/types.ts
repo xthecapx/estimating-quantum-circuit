@@ -89,6 +89,8 @@ export interface IndexData {
   prospectiveReports?: Record<string, string>;
   /** Execution-cost model snapshots (billed QPU time / resource units), keyed by version. */
   costReports?: Record<string, string>;
+  /** Saved models compared on the validation run, keyed by profile. */
+  comparisonReports?: Record<string, string>;
   schemaVersion: number;
   jobs: Job[];
   refs: Record<string, Reference>;

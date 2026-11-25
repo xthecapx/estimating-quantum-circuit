@@ -8,6 +8,10 @@ import { formatHash, parseHash, type UrlState } from "./url";
 
 export const sectionGroups: TabGroup[] = [
   {
+    label: "Summary", icon: "experiment",
+    tabs: [{ id: "findings", label: "Findings" }],
+  },
+  {
     label: "Experiment plots", icon: "compare",
     tabs: [
       { id: "range", label: "Operating range" },
@@ -15,7 +19,7 @@ export const sectionGroups: TabGroup[] = [
     ],
   },
   {
-    label: "AI models", icon: "qubits",
+    label: "Prediction models", icon: "qubits",
     tabs: [
       { id: "footprint", label: "Footprint" },
       { id: "validation", label: "Model validation" },
@@ -28,7 +32,10 @@ const tabs = sectionGroups.flatMap(group => group.tabs);
 
 function choicesFromUrl(url: UrlState) {
   return {
-    section: tabs.find(tab => tab.id === url.section)?.id ?? "range",
+    // A bare address opens the summary. A link without a recognised section but with
+    // explorer settings (older shared links) still opens the operating range.
+    section: tabs.find(tab => tab.id === url.section)?.id
+      ?? (Object.keys(url).some(key => key !== "section") ? "range" : "findings"),
     decay: {
       matrix: url.matrix === "direction" ? "direction" : "similarity",
       pair: url.pair || "", resource: url.resource || "", outcome: url.outcome || "",

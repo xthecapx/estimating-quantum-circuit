@@ -13,6 +13,7 @@
   import EstimationView from "./views/estimation/EstimationView.svelte";
   import ProspectiveView from "./views/prospective/ProspectiveView.svelte";
   import CostView from "./views/cost/CostView.svelte";
+  import FindingsView from "./views/findings/FindingsView.svelte";
 
   const dashboard = createDashboard();
   onMount(dashboard.mount);
@@ -45,13 +46,15 @@
     {#if id === "cost"}
       <p class="intro">Predict the billed QPU time, in IBM resource units, of a job before submitting it. One model for every chip.</p>
     {:else if id === "validation"}
-      <p class="intro">Frozen QAQS models scored on new runs on three IBM chips, including one the models never saw. Predictions were committed before the jobs ran.</p>
+      <p class="intro">The pre-registered test: predictions were committed before the jobs ran on three IBM chips, including one the models never saw.</p>
     {:else if id === "footprint"}
       <p class="intro">Which circuit metrics earned a place in the footprint? Explore the selection experiment for each chip and prediction target.</p>
     {:else if id === "estimation"}
-      <p class="intro">How the QAQS models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For real-world performance, see Model validation.</p>
+      <p class="intro">How the models were built and selected on the training data: regressors, circuit footprints, analytical baselines and the H2–H4 analyses. For the conclusions, see Findings.</p>
     {/if}
-    {#if id === "decay" && explorer}
+    {#if id === "findings"}
+      <FindingsView comparison={index?.comparisonReports ?? {}} estimation={index?.estimationReports ?? {}} onnavigate={dashboard.selectSection} />
+    {:else if id === "decay" && explorer}
       <CompareDecay {explorer} reports={index?.decayReports ?? {}} choices={$dashboard.decay} onchange={decay => dashboard.setChoices({ decay })} />
     {:else if id === "cost"}
       <CostView reports={index?.costReports ?? {}} choices={$dashboard.cost} onchange={cost => dashboard.setChoices({ cost })} />

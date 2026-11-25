@@ -2,13 +2,9 @@
   "schemaVersion": 2,
   "models": [
     {
-      "scope": "ibm_fez",
-      "target": "dsr",
-      "regime": "circuit_only",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_fez_dsr_circuit_only.joblib",
-      "fileName": "ibm_fez_dsr_circuit_only.joblib",
+      "cvMae": 0.12115497774698843,
+      "cvR2": 0.4030008704593806,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 6,
       "features": [
         "a.StructuralMetrics.difficulty",
@@ -18,26 +14,26 @@
         "b.QiskitMetrics.instruction_metrics.num_nonlocal_gates",
         "a.quantum_specific.magic"
       ],
-      "sizeKb": 25.31,
-      "r2": 0.4030008704593806,
+      "fileName": "ibm_fez_dsr_circuit_only.joblib",
+      "label": "XGBoost",
       "mae": 0.12115497774698843,
-      "rmse": 0.20366073551351913,
-      "cvR2": 0.4030008704593806,
-      "cvMae": 0.12115497774698843,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 3,
-        "model__learning_rate": 0.1
+        "model__learning_rate": 0.1,
+        "model__max_depth": 3
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_dsr_circuit_only.joblib",
+      "r2": 0.4030008704593806,
+      "regime": "circuit_only",
+      "rmse": 0.20366073551351913,
+      "scope": "ibm_fez",
+      "sizeKb": 25.31,
+      "target": "dsr"
     },
     {
-      "scope": "ibm_fez",
-      "target": "dsr",
-      "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/ibm_fez_dsr_mixed_submit.joblib",
-      "fileName": "ibm_fez_dsr_mixed_submit.joblib",
+      "cvMae": 0.09026268504954772,
+      "cvR2": 0.6554214904771988,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 13,
       "features": [
         "a.StructuralMetrics.difficulty",
@@ -54,25 +50,25 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 75.44,
-      "r2": 0.6554214904771988,
+      "fileName": "ibm_fez_dsr_mixed_submit.joblib",
+      "label": "LightGBM",
       "mae": 0.09026268504954772,
-      "rmse": 0.15471222966606668,
-      "cvR2": 0.6554214904771988,
-      "cvMae": 0.09026268504954772,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 31
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_dsr_mixed_submit.joblib",
+      "r2": 0.6554214904771988,
+      "regime": "mixed_submit",
+      "rmse": 0.15471222966606668,
+      "scope": "ibm_fez",
+      "sizeKb": 75.44,
+      "target": "dsr"
     },
     {
-      "scope": "ibm_fez",
-      "target": "hellinger",
-      "regime": "circuit_only",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_fez_hellinger_circuit_only.joblib",
-      "fileName": "ibm_fez_hellinger_circuit_only.joblib",
+      "cvMae": 0.06773303676457056,
+      "cvR2": 0.7567774449989567,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -86,26 +82,26 @@
         "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
         "a.quantum_specific.coherence"
       ],
-      "sizeKb": 78.74,
-      "r2": 0.7567774449989567,
+      "fileName": "ibm_fez_hellinger_circuit_only.joblib",
+      "label": "XGBoost",
       "mae": 0.06773303676457056,
-      "rmse": 0.11437776290465312,
-      "cvR2": 0.7567774449989567,
-      "cvMae": 0.06773303676457056,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 5,
-        "model__learning_rate": 0.07
+        "model__learning_rate": 0.07,
+        "model__max_depth": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_hellinger_circuit_only.joblib",
+      "r2": 0.7567774449989567,
+      "regime": "circuit_only",
+      "rmse": 0.11437776290465312,
+      "scope": "ibm_fez",
+      "sizeKb": 78.74,
+      "target": "hellinger"
     },
     {
-      "scope": "ibm_fez",
-      "target": "hellinger",
-      "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/ibm_fez_hellinger_mixed_submit.joblib",
-      "fileName": "ibm_fez_hellinger_mixed_submit.joblib",
+      "cvMae": 0.05003727325976501,
+      "cvR2": 0.8892431537604665,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 17,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -126,97 +122,25 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 64.55,
-      "r2": 0.8892431537604665,
+      "fileName": "ibm_fez_hellinger_mixed_submit.joblib",
+      "label": "LightGBM",
       "mae": 0.05003727325976501,
-      "rmse": 0.07715430465644647,
-      "cvR2": 0.8892431537604665,
-      "cvMae": 0.05003727325976501,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "ibm_fez",
-      "target": "tvd",
-      "regime": "circuit_only",
-      "model": "RF",
-      "label": "Random Forest (RF)",
-      "path": "models/ibm_fez_tvd_circuit_only.joblib",
-      "fileName": "ibm_fez_tvd_circuit_only.joblib",
-      "featureCount": 10,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.ComplexityMetrics.standardized_metrics.gate_density",
-        "b.StructuralMetrics.effort",
-        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "a.quantum_specific.magic",
-        "b.ComplexityMetrics.derived_metrics.square_ratio",
-        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-        "b.BehavioralMetrics.measurement",
-        "a.BehavioralMetrics.liveness",
-        "a.ElementMetrics.percent_qm"
-      ],
-      "sizeKb": 1613.55,
-      "r2": 0.7751509658702354,
-      "mae": 0.06554208303532083,
-      "rmse": 0.11033977477528241,
-      "cvR2": 0.7751509658702354,
-      "cvMae": 0.06554208303532083,
-      "params": {
-        "model__min_samples_leaf": 1
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "ibm_fez",
-      "target": "tvd",
+      "path": "models/ibm_fez_hellinger_mixed_submit.joblib",
+      "r2": 0.8892431537604665,
       "regime": "mixed_submit",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_fez_tvd_mixed_submit.joblib",
-      "fileName": "ibm_fez_tvd_mixed_submit.joblib",
-      "featureCount": 17,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.ComplexityMetrics.standardized_metrics.gate_density",
-        "b.StructuralMetrics.effort",
-        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "a.quantum_specific.magic",
-        "b.ComplexityMetrics.derived_metrics.square_ratio",
-        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-        "b.BehavioralMetrics.measurement",
-        "a.BehavioralMetrics.liveness",
-        "a.ElementMetrics.percent_qm",
-        "c.readout_error.median",
-        "c.readout_p1_given_0.median",
-        "c.one_qubit_gate_error.median",
-        "c.readout_p0_given_1.median",
-        "c.two_qubit_gate_error.median",
-        "c.t2_us.median",
-        "c.t1_us.median"
-      ],
-      "sizeKb": 25.68,
-      "r2": 0.8903573441748963,
-      "mae": 0.04894633494622765,
-      "rmse": 0.07702313524107389,
-      "cvR2": 0.8903573441748963,
-      "cvMae": 0.04894633494622765,
-      "params": {
-        "model__max_depth": 3,
-        "model__learning_rate": 0.1
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "rmse": 0.07715430465644647,
+      "scope": "ibm_fez",
+      "sizeKb": 64.55,
+      "target": "hellinger"
     },
     {
-      "scope": "ibm_fez",
-      "target": "success",
-      "regime": "circuit_only",
-      "model": "RF",
-      "label": "Random Forest (RF)",
-      "path": "models/ibm_fez_success_circuit_only.joblib",
-      "fileName": "ibm_fez_success_circuit_only.joblib",
+      "cvMae": 0.07315625579321715,
+      "cvR2": 0.6909076819513883,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 8,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -228,25 +152,25 @@
         "a.quantum_specific.magic",
         "b.BehavioralMetrics.measurement"
       ],
-      "sizeKb": 670.18,
-      "r2": 0.6909076819513883,
+      "fileName": "ibm_fez_success_circuit_only.joblib",
+      "label": "Random Forest (RF)",
       "mae": 0.07315625579321715,
-      "rmse": 0.1262487507260402,
-      "cvR2": 0.6909076819513883,
-      "cvMae": 0.07315625579321715,
+      "model": "RF",
       "params": {
         "model__min_samples_leaf": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_success_circuit_only.joblib",
+      "r2": 0.6909076819513883,
+      "regime": "circuit_only",
+      "rmse": 0.1262487507260402,
+      "scope": "ibm_fez",
+      "sizeKb": 670.18,
+      "target": "success"
     },
     {
-      "scope": "ibm_fez",
-      "target": "success",
-      "regime": "mixed_submit",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_fez_success_mixed_submit.joblib",
-      "fileName": "ibm_fez_success_mixed_submit.joblib",
+      "cvMae": 0.05703563772228853,
+      "cvR2": 0.8125220274536282,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 15,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -265,26 +189,26 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 80.6,
-      "r2": 0.8125220274536282,
+      "fileName": "ibm_fez_success_mixed_submit.joblib",
+      "label": "XGBoost",
       "mae": 0.05703563772228853,
-      "rmse": 0.09835615752720422,
-      "cvR2": 0.8125220274536282,
-      "cvMae": 0.05703563772228853,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 5,
-        "model__learning_rate": 0.07
+        "model__learning_rate": 0.07,
+        "model__max_depth": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_success_mixed_submit.joblib",
+      "r2": 0.8125220274536282,
+      "regime": "mixed_submit",
+      "rmse": 0.09835615752720422,
+      "scope": "ibm_fez",
+      "sizeKb": 80.6,
+      "target": "success"
     },
     {
-      "scope": "ibm_fez",
-      "target": "success_adj",
-      "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_fez_success_adj_circuit_only.joblib",
-      "fileName": "ibm_fez_success_adj_circuit_only.joblib",
+      "cvMae": 0.083323084062426,
+      "cvR2": 0.6957437439374953,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -298,25 +222,25 @@
         "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density",
         "b.BehavioralMetrics.critical_depth"
       ],
-      "sizeKb": 19.07,
-      "r2": 0.6957437439374953,
+      "fileName": "ibm_fez_success_adj_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.083323084062426,
-      "rmse": 0.15721079740273994,
-      "cvR2": 0.6957437439374953,
-      "cvMae": 0.083323084062426,
+      "model": "SVR",
       "params": {
         "model__C": 0.5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_success_adj_circuit_only.joblib",
+      "r2": 0.6957437439374953,
+      "regime": "circuit_only",
+      "rmse": 0.15721079740273994,
+      "scope": "ibm_fez",
+      "sizeKb": 19.07,
+      "target": "success_adj"
     },
     {
-      "scope": "ibm_fez",
-      "target": "success_adj",
-      "regime": "mixed_submit",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_fez_success_adj_mixed_submit.joblib",
-      "fileName": "ibm_fez_success_adj_mixed_submit.joblib",
+      "cvMae": 0.06971744890842825,
+      "cvR2": 0.798718836611815,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 17,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -337,25 +261,97 @@
         "c.t2_us.median",
         "c.t1_us.median"
       ],
-      "sizeKb": 29.35,
-      "r2": 0.798718836611815,
+      "fileName": "ibm_fez_success_adj_mixed_submit.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.06971744890842825,
-      "rmse": 0.12789985747005603,
-      "cvR2": 0.798718836611815,
-      "cvMae": 0.06971744890842825,
+      "model": "SVR",
       "params": {
         "model__C": 2.0
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_fez_success_adj_mixed_submit.joblib",
+      "r2": 0.798718836611815,
+      "regime": "mixed_submit",
+      "rmse": 0.12789985747005603,
+      "scope": "ibm_fez",
+      "sizeKb": 29.35,
+      "target": "success_adj"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "dsr",
+      "cvMae": 0.06554208303532083,
+      "cvR2": 0.7751509658702354,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 10,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.ComplexityMetrics.standardized_metrics.gate_density",
+        "b.StructuralMetrics.effort",
+        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "a.quantum_specific.magic",
+        "b.ComplexityMetrics.derived_metrics.square_ratio",
+        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+        "b.BehavioralMetrics.measurement",
+        "a.BehavioralMetrics.liveness",
+        "a.ElementMetrics.percent_qm"
+      ],
+      "fileName": "ibm_fez_tvd_circuit_only.joblib",
+      "label": "Random Forest (RF)",
+      "mae": 0.06554208303532083,
+      "model": "RF",
+      "params": {
+        "model__min_samples_leaf": 1
+      },
+      "path": "models/ibm_fez_tvd_circuit_only.joblib",
+      "r2": 0.7751509658702354,
       "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_dsr_circuit_only.joblib",
-      "fileName": "ibm_kingston_dsr_circuit_only.joblib",
+      "rmse": 0.11033977477528241,
+      "scope": "ibm_fez",
+      "sizeKb": 1613.55,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.04894633494622765,
+      "cvR2": 0.8903573441748963,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 17,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.ComplexityMetrics.standardized_metrics.gate_density",
+        "b.StructuralMetrics.effort",
+        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "a.quantum_specific.magic",
+        "b.ComplexityMetrics.derived_metrics.square_ratio",
+        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+        "b.BehavioralMetrics.measurement",
+        "a.BehavioralMetrics.liveness",
+        "a.ElementMetrics.percent_qm",
+        "c.readout_error.median",
+        "c.readout_p1_given_0.median",
+        "c.one_qubit_gate_error.median",
+        "c.readout_p0_given_1.median",
+        "c.two_qubit_gate_error.median",
+        "c.t2_us.median",
+        "c.t1_us.median"
+      ],
+      "fileName": "ibm_fez_tvd_mixed_submit.joblib",
+      "label": "XGBoost",
+      "mae": 0.04894633494622765,
+      "model": "XGBoost",
+      "params": {
+        "model__learning_rate": 0.1,
+        "model__max_depth": 3
+      },
+      "path": "models/ibm_fez_tvd_mixed_submit.joblib",
+      "r2": 0.8903573441748963,
+      "regime": "mixed_submit",
+      "rmse": 0.07702313524107389,
+      "scope": "ibm_fez",
+      "sizeKb": 25.68,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.08743983283848929,
+      "cvR2": 0.5095841203454498,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 6,
       "features": [
         "a.StructuralMetrics.total_operands",
@@ -365,25 +361,25 @@
         "a.quantum_specific.magic",
         "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio"
       ],
-      "sizeKb": 10.12,
-      "r2": 0.5095841203454498,
+      "fileName": "ibm_kingston_dsr_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.08743983283848929,
-      "rmse": 0.14796874044904554,
-      "cvR2": 0.5095841203454498,
-      "cvMae": 0.08743983283848929,
+      "model": "SVR",
       "params": {
         "model__C": 8.0
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_dsr_circuit_only.joblib",
+      "r2": 0.5095841203454498,
+      "regime": "circuit_only",
+      "rmse": 0.14796874044904554,
+      "scope": "ibm_kingston",
+      "sizeKb": 10.12,
+      "target": "dsr"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "dsr",
-      "regime": "mixed_submit",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_kingston_dsr_mixed_submit.joblib",
-      "fileName": "ibm_kingston_dsr_mixed_submit.joblib",
+      "cvMae": 0.0844957385965122,
+      "cvR2": 0.5244748307526091,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 13,
       "features": [
         "a.StructuralMetrics.total_operands",
@@ -400,26 +396,26 @@
         "c.two_qubit_gate_error.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 74.39,
-      "r2": 0.5244748307526091,
+      "fileName": "ibm_kingston_dsr_mixed_submit.joblib",
+      "label": "XGBoost",
       "mae": 0.0844957385965122,
-      "rmse": 0.14573067956502808,
-      "cvR2": 0.5244748307526091,
-      "cvMae": 0.0844957385965122,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 5,
-        "model__learning_rate": 0.07
+        "model__learning_rate": 0.07,
+        "model__max_depth": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_dsr_mixed_submit.joblib",
+      "r2": 0.5244748307526091,
+      "regime": "mixed_submit",
+      "rmse": 0.14573067956502808,
+      "scope": "ibm_kingston",
+      "sizeKb": 74.39,
+      "target": "dsr"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "hellinger",
-      "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_hellinger_circuit_only.joblib",
-      "fileName": "ibm_kingston_hellinger_circuit_only.joblib",
+      "cvMae": 0.04372921453863493,
+      "cvR2": 0.8729942874266068,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 8,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -431,25 +427,25 @@
         "a.StructuralMetrics.effort",
         "a.BehavioralMetrics.parallelism"
       ],
-      "sizeKb": 12.39,
-      "r2": 0.8729942874266068,
+      "fileName": "ibm_kingston_hellinger_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.04372921453863493,
-      "rmse": 0.0690443113274287,
-      "cvR2": 0.8729942874266068,
-      "cvMae": 0.04372921453863493,
+      "model": "SVR",
       "params": {
         "model__C": 0.5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_hellinger_circuit_only.joblib",
+      "r2": 0.8729942874266068,
+      "regime": "circuit_only",
+      "rmse": 0.0690443113274287,
+      "scope": "ibm_kingston",
+      "sizeKb": 12.39,
+      "target": "hellinger"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "hellinger",
-      "regime": "mixed_submit",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_kingston_hellinger_mixed_submit.joblib",
-      "fileName": "ibm_kingston_hellinger_mixed_submit.joblib",
+      "cvMae": 0.04172878846494565,
+      "cvR2": 0.8789058805300763,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 15,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -468,92 +464,26 @@
         "c.two_qubit_gate_error.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 25.65,
-      "r2": 0.8789058805300763,
-      "mae": 0.04172878846494565,
-      "rmse": 0.0674240709210225,
-      "cvR2": 0.8789058805300763,
-      "cvMae": 0.04172878846494565,
-      "params": {
-        "model__max_depth": 3,
-        "model__learning_rate": 0.1
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "ibm_kingston",
-      "target": "tvd",
-      "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_tvd_circuit_only.joblib",
-      "fileName": "ibm_kingston_tvd_circuit_only.joblib",
-      "featureCount": 7,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.ComplexityMetrics.standardized_metrics.gate_density",
-        "b.StructuralMetrics.vocabulary",
-        "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-        "b.BehavioralMetrics.measurement",
-        "b.StructuralMetrics.difficulty"
-      ],
-      "sizeKb": 11.32,
-      "r2": 0.8663554741340418,
-      "mae": 0.043375363552401604,
-      "rmse": 0.07069288606999426,
-      "cvR2": 0.8663554741340418,
-      "cvMae": 0.043375363552401604,
-      "params": {
-        "model__C": 2.0
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "ibm_kingston",
-      "target": "tvd",
-      "regime": "mixed_submit",
-      "model": "XGBoost",
+      "fileName": "ibm_kingston_hellinger_mixed_submit.joblib",
       "label": "XGBoost",
-      "path": "models/ibm_kingston_tvd_mixed_submit.joblib",
-      "fileName": "ibm_kingston_tvd_mixed_submit.joblib",
-      "featureCount": 14,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.ComplexityMetrics.standardized_metrics.gate_density",
-        "b.StructuralMetrics.vocabulary",
-        "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
-        "b.BehavioralMetrics.measurement",
-        "b.StructuralMetrics.difficulty",
-        "c.readout_error.median",
-        "c.readout_p0_given_1.median",
-        "c.readout_p1_given_0.median",
-        "c.one_qubit_gate_error.median",
-        "c.t1_us.median",
-        "c.two_qubit_gate_error.median",
-        "c.t2_us.median"
-      ],
-      "sizeKb": 80.11,
-      "r2": 0.8809810879253034,
-      "mae": 0.04069411415102444,
-      "rmse": 0.06663904628430405,
-      "cvR2": 0.8809810879253034,
-      "cvMae": 0.04069411415102444,
+      "mae": 0.04172878846494565,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 5,
-        "model__learning_rate": 0.07
+        "model__learning_rate": 0.1,
+        "model__max_depth": 3
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_hellinger_mixed_submit.joblib",
+      "r2": 0.8789058805300763,
+      "regime": "mixed_submit",
+      "rmse": 0.0674240709210225,
+      "scope": "ibm_kingston",
+      "sizeKb": 25.65,
+      "target": "hellinger"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "success",
-      "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_success_circuit_only.joblib",
-      "fileName": "ibm_kingston_success_circuit_only.joblib",
+      "cvMae": 0.050733384074821995,
+      "cvR2": 0.8262676207636783,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -567,25 +497,25 @@
         "b.BehavioralMetrics.critical_depth",
         "a.ElementMetrics.percent_qm"
       ],
-      "sizeKb": 13.67,
-      "r2": 0.8262676207636783,
+      "fileName": "ibm_kingston_success_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.050733384074821995,
-      "rmse": 0.08020891163295192,
-      "cvR2": 0.8262676207636783,
-      "cvMae": 0.050733384074821995,
+      "model": "SVR",
       "params": {
         "model__C": 0.5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_success_circuit_only.joblib",
+      "r2": 0.8262676207636783,
+      "regime": "circuit_only",
+      "rmse": 0.08020891163295192,
+      "scope": "ibm_kingston",
+      "sizeKb": 13.67,
+      "target": "success"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "success",
-      "regime": "mixed_submit",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_success_mixed_submit.joblib",
-      "fileName": "ibm_kingston_success_mixed_submit.joblib",
+      "cvMae": 0.05264486772682239,
+      "cvR2": 0.7953487301521122,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 17,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -606,25 +536,25 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 21.64,
-      "r2": 0.7953487301521122,
+      "fileName": "ibm_kingston_success_mixed_submit.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.05264486772682239,
-      "rmse": 0.08739565119431554,
-      "cvR2": 0.7953487301521122,
-      "cvMae": 0.05264486772682239,
+      "model": "SVR",
       "params": {
         "model__C": 0.5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_success_mixed_submit.joblib",
+      "r2": 0.7953487301521122,
+      "regime": "mixed_submit",
+      "rmse": 0.08739565119431554,
+      "scope": "ibm_kingston",
+      "sizeKb": 21.64,
+      "target": "success"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "success_adj",
-      "regime": "circuit_only",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/ibm_kingston_success_adj_circuit_only.joblib",
-      "fileName": "ibm_kingston_success_adj_circuit_only.joblib",
+      "cvMae": 0.05965043469509563,
+      "cvR2": 0.8533669376954355,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 6,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -634,25 +564,25 @@
         "a.quantum_specific.sensitivity",
         "b.BehavioralMetrics.critical_depth"
       ],
-      "sizeKb": 9.56,
-      "r2": 0.8533669376954355,
+      "fileName": "ibm_kingston_success_adj_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.05965043469509563,
-      "rmse": 0.1082005837595512,
-      "cvR2": 0.8533669376954355,
-      "cvMae": 0.05965043469509563,
+      "model": "SVR",
       "params": {
         "model__C": 0.5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_success_adj_circuit_only.joblib",
+      "r2": 0.8533669376954355,
+      "regime": "circuit_only",
+      "rmse": 0.1082005837595512,
+      "scope": "ibm_kingston",
+      "sizeKb": 9.56,
+      "target": "success_adj"
     },
     {
-      "scope": "ibm_kingston",
-      "target": "success_adj",
-      "regime": "mixed_submit",
-      "model": "XGBoost",
-      "label": "XGBoost",
-      "path": "models/ibm_kingston_success_adj_mixed_submit.joblib",
-      "fileName": "ibm_kingston_success_adj_mixed_submit.joblib",
+      "cvMae": 0.06419483514875643,
+      "cvR2": 0.8364397992077851,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 13,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -669,26 +599,92 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 74.78,
-      "r2": 0.8364397992077851,
+      "fileName": "ibm_kingston_success_adj_mixed_submit.joblib",
+      "label": "XGBoost",
       "mae": 0.06419483514875643,
-      "rmse": 0.11415743728531769,
-      "cvR2": 0.8364397992077851,
-      "cvMae": 0.06419483514875643,
+      "model": "XGBoost",
       "params": {
-        "model__max_depth": 5,
-        "model__learning_rate": 0.07
+        "model__learning_rate": 0.07,
+        "model__max_depth": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/ibm_kingston_success_adj_mixed_submit.joblib",
+      "r2": 0.8364397992077851,
+      "regime": "mixed_submit",
+      "rmse": 0.11415743728531769,
+      "scope": "ibm_kingston",
+      "sizeKb": 74.78,
+      "target": "success_adj"
     },
     {
-      "scope": "pooled",
-      "target": "dsr",
-      "regime": "circuit_chip",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_dsr_circuit_chip.joblib",
-      "fileName": "pooled_dsr_circuit_chip.joblib",
+      "cvMae": 0.043375363552401604,
+      "cvR2": 0.8663554741340418,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 7,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.ComplexityMetrics.standardized_metrics.gate_density",
+        "b.StructuralMetrics.vocabulary",
+        "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+        "b.BehavioralMetrics.measurement",
+        "b.StructuralMetrics.difficulty"
+      ],
+      "fileName": "ibm_kingston_tvd_circuit_only.joblib",
+      "label": "Support Vector Regression (SVR)",
+      "mae": 0.043375363552401604,
+      "model": "SVR",
+      "params": {
+        "model__C": 2.0
+      },
+      "path": "models/ibm_kingston_tvd_circuit_only.joblib",
+      "r2": 0.8663554741340418,
+      "regime": "circuit_only",
+      "rmse": 0.07069288606999426,
+      "scope": "ibm_kingston",
+      "sizeKb": 11.32,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.04069411415102444,
+      "cvR2": 0.8809810879253034,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 14,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.ComplexityMetrics.standardized_metrics.gate_density",
+        "b.StructuralMetrics.vocabulary",
+        "a.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "b.ComplexityMetrics.entanglement_metrics.entangling_width",
+        "b.BehavioralMetrics.measurement",
+        "b.StructuralMetrics.difficulty",
+        "c.readout_error.median",
+        "c.readout_p0_given_1.median",
+        "c.readout_p1_given_0.median",
+        "c.one_qubit_gate_error.median",
+        "c.t1_us.median",
+        "c.two_qubit_gate_error.median",
+        "c.t2_us.median"
+      ],
+      "fileName": "ibm_kingston_tvd_mixed_submit.joblib",
+      "label": "XGBoost",
+      "mae": 0.04069411415102444,
+      "model": "XGBoost",
+      "params": {
+        "model__learning_rate": 0.07,
+        "model__max_depth": 5
+      },
+      "path": "models/ibm_kingston_tvd_mixed_submit.joblib",
+      "r2": 0.8809810879253034,
+      "regime": "mixed_submit",
+      "rmse": 0.06663904628430405,
+      "scope": "ibm_kingston",
+      "sizeKb": 80.11,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.10478758691596729,
+      "cvR2": 0.4528629630817893,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 12,
       "features": [
         "a.StructuralMetrics.difficulty",
@@ -704,25 +700,25 @@
         "chip.ibm_fez",
         "chip.ibm_kingston"
       ],
-      "sizeKb": 61.7,
-      "r2": 0.4528629630817893,
+      "fileName": "pooled_dsr_circuit_chip.joblib",
+      "label": "LightGBM",
       "mae": 0.10478758691596729,
-      "rmse": 0.17802849859888573,
-      "cvR2": 0.4528629630817893,
-      "cvMae": 0.10478758691596729,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_dsr_circuit_chip.joblib",
+      "r2": 0.4528629630817893,
+      "regime": "circuit_chip",
+      "rmse": 0.17802849859888573,
+      "scope": "pooled",
+      "sizeKb": 61.7,
+      "target": "dsr"
     },
     {
-      "scope": "pooled",
-      "target": "dsr",
-      "regime": "circuit_only",
-      "model": "RF",
-      "label": "Random Forest (RF)",
-      "path": "models/pooled_dsr_circuit_only.joblib",
-      "fileName": "pooled_dsr_circuit_only.joblib",
+      "cvMae": 0.11127847815534976,
+      "cvR2": 0.3907737538340115,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "a.StructuralMetrics.difficulty",
@@ -736,25 +732,25 @@
         "b.BehavioralMetrics.critical_depth",
         "b.ComplexityMetrics.entanglement_metrics.entangling_gate_density"
       ],
-      "sizeKb": 980.84,
-      "r2": 0.3907737538340115,
+      "fileName": "pooled_dsr_circuit_only.joblib",
+      "label": "Random Forest (RF)",
       "mae": 0.11127847815534976,
-      "rmse": 0.1878703866587723,
-      "cvR2": 0.3907737538340115,
-      "cvMae": 0.11127847815534976,
+      "model": "RF",
       "params": {
         "model__min_samples_leaf": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_dsr_circuit_only.joblib",
+      "r2": 0.3907737538340115,
+      "regime": "circuit_only",
+      "rmse": 0.1878703866587723,
+      "scope": "pooled",
+      "sizeKb": 980.84,
+      "target": "dsr"
     },
     {
-      "scope": "pooled",
-      "target": "dsr",
-      "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_dsr_mixed_submit.joblib",
-      "fileName": "pooled_dsr_mixed_submit.joblib",
+      "cvMae": 0.08708591090834426,
+      "cvR2": 0.6212332674787407,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 17,
       "features": [
         "a.StructuralMetrics.difficulty",
@@ -775,25 +771,25 @@
         "c.two_qubit_gate_error.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 93.6,
-      "r2": 0.6212332674787407,
+      "fileName": "pooled_dsr_mixed_submit.joblib",
+      "label": "LightGBM",
       "mae": 0.08708591090834426,
-      "rmse": 0.14813841833627925,
-      "cvR2": 0.6212332674787407,
-      "cvMae": 0.08708591090834426,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 63
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_dsr_mixed_submit.joblib",
+      "r2": 0.6212332674787407,
+      "regime": "mixed_submit",
+      "rmse": 0.14813841833627925,
+      "scope": "pooled",
+      "sizeKb": 93.6,
+      "target": "dsr"
     },
     {
-      "scope": "pooled",
-      "target": "hellinger",
-      "regime": "circuit_chip",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_hellinger_circuit_chip.joblib",
-      "fileName": "pooled_hellinger_circuit_chip.joblib",
+      "cvMae": 0.05818818576257275,
+      "cvR2": 0.7940057347249451,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -807,25 +803,25 @@
         "chip.ibm_fez",
         "chip.ibm_kingston"
       ],
-      "sizeKb": 62.68,
-      "r2": 0.7940057347249451,
+      "fileName": "pooled_hellinger_circuit_chip.joblib",
+      "label": "LightGBM",
       "mae": 0.05818818576257275,
-      "rmse": 0.0978052324421963,
-      "cvR2": 0.7940057347249451,
-      "cvMae": 0.05818818576257275,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_hellinger_circuit_chip.joblib",
+      "r2": 0.7940057347249451,
+      "regime": "circuit_chip",
+      "rmse": 0.0978052324421963,
+      "scope": "pooled",
+      "sizeKb": 62.68,
+      "target": "hellinger"
     },
     {
-      "scope": "pooled",
-      "target": "hellinger",
-      "regime": "circuit_only",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_hellinger_circuit_only.joblib",
-      "fileName": "pooled_hellinger_circuit_only.joblib",
+      "cvMae": 0.0657352645434794,
+      "cvR2": 0.7548098062429148,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 8,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -837,25 +833,25 @@
         "a.BehavioralMetrics.parallelism",
         "b.ComplexityMetrics.entanglement_metrics.entangling_width"
       ],
-      "sizeKb": 61.96,
-      "r2": 0.7548098062429148,
+      "fileName": "pooled_hellinger_circuit_only.joblib",
+      "label": "LightGBM",
       "mae": 0.0657352645434794,
-      "rmse": 0.10670093426793166,
-      "cvR2": 0.7548098062429148,
-      "cvMae": 0.0657352645434794,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_hellinger_circuit_only.joblib",
+      "r2": 0.7548098062429148,
+      "regime": "circuit_only",
+      "rmse": 0.10670093426793166,
+      "scope": "pooled",
+      "sizeKb": 61.96,
+      "target": "hellinger"
     },
     {
-      "scope": "pooled",
-      "target": "hellinger",
-      "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_hellinger_mixed_submit.joblib",
-      "fileName": "pooled_hellinger_mixed_submit.joblib",
+      "cvMae": 0.046753548197266286,
+      "cvR2": 0.8847223145532919,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 15,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -874,124 +870,25 @@
         "c.t1_us.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 64.95,
-      "r2": 0.8847223145532919,
+      "fileName": "pooled_hellinger_mixed_submit.joblib",
+      "label": "LightGBM",
       "mae": 0.046753548197266286,
-      "rmse": 0.073164301087752,
-      "cvR2": 0.8847223145532919,
-      "cvMae": 0.046753548197266286,
-      "params": {
-        "model__num_leaves": 15
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "pooled",
-      "target": "tvd",
-      "regime": "circuit_chip",
       "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_tvd_circuit_chip.joblib",
-      "fileName": "pooled_tvd_circuit_chip.joblib",
-      "featureCount": 10,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.StructuralMetrics.effort",
-        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "b.BehavioralMetrics.measurement",
-        "a.quantum_specific.magic",
-        "a.BehavioralMetrics.parallelism",
-        "a.quantum_specific.coherence",
-        "a.ElementMetrics.percent_single_gates",
-        "chip.ibm_fez",
-        "chip.ibm_kingston"
-      ],
-      "sizeKb": 63.0,
-      "r2": 0.7931619371672626,
-      "mae": 0.057079999747875164,
-      "rmse": 0.09817011134987878,
-      "cvR2": 0.7931619371672626,
-      "cvMae": 0.057079999747875164,
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "pooled",
-      "target": "tvd",
-      "regime": "circuit_only",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_tvd_circuit_only.joblib",
-      "fileName": "pooled_tvd_circuit_only.joblib",
-      "featureCount": 8,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.StructuralMetrics.effort",
-        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "b.BehavioralMetrics.measurement",
-        "a.quantum_specific.magic",
-        "a.BehavioralMetrics.parallelism",
-        "a.quantum_specific.coherence",
-        "a.ElementMetrics.percent_single_gates"
-      ],
-      "sizeKb": 61.54,
-      "r2": 0.7592306617347914,
-      "mae": 0.06297783844098193,
-      "rmse": 0.1059383397013024,
-      "cvR2": 0.7592306617347914,
-      "cvMae": 0.06297783844098193,
-      "params": {
-        "model__num_leaves": 15
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
-    },
-    {
-      "scope": "pooled",
-      "target": "tvd",
+      "path": "models/pooled_hellinger_mixed_submit.joblib",
+      "r2": 0.8847223145532919,
       "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_tvd_mixed_submit.joblib",
-      "fileName": "pooled_tvd_mixed_submit.joblib",
-      "featureCount": 15,
-      "features": [
-        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
-        "b.StructuralMetrics.effort",
-        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
-        "b.BehavioralMetrics.measurement",
-        "a.quantum_specific.magic",
-        "a.BehavioralMetrics.parallelism",
-        "a.quantum_specific.coherence",
-        "a.ElementMetrics.percent_single_gates",
-        "c.readout_error.median",
-        "c.readout_p1_given_0.median",
-        "c.readout_p0_given_1.median",
-        "c.one_qubit_gate_error.median",
-        "c.t1_us.median",
-        "c.two_qubit_gate_error.median",
-        "c.t2_us.median"
-      ],
-      "sizeKb": 128.23,
-      "r2": 0.8879776074810062,
-      "mae": 0.045118762378606715,
-      "rmse": 0.07221407389179973,
-      "cvR2": 0.8879776074810062,
-      "cvMae": 0.045118762378606715,
-      "params": {
-        "model__num_leaves": 63
-      },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "rmse": 0.073164301087752,
+      "scope": "pooled",
+      "sizeKb": 64.95,
+      "target": "hellinger"
     },
     {
-      "scope": "pooled",
-      "target": "success",
-      "regime": "circuit_chip",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_success_circuit_chip.joblib",
-      "fileName": "pooled_success_circuit_chip.joblib",
+      "cvMae": 0.06474001783155663,
+      "cvR2": 0.7361003798489499,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 12,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1007,25 +904,25 @@
         "chip.ibm_fez",
         "chip.ibm_kingston"
       ],
-      "sizeKb": 98.48,
-      "r2": 0.7361003798489499,
+      "fileName": "pooled_success_circuit_chip.joblib",
+      "label": "LightGBM",
       "mae": 0.06474001783155663,
-      "rmse": 0.10919942595234049,
-      "cvR2": 0.7361003798489499,
-      "cvMae": 0.06474001783155663,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 31
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_circuit_chip.joblib",
+      "r2": 0.7361003798489499,
+      "regime": "circuit_chip",
+      "rmse": 0.10919942595234049,
+      "scope": "pooled",
+      "sizeKb": 98.48,
+      "target": "success"
     },
     {
-      "scope": "pooled",
-      "target": "success",
-      "regime": "circuit_only",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_success_circuit_only.joblib",
-      "fileName": "pooled_success_circuit_only.joblib",
+      "cvMae": 0.06994289260058596,
+      "cvR2": 0.7032003805988191,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 10,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1039,25 +936,25 @@
         "a.ComplexityMetrics.entanglement_metrics.entangling_width",
         "b.ElementMetrics.percent_single_gates"
       ],
-      "sizeKb": 58.8,
-      "r2": 0.7032003805988191,
+      "fileName": "pooled_success_circuit_only.joblib",
+      "label": "LightGBM",
       "mae": 0.06994289260058596,
-      "rmse": 0.11579597900421851,
-      "cvR2": 0.7032003805988191,
-      "cvMae": 0.06994289260058596,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 15
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_circuit_only.joblib",
+      "r2": 0.7032003805988191,
+      "regime": "circuit_only",
+      "rmse": 0.11579597900421851,
+      "scope": "pooled",
+      "sizeKb": 58.8,
+      "target": "success"
     },
     {
-      "scope": "pooled",
-      "target": "success",
-      "regime": "mixed_submit",
-      "model": "LightGBM",
-      "label": "LightGBM",
-      "path": "models/pooled_success_mixed_submit.joblib",
-      "fileName": "pooled_success_mixed_submit.joblib",
+      "cvMae": 0.05589708825602533,
+      "cvR2": 0.8080651463169729,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 17,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1078,25 +975,25 @@
         "c.two_qubit_gate_error.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 107.61,
-      "r2": 0.8080651463169729,
+      "fileName": "pooled_success_mixed_submit.joblib",
+      "label": "LightGBM",
       "mae": 0.05589708825602533,
-      "rmse": 0.09312610471035215,
-      "cvR2": 0.8080651463169729,
-      "cvMae": 0.05589708825602533,
+      "model": "LightGBM",
       "params": {
         "model__num_leaves": 31
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_mixed_submit.joblib",
+      "r2": 0.8080651463169729,
+      "regime": "mixed_submit",
+      "rmse": 0.09312610471035215,
+      "scope": "pooled",
+      "sizeKb": 107.61,
+      "target": "success"
     },
     {
-      "scope": "pooled",
-      "target": "success_adj",
-      "regime": "circuit_chip",
-      "model": "RF",
-      "label": "Random Forest (RF)",
-      "path": "models/pooled_success_adj_circuit_chip.joblib",
-      "fileName": "pooled_success_adj_circuit_chip.joblib",
+      "cvMae": 0.07511291776611569,
+      "cvR2": 0.7645681641087432,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 9,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1109,25 +1006,25 @@
         "chip.ibm_fez",
         "chip.ibm_kingston"
       ],
-      "sizeKb": 1197.67,
-      "r2": 0.7645681641087432,
+      "fileName": "pooled_success_adj_circuit_chip.joblib",
+      "label": "Random Forest (RF)",
       "mae": 0.07511291776611569,
-      "rmse": 0.13784157875860104,
-      "cvR2": 0.7645681641087432,
-      "cvMae": 0.07511291776611569,
+      "model": "RF",
       "params": {
         "model__min_samples_leaf": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_adj_circuit_chip.joblib",
+      "r2": 0.7645681641087432,
+      "regime": "circuit_chip",
+      "rmse": 0.13784157875860104,
+      "scope": "pooled",
+      "sizeKb": 1197.67,
+      "target": "success_adj"
     },
     {
-      "scope": "pooled",
-      "target": "success_adj",
-      "regime": "circuit_only",
-      "model": "RF",
-      "label": "Random Forest (RF)",
-      "path": "models/pooled_success_adj_circuit_only.joblib",
-      "fileName": "pooled_success_adj_circuit_only.joblib",
+      "cvMae": 0.08137050556928417,
+      "cvR2": 0.7365789089926663,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 7,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1138,25 +1035,25 @@
         "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
         "b.BehavioralMetrics.critical_depth"
       ],
-      "sizeKb": 1105.76,
-      "r2": 0.7365789089926663,
+      "fileName": "pooled_success_adj_circuit_only.joblib",
+      "label": "Random Forest (RF)",
       "mae": 0.08137050556928417,
-      "rmse": 0.14581928001443886,
-      "cvR2": 0.7365789089926663,
-      "cvMae": 0.08137050556928417,
+      "model": "RF",
       "params": {
         "model__min_samples_leaf": 5
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_adj_circuit_only.joblib",
+      "r2": 0.7365789089926663,
+      "regime": "circuit_only",
+      "rmse": 0.14581928001443886,
+      "scope": "pooled",
+      "sizeKb": 1105.76,
+      "target": "success_adj"
     },
     {
-      "scope": "pooled",
-      "target": "success_adj",
-      "regime": "mixed_submit",
-      "model": "SVR",
-      "label": "Support Vector Regression (SVR)",
-      "path": "models/pooled_success_adj_mixed_submit.joblib",
-      "fileName": "pooled_success_adj_mixed_submit.joblib",
+      "cvMae": 0.065144907928415,
+      "cvR2": 0.8229691035378434,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
       "featureCount": 14,
       "features": [
         "b.ComplexityMetrics.standardized_metrics.circuit_volume",
@@ -1174,16 +1071,119 @@
         "c.two_qubit_gate_error.median",
         "c.t2_us.median"
       ],
-      "sizeKb": 39.1,
-      "r2": 0.8229691035378434,
+      "fileName": "pooled_success_adj_mixed_submit.joblib",
+      "label": "Support Vector Regression (SVR)",
       "mae": 0.065144907928415,
-      "rmse": 0.11956603467763897,
-      "cvR2": 0.8229691035378434,
-      "cvMae": 0.065144907928415,
+      "model": "SVR",
       "params": {
         "model__C": 8.0
       },
-      "evaluation": "nested repeated grouped K-fold (procedure score)"
+      "path": "models/pooled_success_adj_mixed_submit.joblib",
+      "r2": 0.8229691035378434,
+      "regime": "mixed_submit",
+      "rmse": 0.11956603467763897,
+      "scope": "pooled",
+      "sizeKb": 39.1,
+      "target": "success_adj"
+    },
+    {
+      "cvMae": 0.057079999747875164,
+      "cvR2": 0.7931619371672626,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 10,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.StructuralMetrics.effort",
+        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "b.BehavioralMetrics.measurement",
+        "a.quantum_specific.magic",
+        "a.BehavioralMetrics.parallelism",
+        "a.quantum_specific.coherence",
+        "a.ElementMetrics.percent_single_gates",
+        "chip.ibm_fez",
+        "chip.ibm_kingston"
+      ],
+      "fileName": "pooled_tvd_circuit_chip.joblib",
+      "label": "LightGBM",
+      "mae": 0.057079999747875164,
+      "model": "LightGBM",
+      "params": {
+        "model__num_leaves": 15
+      },
+      "path": "models/pooled_tvd_circuit_chip.joblib",
+      "r2": 0.7931619371672626,
+      "regime": "circuit_chip",
+      "rmse": 0.09817011134987878,
+      "scope": "pooled",
+      "sizeKb": 63.0,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.06297783844098193,
+      "cvR2": 0.7592306617347914,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 8,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.StructuralMetrics.effort",
+        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "b.BehavioralMetrics.measurement",
+        "a.quantum_specific.magic",
+        "a.BehavioralMetrics.parallelism",
+        "a.quantum_specific.coherence",
+        "a.ElementMetrics.percent_single_gates"
+      ],
+      "fileName": "pooled_tvd_circuit_only.joblib",
+      "label": "LightGBM",
+      "mae": 0.06297783844098193,
+      "model": "LightGBM",
+      "params": {
+        "model__num_leaves": 15
+      },
+      "path": "models/pooled_tvd_circuit_only.joblib",
+      "r2": 0.7592306617347914,
+      "regime": "circuit_only",
+      "rmse": 0.1059383397013024,
+      "scope": "pooled",
+      "sizeKb": 61.54,
+      "target": "tvd"
+    },
+    {
+      "cvMae": 0.045118762378606715,
+      "cvR2": 0.8879776074810062,
+      "evaluation": "nested repeated grouped K-fold (procedure score)",
+      "featureCount": 15,
+      "features": [
+        "b.ComplexityMetrics.standardized_metrics.circuit_volume",
+        "b.StructuralMetrics.effort",
+        "b.ComplexityMetrics.gate_based_metrics.multi_qubit_ratio",
+        "b.BehavioralMetrics.measurement",
+        "a.quantum_specific.magic",
+        "a.BehavioralMetrics.parallelism",
+        "a.quantum_specific.coherence",
+        "a.ElementMetrics.percent_single_gates",
+        "c.readout_error.median",
+        "c.readout_p1_given_0.median",
+        "c.readout_p0_given_1.median",
+        "c.one_qubit_gate_error.median",
+        "c.t1_us.median",
+        "c.two_qubit_gate_error.median",
+        "c.t2_us.median"
+      ],
+      "fileName": "pooled_tvd_mixed_submit.joblib",
+      "label": "LightGBM",
+      "mae": 0.045118762378606715,
+      "model": "LightGBM",
+      "params": {
+        "model__num_leaves": 63
+      },
+      "path": "models/pooled_tvd_mixed_submit.joblib",
+      "r2": 0.8879776074810062,
+      "regime": "mixed_submit",
+      "rmse": 0.07221407389179973,
+      "scope": "pooled",
+      "sizeKb": 128.23,
+      "target": "tvd"
     }
   ]
 }
