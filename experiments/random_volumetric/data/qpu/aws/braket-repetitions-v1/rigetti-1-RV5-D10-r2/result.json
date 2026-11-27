@@ -1,0 +1,91 @@
+{
+  "counts": {
+    "10000": 25,
+    "11010": 35,
+    "11001": 38,
+    "10100": 40,
+    "11111": 73,
+    "01110": 26,
+    "10101": 35,
+    "01011": 46,
+    "10111": 36,
+    "11110": 45,
+    "10001": 29,
+    "11000": 34,
+    "00101": 26,
+    "11101": 38,
+    "01001": 29,
+    "10010": 32,
+    "00111": 21,
+    "11011": 32,
+    "10110": 40,
+    "11100": 35,
+    "01010": 31,
+    "00000": 30,
+    "00110": 29,
+    "00001": 26,
+    "01100": 19,
+    "01111": 32,
+    "00100": 18,
+    "10011": 31,
+    "00010": 16,
+    "01000": 26,
+    "00011": 22,
+    "01101": 29
+  },
+  "shots": 1024,
+  "success_rate": 0.029296875,
+  "success_interval_95_wilson": [
+    0.020597534519865346,
+    0.041514631002182556
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 32,
+      "success_rate": 0.029297,
+      "dsr": 0.0,
+      "peak_mismatch": true,
+      "hellinger_fidelity": 0.029297,
+      "tvd": 0.970703,
+      "tvd_fidelity": 0.029297,
+      "chance_baseline": 0.03125,
+      "chance_corrected_success": 0.0,
+      "coarse_tvd": 0.970703,
+      "coarse_tvd_similarity": 0.029297,
+      "coarse_hellinger_distance": 0.910405,
+      "coarse_hellinger_fidelity": 0.029297
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.970703125,
+      "tvd_interval": [
+        0.9542851207880866,
+        0.9825529309840825
+      ],
+      "success_rate": 0.029296875,
+      "success_interval": [
+        0.017447069015917478,
+        0.04571487921191339
+      ],
+      "model_status": "not_applicable",
+      "rank_status": "unresolved",
+      "normalized_entropy": 0.9866626604675975,
+      "gap_standard_error": 0.010621125622807079,
+      "rank_pvalue": 0.01678632911847825,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "exact_clopper_pearson_deterministic_target",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/9f148b21-f848-4746-a6a4-0bfd1e7c4853",
+  "recovered_at": "2026-11-25T21:51:31.652416+00:00",
+  "raw_result_sha256": "4c2c4b1cfe2f0c888871dc8bf6c75cccf985756b71bbb4a3e15a22d3bfc5ae37"
+}

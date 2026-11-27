@@ -1,0 +1,13 @@
+{
+  "deviceArn": "arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1",
+  "action": "{\"braketSchemaHeader\": {\"name\": \"braket.ir.openqasm.program\", \"version\": \"1\"}, \"inputs\": {}, \"source\": \"OPENQASM 3.0;\\nbit[4] b;\\nqubit[4] q;\\nrx(3.1415926535897927) q[1];\\nrx(3.1415926535897927) q[2];\\nh q[3];\\nrz(1.3744467859455345) q[3];\\ncnot q[3], q[2];\\nrz(-0.7853981633974483) q[2];\\ncnot q[3], q[2];\\nrz(0.7853981633974483) q[2];\\nh q[2];\\nrz(1.1780972450961724) q[2];\\ncnot q[3], q[1];\\nrz(-0.39269908169872414) q[1];\\ncnot q[3], q[1];\\nrz(0.39269908169872414) q[1];\\ncnot q[2], q[1];\\nrz(-0.7853981633974483) q[1];\\ncnot q[2], q[1];\\nrz(0.7853981633974483) q[1];\\nh q[1];\\nrz(0.7853981633974483) q[1];\\ncnot q[3], q[0];\\nrz(-0.19634954084936207) q[0];\\ncnot q[3], q[0];\\nrz(0.19634954084936207) q[0];\\ncnot q[2], q[0];\\nrz(-0.39269908169872414) q[0];\\ncnot q[2], q[0];\\nrz(0.39269908169872414) q[0];\\ncnot q[1], q[0];\\nrz(-0.7853981633974483) q[0];\\ncnot q[1], q[0];\\nrz(0.7853981633974483) q[0];\\nh q[0];\\nh q[0];\\nrz(-0.7853981633974483) q[1];\\ncnot q[1], q[0];\\nrz(0.7853981633974483) q[0];\\ncnot q[1], q[0];\\nrz(-0.7853981633974483) q[0];\\nh q[1];\\nrz(-1.1780972450961724) q[2];\\ncnot q[2], q[0];\\nrz(0.39269908169872414) q[0];\\ncnot q[2], q[0];\\nrz(-0.39269908169872414) q[0];\\ncnot q[2], q[1];\\nrz(0.7853981633974483) q[1];\\ncnot q[2], q[1];\\nrz(-0.7853981633974483) q[1];\\nh q[2];\\nrz(-1.3744467859455345) q[3];\\ncnot q[3], q[0];\\nrz(0.19634954084936207) q[0];\\ncnot q[3], q[0];\\nrz(-0.19634954084936207) q[0];\\ncnot q[3], q[1];\\nrz(0.39269908169872414) q[1];\\ncnot q[3], q[1];\\nrz(-0.39269908169872414) q[1];\\ncnot q[3], q[2];\\nrz(0.7853981633974483) q[2];\\ncnot q[3], q[2];\\nrz(-0.7853981633974483) q[2];\\nh q[3];\\nb[0] = measure q[0];\\nb[1] = measure q[1];\\nb[2] = measure q[2];\\nb[3] = measure q[3];\"}",
+  "deviceParameters": "{\"braketSchemaHeader\": {\"name\": \"braket.device_schema.ionq.ionq_device_parameters\", \"version\": \"1\"}, \"paradigmParameters\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.gate_model_parameters\", \"version\": \"1\"}, \"qubitCount\": 4, \"disableQubitRewiring\": false}}",
+  "shots": 100,
+  "outputS3Bucket": "amazon-braket-cristian-results",
+  "outputS3KeyPrefix": "qward/braket-study-v1/2bd3df53-9681-4272-b26c-1176fa2a06c0",
+  "clientToken": "2bd3df53-9681-4272-b26c-1176fa2a06c0",
+  "tags": {
+    "qward-run-id": "2bd3df53-9681-4272-b26c-1176fa2a06c0",
+    "qward-config": "SR4"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "ResponseMetadata": {
+    "RequestId": "08e52fcd-25a6-490f-b977-deb48b86e6fd",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "x-amzn-requestid": "08e52fcd-25a6-490f-b977-deb48b86e6fd",
+      "x-xss-protection": "1; mode=block",
+      "access-control-allow-origin": "*",
+      "strict-transport-security": "max-age=47304000; includeSubDomains",
+      "access-control-allow-headers": "*,authorization,date,x-amz-date,x-amz-security-token,x-amz-target,content-type,x-amz-content-sha256,x-amz-user-agent,x-amzn-platform-id,x-amzn-trace-id",
+      "x-frame-options": "DENY",
+      "content-security-policy": "upgrade-insecure-requests; default-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'none';",
+      "x-amz-apigw-id": "Haq-UGRhSK4EMVA=",
+      "cache-control": "no-store, no-cache",
+      "x-content-type-options": "nosniff",
+      "access-control-allow-methods": "OPTIONS,GET,PUT,POST,DELETE",
+      "access-control-expose-headers": "x-amzn-errortype,x-amzn-requestid,x-amzn-errormessage,x-amzn-trace-id,x-amz-apigw-id,date",
+      "x-amzn-trace-id": "Root=1-6b07585b-2ad45d7a8a9412a353944b1b",
+      "pragma": "no-cache",
+      "content-type": "application/json",
+      "content-length": "1045",
+      "connection": "keep-alive",
+      "date": "Wed, 25 Nov 2026 21:51:22 GMT"
+    },
+    "MaxAttemptsReached": true,
+    "RetryAttempts": 0
+  },
+  "quantumTaskArn": "arn:aws:braket:us-west-1:127214192355:quantum-task/5b103771-2e38-4eb5-ba91-6af31e96f7ef",
+  "status": "COMPLETED",
+  "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+  "deviceParameters": "{\"braketSchemaHeader\": {\"name\": \"braket.device_schema.rigetti.rigetti_device_parameters\", \"version\": \"1\"}, \"paradigmParameters\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.gate_model_parameters\", \"version\": \"1\"}, \"qubitCount\": 6, \"disableQubitRewiring\": false}}",
+  "shots": 1024,
+  "outputS3Bucket": "amazon-braket-us-west-1-127214192355",
+  "outputS3Directory": "qward/braket-study-v1/0f086687-5732-4b1a-9353-f630833b0884/5b103771-2e38-4eb5-ba91-6af31e96f7ef",
+  "createdAt": "2026-11-25T19:17:13.769000+00:00",
+  "endedAt": "2026-11-25T20:46:45.206000+00:00",
+  "tags": {
+    "qward-config": "BV5-ONES",
+    "qward-run-id": "0f086687-5732-4b1a-9353-f630833b0884"
+  },
+  "actionMetadata": {
+    "actionType": "braket.ir.openqasm.program"
+  }
+}

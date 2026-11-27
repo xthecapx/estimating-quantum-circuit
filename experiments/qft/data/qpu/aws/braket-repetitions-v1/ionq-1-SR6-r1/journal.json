@@ -1,0 +1,12 @@
+{
+  "prepared_hash": "7766fc50564285258289a188a00e9e6ee85c784f9edbbb4d652930fac7a2c6e6",
+  "status": "completed",
+  "task_arn": "arn:aws:braket:us-east-1:127214192355:quantum-task/c31b1a38-8123-4c3a-b4bb-666034e81b5f",
+  "submission_started_at": "2026-11-25T21:45:06.616313+00:00",
+  "account_id": "127214192355",
+  "submitted_at": "2026-11-25T21:45:07.410813+00:00",
+  "task_status": "COMPLETED",
+  "checked_at": "2026-11-25T22:11:07.438806+00:00",
+  "completed_at": "2026-11-25T22:11:07.568601+00:00",
+  "result_hash": "ffb4b0390eafa2c8ec5d5328980c6aeb12d9bd8562ce4142a8ab31b19717b2f0"
+}

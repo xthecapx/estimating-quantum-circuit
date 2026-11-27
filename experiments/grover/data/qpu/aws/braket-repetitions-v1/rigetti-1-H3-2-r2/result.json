@@ -1,0 +1,64 @@
+{
+  "counts": {
+    "111": 193,
+    "100": 74,
+    "110": 115,
+    "000": 74,
+    "011": 376,
+    "101": 56,
+    "010": 102,
+    "001": 34
+  },
+  "shots": 1024,
+  "success_rate": 0.3671875,
+  "success_interval_95_wilson": [
+    0.33821061951012654,
+    0.3971571284380032
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 8,
+      "success_rate": 0.367188,
+      "dsr": 0.321617,
+      "peak_mismatch": false,
+      "hellinger_fidelity": 0.591891,
+      "tvd": 0.578125,
+      "tvd_fidelity": 0.421875,
+      "chance_baseline": 0.125,
+      "chance_corrected_success": 0.276786,
+      "coarse_tvd": 0.632812,
+      "coarse_tvd_similarity": 0.367188,
+      "coarse_hellinger_distance": 0.627726,
+      "coarse_hellinger_fidelity": 0.367188
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.578125,
+      "tvd_interval": [
+        0.46446797534547984,
+        0.711646597860352
+      ],
+      "success_rate": null,
+      "success_interval": null,
+      "model_status": "not_applicable",
+      "rank_status": "verified",
+      "normalized_entropy": 0.870158506668604,
+      "gap_standard_error": 0.022615296246873674,
+      "rank_pvalue": 1.4010890513741188e-14,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "conservative_tvd_bounds_from_simultaneous_bonferroni_binomial_intervals",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/6e81ebf8-dc44-44d5-b371-b464f05a1c72",
+  "recovered_at": "2026-11-25T21:51:24.753412+00:00",
+  "raw_result_sha256": "8883251defef9cdcc9cdba5433235787515eccd37cecb975262143ac4bc94acb"
+}

@@ -1,0 +1,76 @@
+{
+  "counts": {
+    "100000": 857,
+    "000000": 109,
+    "110000": 12,
+    "100001": 10,
+    "100010": 13,
+    "100110": 1,
+    "101000": 7,
+    "111000": 1,
+    "100100": 5,
+    "111001": 1,
+    "010000": 2,
+    "110100": 1,
+    "110010": 1,
+    "001000": 1,
+    "000100": 1,
+    "101001": 1,
+    "101010": 1
+  },
+  "shots": 1024,
+  "success_rate": 0.8369140625,
+  "success_interval_95_wilson": [
+    0.8130340968215892,
+    0.8582756602217583
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 17,
+      "success_rate": 0.836914,
+      "dsr": 0.774327,
+      "peak_mismatch": false,
+      "hellinger_fidelity": 0.836914,
+      "tvd": 0.163086,
+      "tvd_fidelity": 0.836914,
+      "chance_baseline": 0.015625,
+      "chance_corrected_success": 0.834325,
+      "coarse_tvd": 0.163086,
+      "coarse_tvd_similarity": 0.836914,
+      "coarse_hellinger_distance": 0.291839,
+      "coarse_hellinger_fidelity": 0.836914
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.1630859375,
+      "tvd_interval": [
+        0.13449033976947478,
+        0.19487445962509242
+      ],
+      "success_rate": 0.8369140625,
+      "success_interval": [
+        0.8051255403749076,
+        0.8655096602305252
+      ],
+      "model_status": "not_applicable",
+      "rank_status": "verified",
+      "normalized_entropy": 0.16191105006879902,
+      "gap_standard_error": 0.020004266641413745,
+      "rank_pvalue": 1.039141429192046e-144,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "exact_clopper_pearson_deterministic_target",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/3353eba1-04db-4a41-ae34-7dfb72bb05df",
+  "recovered_at": "2026-11-25T21:51:08.489885+00:00",
+  "raw_result_sha256": "4e088fa894ac283ad8668c8ce98af2b8048049d4a9de3b9ca652a3d2080a30dd"
+}
