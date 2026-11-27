@@ -638,6 +638,11 @@ def compute_cross_chip_transfer(
                 ]
                 if not shared_cols:
                     continue
+                if reg_key == "mixed_submit" and not (
+                    any(c.startswith(("a.", "b.")) for c in shared_cols)
+                    and any(c.startswith("c.") for c in shared_cols)
+                ):
+                    continue
                 groups = dst_df["meta.config_id"].to_numpy()
                 if src == dst:
                     preds = _group_cv_predictions(

@@ -355,6 +355,7 @@ test("footprint tab traces metric selection, subset scores and model results @na
   const errors = await openApp(page, "#section=range");
   await selectSection(page, "Footprint", true);
   const panel = page.getByRole("region", { name: "Footprint selection experiment" });
+  await panel.getByLabel("Chip / Scope").selectOption({ label: "IBM (both chips)" });
   await panel.getByLabel("Target quality metric").selectOption({ label: "Success Rate" });
   const selected = panel.getByRole("region", { name: "Selected footprint" });
   await expect(selected.getByRole("button")).toHaveCount(10);
@@ -545,6 +546,20 @@ test("Run details shows all tested settings and preserves the overview question 
   await expect(page.getByLabel("Minimum success rate")).toHaveValue("73");
 });
 
+test("Model training shows Rigetti results and IonQ training coverage @narrow", async ({ page }) => {
+  const errors = await openApp(page, "#section=estimation");
+  const scope = page.getByLabel("Chip / Scope");
+  await scope.selectOption({ label: "IonQ Forte-1" });
+  await expect(page.getByRole("status").filter({ hasText: "IonQ Forte-1" })).toContainText("7 jobs, need 20");
+  await scope.selectOption({ label: "Rigetti Cepheus-1-108Q" });
+  await expect(page.getByRole("heading", { name: /Model leaderboard/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Model training results" })).toContainText("36 jobs");
+  await scope.selectOption({ label: "All QPUs Pooled (Cross-chip)" });
+  await page.getByLabel("Thesis view").selectOption({ label: "H3 · Hardware Boundary & Cross-Chip Transfer" });
+  await expect(page.getByRole("table", { name: "Leave-one-provider-out scores" })).toContainText("rigetti");
+  expect(errors).toEqual([]);
+});
+
 test("report tabs share the pooled export and load other reports on demand", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", request => {
@@ -557,7 +572,7 @@ test("report tabs share the pooled export and load other reports on demand", asy
   await expect(page.getByRole("region", { name: "Selected footprint" })).toBeVisible();
   await page.getByRole("tab", { name: "Model training" }).click();
   await expect(page.getByRole("heading", { name: /Model leaderboard/ })).toBeVisible();
-  expect(requests.filter(name => name.startsWith("estimation-pooled"))).toHaveLength(1);
+  expect(requests.filter(name => name.startsWith("training-pooled"))).toHaveLength(1);
   await page.getByRole("tab", { name: "Execution cost" }).click();
   await expect(page.getByRole("heading", { name: "What will a job cost before it runs?" })).toBeVisible();
   await page.getByRole("tab", { name: "Model validation" }).click();

@@ -169,7 +169,7 @@ class DatasetBundle:
 
 def infer_provider(backend_name: str, explicit_provider: str | None = None) -> tuple[str, str]:
     """Map backend identifiers from IBM, Rigetti, or IonQ to (provider, modality)."""
-    if explicit_provider and str(explicit_provider).strip():
+    if pd.notna(explicit_provider) and str(explicit_provider).strip():
         prov = str(explicit_provider).strip().lower()
         modality = "trapped_ion" if prov == "ionq" else "superconducting"
         return prov, modality
@@ -221,12 +221,16 @@ def _canonicalize_hardware_columns(
     return mapping
 
 
+BRAKET_TRAINING_TABLE = "braket-repetitions-v1/dataset.csv"
+
+
 def load_ml_dataset(
     tables: Path,
     backends: Sequence[str] | None = None,
     providers: Sequence[str] | None = None,
     include_validation: bool = False,
     roles: Sequence[str] | None = None,
+    include_braket_training: bool = False,
 ) -> DatasetBundle:
     """Load and validate CSV dataset parts against `dataset_manifest.json`.
 
@@ -236,7 +240,8 @@ def load_ml_dataset(
     Only ``train``-role campaigns are returned by default (see ``campaign_role``), so the
     training pipeline can never see prospective-validation or exploratory collections.
     ``include_validation=True`` returns every campaign; ``roles`` selects explicitly.
-    ``manifest_hash``/``inputs`` still describe the full export.
+    With ``include_braket_training``, append only the explicitly assigned Braket training rows.
+    ``manifest_hash`` identifies the primary table and ``inputs`` fingerprints every source CSV.
     """
     manifest_path = tables / "dataset_manifest.json"
     if manifest_path.exists():
@@ -266,6 +271,12 @@ def load_ml_dataset(
         if "rows" in part and len(df_part) != part["rows"]:
             raise ValueError(f"Dataset part row count mismatch: {part_name}")
         frames.append(df_part)
+
+    if include_braket_training:
+        name = BRAKET_TRAINING_TABLE
+        braket = pd.read_csv(tables / name, low_memory=False)
+        inputs[name] = _sha256(tables / name)
+        frames.append(braket.loc[braket["meta.split"].eq("train")])
 
     frame = pd.concat(frames, ignore_index=True).copy()
 
@@ -415,7 +426,7 @@ def baseline_predictions(frame: pd.DataFrame, target_key: str) -> dict[str, pd.S
         ):
             if col in frame.columns:
                 preds[name] = pd.to_numeric(frame[col], errors="coerce")
-    return preds
+    return {name: series for name, series in preds.items() if series.notna().any()}
 
 
 def split_temporal_and_cv(

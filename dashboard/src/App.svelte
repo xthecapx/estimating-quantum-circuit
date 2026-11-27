@@ -163,7 +163,7 @@
           {#if section === "findings"}
             <FindingsView
               comparison={index?.comparisonReports ?? {}}
-              estimation={index?.estimationReports ?? {}}
+              estimation={index?.findingsEstimationReports ?? index?.estimationReports ?? {}}
               onnavigate={dashboard.selectSection}
             />
           {:else if section === "decay"}

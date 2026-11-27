@@ -87,6 +87,7 @@ export interface CalibrationRecord {
 export interface IndexData {
   decayReports?: Record<string, string>;
   estimationReports?: Record<string, string>;
+  findingsEstimationReports?: Record<string, string>;
   /** Prospective validation snapshots (frozen models on new QPU runs), keyed by profile. */
   prospectiveReports?: Record<string, string>;
   /** Execution-cost model snapshots (billed QPU time / resource units), keyed by version. */

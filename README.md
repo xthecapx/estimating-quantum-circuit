@@ -4,7 +4,7 @@
 
 How accurately can we predict a quantum circuit’s output quality and billed execution time before running it on hardware? This thesis repository brings together the circuits, hardware measurements, and prediction models used to study that question.
 
-[Explore the dashboard](https://xthecapx.github.io/estimating-quantum-circuit/dashboard/) · [Browse the IBM data](experiments/dataset_out/) · [Read the model results](report/ml_estimation/report.md)
+[Explore the dashboard](https://xthecapx.github.io/estimating-quantum-circuit/dashboard/) · [Browse the IBM data](experiments/dataset_out/) · [Read the multi-provider training results](report/ml_estimation/multi_provider/report.md)
 
 ## Explore the data
 

@@ -138,6 +138,26 @@ def test_provider_inference_supports_ibm_rigetti_ionq() -> None:
     assert infer_provider("custom_qpu", explicit_provider="ionq") == ("ionq", "trapped_ion")
 
 
+def test_combined_training_respects_braket_split_and_provenance(tmp_path: Path) -> None:
+    tables = _synthetic_multichip_tables(tmp_path)
+    base = load_ml_dataset(tables)
+    part = Path("braket-repetitions-v1/dataset.csv")
+    (tables / part.parent).mkdir()
+    jobs = base.frame.iloc[:4].copy()
+    jobs["meta.provider"] = "ionq"
+    jobs["meta.backend_name"] = "Forte-1"
+    jobs["meta.campaign_id"] = "ionq-development-v1"
+    jobs["meta.job_id"] = ["train-job", "test-job", "validation-job", "pilot-job"]
+    jobs["meta.split"] = ["train", "test", "validation", "pilot"]
+    jobs.to_csv(tables / part, index=False)
+
+    combined = load_ml_dataset(tables, include_braket_training=True)
+    assert len(combined.frame) == len(base.frame) + 1
+    assert combined.frame.loc[combined.frame["meta.backend_name"] == "Forte-1", "meta.job_id"].tolist() == ["train-job"]
+    assert set(combined.frame["meta.provider"]) == {"ibm", "rigetti", "ionq"}
+    assert combined.inputs == {**base.inputs, str(part): hashlib.sha256((tables / part).read_bytes()).hexdigest()}
+
+
 def test_multichip_loader_vif_and_end_to_end_pipeline(tmp_path: Path) -> None:
     """The whole pipeline runs on three providers with no chip or provider named in code."""
     tables = _synthetic_multichip_tables(tmp_path)

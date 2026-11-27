@@ -5,7 +5,8 @@
   import Select from "../../lib/ui/Select.svelte";
   import { fmt, footprintChart, type TargetReport } from "./model";
 
-  let { report, scope }: { report: TargetReport; scope: string } = $props();
+  let { report, scope, combined }: { report: TargetReport; scope: string; combined: boolean } = $props();
+  const evidenceRoot = $derived("https://github.com/xthecapx/estimating-quantum-circuit/blob/main/report/ml_estimation" + (combined ? "/multi_provider" : ""));
   let showChart = $state(false);
   const rows = $derived(report.footprintAblation ?? []);
   const chosen = $derived(rows.find(row => row.selected));
@@ -80,8 +81,8 @@
   </details>
 </div>
 <p class="sources"><a href="https://github.com/xthecapx/estimating-quantum-circuit/blob/main/experiments/footprint_analysis.py">Selection method</a>
-  · <a href="https://github.com/xthecapx/estimating-quantum-circuit/blob/main/report/ml_estimation/footprint.csv">Metric evidence (CSV)</a>
-  · <a href="https://github.com/xthecapx/estimating-quantum-circuit/blob/main/report/ml_estimation/footprint_ablation.csv">Footprint-size results (CSV)</a></p>
+  · <a href="{evidenceRoot}/footprint.csv">Metric evidence (CSV)</a>
+  · <a href="{evidenceRoot}/footprint_ablation.csv">Footprint-size results (CSV)</a></p>
 
 <style>
   .summary { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; padding:0; }

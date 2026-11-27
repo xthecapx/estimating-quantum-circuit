@@ -105,6 +105,19 @@ Export reads local journals and their `artifacts/.../prepared.json` files; it do
 
 For collecting and recovering new QPU results, follow the [IBM Fez experiment plan](../docs/ibm_fez_dataset_plan.md) and the [campaign driver](../experiments/run_campaign.sh). Those operations have their own IBM credentials and usage requirements. They are separate from running the dashboard.
 
+### Refresh Model training and Footprint
+
+After exporting the IBM tables and `braket-repetitions-v1/dataset.csv`, run these commands from the repository root with the project’s ML dependencies installed.
+
+```sh
+python -m pip install -e ".[ml]"
+python -m experiments.ml_estimation --include-braket
+python3 dashboard/build.py
+npm run build --prefix dashboard
+```
+
+The trainer reads IBM training campaigns and Braket rows marked `train`. It groups folds by circuit configuration across chips and keeps each chip’s collection windows separate. Training snapshots are in `dashboard/experiments/training/`. Fitted models and score tables are in `report/ml_estimation/multi_provider/`.
+
 ## Verification during development
 
 None of these submit IBM jobs. One-time setup, from the repository root:

@@ -1,6 +1,6 @@
 """QAQS quality-estimation pipeline: evaluate, save models, write report and dashboard data.
 
-    python -m experiments.ml_estimation
+    python -m experiments.ml_estimation --include-braket
 
 One evaluation path: nested repeated grouped K-fold over circuit configurations
 (``qaqs_kfold``). Scopes are derived from the export: one per chip, one per provider
@@ -16,7 +16,7 @@ from typing import Any, Sequence
 
 import pandas as pd
 
-from experiments.ml_dataset import ALL_TARGETS, CAMPAIGN_ROLES, DatasetBundle, load_ml_dataset
+from experiments.ml_dataset import ALL_TARGETS, BRAKET_TRAINING_TABLE, CAMPAIGN_ROLES, DatasetBundle, load_ml_dataset
 from experiments.qaqs_kfold import analyze_scope_kfold, assign_config_folds, provider_transfer
 from experiments.qaqs_models import (  # noqa: F401  (re-exported for callers of this module)
     H1_R2_THRESHOLD,
@@ -49,28 +49,41 @@ def build_scopes(frame: pd.DataFrame) -> list[tuple[str, pd.DataFrame]]:
     return scopes
 
 
-def dataset_summary(tables: Path, bundle: DatasetBundle) -> dict[str, Any]:
-    everything = load_ml_dataset(tables, roles=CAMPAIGN_ROLES).frame
-    return {
+def dataset_summary(tables: Path, bundle: DatasetBundle, include_braket: bool = False) -> dict[str, Any]:
+    everything = load_ml_dataset(tables, roles=CAMPAIGN_ROLES, include_braket_training=include_braket).frame
+    summary = {
         "manifestHash": bundle.manifest_hash,
         "chips": sorted(bundle.frame["meta.backend_name"].unique().tolist()),
         "providers": sorted(bundle.frame["meta.provider"].unique().tolist()),
         "campaignRoles": {k: int(v) for k, v in everything["meta.campaign_role"].value_counts().items()},
     }
+    if include_braket:
+        name = BRAKET_TRAINING_TABLE
+        splits = pd.read_csv(tables / name, usecols=["meta.split"])["meta.split"].value_counts()
+        summary["braketSplits"] = splits.to_dict()
+        summary["braketHash"] = bundle.inputs[name]
+    return summary
 
 
 def run_pipeline(
     tables: Path = DEFAULT_TABLES,
-    report_out: Path = DEFAULT_REPORT_OUT,
-    dashboard_out: Path = DEFAULT_DASHBOARD_OUT,
+    report_out: Path | None = None,
+    dashboard_out: Path | None = None,
     backends: Sequence[str] | None = None,
     split_seed: int = 11,
     n_splits: int = 5,
     n_repeats: int = 3,
     n_jobs: int = -1,
+    include_braket: bool | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Evaluate every scope and write models, report tables and dashboard snapshots."""
-    bundle = load_ml_dataset(tables, backends=backends)
+    if include_braket is None:
+        include_braket = (tables / BRAKET_TRAINING_TABLE).is_file()
+    if report_out is None:
+        report_out = DEFAULT_REPORT_OUT / "multi_provider" if include_braket else DEFAULT_REPORT_OUT
+    if dashboard_out is None:
+        dashboard_out = DEFAULT_DASHBOARD_OUT.with_name("training") if include_braket else DEFAULT_DASHBOARD_OUT
+    bundle = load_ml_dataset(tables, backends=backends, include_braket_training=include_braket)
     frame = bundle.frame
     fold_table = assign_config_folds(frame, n_splits=n_splits, n_repeats=n_repeats, seed=split_seed)
     print(
@@ -112,15 +125,19 @@ def run_pipeline(
             json.dumps(payload, separators=(",", ":"), allow_nan=False, sort_keys=True), encoding="utf-8"
         )
     print(f"Wrote estimation snapshots for {list(snapshots)}", flush=True)
-    write_reports(snapshots, report_out, dataset_summary(tables, bundle))
+    write_reports(snapshots, report_out, dataset_summary(tables, bundle, include_braket))
     return snapshots
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--tables", type=Path, default=DEFAULT_TABLES)
-    parser.add_argument("--report-out", type=Path, default=DEFAULT_REPORT_OUT)
-    parser.add_argument("--dashboard-out", type=Path, default=DEFAULT_DASHBOARD_OUT)
+    parser.add_argument(
+        "--include-braket", action=argparse.BooleanOptionalAction, default=None,
+        help="Include the Braket training split alongside IBM (default: when its export is present).",
+    )
+    parser.add_argument("--report-out", type=Path)
+    parser.add_argument("--dashboard-out", type=Path)
     parser.add_argument("--backend", action="append", help="Optional chip filter; repeatable. Default: every chip.")
     parser.add_argument("--folds", type=int, default=5)
     parser.add_argument("--repeats", type=int, default=3)
@@ -131,6 +148,7 @@ def main() -> None:
         tables=args.tables,
         report_out=args.report_out,
         dashboard_out=args.dashboard_out,
+        include_braket=args.include_braket,
         backends=args.backend,
         split_seed=args.split_seed,
         n_splits=args.folds,

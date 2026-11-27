@@ -509,7 +509,7 @@ def write_reports(
     models_dir.mkdir(parents=True, exist_ok=True)
     rows = collect_rows(snapshots)
     stable = stable_footprint(snapshots)
-    any_snap = next(iter(snapshots.values()))
+    any_snap = snapshots.get("pooled") or next(iter(snapshots.values()))
     sp = any_snap["split"]
     dataset = dataset or {}
 
@@ -529,7 +529,15 @@ def write_reports(
         ]
         assert set(roles) <= set(CAMPAIGN_ROLES)
     lines += [f"Scopes: {', '.join(f'`{s}`' for s in snapshots)}.", ""]
-    lines += _section_best(snapshots)
+    if "braketSplits" in dataset:
+        splits = dataset["braketSplits"]
+        lines += [
+            f"Braket export `{dataset['braketHash'][:12]}` contributes {splits.get('train', 0)} training jobs. "
+            f"The export reserves {splits.get('test', 0)} jobs for testing.",
+            "",
+        ]
+    else:
+        lines += _section_best(snapshots)
 
     lines += [
         "## Verdicts",
@@ -567,14 +575,14 @@ def write_reports(
     lines += _section_h3(snapshots)
     lines += _section_h4(snapshots)
     lines += _section_footprint(snapshots, stable)
-    lines += _section_prospective()
+    if "braketSplits" not in dataset:
+        lines += _section_prospective()
 
     if rows["_models"]:
         lines += [
             "## Saved models",
             "",
-            "Fitted on every training-role job with the procedure scored above. Roles are listed under "
-            "\"Which model to use\".",
+            "Each model is fitted on all eligible jobs in its scope.",
             "",
             "| Scope | Target | Regime | Model | Features | Procedure R² | MAE | Artifact |",
             "|---|---|---|---|---:|---:|---:|---|",

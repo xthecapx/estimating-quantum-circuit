@@ -59,6 +59,10 @@
     targetKeys.includes(choices.target) ? choices.target : (targetKeys[0] ?? ""),
   );
   const report = $derived(data?.targets[targetKey]);
+  const skipReasons = $derived(
+    [...new Set(Object.values(data?.skippedTargets ?? {}))]
+      .map(reason => reason.replace(/^WAITING FOR DATA: /, "")).join(". "),
+  );
   const split = $derived<"holdout" | "cv">(
     choices.split === "cv" || (data && data.holdoutJobs === 0) ? "cv" : "holdout",
   );
@@ -117,9 +121,8 @@
 
 <section class="surface estimation" aria-label={footprintOnly ? "Footprint selection experiment" : "Model training results"}>
   {#if !footprintOnly}<p class="training-banner" role="note">
-    <strong>Training-data results.</strong> These scores come from cross-validation on the collection used to build
-    the models, and are kept for comparison and model selection. The real performance is the
-    <a href="#section=validation">Model validation</a> tab: frozen models scored on new QPU runs.
+    <strong>Training results.</strong> Cross-validation measures how well the models predict held-out circuit configurations.
+    For the earlier frozen IBM models, see <a href="#section=validation">Model validation</a>.
   </p>{/if}
   <div class="settings controls">
     {#if availableScopes.length}
@@ -167,10 +170,15 @@
   {:else if !reports[activeScope]}
     <p role="status">
       No quality estimation snapshot is bundled yet for {activeScope}. Run
-      <code>python -m experiments.ml_estimation</code> and rebuild dashboard data.
+      <code>python -m experiments.ml_estimation --include-braket</code> and rebuild dashboard data.
     </p>
-  {:else if !data || !report}
+  {:else if !data}
     <p role="status">Loading estimation results…</p>
+  {:else if !report}
+    <p role="status">{SCOPE_LABELS[data.backend] ?? data.backend} has no fitted model for this scope.
+      {skipReasons}.
+      {#if availableScopes.includes("pooled") && data.backend !== "pooled"}These jobs are included in the pooled training data.{/if}
+    </p>
   {:else}
     {#if viewMode !== "footprint"}<div class="heading">
       <div>
@@ -179,6 +187,9 @@
           {#if data.split?.mode === "kfold"}
             {VALIDATION.unseenCircuit.name} ({data.split.nSplits}-fold × {data.split.nRepeats} repeats over
             {data.split.totalConfigs} configurations)
+            {#if report.foldCount != null && data.split.nSplits && data.split.nRepeats && report.foldCount < data.split.nSplits * data.split.nRepeats}
+              · {report.foldCount} of {data.split.nSplits * data.split.nRepeats} folds met the job minimums
+            {/if}
           {:else}
             {data.trainJobs} train, {data.holdoutJobs} held out
           {/if}
@@ -189,10 +200,10 @@
           {#if report.candidateFootprintCount && report.candidateFootprintCount > report.footprintCount}
             (of {report.candidateFootprintCount} VIF-screened)
           {/if}
-          pre-runtime footprint features + {report.hardwareFeatureCount} hardware calibration features.
-          {#if report.savedModels?.mixed_submit}
-            Saved artifact: <code>{report.savedModels.mixed_submit.path}</code>
-            ({report.savedModels.mixed_submit.sizeKb.toFixed(1)} KB).
+          pre-runtime circuit features.
+          {#if report.savedModels?.circuit_only}
+            Saved artifact: <code>{report.savedModels.circuit_only.path}</code>
+            ({report.savedModels.circuit_only.sizeKb.toFixed(1)} KB).
           {/if}
           {#if data.holdoutPeriods.length}
             Unseen holdout: {data.holdoutPeriods.join(", ")}.
@@ -281,13 +292,12 @@
       </div>
       {#if report.baselines.length === 0}
         <p class="note">
-          Analytical M1/M2 baselines predict success rate and full TVD directly; switch Target to
-          Total Variation Distance or Success Rate to compare ML against M1/M1-mixture/M2.
+          No analytical baseline is available for this scope and metric.
         </p>
       {/if}
 
     {:else if viewMode === "footprint"}
-      <FootprintEvidence {report} scope={SCOPE_LABELS[data.backend] ?? data.backend}/>
+      <FootprintEvidence {report} combined={reports[activeScope].startsWith("training-")} scope={SCOPE_LABELS[data.backend] ?? data.backend}/>
 
     {:else if viewMode === "h3"}
       <article class="card">
@@ -430,6 +440,25 @@
             </tbody>
           </table>
         </div>
+      {/if}
+
+      {#if data.backend === "pooled" && report.h3.providerTransfer?.rows.length}
+        <h3>How well does a model transfer to another provider?</h3>
+        <div class="scroll"><table aria-label="Leave-one-provider-out scores">
+          <thead><tr><th>Training providers</th><th>Held-out provider</th><th>Features</th><th>Train / Test jobs</th><th>R²</th><th>MAE</th></tr></thead>
+          <tbody>
+            {#each report.h3.providerTransfer.rows as row}
+              <tr>
+                <td>{row.trainProviders.join(", ")}</td>
+                <th scope="row">{row.heldOutProvider}</th>
+                <td>{row.label}</td>
+                <td>{row.nTrain} / {row.nTest}</td>
+                <td>{fmt(row.r2, 3)}</td>
+                <td>{fmt(row.mae, 4)}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table></div>
       {/if}
 
     {:else if viewMode === "h2_h4"}

@@ -590,6 +590,9 @@ def _h2_protocols(valid: pd.DataFrame) -> list[dict[str, Any]]:
     protocols: list[dict[str, Any]] = []
     for fam_key, fam_algos in FAMILIES.items():
         sub = valid[valid["meta.algorithm"].isin(fam_algos)]
+        if "b.two_qubit_gates" not in sub:
+            continue
+        sub = sub.dropna(subset=["b.two_qubit_gates"])
         cfg_sizes = sub.groupby(["meta.algorithm", "meta.config_id"])["b.two_qubit_gates"].median().sort_values()
         if len(cfg_sizes) < 6:
             continue

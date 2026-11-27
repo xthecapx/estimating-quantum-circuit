@@ -32,7 +32,7 @@ export interface PredictionPoint {
   algorithm: string;
   config: string;
   width: number;
-  twoQubitGates: number;
+  twoQubitGates: number | null;
   observed: number;
   predicted: number;
   residual: number;
@@ -124,6 +124,7 @@ export interface FootprintAblationRow {
 }
 
 export interface TargetReport {
+  foldCount?: number;
   key: string;
   column: string;
   label: string;
@@ -154,6 +155,9 @@ export interface TargetReport {
       regimes: H3Regime[];
     } | null;
     transferMatrix: TransferCell[];
+    providerTransfer?: {
+      rows: (SplitMetrics & { heldOutProvider: string; trainProviders: string[]; label: string; nTrain: number; nTest: number })[];
+    };
   };
   h4: H4Regime[];
 }
@@ -185,9 +189,13 @@ export interface EstimationSnapshot {
   backendsIncluded: string[];
   providersIncluded: string[];
   targets: Record<string, TargetReport>;
+  skippedTargets?: Record<string, string>;
 }
 
 export const SCOPE_LABELS: Record<string, string> = {
+  "Cepheus-1-108Q": "Rigetti Cepheus-1-108Q",
+  "Forte-1": "IonQ Forte-1",
+  provider_ibm: "IBM (both chips)",
   ibm_fez: "IBM Fez (ibm_fez)",
   ibm_kingston: "IBM Kingston (ibm_kingston)",
   pooled: "All QPUs Pooled (Cross-chip)",
@@ -380,7 +388,7 @@ export function scatterChart(
         p.config,
         p.backend,
         p.jobs,
-        Math.round(p.twoQubitGates || 0),
+        p.twoQubitGates == null ? null : Math.round(p.twoQubitGates),
       ]),
     });
   }
@@ -390,10 +398,10 @@ export function scatterChart(
       trigger: "item",
       confine: true,
       formatter: (params: unknown) => {
-        const p = params as { seriesName?: string; value?: [number, number, string, string, number, number] };
+        const p = params as { seriesName?: string; value?: [number, number, string, string, number, number | null] };
         if (!p.value || p.value.length < 6) return "";
         const [obs, pred, cfg, chip, jobs, g2] = p.value;
-        return `<b>${p.seriesName} · ${cfg}</b><br/>Chip: ${chip} (${jobs} jobs, ${g2} 2Q gates)<br/>Observed: ${obs.toFixed(3)} · Predicted: ${pred.toFixed(3)}`;
+        return `<b>${p.seriesName} · ${cfg}</b><br/>Chip: ${chip} (${jobs} jobs${g2 == null ? "" : `, ${g2} 2Q gates`})<br/>Observed: ${obs.toFixed(3)} · Predicted: ${pred.toFixed(3)}`;
       },
     },
     xAxis: {

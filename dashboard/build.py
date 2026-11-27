@@ -270,11 +270,13 @@ def _collect_validated_reports(project_subdir, output_prefix, tables, output, di
         if snapshot.get("manifestHash") != source_digest:
             continue
         if any(
-            hashlib.sha256((source_dir / name).read_bytes()).hexdigest() != expected
+            not (source_dir / name).is_file()
+            or hashlib.sha256((source_dir / name).read_bytes()).hexdigest() != expected
             for name, expected in snapshot.get("inputs", {}).items()
         ):
             continue
-        filename = f"{output_prefix}-{path.stem}-{source_digest[:12]}.json"
+        snapshot_digest = hashlib.sha256(path.read_bytes()).hexdigest() if output_prefix == "training" else source_digest
+        filename = f"{output_prefix}-{path.stem}-{snapshot_digest[:12]}.json"
         write_json(output / filename, snapshot)
         reports[snapshot["backend"]] = filename
     return reports
@@ -290,6 +292,7 @@ def build(tables, output):
     output.mkdir(parents=True, exist_ok=True)
     decay_reports = {}
     estimation_reports = {}
+    training_reports = {}
     prospective_reports = {}
     cost_reports = {}
     comparison_reports = {}
@@ -301,6 +304,9 @@ def build(tables, output):
         )
         estimation_reports = _collect_validated_reports(
             "experiments/estimation", "estimation", tables, output, digest
+        )
+        training_reports = _collect_validated_reports(
+            "experiments/training", "training", tables, output, digest
         )
         prospective_reports = _collect_validated_reports(
             "experiments/prospective", "prospective", tables, output, digest
@@ -318,7 +324,8 @@ def build(tables, output):
             "jobs": data["jobs"],
             "refs": data["refs"],
             "decayReports": decay_reports,
-            "estimationReports": estimation_reports,
+            "estimationReports": training_reports or estimation_reports,
+            "findingsEstimationReports": estimation_reports,
             "prospectiveReports": prospective_reports,
             "costReports": cost_reports,
             "comparisonReports": comparison_reports,
