@@ -55,7 +55,7 @@
         }}
         onchange={(v) => (explorer.runChoice = v)}
       />
-      <p id="run-help" class="field-help">One run is one IBM job executing this circuit repeatedly.</p>
+      <p id="run-help" class="field-help">Each run contains the shots from one execution of this circuit on the selected chip.</p>
     </div>
   </div>
   <ExperimentPicker
@@ -91,8 +91,9 @@
     <div>
       <span class="hardware-context-label">Behind this run</span>
       <p id="job-calibration-help" class="note">
-        See how these histogram bits map to physical qubits and their calibration. Opens the chip
-        explorer scoped to this run.
+        {#if job.provider}Inspect the device-wide fidelity benchmarks captured when this task was submitted.
+        {:else}See how these histogram bits map to physical qubits and their calibration. Opens the chip
+        explorer scoped to this run.{/if}
       </p>
     </div>
     <button

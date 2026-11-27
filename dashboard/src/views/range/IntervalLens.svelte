@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import type { EChartsType } from "../../lib/charts/echarts";
-  import { algorithmName, axes, circuitDescription, questions, studyName } from "../../lib/domain/catalog";
+  import { algorithmName, circuitDescription, questions, studyName } from "../../lib/domain/catalog";
   import { format, jobTime, pct } from "../../lib/domain/format";
   import type { Explorer } from "../../lib/state/explorer.svelte";
 
@@ -74,7 +74,7 @@
     {/if}
     <div><dt>Circuit</dt><dd>{circuitDescription(job) || algorithmName(job.algorithm)}</dd></div>
     <div>
-      <dt>{explorer.axis === "width" ? "Total logical qubits" : axes[explorer.axis]}</dt>
+      <dt>{explorer.axis === "width" ? "Total logical qubits" : explorer.axisLabels[explorer.axis]}</dt>
       <dd>{point.value[0]}</dd>
     </div>
     <div><dt>Repetition</dt><dd>{job.rep}</dd></div>

@@ -93,11 +93,22 @@ SUMMARY_START = "<!-- replication-summary:start -->"
 SUMMARY_END = "<!-- replication-summary:end -->"
 
 
+def table_source(tables):
+    """Braket stores the campaign in one CSV with embedded frozen references."""
+    manifest = tables / "dataset_manifest.json"
+    if manifest.is_file():
+        return manifest, json.loads(manifest.read_text(encoding="utf-8"))
+    single = tables / "dataset.csv"
+    if not single.is_file():
+        raise FileNotFoundError(manifest)
+    return single, {"schema_version": "1.0", "parts": [{"file": single.name}]}
+
+
 def analysis_backends(tables: Path, campaigns=None):
     """Backends with analysis jobs in the export, so no chip name is hardcoded."""
     from experiments.ml_dataset import campaign_role
 
-    manifest = json.loads((tables / "dataset_manifest.json").read_text(encoding="utf-8"))
+    _, manifest = table_source(tables)
     columns = ["meta.backend_name", "meta.campaign_id", "meta.algorithm"]
     data = pd.concat(
         [pd.read_csv(tables / part["file"], usecols=columns) for part in manifest["parts"]],
@@ -128,8 +139,8 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
         raise ValueError(
             "Predictors must be circuit metrics from groups a/b, not targets or timing"
         )
-    manifest_path = tables / "dataset_manifest.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest_path, manifest = table_source(tables)
+    single_csv = manifest_path.suffix == ".csv"
     if manifest.get("schema_version") != "1.0":
         raise ValueError("Unsupported dataset manifest schema")
     names = [part["file"] for part in manifest["parts"]]
@@ -142,7 +153,7 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
     frames, inputs = [], []
     for part in manifest["parts"]:
         path = tables / part["file"]
-        if path.stat().st_size != part["bytes"]:
+        if not single_csv and path.stat().st_size != part["bytes"]:
             raise ValueError(f"Dataset size mismatch: {path.name}")
         header = pd.read_csv(path, nrows=0).columns
         missing = set(IDENTITY) | set(metrics) | {"f.counts_json"}
@@ -154,7 +165,7 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
         frame = pd.read_csv(
             path, usecols=list(IDENTITY) + list(metrics) + ["f.counts_json", *target_cols]
         )
-        if len(frame) != part["rows"]:
+        if not single_csv and len(frame) != part["rows"]:
             raise ValueError(f"Dataset row count mismatch: {path.name}")
         frames.append(frame)
         inputs.append({**part, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
@@ -166,7 +177,7 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
             data[name] = pd.to_numeric(data[name], errors="raise")
             if not data[name].dropna().between(0, 1).all():
                 raise ValueError(f"Expected a bounded quality score for {name}")
-    if len(data) != manifest["rows"] or data["job_id"].duplicated().any():
+    if (not single_csv and len(data) != manifest["rows"]) or data["job_id"].duplicated().any():
         raise ValueError("Manifest row count mismatch or duplicate job IDs")
     if data[list(IDENTITY.values())].isna().any().any():
         raise ValueError("Missing job identity, success, shot count, or chance baseline")
@@ -206,7 +217,16 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
     # Exported target schemas round rates to six decimals. Recover exact accepted
     # counts from histograms and frozen success sets, never round rates into counts.
     reference_path = tables / "references.csv"
-    references = pd.read_csv(reference_path, usecols=["run_id", "accepted_json", "ideal_json"])
+    if single_csv:
+        reference_path = manifest_path
+        columns = {
+            "meta.run_id": "run_id",
+            "g.accepted_json": "accepted_json",
+            "g.ideal_json": "ideal_json",
+        }
+        references = pd.read_csv(reference_path, usecols=list(columns)).rename(columns=columns)
+    else:
+        references = pd.read_csv(reference_path, usecols=["run_id", "accepted_json", "ideal_json"])
     if references["run_id"].duplicated().any():
         raise ValueError("Duplicate reference run IDs")
     accepted_labels = references.set_index("run_id")["accepted_json"].map(json.loads).to_dict()
@@ -251,6 +271,8 @@ def load_data(tables: Path, metrics=METRICS, backend=None, campaigns=None):
             timing_available = True
     provenance = {
         "backend": backend,
+        "reference_file": reference_path.name,
+        "table_source": manifest_path.name,
         "input_jobs": len(data),
         "selected_jobs": len(selected_data),
         "configuration_count": selected_data["cluster"].nunique(),
@@ -1200,8 +1222,12 @@ def confounding_lines(confounding, comparisons):
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for r in confounding.itertuples():
-        rho = "—" if pd.isna(r.median_abs_rho_time_metric) else f"{r.median_abs_rho_time_metric:.2f}"
-        same = "—" if pd.isna(r.adjacent_same_algorithm) else f"{100 * r.adjacent_same_algorithm:.0f}%"
+        rho = (
+            "—" if pd.isna(r.median_abs_rho_time_metric) else f"{r.median_abs_rho_time_metric:.2f}"
+        )
+        same = (
+            "—" if pd.isna(r.adjacent_same_algorithm) else f"{100 * r.adjacent_same_algorithm:.0f}%"
+        )
         calibrations = "—" if pd.isna(r.calibrations) else f"{int(r.calibrations)}"
         lines.append(
             f"| {r.period} | {r.jobs} | {r.span_hours:.2f} | {calibrations} | {same} | {rho} | "

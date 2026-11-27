@@ -60,7 +60,9 @@ export function periods(jobs: Job[], backend: string): Period[] {
     .map(({ id, rows, times }) => {
       const first = times.length ? shortDate(times[0]) : "Date unavailable";
       const last = times.length ? shortDate(times[times.length - 1]) : first;
-      return { id, label: periodLabel(times), dateLabel: first === last ? first : `${first} – ${last}`, jobs: rows };
+      const job = rows[0];
+      const label = job.provider ? `${job.campaign} · window ${job.window} · ${periodLabel(times)}` : periodLabel(times);
+      return { id, label, dateLabel: first === last ? first : `${first} – ${last}`, jobs: rows };
     });
 }
 

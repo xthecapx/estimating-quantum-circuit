@@ -185,6 +185,25 @@ test("5 · chip calibration history opens independently and searches components 
   expect(errors).toEqual([]);
 });
 
+test("Braket windows keep provider-specific runs, references and device profiles", async ({ page }) => {
+  await openApp(page, "#section=range&mode=details&a=QFT");
+  for (const [chip, campaign, shots] of [
+    ["Rigetti · Cepheus-1-108Q", "rigetti-development-v1", "1,024"],
+    ["IonQ · Forte-1", "ionq-development-v1", "100"],
+  ]) {
+    await page.getByRole("combobox", { name: "Chip", exact: true }).selectOption({ label: chip });
+    await expect(page.getByLabel("Periods (UTC)").locator("option").last()).toContainText(campaign);
+    await page.getByLabel("X-axis").selectOption({ label: "Submitted circuit depth" });
+    if (!(await page.locator("#settings-table").isVisible())) await page.getByText("Compare the experiments shown").click();
+    await page.locator("#settings-table button.job-value").first().click();
+    await expect(page.locator("#hist svg")).toBeVisible();
+    await expect(page.locator("#histogram-view")).toContainText(shots);
+    await page.getByRole("button", { name: /Inspect run calibration/ }).click();
+    await expect(page.locator("#calibration-view table")).toContainText("Provider benchmark");
+    await page.getByRole("button", { name: "Operating range", exact: true }).click();
+  }
+});
+
 test("deep links restore the histogram view", async ({ page }) => {
   await openApp(page, "#section=range");
   await openFirstJob(page);
@@ -220,7 +239,7 @@ test("compare decay shows matched fits, shares selections and restores range set
   await expect(panel.getByRole("region", { name: "Selected metric summary" })).toBeVisible();
   // Chip sits in the top filter bar alongside Algorithm, Compare with, and Outcome; no inline Metric select remains.
   const chipFilter = panel.getByRole("group", { name: "Decay filters" }).getByLabel("Chip", { exact: true });
-  await expect(chipFilter.locator("option")).toHaveText(["All data", "IBM Fez", "IBM Kingston"]);
+  await expect(chipFilter.locator("option")).toHaveText(["All data", "Rigetti · Cepheus-1-108Q", "IonQ · Forte-1", "IBM Fez", "IBM Kingston"]);
   await expect(panel.getByLabel("Inspected circuit resource")).toHaveCount(0);
   // Starts focused on All metrics; Window details opens on demand or when inspecting a metric.
   await expect(panel.getByRole("img", { name: /Median decay gap by circuit resource/ }).locator("svg")).toBeVisible();
@@ -310,7 +329,7 @@ test("all-data GHZ and BV comparison includes the new Fez window @narrow", async
   const panel = page.getByRole("region", { name: "Decay comparison" });
   await panel.locator(".overview-disclosure > summary").click();
   await expect(panel.locator("table.evidence").getByRole("columnheader")).toHaveText([
-    "Circuit resource", "All data", "ibm_fez", "ibm_kingston",
+    "Circuit resource", "All data", "Cepheus-1-108Q", "Forte-1", "ibm_fez", "ibm_kingston",
   ]);
   const gates = panel.locator("table.evidence").getByRole("row", { name: /^Logical two-qubit gates/ });
   await expect(gates.locator("td strong")).toHaveText(["0 of 7", "0 of 4", "0 of 3"]);
@@ -326,7 +345,7 @@ test("Marrakesh validation contributes to all-data and can be inspected via All 
   await panel.locator(".overview-disclosure > summary").click();
   const widths = panel.locator("table.evidence").getByRole("row", { name: /^Total logical qubits/ });
   await expect(widths.locator("td strong")).toHaveText(["2 of 7", "0 of 3", "1 of 3"]);
-  await expect(panel.locator("table.evidence").getByRole("columnheader")).toHaveText(["Circuit resource", "All data", "ibm_fez", "ibm_kingston"]);
+  await expect(panel.locator("table.evidence").getByRole("columnheader")).toHaveText(["Circuit resource", "All data", "Cepheus-1-108Q", "Forte-1", "ibm_fez", "ibm_kingston"]);
   await widths.getByRole("button", { name: /All data/ }).click();
   await expect(panel.locator(".gap-chart li")).toHaveCount(7);
   await expect(panel.locator(".gap-chart li").filter({ hasText: "IBM Marrakesh" })).toContainText("Nov 16, 2026");
@@ -400,7 +419,8 @@ test("average explorer selects measured settings and updates both axes @narrow",
     const field = filters.getByRole("combobox", { name, exact: true });
     await field.selectOption({ index: 1 });
     await expect(field).toHaveValue("1");
-    await field.selectOption({ index: 0 });
+    if (name === "Chip") await field.selectOption({ label: "ibm_fez" });
+    else await field.selectOption({ index: 0 });
   }
   await panel.getByLabel("Minimum success rate").fill("80");
   await panel.getByLabel("Algorithm").selectOption({ label: "Grover" });

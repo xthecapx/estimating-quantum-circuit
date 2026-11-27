@@ -35,6 +35,7 @@ export class Explorer {
   readonly jobsAll: Job[] = [];
   readonly refs: Record<string, Reference> = {};
   readonly backends: string[] = [];
+  readonly providers = new Map<string, Job["provider"]>();
   readonly calibration: CalibrationState;
 
   backendChoice = $state("");
@@ -58,6 +59,7 @@ export class Explorer {
     this.jobsAll = data.jobs;
     this.refs = data.refs;
     this.backends = unique(data.jobs.map((j) => j.backend)).sort();
+    for (const job of data.jobs) this.providers.set(job.backend, job.provider);
     this.backendChoice = pick(this.backends, "ibm_fez") ?? "";
     this.calibration = new CalibrationState(this);
     this.apply(initial);
@@ -65,6 +67,8 @@ export class Explorer {
 
   // ---- scope -------------------------------------------------------------------------------
   backend = $derived(pick(this.backends, this.backendChoice) ?? "");
+  provider = $derived(this.providers.get(this.backend));
+  axisLabels = $derived(this.provider ? { ...axes, depth: "Submitted circuit depth", gates: "Submitted two-qubit gates" } : axes);
   periods = $derived(periods(this.jobsAll, this.backend));
   period = $derived(
     pick([ALL_PERIODS, ...this.periods.map((p) => p.id)], this.periodChoice) ?? ALL_PERIODS,

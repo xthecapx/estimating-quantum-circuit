@@ -1,4 +1,4 @@
-import type { AxisKey, QuestionKey } from "../../lib/data/types";
+import type { AxisKey, Job, QuestionKey } from "../../lib/data/types";
 import { format } from "../../lib/domain/format";
 
 export const resource: Record<AxisKey, { unit: string; settings: string }> = {
@@ -7,6 +7,12 @@ export const resource: Record<AxisKey, { unit: string; settings: string }> = {
   bits: { unit: "measured bits", settings: "measured bit counts" },
   gates: { unit: "two-qubit gates", settings: "two-qubit gate counts" },
 };
+
+export function resourceUnit(axis: AxisKey, provider: Job["provider"]) {
+  if (provider && axis === "depth") return "submitted layers";
+  if (provider && axis === "gates") return "submitted two-qubit gates";
+  return resource[axis].unit;
+}
 
 export function averageQuestion(axis: AxisKey, key: QuestionKey, target: number | null) {
   const settings = resource[axis].settings;

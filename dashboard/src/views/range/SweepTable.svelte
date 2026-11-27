@@ -16,7 +16,7 @@
           <th>Experiment</th>
           <th>Group</th>
           <th>Qubits</th>
-          <th>ISA depth</th>
+          <th>{explorer.provider ? "Submitted depth" : "ISA depth"}</th>
           <th>Job values</th>
           <th>Target result</th>
         </tr>

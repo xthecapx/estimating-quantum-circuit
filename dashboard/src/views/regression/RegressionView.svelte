@@ -9,7 +9,7 @@
   import { comparator, format, lowerIsBetter } from "../../lib/domain/format";
   import { passes } from "../../lib/domain/sweep";
   import type { Explorer } from "../../lib/state/explorer.svelte";
-  import { averageAnswer, averageQuestion, resource } from "./questions";
+  import { averageAnswer, averageQuestion, resourceUnit } from "./questions";
 
   let { explorer, xPicker }: { explorer: Explorer; xPicker: Snippet } = $props();
   const axis = $derived(explorer.axis);
@@ -24,7 +24,7 @@
   const observed = $derived(explorer.overviewLevel);
   const x = $derived(observed?.x ?? 0);
   const y = $derived(observed?.mean ?? 0);
-  const unit = $derived(resource[axis].unit);
+  const unit = $derived(resourceUnit(axis, explorer.provider));
   const quality = $derived(lowerIsBetter(metric) ? 1 - y : y);
   const pointColor = $derived.by(() => {
     // Interpolate through dark red, ochre and green so white text stays legible.

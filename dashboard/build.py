@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import re
+from itertools import chain
 from pathlib import Path
 from statistics import NormalDist
 
@@ -98,6 +99,39 @@ def dataset_rows(directory):
         raise ValueError("Dataset manifest total row count mismatch")
 
 
+def braket_rows(directory, refs, calibrations):
+    """Adapt the recovered Braket export at the dashboard boundary."""
+    path = directory / "braket-repetitions-v1" / "dataset.csv"
+    if not path.is_file():
+        return
+    with path.open(encoding="utf-8", newline="") as stream:
+        for row in csv.DictReader(stream):
+            ref = row["meta.run_id"]
+            if ref in refs:
+                raise ValueError(f"Duplicate Braket reference: {ref}")
+            refs[ref] = {
+                "accepted": json.loads(row["g.accepted_json"]),
+                "ideal": json.loads(row["g.ideal_json"]),
+            }
+            row["g.success_set_size"] = len(refs[ref]["accepted"])
+            captured = row["g.profile_at_submission"]
+            calibrations[ref] = {
+                "backend": row["meta.backend_name"],
+                "at": captured,
+                "collectedAt": captured,
+                "source": "Braket submission profile",
+                "qubits": {},
+                "operations": [],
+                "measurements": [],
+                "fidelities": {
+                    k.split("_fidelity.", 1)[1]: float(value)
+                    for k, value in row.items()
+                    if "_fidelity." in k and k.startswith("c.") and value
+                },
+            }
+            yield row
+
+
 def load_tables(directory):
     """Project only public fields. The renderer never needs the original job journals."""
     csv.field_size_limit(64 * 1024 * 1024)
@@ -113,7 +147,9 @@ def load_tables(directory):
             }
     jobs = []
     seen = set()
-    for row in dataset_rows(directory):
+    calibrations = {}
+    for row in chain(dataset_rows(directory), braket_rows(directory, refs, calibrations)):
+        braket = row.get("meta.provider") in ("rigetti", "ionq")
         key = row["meta.job_id"]
         ref = row["meta.run_id"]
         counts = json.loads(row["f.counts_json"])
@@ -138,11 +174,11 @@ def load_tables(directory):
             "description": row["config.description"],
             "width": int(row["a.num_qubits"]),
             "bits": int(row["a.num_clbits"]),
-            "depth": int(row["b.depth"]),
-            "gates": int(row["b.two_qubit_gates"]),
+            "depth": int(row["submitted.depth" if braket else "b.depth"]),
+            "gates": int(row["submitted.two_qubit_gates" if braket else "b.two_qubit_gates"]),
             "designDepth": float(row["config.depth"]) if row.get("config.depth") else None,
             "shots": shots,
-            "rep": int(row["meta.run_index"]) + 1,
+            "rep": int(row["meta.run_index"]) + (0 if braket else 1),
             "ref": ref,
             "finishedAt": row["g.finished_at"],
             "exact": row["g.reference_exact"] == "True",
@@ -166,6 +202,8 @@ def load_tables(directory):
                 },
             },
         }
+        if braket:
+            job["provider"] = row["meta.provider"]
         if job["algorithm"] == "QFT" and row.get("config.test_mode") == "period_detection":
             job["countingQubits"] = int(float(row["config.num_qubits"]))
         for name, column in METRICS.items():
@@ -177,7 +215,6 @@ def load_tables(directory):
         jobs.append(job)
     if not jobs:
         raise ValueError("The dashboard needs at least one completed job")
-    calibrations = {}
     path = directory / "calibrations.csv"
     if path.exists():
         with path.open(encoding="utf-8", newline="") as stream:
@@ -223,14 +260,21 @@ def _collect_validated_reports(project_subdir, output_prefix, tables, output, di
     reports = {}
     for path in sorted((PROJECT / project_subdir).glob("*.json")):
         snapshot = json.loads(path.read_text(encoding="utf-8"))
-        if snapshot.get("manifestHash") != digest:
+        source_dir, source_digest = tables, digest
+        if snapshot.get("tableSource") == "dataset.csv":
+            source_dir = tables / "braket-repetitions-v1"
+            csv_path = source_dir / "dataset.csv"
+            if not csv_path.exists():
+                continue
+            source_digest = hashlib.sha256(csv_path.read_bytes()).hexdigest()
+        if snapshot.get("manifestHash") != source_digest:
             continue
         if any(
-            hashlib.sha256((Path(tables) / name).read_bytes()).hexdigest() != expected
+            hashlib.sha256((source_dir / name).read_bytes()).hexdigest() != expected
             for name, expected in snapshot.get("inputs", {}).items()
         ):
             continue
-        filename = f"{output_prefix}-{path.stem}-{digest[:12]}.json"
+        filename = f"{output_prefix}-{path.stem}-{source_digest[:12]}.json"
         write_json(output / filename, snapshot)
         reports[snapshot["backend"]] = filename
     return reports
@@ -261,7 +305,9 @@ def build(tables, output):
         prospective_reports = _collect_validated_reports(
             "experiments/prospective", "prospective", tables, output, digest
         )
-        cost_reports = _collect_validated_reports("experiments/cost", "cost", tables, output, digest)
+        cost_reports = _collect_validated_reports(
+            "experiments/cost", "cost", tables, output, digest
+        )
         comparison_reports = _collect_validated_reports(
             "experiments/comparison", "comparison", tables, output, digest
         )

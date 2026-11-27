@@ -108,7 +108,7 @@
         >
         <span class="experiment-choice-metadata">
           <span><Icon name="qubits" />{qubitSummary(job)}</span>
-          <span><Icon name="depth" />ISA depth {job.depth}</span>
+          <span><Icon name="depth" />{job.provider ? "Submitted depth" : "ISA depth"} {job.depth}</span>
           <span
             ><Icon name="runs" />{group.length} recorded run{group.length === 1 ? "" : "s"}</span
           >

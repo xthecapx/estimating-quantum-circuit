@@ -15,6 +15,7 @@
       format={algorithmName} onchange={(v) => { explorer.setAlgorithm(v); onalgorithmchange?.(); }} />
     <div class="chip-field">
       <Select icon="chip" label="Chip" value={explorer.backend} options={explorer.backends}
+        format={chip => ({ ionq: "IonQ · ", rigetti: "Rigetti · ", ibm: "" }[explorer.providers.get(chip) ?? "ibm"]) + chip}
         onchange={(v) => explorer.setBackend(v)} />
         <button type="button" id="open-calibration" class="text-action"
           onclick={event => explorer.calibration.open(null, event.currentTarget)}>

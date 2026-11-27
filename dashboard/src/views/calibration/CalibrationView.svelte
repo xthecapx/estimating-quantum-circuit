@@ -20,10 +20,12 @@
   const job = $derived(cal.job);
   const duration = $derived(isDuration(cal.mode));
 
+  const fidelities = $derived(cal.current[0]?.fidelities);
   const context = $derived.by(() => {
     if (cal.status === "ready" && !cal.available) {
       return "Detailed preparation calibration is unavailable for this selection. The histogram and its metrics remain available.";
     }
+    if (fidelities) return "Device-wide fidelity benchmarks from the Amazon Braket profile. Dates identify when each profile was captured.";
     if (!job) {
       return "Explore the hardware observed in our experiments. Dates refer to saved preparation calibration snapshots; coverage varies between snapshots.";
     }
@@ -73,6 +75,7 @@
         format={calibrationStamp}
         onchange={(v) => (cal.dateChoice = v)}
       />
+      {#if !fidelities}
       <Select
         id="cal-mode"
         label="Explore"
@@ -90,8 +93,16 @@
           onchange={(v) => (cal.gateChoice = v)}
         />
       {/if}
+      {/if}
     </div>
-    {#if !cal.available}
+    {#if fidelities}
+      <table>
+        <thead><tr><th>Provider benchmark</th><th>Fidelity</th></tr></thead>
+        <tbody>{#each Object.entries(fidelities) as [benchmark, value]}
+          <tr><td>{benchmark.replaceAll(".", " · ").replaceAll("_", " ")}</td><td>{(100 * value).toFixed(2)}%</td></tr>
+        {/each}</tbody>
+      </table>
+    {:else if !cal.available}
       <p id="cal-empty" role="status">
         No detailed calibration snapshots are available. Export calibrations.csv and rebuild to explore
         this chip.

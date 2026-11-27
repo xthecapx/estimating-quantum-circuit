@@ -6,7 +6,7 @@ export const jobMetadata = (job: Job): MetadataEntry[] => [
   ["chip", "Chip", job.backend],
   ["shots", "Shots", job.shots.toLocaleString()],
   ["bits", "Measured bits", job.bits],
-  ["depth", "ISA depth", job.depth],
+  ["depth", job.provider ? "Submitted depth" : "ISA depth", job.depth],
   ["experiment", "Experiment", job.config],
   ["date", "Measured at", jobTime(job)],
 ];

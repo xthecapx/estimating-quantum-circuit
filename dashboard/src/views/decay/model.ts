@@ -80,11 +80,15 @@ export const targets: Record<string, string> = {
   dsr: "Differential success rate",
 };
 export const CHIP_NAMES: Record<string, string> = {
+  "Cepheus-1-108Q": "Rigetti · Cepheus-1-108Q",
+  "Forte-1": "IonQ · Forte-1",
   ibm_fez: "IBM Fez",
   ibm_kingston: "IBM Kingston",
   ibm_marrakesh: "IBM Marrakesh",
 };
 export const CHIP_COLORS: Record<string, string> = {
+  "Cepheus-1-108Q": "#755194",
+  "Forte-1": "#605a32",
   ibm_fez: palette.teal,
   ibm_kingston: palette.accent,
   ibm_marrakesh: palette.blue,

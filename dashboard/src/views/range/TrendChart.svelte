@@ -4,7 +4,7 @@
   import EChart from "../../lib/charts/EChart.svelte";
   import { palette, type EChartsType } from "../../lib/charts/echarts";
   import type { Job } from "../../lib/data/types";
-  import { axes, questions } from "../../lib/domain/catalog";
+  import { questions } from "../../lib/domain/catalog";
   import { unique } from "../../lib/domain/format";
   import { sweepAxis } from "../../lib/domain/sweep";
   import type { Explorer } from "../../lib/state/explorer.svelte";
@@ -93,7 +93,7 @@
   <EChart
     id="trend"
     class="plot"
-    label={questions[explorer.question].label + " by " + axes[explorer.axis].toLowerCase()}
+    label={questions[explorer.question].label + " by " + explorer.axisLabels[explorer.axis].toLowerCase()}
     {option}
     replace
     onready={ready}

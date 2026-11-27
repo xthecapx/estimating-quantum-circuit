@@ -152,7 +152,7 @@
   const gapScale = $derived(Math.max(1, 2 * tolerance, ...windowEntries.flatMap(w => [w.period.gap, w.period.ciHigh ?? 0])));
   const minPeriods = $derived(data?.minPeriods ?? 2);
   const axes = $derived(windowEntries.length ? bounds(windowEntries.map(w => w.period)) : null);
-  const ids = $derived(data?.algorithms ?? snapshots[0]?.algorithms ?? []);
+  const ids = $derived(isAll ? [...new Set(snapshots.flatMap(report => report.algorithms))].sort() : data?.algorithms ?? []);
   const rowAlg = $derived(algorithm);
   const colAlg = $derived(partner?.id ?? "");
 
@@ -279,11 +279,11 @@
     explorer.backends.flatMap(backend =>
       chipPeriods(explorer.jobsAll, backend).map(period => {
         const { campaign, window } = period.jobs[0];
-        return [campaign + " / window " + window, period.dateLabel] as const;
+        return [JSON.stringify([backend, campaign + " / window " + window]), period.dateLabel] as const;
       }),
     ),
   ));
-  function dateLabel(period: string) { return dates.get(period) ?? "Date unavailable"; }
+  function dateLabel(backend: string, period: string) { return dates.get(JSON.stringify([backend, period])) ?? "Date unavailable"; }
 </script>
 
 <section class="surface compare" aria-label="Decay comparison">
@@ -459,7 +459,7 @@
                     <li class:similar={status === "similar"}>
                       <span class="window" title={`${entry.backend} · ${entry.name}`}>
                         {#if isAll}<span class="chip-pill" style="--c:{CHIP_COLORS[entry.backend]}">{chipName(entry.backend)}</span>{/if}
-                        {dateLabel(entry.name)}
+                        {dateLabel(entry.backend, entry.name)}
                       </span>
                       <div class="track" aria-hidden="true">
                         <i style:width={(100 * p.gap / gapScale) + "%"}></i>
@@ -494,7 +494,7 @@
                       <article>
                         <h4 title={`${entry.backend} · ${entry.name}`}>
                           {#if isAll}<span class="chip-pill" style="--c:{CHIP_COLORS[entry.backend]}">{chipName(entry.backend)}</span>{/if}
-                          {dateLabel(entry.name)}
+                          {dateLabel(entry.backend, entry.name)}
                         </h4>
                         <p class="window-label">
                           {declineLabels[declineStatus(entry.period, entry.tolerance)]} · {fixed(entry.period.gap)} {unit} apart
@@ -503,7 +503,7 @@
                         <EChart
                           option={chart(entry.period, entry.cell, axes, resources[metric] ?? metric, ylabel)}
                           replace
-                          label={pairLabel(key(entry.cell)) + " on " + chipName(entry.backend) + " " + dateLabel(entry.name)}
+                          label={pairLabel(key(entry.cell)) + " on " + chipName(entry.backend) + " " + dateLabel(entry.backend, entry.name)}
                           style="height:195px;width:100%"
                         />
                       </article>
@@ -536,7 +536,7 @@
                       {#each windowEntries as entry (`${entry.backend}:${entry.name}`)}
                         {@const v = entry.period}
                         <tr>
-                          <td title={entry.name}>{dateLabel(entry.name)}</td>
+                          <td title={entry.name}>{dateLabel(entry.backend, entry.name)}</td>
                           {#if isAll}<td>{chipName(entry.backend)}</td>{/if}
                           <td>{v.points.length}</td>
                           <td>{fixed(100 * v.slopeA)}</td>
@@ -723,7 +723,7 @@
                   {:else if status === "different"}Their losses were {fixed(period.gap)} points apart, above the {report.tolerance}-point cutoff, so this window counts only toward the second number.
                   {:else}A similar decline requires both fitted outcomes to fall, so this window counts only toward the second number.{/if}</p>
               {/if}
-              <p class="note">All data counts each comparable chip window once.{#if hasValidation} It includes eligible Marrakesh validation windows — click any All data cell to inspect them alongside Fez and Kingston.{:else if explorer.backends.includes(validationChip)} Marrakesh validation data is unavailable for this export.{/if}</p>
+              <p class="note">All data counts each comparable chip window once.{#if hasValidation} It includes eligible Marrakesh validation windows — click any All data cell to inspect the individual chip windows.{:else if explorer.backends.includes(validationChip)} Marrakesh validation data is unavailable for this export.{/if}</p>
               {#each chipSnapshots as report}
                 <p>{report.backend} requires at least {report.minLevels} shared resource levels in a window. Both fitted outcomes must fall and their losses must be within {report.tolerance} {outcome === "success" ? "percentage points" : "points on the outcome × 100 scale"} of each other. A repeated match requires {report.minPeriods} matching windows.</p>
               {/each}

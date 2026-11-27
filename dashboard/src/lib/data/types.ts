@@ -22,6 +22,7 @@ export interface ExecutionCalibration {
 }
 
 export interface Job extends Record<MetricKey, number | null> {
+  provider?: "ionq" | "rigetti";
   backend: string;
   campaign: string;
   window: string;
@@ -73,6 +74,7 @@ export interface Measurement {
 }
 
 export interface CalibrationRecord {
+  fidelities?: Record<string, number>;
   backend: string;
   at: string;
   collectedAt: string;

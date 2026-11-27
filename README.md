@@ -10,6 +10,8 @@ How accurately can we predict a quantum circuit’s output quality and billed ex
 
 The [IBM dataset](experiments/dataset_out/) contains 2,681 rows across eight circuit families, including GHZ, Bernstein–Vazirani, Grover, and Shor. To analyze it, read the numbered CSV files in [manifest order](experiments/dataset_out/dataset_manifest.json). Keep the parts, references, and calibrations from the same export together.
 
+The [Amazon Braket export](experiments/dataset_out/braket-repetitions-v1/dataset.csv) adds 48 Rigetti Cepheus-1-108Q runs and 10 IonQ Forte-1 runs from development window 1. Select either device in the dashboard’s chip filter. Each provider has its own collection window and frozen circuit references.
+
 | Research question | Where to look |
 | --- | --- |
 | What does each column measure? | [Dataset schema](docs/ibm_fez_dataset_schema.md) |

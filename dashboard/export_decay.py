@@ -93,10 +93,11 @@ def package(report):
         tolerance=groups["tolerance_points"],
         minPeriods=groups["minimum_periods"],
         minLevels=provenance["minimum_shared_levels"],
+        tableSource=provenance.get("table_source", "dataset_manifest.json"),
         manifestHash=provenance["manifest_sha256"],
         inputs={
             **{p["file"]: p["sha256"] for p in provenance["inputs"]},
-            "references.csv": provenance["references_sha256"],
+            provenance.get("reference_file", "references.csv"): provenance["references_sha256"],
         },
         baseRates=base_rates(report),
         panels=panels,

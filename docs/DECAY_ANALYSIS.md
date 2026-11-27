@@ -79,6 +79,20 @@ Pages workflow packages the committed snapshots; it does not fit decay models.
 
 Marrakesh contributes its validation window to the descriptive All data counts wherever a pair shares enough levels. Chip columns and relationship rankings use the development reports. QAQS training continues to exclude validation campaigns.
 
+## Braket development windows
+
+Use the logical resource columns for cross-provider comparisons. Braket reports the submitted circuit; hardware-native depth and gate counts are unavailable. Run these commands from the repository root to regenerate the provider-specific decay snapshots from the recovered records.
+
+```sh
+python scripts/run.py braket export
+python scripts/run.py decay --decay-only --no-plots --tables experiments/dataset_out/braket-repetitions-v1 --out report/braket-decay --metrics a.num_qubits a.depth a.size a.ComplexityMetrics.gate_based_metrics.two_qubit_count a.StructuralMetrics.volume a.BehavioralMetrics.program_communication a.quantum_specific.entanglement_ratio
+python dashboard/export_decay.py report/braket-decay/Cepheus-1-108Q/decay
+python dashboard/export_decay.py report/braket-decay/Forte-1/decay
+python dashboard/build.py
+```
+
+Rigetti and IonQ have distinct campaign IDs and device reports. Compare decay fits algorithm pairs within a single device and window. Each snapshot is validated against the Braket CSV used to generate it.
+
 ## Interpretation and replacement jobs
 
 Observed configurations have equal weight within algorithm/resource/period

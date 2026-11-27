@@ -4,7 +4,7 @@
   import { comparator, format, lowerIsBetter, plural } from "../../lib/domain/format";
   import type { Explorer } from "../../lib/state/explorer.svelte";
   import RegressionView from "../regression/RegressionView.svelte";
-  import { averageQuestion, resource } from "../regression/questions";
+  import { averageQuestion, resourceUnit } from "../regression/questions";
   import TargetInput from "../TargetInput.svelte";
   import Findings from "./Findings.svelte";
   import SweepTable from "./SweepTable.svelte";
@@ -19,7 +19,7 @@
 {#snippet xPicker()}
   <label class="axis-picker x-picker">X-axis
     <select value={explorer.axis} onchange={e => { explorer.axis = e.currentTarget.value as AxisKey; explorer.readAt = null; }}>
-      {#each axisKeys as a}<option value={a}>{axes[a]}</option>{/each}
+      {#each axisKeys as a}<option value={a}>{explorer.axisLabels[a]}</option>{/each}
     </select>
   </label>
 {/snippet}
@@ -62,7 +62,7 @@
         <RegressionView {explorer} {xPicker} />
       {/if}
       {#if explorer.levels.length && explorer.threshold !== null}
-        <p class="target-answer">{explorer.passingLevel ? `The largest tested setting meeting the target on average is ${explorer.passingLevel.x} ${resource[explorer.axis].unit}.` : "No tested setting meets the target on average."}</p>
+        <p class="target-answer">{explorer.passingLevel ? `The largest tested setting meeting the target on average is ${explorer.passingLevel.x} ${resourceUnit(explorer.axis, explorer.provider)}.` : "No tested setting meets the target on average."}</p>
       {/if}
     </section>
     {#if details}<Findings {explorer} />{/if}

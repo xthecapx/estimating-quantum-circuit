@@ -413,6 +413,9 @@ def dataset_row(row, path, prepared, journal):
         "g.compiler_policy": prepared["compiler_policy"],
         "g.logical_circuit_hash": prepared["logical_circuit_hash"],
         "g.estimated_usd": prepared["cost_estimate_usd"],
+        "g.accepted_json": json.dumps(prepared["success_set"]),
+        "g.ideal_json": json.dumps(prepared["reference"], sort_keys=True),
+        "g.reference_exact": prepared["local_check"]["max_probability_error"] <= 1e-8,
         "f.counts_json": json.dumps(result["counts"], sort_keys=True),
         "f.success_interval_95_wilson": json.dumps(result["success_interval_95_wilson"]),
     }
