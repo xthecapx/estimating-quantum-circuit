@@ -1,0 +1,4 @@
+interface:
+  display_name: "PhD Thesis (QAQS)"
+  short_description: "Thesis context, data, QWARD, models and dashboard"
+  default_prompt: "Use $phd-thesis to orient in the QAQS thesis data, models and dashboard."

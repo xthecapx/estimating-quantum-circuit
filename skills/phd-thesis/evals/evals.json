@@ -1,0 +1,56 @@
+{
+ "skill_name": "phd-thesis",
+ "evals": [
+  {
+   "id": 0,
+   "eval_name": "kingston-training-data",
+   "prompt": "I want to check how success rate drops with two-qubit gate count on Kingston, only the data we can train on. Write me a short python script that loads it and prints the Spearman correlation per algorithm, run it, and tell me what you got.",
+   "expected_output": "Script loads experiments/dataset_out via manifest/load_ml_dataset with train role only (no validation/exploratory), ibm_kingston, uses f.fidelity.success_rate and a b.* 2Q count column, prints per-algorithm Spearman, reports numbers. No QPU calls, no old QWARD data.",
+   "files": [],
+   "assertions": [
+    "Script reads experiments/dataset_out (manifest parts or load_ml_dataset)",
+    "Restricts to train role: excludes validation (-validation-v) and exploratory campaigns",
+    "Filters to ibm_kingston only",
+    "Uses f.fidelity.success_rate and transpiled b.two_qubit_gates (not the logical count, which is 0 for Grover/RV)",
+    "Script ran and result.txt has a Spearman value per algorithm",
+    "Answer reports job count consistent with 1173 Kingston train jobs",
+    "Intervals or caveat account for repeated runs of the same configuration",
+    "No old QWARD paper data and no QPU calls"
+   ]
+  },
+  {
+   "id": 1,
+   "eval_name": "prior-work-citations",
+   "prompt": "I'm starting the related/prior work paragraph for my next QAQS paper. Give me a short list of my own earlier publications and datasets I should cite, with DOIs, and one line each on what claim it lets me skip re-proving.",
+   "expected_output": "Lists CIbSE 2025 (10.5753/cibse.2025.35330), qWard CHILECON 2025 (10.1109/CHILECON66915.2025.11476435, software 10.5281/zenodo.18773713), vTP IEEE Access (10.1109/ACCESS.2025.3639914), DataPort 10.21227/z95f-g888 and 10.21227/b6jm-zd11, DSR paper under review (artifact 10.5281/zenodo.22679268), representational analysis draft without DOI. No invented DOIs.",
+   "files": [],
+   "assertions": [
+    "Includes CIbSE 2025 mapping study with DOI 10.5753/cibse.2025.35330",
+    "Includes vTP IEEE Access with DOI 10.1109/ACCESS.2025.3639914",
+    "Includes both DataPort datasets 10.21227/z95f-g888 and 10.21227/b6jm-zd11",
+    "Includes qWard CHILECON paper DOI 10.1109/CHILECON66915.2025.11476435",
+    "Marks DSR paper as under review (not accepted / in press)",
+    "Marks representational-analysis paper as unpublished draft without DOI",
+    "No invented or wrong DOI",
+    "Each item has a one-line claim it supports"
+   ]
+  },
+  {
+   "id": 2,
+   "eval_name": "dashboard-h2-tab",
+   "prompt": "Plan how to add an H2 scaling panel to the dashboard showing the M2 prior + residual results per paradigm. Don't write the code, just give me the plan: which files change, where the numbers come from, and how I verify it before I push.",
+   "expected_output": "Plan reads existing estimation snapshots (targets.*.h2, from ml_estimation / h2_scalability.csv), keeps stats in Python, notes hash match, front-end-only change (no schema bump), extends h2_h4 view, flags Findings H2 claim, verifies with check/test/build and local e2e, user pushes.",
+   "files": [],
+   "assertions": [
+    "Names the estimation snapshots / h2_scalability.csv (ml_estimation pipeline) as the number source",
+    "Keeps statistics computed in Python at build time, not in the browser",
+    "Mentions snapshot hash matching the export",
+    "Correctly decides whether build.py/types.ts/SCHEMA_VERSION must change (shape unchanged -> no)",
+    "Extends existing h2_h4 view or justifies a new tab in lib/state/dashboard.ts",
+    "Verification includes npm run check, npm test, npm run build and local npm run e2e (CI skips e2e)",
+    "Flags the Findings page H2 claim to keep consistent",
+    "Does not push or tells user that they push"
+   ]
+  }
+ ]
+}
