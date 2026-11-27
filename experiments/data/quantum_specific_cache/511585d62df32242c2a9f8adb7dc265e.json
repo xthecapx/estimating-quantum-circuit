@@ -1,0 +1,10 @@
+{
+  "available": true,
+  "coherence": 13.023724555969238,
+  "compute_seconds": 3.199,
+  "entanglement_ratio": 0.3333333333333333,
+  "magic": 2.253703950891306e-15,
+  "seed": 11,
+  "sensitivity": 0.6562501192092896,
+  "spposq_ratio": 1.0
+}
