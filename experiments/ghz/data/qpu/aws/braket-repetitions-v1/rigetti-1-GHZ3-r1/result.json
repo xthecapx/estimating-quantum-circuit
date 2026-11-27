@@ -1,0 +1,64 @@
+{
+  "counts": {
+    "000": 435,
+    "111": 460,
+    "001": 37,
+    "011": 17,
+    "100": 18,
+    "101": 17,
+    "110": 26,
+    "010": 14
+  },
+  "shots": 1024,
+  "success_rate": 0.8740234375,
+  "success_interval_95_wilson": [
+    0.8522916871250028,
+    0.8929594344622496
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 8,
+      "success_rate": 0.874023,
+      "dsr": 0.847265,
+      "peak_mismatch": false,
+      "hellinger_fidelity": 0.873853,
+      "tvd": 0.125977,
+      "tvd_fidelity": 0.874023,
+      "chance_baseline": 0.25,
+      "chance_corrected_success": 0.832031,
+      "coarse_tvd": 0.125977,
+      "coarse_tvd_similarity": 0.874023,
+      "coarse_hellinger_distance": 0.255341,
+      "coarse_hellinger_fidelity": 0.873853
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.1259765625,
+      "tvd_interval": [
+        0.041102350036592135,
+        0.2312231730394494
+      ],
+      "success_rate": null,
+      "success_interval": null,
+      "model_status": "not_applicable",
+      "rank_status": "unresolved",
+      "normalized_entropy": 0.578144164016331,
+      "gap_standard_error": 0.029205417931857422,
+      "rank_pvalue": 0.42243451061880305,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "conservative_tvd_bounds_from_simultaneous_bonferroni_binomial_intervals",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/975535f2-7b1f-4f05-9b2c-c6aa223bd619",
+  "recovered_at": "2026-11-25T21:51:28.960911+00:00",
+  "raw_result_sha256": "b34f35eb622de4b02f611f6e8f4f19663fbf7ba886cf91ccde63eec82ecf56b8"
+}

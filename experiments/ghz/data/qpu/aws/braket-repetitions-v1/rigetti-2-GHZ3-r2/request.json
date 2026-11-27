@@ -1,0 +1,13 @@
+{
+  "deviceArn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Cepheus-1-108Q",
+  "action": "{\"braketSchemaHeader\": {\"name\": \"braket.ir.openqasm.program\", \"version\": \"1\"}, \"inputs\": {}, \"source\": \"OPENQASM 3.0;\\nbit[3] b;\\nqubit[3] q;\\nh q[0];\\ncnot q[0], q[1];\\ncnot q[1], q[2];\\nb[0] = measure q[0];\\nb[1] = measure q[1];\\nb[2] = measure q[2];\"}",
+  "deviceParameters": "{\"braketSchemaHeader\": {\"name\": \"braket.device_schema.rigetti.rigetti_device_parameters\", \"version\": \"1\"}, \"paradigmParameters\": {\"braketSchemaHeader\": {\"name\": \"braket.device_schema.gate_model_parameters\", \"version\": \"1\"}, \"qubitCount\": 3, \"disableQubitRewiring\": false}}",
+  "shots": 1024,
+  "outputS3Bucket": "amazon-braket-us-west-1-127214192355",
+  "outputS3KeyPrefix": "qward/braket-study-v1/811b69a8-5fa2-4720-a7fc-d2ca13fc26ac",
+  "clientToken": "811b69a8-5fa2-4720-a7fc-d2ca13fc26ac",
+  "tags": {
+    "qward-run-id": "811b69a8-5fa2-4720-a7fc-d2ca13fc26ac",
+    "qward-config": "GHZ3"
+  }
+}

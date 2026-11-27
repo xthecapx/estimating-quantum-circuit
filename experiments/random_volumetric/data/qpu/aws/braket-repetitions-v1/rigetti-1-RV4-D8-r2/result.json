@@ -1,0 +1,75 @@
+{
+  "counts": {
+    "0000": 267,
+    "1010": 11,
+    "1000": 56,
+    "0111": 81,
+    "1110": 76,
+    "1111": 91,
+    "0100": 69,
+    "1101": 46,
+    "0101": 37,
+    "0110": 61,
+    "1011": 16,
+    "1001": 54,
+    "0001": 62,
+    "0011": 23,
+    "1100": 46,
+    "0010": 28
+  },
+  "shots": 1024,
+  "success_rate": 0.2607421875,
+  "success_interval_95_wilson": [
+    0.2347811205925798,
+    0.28849166063750686
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 16,
+      "success_rate": 0.260742,
+      "dsr": 0.49162,
+      "peak_mismatch": false,
+      "hellinger_fidelity": 0.260742,
+      "tvd": 0.739258,
+      "tvd_fidelity": 0.260742,
+      "chance_baseline": 0.0625,
+      "chance_corrected_success": 0.211458,
+      "coarse_tvd": 0.739258,
+      "coarse_tvd_similarity": 0.260742,
+      "coarse_hellinger_distance": 0.69955,
+      "coarse_hellinger_fidelity": 0.260742
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.7392578125,
+      "tvd_interval": [
+        0.7023575114953404,
+        0.7738982962042817
+      ],
+      "success_rate": 0.2607421875,
+      "success_interval": [
+        0.22610170379571826,
+        0.2976424885046595
+      ],
+      "model_status": "not_applicable",
+      "rank_status": "verified",
+      "normalized_entropy": 0.8977530054988903,
+      "gap_standard_error": 0.017679557607648118,
+      "rank_pvalue": 3.422223907719589e-21,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "exact_clopper_pearson_deterministic_target",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/1b505f7b-2eca-431d-9c6b-425885413453",
+  "recovered_at": "2026-11-25T21:51:27.511174+00:00",
+  "raw_result_sha256": "5cac65c917fa82e0048d3553c11739601f8cd938ee63857cc80f0c6b270061d4"
+}

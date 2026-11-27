@@ -1,0 +1,75 @@
+{
+  "counts": {
+    "1000": 63,
+    "1101": 48,
+    "1100": 79,
+    "0101": 61,
+    "0000": 89,
+    "0010": 70,
+    "0100": 165,
+    "1010": 64,
+    "0011": 42,
+    "1110": 84,
+    "0110": 59,
+    "1111": 57,
+    "1011": 26,
+    "0001": 65,
+    "1001": 32,
+    "0111": 20
+  },
+  "shots": 1024,
+  "success_rate": 0.26171875,
+  "success_interval_95_wilson": [
+    0.23572172364306293,
+    0.289496882969758
+  ],
+  "targets": {
+    "available": true,
+    "shots": 1024,
+    "fidelity": {
+      "available": true,
+      "shots": 1024,
+      "unique_outcomes": 16,
+      "success_rate": 0.261719,
+      "dsr": 0.001869,
+      "peak_mismatch": false,
+      "hellinger_fidelity": 0.161133,
+      "tvd": 0.838867,
+      "tvd_fidelity": 0.161133,
+      "chance_baseline": 0.1875,
+      "chance_corrected_success": 0.091346,
+      "coarse_tvd": 0.738281,
+      "coarse_tvd_similarity": 0.261719,
+      "coarse_hellinger_distance": 0.714425,
+      "coarse_hellinger_fidelity": 0.239705
+    },
+    "histogram_assessment": {
+      "available": true,
+      "schema_version": "1.3",
+      "shots": 1024,
+      "alpha": 0.01,
+      "tvd": 0.8388671875,
+      "tvd_interval": [
+        0.80721273269115,
+        0.8673098783098203
+      ],
+      "success_rate": 0.1611328125,
+      "success_interval": [
+        0.1326901216901797,
+        0.19278726730884999
+      ],
+      "model_status": "not_applicable",
+      "rank_status": "verified",
+      "normalized_entropy": 0.9589012909640426,
+      "gap_standard_error": 0.01539006033699051,
+      "rank_pvalue": 2.1409546410675903e-06,
+      "prediction_residual": null,
+      "prediction_snapshot_hash": null,
+      "interval_method": "exact_clopper_pearson_deterministic_target",
+      "m2_model_status": "not_applicable"
+    }
+  },
+  "task_arn": "arn:aws:braket:us-west-1:127214192355:quantum-task/94431949-31a0-4568-b496-7df9a6219fab",
+  "recovered_at": "2026-11-25T21:51:18.427854+00:00",
+  "raw_result_sha256": "72d4e4e251cc6e56792109332ed4b7ca91247bbbbe4f0d82797d6f5da66a475a"
+}
