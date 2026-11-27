@@ -1,6 +1,6 @@
 # Estimating quantum circuit behavior
 
-[![DOI](https://zenodo.org/badge/1453209923.svg)](https://doi.org/10.5281/zenodo.24486377)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24486377.svg)](https://doi.org/10.5281/zenodo.24486377)
 
 How accurately can we predict a quantum circuit’s output quality and billed execution time before running it on hardware? This thesis repository brings together the circuits, hardware measurements, and prediction models used to study that question.
 
@@ -40,6 +40,10 @@ To run the dashboard locally from the committed tables, follow the [dashboard qu
 ## Publish the website on GitHub Pages
 
 The [Pages workflow](.github/workflows/dashboard.yml) builds the [research site](https://xthecapx.github.io/estimating-quantum-circuit/) and dashboard. To publish new measurements, commit the complete rebuilt export and push to `main` with **GitHub Actions** selected as the Pages source. Pull requests run the build checks.
+
+## Agent skills
+
+Repository-specific AI agent context lives under [`skills/`](skills/) (starting with [phd-thesis](skills/phd-thesis/SKILL.md)) and is registered via [`.agents/skills.json`](.agents/skills.json) for automatic discovery.
 
 ## Provenance and license
 
